@@ -2,6 +2,32 @@ import { useEffect } from 'react';
 import { useLocalStorage } from './useLocalStorage';
 import type { Explanation, Bookmark, LastPosition } from '@/types/quran';
 
+export interface UserSettings {
+  language: 'en' | 'bn' | 'hi' | 'ur';
+  arabicFontSize: number;
+  translationFontSize: number;
+  lineSpacing: number;
+  showOnlyExplained: boolean;
+}
+
+export const defaultSettings: UserSettings = {
+  language: 'en',
+  arabicFontSize: 24,
+  translationFontSize: 14,
+  lineSpacing: 2.0,
+  showOnlyExplained: false,
+};
+
+export function useSettings() {
+  const [settings, setSettings] = useLocalStorage<UserSettings>('iq-settings', defaultSettings);
+
+  const updateSettings = (newSettings: Partial<UserSettings>) => {
+    setSettings((prev) => ({ ...prev, ...newSettings }));
+  };
+
+  return { settings, updateSettings };
+}
+
 export function useFavorites() {
   const [favorites, setFavorites] = useLocalStorage<number[]>('iq-favorites', []);
 
@@ -14,8 +40,10 @@ export function useFavorites() {
   };
 
   const isFavorite = (surahNumber: number) => favorites.includes(surahNumber);
+  
+  const clearFavorites = () => setFavorites([]);
 
-  return { favorites, toggleFavorite, isFavorite };
+  return { favorites, toggleFavorite, isFavorite, clearFavorites };
 }
 
 export function useBookmarks() {
@@ -34,7 +62,9 @@ export function useBookmarks() {
   const isBookmarked = (surahNumber: number, ayahNumber: number) =>
     bookmarks.some(b => b.surahNumber === surahNumber && b.ayahNumber === ayahNumber);
 
-  return { bookmarks, toggleBookmark, isBookmarked };
+  const clearBookmarks = () => setBookmarks([]);
+
+  return { bookmarks, toggleBookmark, isBookmarked, clearBookmarks };
 }
 
 export function useExplanations() {

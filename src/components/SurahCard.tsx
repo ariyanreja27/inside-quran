@@ -1,10 +1,10 @@
 import { Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import type { Surah } from '@/types/quran';
+import type { SurahMeta } from '@/data/quranMeta';
 
 interface SurahCardProps {
-  surah: Surah;
+  surah: SurahMeta;
   isFavorite: boolean;
   onToggleFavorite: (n: number) => void;
 }
@@ -12,44 +12,51 @@ interface SurahCardProps {
 export default function SurahCard({ surah, isFavorite, onToggleFavorite }: SurahCardProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 8 }}
+      initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.2, delay: Math.min(surah.number * 0.01, 0.5) }}
+      transition={{ delay: Math.min(surah.number * 0.02, 0.8), duration: 0.35 }}
+      whileTap={{ scale: 0.98 }}
+      className="relative"
     >
-      <Link to={`/surah/${surah.number}`} className="block">
-        <div className="surah-card flex items-center gap-4">
-          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-secondary text-primary font-display font-semibold text-sm">
-            {surah.number}
+      <Link 
+        to={`/surah/${surah.number}`} 
+        className="block group rounded-lg bg-card shadow-sm border border-border transition-all duration-200 hover:bg-accent/40 active:bg-accent/60 outline-none focus-visible:ring-2 focus-visible:ring-primary/20"
+      >
+        <div className="flex items-center gap-4 p-4 pr-14">
+          {/* Surah number circle */}
+          <div className="flex-shrink-0 w-10 h-10 rounded-full border border-border flex items-center justify-center bg-muted/30">
+            <span className="text-xs font-mono text-muted-foreground tabular-nums">{surah.number}</span>
           </div>
-          <div className="flex-1 min-w-0">
+
+          {/* Info */}
+          <div className="flex-1 min-w-0 text-left">
             <div className="flex items-center gap-2">
-              <h3 className="font-display font-semibold text-foreground text-sm truncate">
-                {surah.englishName}
-              </h3>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-secondary text-muted-foreground">
-                {surah.revelationType}
-              </span>
+              <span className="font-medium text-[14.5px] text-foreground truncate">{surah.name}</span>
             </div>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              {surah.englishNameTranslation} • {surah.numberOfAyahs} ayahs
-            </p>
+            <span className="text-[12px] text-muted-foreground">{surah.meaning} • {surah.ayahCount} Ayahs</span>
           </div>
-          <p className="arabic-text text-lg text-primary font-arabic">{surah.name}</p>
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              onToggleFavorite(surah.number);
-            }}
-            className="p-1.5 rounded-full transition-colors hover:bg-secondary"
-          >
-            <Star
-              size={16}
-              className={isFavorite ? 'fill-gold text-gold' : 'text-muted-foreground'}
-            />
-          </button>
+
+          {/* Arabic name */}
+          <span className="font-arabic text-[22px] text-primary flex-shrink-0">{surah.nameArabic}</span>
         </div>
       </Link>
+
+      {/* Favorite toggle - absolutely positioned to prevent link interactions */}
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onToggleFavorite(surah.number);
+        }}
+        onPointerDown={(e) => e.stopPropagation()}
+        onMouseDown={(e) => e.stopPropagation()}
+        className="absolute right-3.5 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full active:scale-90 transition-all focus:outline-none [-webkit-tap-highlight-color:transparent]"
+        aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+      >
+        <Star
+          className={`w-[18px] h-[18px] transition-colors ${isFavorite ? "fill-primary text-primary" : "text-muted-foreground/40"}`}
+        />
+      </button>
     </motion.div>
   );
 }

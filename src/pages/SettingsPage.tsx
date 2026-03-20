@@ -1,0 +1,181 @@
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Moon, Globe, Type, BookmarkX, Bell, Cloud, Eye, Info, RotateCcw, LucideIcon } from 'lucide-react';
+import { useSettings, useDarkMode, useBookmarks, useFavorites, defaultSettings } from '@/hooks/useAppStore';
+
+export default function SettingsPage() {
+  const { settings, updateSettings } = useSettings();
+  const { isDark, toggle: toggleDark } = useDarkMode();
+  const { clearBookmarks, bookmarks } = useBookmarks();
+  const { clearFavorites, favorites } = useFavorites();
+
+  const handleClearBookmarks = () => {
+    if (bookmarks.length === 0) return alert('No bookmarks to clear.');
+    if (window.confirm('Are you sure you want to completely clear all saved bookmarks?')) {
+      clearBookmarks();
+    }
+  };
+
+  const handleClearFavorites = () => {
+    if (favorites.length === 0) return alert('No favorites to clear.');
+    if (window.confirm('Are you sure you want to completely clear all favorite Surahs?')) {
+      clearFavorites();
+    }
+  };
+
+  const SectionTitle = ({ icon: Icon, title }: { icon: LucideIcon; title: string }) => (
+    <h2 className="flex items-center gap-2 font-display text-sm font-semibold text-foreground mb-4">
+      <Icon size={16} className="text-primary" /> {title}
+    </h2>
+  );
+
+  return (
+    <div className="min-h-screen pb-24 bg-background">
+      {/* Header */}
+      <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border px-4 py-4">
+        <h1 className="font-display text-2xl font-bold text-foreground">Settings</h1>
+        <p className="text-sm text-muted-foreground mt-1">Preferences and configurations</p>
+      </div>
+
+      <div className="px-4 py-6 space-y-8 max-w-lg mx-auto">
+        
+        {/* SECTION 1: THEME */}
+        <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.0 }}>
+          <SectionTitle icon={Moon} title="Appearance" />
+          <div className="bg-card border border-border rounded-2xl p-4 flex items-center justify-between shadow-sm">
+            <div>
+              <p className="text-sm font-medium">Dark Mode</p>
+              <p className="text-xs text-muted-foreground">Toggle dark theme</p>
+            </div>
+            <button 
+              onClick={toggleDark}
+              className={`w-12 h-6 rounded-full transition-colors relative ${isDark ? 'bg-primary' : 'bg-secondary'}`}
+            >
+              <span className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isDark ? 'translate-x-6' : 'translate-x-0'}`} />
+            </button>
+          </div>
+        </motion.section>
+
+        {/* SECTION 2: LANGUAGE */}
+        <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}>
+          <SectionTitle icon={Globe} title="Language" />
+          <div className="bg-card border border-border rounded-2xl p-4 space-y-3 shadow-sm">
+            {(['en', 'bn', 'hi', 'ur'] as const).map(lang => {
+              const labels = { en: 'English', bn: 'Bengali (বাংলা)', hi: 'Hindi (हिंदी)', ur: 'Urdu (اردو)' };
+              return (
+                <label key={lang} className="flex items-center justify-between cursor-pointer group">
+                  <span className="text-sm font-medium group-hover:text-primary transition-colors">{labels[lang]}</span>
+                  <input 
+                    type="radio" 
+                    name="language" 
+                    value={lang} 
+                    checked={settings.language === lang}
+                    onChange={() => updateSettings({ language: lang })}
+                    className="w-4 h-4 accent-primary"
+                  />
+                </label>
+              )
+            })}
+          </div>
+        </motion.section>
+
+        {/* SECTION 3: READING */}
+        <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+          <SectionTitle icon={Type} title="Reading Preferences" />
+          <div className="bg-card border border-border rounded-2xl p-4 space-y-6 shadow-sm">
+            <div>
+              <div className="flex justify-between mb-2">
+                <p className="text-sm font-medium">Arabic Size</p>
+                <p className="text-xs text-muted-foreground">{settings.arabicFontSize}px</p>
+              </div>
+              <input type="range" min="16" max="48" value={settings.arabicFontSize} onChange={e => updateSettings({ arabicFontSize: Number(e.target.value) })} className="w-full accent-primary" />
+            </div>
+            
+            <div>
+              <div className="flex justify-between mb-2">
+                <p className="text-sm font-medium">Translation Size</p>
+                <p className="text-xs text-muted-foreground">{settings.translationFontSize}px</p>
+              </div>
+              <input type="range" min="10" max="24" value={settings.translationFontSize} onChange={e => updateSettings({ translationFontSize: Number(e.target.value) })} className="w-full accent-primary" />
+            </div>
+
+            <div>
+              <div className="flex justify-between mb-2">
+                <p className="text-sm font-medium">Line Spacing</p>
+                <p className="text-xs text-muted-foreground">{settings.lineSpacing}x</p>
+              </div>
+              <input type="range" min="1.5" max="4.0" step="0.1" value={settings.lineSpacing} onChange={e => updateSettings({ lineSpacing: Number(e.target.value) })} className="w-full accent-primary" />
+            </div>
+
+            <div className="pt-2 flex justify-end">
+              <button 
+                onClick={() => updateSettings({
+                  arabicFontSize: defaultSettings.arabicFontSize,
+                  translationFontSize: defaultSettings.translationFontSize,
+                  lineSpacing: defaultSettings.lineSpacing,
+                })}
+                className="text-[10px] font-semibold text-primary/60 hover:text-primary transition-colors flex items-center gap-1 uppercase tracking-wider"
+              >
+                <RotateCcw size={10} />
+                Reset to defaults
+              </button>
+            </div>
+          </div>
+        </motion.section>
+
+        {/* SECTION 7: APPEARANCE (Moved up for logical flow) */}
+        <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
+          <SectionTitle icon={Eye} title="Filter" />
+          <div className="bg-card border border-border rounded-2xl p-4 flex items-center justify-between shadow-sm">
+            <div>
+              <p className="text-sm font-medium">Explained Ayahs Only</p>
+              <p className="text-xs text-muted-foreground">Hide ayahs without tafsir</p>
+            </div>
+            <button 
+              onClick={() => updateSettings({ showOnlyExplained: !settings.showOnlyExplained })}
+              className={`w-12 h-6 rounded-full transition-colors relative ${settings.showOnlyExplained ? 'bg-primary' : 'bg-secondary'}`}
+            >
+              <span className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${settings.showOnlyExplained ? 'translate-x-6' : 'translate-x-0'}`} />
+            </button>
+          </div>
+        </motion.section>
+
+
+
+        {/* SECTION 5 & 6: PLACEHOLDERS */}
+        <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
+          <SectionTitle icon={Cloud} title="Sync & Notifications" />
+          <div className="bg-card border border-border rounded-2xl p-4 space-y-4 shadow-sm opacity-60 pointer-events-none">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Bell size={16} className="text-muted-foreground" />
+                <p className="text-sm font-medium">Daily Reminders</p>
+              </div>
+              <span className="text-[10px] font-medium bg-secondary px-2 py-1 rounded-md text-muted-foreground">Coming Soon</span>
+            </div>
+            <div className="h-px bg-border my-2" />
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium">Cloud Backup</p>
+              </div>
+              <span className="text-[10px] font-medium bg-secondary px-2 py-1 rounded-md text-muted-foreground">Coming Soon</span>
+            </div>
+          </div>
+        </motion.section>
+
+        {/* SECTION 8: ABOUT */}
+        <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+          <SectionTitle icon={Info} title="About" />
+          <div className="bg-card border border-border rounded-2xl p-6 shadow-sm text-center">
+            <h3 className="font-display font-bold text-xl text-primary mb-1">Inside Quran</h3>
+            <p className="text-xs text-muted-foreground mb-4">Version 1.0.0</p>
+            <p className="text-sm leading-relaxed text-foreground">
+              A personal Quran study and tafsir system designed for focused reading and reflection.
+            </p>
+          </div>
+        </motion.section>
+        
+      </div>
+    </div>
+  );
+}

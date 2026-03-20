@@ -1,6 +1,8 @@
 import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
 
+import typography from "@tailwindcss/typography";
+
 export default {
   darkMode: ["class"],
   content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
@@ -16,7 +18,7 @@ export default {
     extend: {
       fontFamily: {
         arabic: ['Amiri', 'serif'],
-        display: ['Playfair Display', 'serif'],
+        display: ['Fraunces', 'Georgia', 'serif'],
         body: ['Inter', 'sans-serif'],
       },
       colors: {
@@ -98,5 +100,5 @@ export default {
       },
     },
   },
-  plugins: [tailwindcssAnimate],
+  plugins: [tailwindcssAnimate, typography],
 } satisfies Config;

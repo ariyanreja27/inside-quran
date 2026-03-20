@@ -1,4 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&family=Amiri:ital,wght@0,400;0,700;1,400&family=Scheherazade+New:wght@400;700&family=Katibeh&display=swap');
+
+@font-face {
+  font-family: 'surah-font';
+  src: url('https://static-cdn.tarteel.ai/qul/fonts/surah-names/v4/surah-name-v4.ttf') format('truetype');
+  font-display: swap;
+}
 
 @tailwind base;
 @tailwind components;
@@ -6,7 +12,7 @@
 
 @layer base {
   :root {
-    --background: 36 33% 96%;
+    --background: 40 30% 96%;
     --foreground: 20 10% 15%;
 
     --card: 36 30% 98%;
@@ -53,9 +59,10 @@
     --explained: 140 40% 92%;
     --explained-border: 140 35% 75%;
 
-    --font-arabic: 'Amiri', serif;
-    --font-display: 'Playfair Display', serif;
-    --font-body: 'Inter', sans-serif;
+    --font-arabic: 'Amiri', 'Traditional Arabic', serif;
+    --font-quran: 'Calibri', 'Katibeh', 'Scheherazade New', serif;
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-body: 'Geist Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
 
   .dark {
@@ -106,21 +113,18 @@
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
+  html {
+    scrollbar-gutter: stable;
+    overflow-x: hidden;
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
     font-family: var(--font-body);
     -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
+    width: 100%;
   }
-
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-display);
-  }
-}
 
 @layer components {
   .arabic-text {
@@ -130,9 +134,26 @@
   }
 
   .bismillah-text {
-    font-family: var(--font-arabic);
+    font-family: var(--font-quran);
     direction: rtl;
-    line-height: 2;
+    line-height: 1;
+    font-weight: 400;
+    @apply text-foreground;
+  }
+
+  .surah-calligraphy {
+    font-family: 'surah-font' !important;
+    font-size: 65px;
+    @apply text-foreground;
+    display: block;
+    font-variant-ligatures: discretionary-ligatures;
+    -webkit-font-feature-settings: "liga" 1, "dlig" 1;
+    line-height: 1;
+  }
+
+  .font-display {
+    font-family: var(--font-display);
+    font-variation-settings: 'SOFT' 100, 'WONK' 1;
   }
 
   .surah-card {
@@ -148,23 +169,18 @@
     @apply bg-card rounded-2xl border border-border p-5 transition-all duration-200;
   }
 
-  .ayah-card-explained {
-    @apply bg-card rounded-2xl border p-5 transition-all duration-200;
-    border-color: hsl(var(--explained-border));
-    background-color: hsl(var(--explained));
-  }
 
   .divider-label {
     @apply text-xs font-medium tracking-wider uppercase text-muted-foreground;
   }
 
   .filter-chip {
-    @apply px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer;
+    @apply px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 cursor-pointer;
     @apply bg-secondary text-secondary-foreground;
   }
 
   .filter-chip-active {
-    @apply px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer;
+    @apply px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 cursor-pointer;
     background-color: hsl(var(--primary));
     color: hsl(var(--primary-foreground));
   }
@@ -176,5 +192,31 @@
   .islamic-pattern-bg {
     background-image: radial-gradient(circle at 20% 50%, hsl(var(--gold-light) / 0.1) 0%, transparent 50%),
                       radial-gradient(circle at 80% 20%, hsl(var(--primary) / 0.05) 0%, transparent 50%);
+  }
+
+  /* Custom Draggable Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.2);
+    border-radius: 10px;
+    border: 2px solid hsl(var(--background));
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.4);
+  }
+
+  /* Utility to hide scrollbar while keeping it draggable if needed (for specific elements) */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
   }
 }

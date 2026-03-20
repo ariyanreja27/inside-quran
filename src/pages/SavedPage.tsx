@@ -20,7 +20,7 @@ function BookmarkedAyahCard({ surahNumber, ayahNumber }: { surahNumber: number; 
       <div className="surah-card">
         <div className="mb-2 flex items-center gap-2">
           <BookmarkCheck size={14} className="gold-accent" />
-          <span className="text-xs font-medium text-foreground">{surah.englishName} : {ayahNumber}</span>
+          <span className="text-xs font-medium text-foreground">{surah.name} : {ayahNumber}</span>
         </div>
         <p className="arabic-text line-clamp-1 text-sm text-foreground">{ayah.text}</p>
         <p className="mt-1 line-clamp-1 text-xs text-muted-foreground">{ayah.translation}</p>
@@ -49,20 +49,25 @@ export default function SavedPage() {
       </div>
 
       <div className="px-4">
-        <div className="mb-5 rounded-full border border-border bg-secondary/70 p-1 backdrop-blur-sm">
-          <div className="grid grid-cols-2 gap-1">
+        <div className="mb-5 rounded-full border border-border bg-secondary/40 p-1 backdrop-blur-sm relative">
+          <div className="grid grid-cols-2 gap-1 relative">
             {tabs.map((tab) => {
               const active = activeView === tab.id;
               return (
                 <button
                   key={tab.id}
                   onClick={() => setActiveView(tab.id)}
-                  className={`rounded-full px-4 py-2.5 text-xs font-medium transition-all ${
-                    active
-                      ? 'bg-primary text-primary-foreground shadow-sm'
-                      : 'text-muted-foreground'
+                  className={`relative rounded-full px-4 py-2.5 text-xs font-semibold transition-colors z-10 ${
+                    active ? 'text-primary-foreground' : 'text-muted-foreground hover:text-primary'
                   }`}
                 >
+                  {active && (
+                    <motion.div
+                      layoutId="activeTab-saved"
+                      className="absolute inset-0 bg-primary rounded-full shadow-sm z-[-1]"
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                    />
+                  )}
                   {tab.label}
                 </button>
               );
@@ -91,11 +96,11 @@ export default function SavedPage() {
                       <Link to={`/surah/${surah.number}`} className="block">
                         <div className="surah-card flex items-center justify-between">
                           <div>
-                            <p className="font-display text-sm font-semibold">{surah.englishName}</p>
-                            <p className="text-xs text-muted-foreground">{surah.numberOfAyahs} ayahs</p>
+                            <p className="font-display text-sm font-semibold">{surah.name}</p>
+                            <p className="text-xs text-muted-foreground">{surah.ayahCount} ayahs</p>
                           </div>
                           <div className="flex items-center gap-3">
-                            <p className="arabic-text font-arabic text-primary">{surah.name}</p>
+                            <p className="arabic-text font-arabic text-primary">{surah.nameArabic}</p>
                             <ArrowRight size={14} className="text-muted-foreground" />
                           </div>
                         </div>

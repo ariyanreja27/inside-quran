@@ -34,11 +34,23 @@ export interface DeeperLookCategory {
   order: number;
 }
 
+export interface ConciseExplanation {
+  id: string;
+  title?: string;
+  text: string;
+}
+
+export interface ConciseBlock {
+  ayahNumber: number;
+  explanations: ConciseExplanation[];
+}
+
 export interface Explanation {
   id: string;
   surahNumber: number;
   ayahs: number[];
-  concise: { [ayahNumber: number]: string };
+  ayahRange?: string;
+  concise: ConciseBlock[];
   deeperLook: {
     rootWords: RootWord[];
     categories: DeeperLookCategory[];

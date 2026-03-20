@@ -5,10 +5,13 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import BottomNav from "@/components/BottomNav";
 import ThemeToggleFloating from "@/components/ThemeToggleFloating";
-import SurahListPage from "./pages/SurahListPage";
-import SurahReadingPage from "./pages/SurahReadingPage";
-import SavedPage from "./pages/SavedPage";
-import NotFound from "./pages/NotFound";
+import SurahListPage from "@/pages/SurahListPage";
+import SurahReadingPage from "@/pages/SurahReadingPage";
+import SavedPage from "@/pages/SavedPage";
+import SettingsPage from "@/pages/SettingsPage";
+import ExplanationBuilderPage from "@/pages/ExplanationBuilderPage";
+import ExplanationViewPage from "@/pages/ExplanationViewPage";
+import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -18,11 +21,13 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <ThemeToggleFloating />
         <Routes>
           <Route path="/" element={<SurahListPage />} />
           <Route path="/surah/:number" element={<SurahReadingPage />} />
           <Route path="/saved" element={<SavedPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/explanation-builder" element={<ExplanationBuilderPage />} />
+          <Route path="/explanation-view" element={<ExplanationViewPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <BottomNav />

@@ -1,10 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, MoreVertical, BookmarkCheck, Bookmark as BookmarkIcon, FileText } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useSurahAyahs, useSurahs } from '@/hooks/useQuranData';
-import { useBookmarks, useExplanations, useLastPosition } from '@/hooks/useAppStore';
-import ExplanationSheet from '@/components/ExplanationSheet';
+import { useBookmarks, useExplanations, useLastPosition, useSettings } from '@/hooks/useAppStore';
 import type { Ayah } from '@/types/quran';
 
 export default function SurahReadingPage() {
@@ -13,11 +12,16 @@ export default function SurahReadingPage() {
   const navigate = useNavigate();
   const { data: surahs } = useSurahs();
   const { data: ayahs, isLoading } = useSurahAyahs(surahNumber);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const targetAyah = queryParams.get('ayah');
   const { isBookmarked, toggleBookmark } = useBookmarks();
   const { hasExplanation, getExplanation } = useExplanations();
   const { setPosition } = useLastPosition();
-  const [selectedAyah, setSelectedAyah] = useState<Ayah | null>(null);
+  const { settings } = useSettings();
   const [menuAyah, setMenuAyah] = useState<number | null>(null);
+  const [currentJuz, setCurrentJuz] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState<number | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const surah = surahs?.find(s => s.number === surahNumber);
@@ -27,10 +31,59 @@ export default function SurahReadingPage() {
   }, [surahNumber]);
 
   useEffect(() => {
-    if (surahNumber) {
+    if (surahNumber && !targetAyah) {
       setPosition({ surahNumber, ayahNumber: 1 });
+    } else if (surahNumber && targetAyah) {
+      setPosition({ surahNumber, ayahNumber: parseInt(targetAyah) });
     }
-  }, [surahNumber, setPosition]);
+  }, [surahNumber, targetAyah, setPosition]);
+
+  useEffect(() => {
+    if (ayahs && ayahs.length > 0 && !currentJuz) {
+      setCurrentJuz(ayahs[0].juz);
+      setCurrentPage(ayahs[0].page);
+    }
+  }, [ayahs, currentJuz]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntry = entries.find(entry => entry.isIntersecting);
+        if (visibleEntry) {
+          const ayahId = visibleEntry.target.id;
+          const ayahNum = parseInt(ayahId.split('-')[1]);
+          const ayah = ayahs?.find(a => a.numberInSurah === ayahNum);
+          if (ayah) {
+            setCurrentJuz(ayah.juz);
+            setCurrentPage(ayah.page);
+          }
+        }
+      },
+      { threshold: 0.1, rootMargin: '-60px 0px -80% 0px' }
+    );
+
+    const ayahElements = document.querySelectorAll('[id^="ayah-"]');
+    ayahElements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, [ayahs, isLoading]);
+
+  // Scroll to target ayah if provided in URL
+  useEffect(() => {
+    if (!isLoading && targetAyah && ayahs) {
+      const element = document.getElementById(`ayah-${targetAyah}`);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          // Highlight effect
+          element.classList.add('ring-2', 'ring-primary/50', 'bg-primary/5');
+          setTimeout(() => {
+            element.classList.remove('ring-2', 'ring-primary/50', 'bg-primary/5');
+          }, 2000);
+        }, 300);
+      }
+    }
+  }, [isLoading, targetAyah, ayahs]);
 
   // Close menu on outside click
   useEffect(() => {
@@ -56,21 +109,29 @@ export default function SurahReadingPage() {
             <ArrowLeft size={20} />
           </button>
           <div className="flex-1 min-w-0">
-            <h2 className="font-display font-semibold text-sm truncate">{surah?.englishName}</h2>
-            <p className="text-[10px] text-muted-foreground">{surah?.englishNameTranslation}</p>
+            <h2 className="font-display font-semibold text-sm truncate">{surah?.name}</h2>
+            <p className="text-[10px] text-muted-foreground">{surah?.meaning}</p>
           </div>
-          <p className="arabic-text text-lg text-primary font-arabic">{surah?.name}</p>
+          {currentJuz && (
+            <div className="flex flex-col items-end text-[10px] text-muted-foreground font-medium pr-1">
+              <span>Juz {currentJuz}</span>
+              <span>Page {currentPage}</span>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Bismillah */}
-      {surahNumber !== 1 && surahNumber !== 9 && (
-        <div className="text-center py-8 px-4">
-          <p className="bismillah-text text-2xl text-primary font-arabic leading-relaxed">
-            بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
+      {/* Bismillah & Surah Calligraphy */}
+      <div className="text-center py-5 px-4 flex flex-col items-center gap-1">
+        <p className="surah-calligraphy">
+          surah{surahNumber.toString().padStart(3, '0')} surah-icon
+        </p>
+        {surahNumber !== 1 && surahNumber !== 9 && (
+          <p className="bismillah-text text-3xl leading-normal">
+            ﷽
           </p>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Ayahs */}
       <div className="px-4 space-y-3 mt-2">
@@ -88,10 +149,12 @@ export default function SurahReadingPage() {
             const explained = hasExplanation(surahNumber, ayah.numberInSurah);
             const bookmarked = isBookmarked(surahNumber, ayah.numberInSurah);
 
+            if (settings.showOnlyExplained && !explained) return null;
+
             return (
               <div key={ayah.numberInSurah}>
                 {dividers.length > 0 && (
-                  <div className="flex items-center justify-center gap-2 py-3">
+                  <div className="flex items-center justify-center gap-2 py-1">
                     <div className="h-px flex-1 bg-border" />
                     <span className="divider-label">{dividers.join(' • ')}</span>
                     <div className="h-px flex-1 bg-border" />
@@ -101,10 +164,15 @@ export default function SurahReadingPage() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.15, delay: Math.min(ayah.numberInSurah * 0.02, 1) }}
-                  className={`relative cursor-pointer ${explained ? 'ayah-card-explained' : 'ayah-card'} ${
-                    !explained ? 'opacity-90' : ''
-                  }`}
-                  onClick={() => setSelectedAyah(ayah)}
+                  id={`ayah-${ayah.numberInSurah}`}
+                  className="relative cursor-pointer ayah-card transition-all duration-500 rounded-2xl"
+                  onClick={() => {
+                    if (explained) {
+                      navigate(`/explanation-view?surah=${surahNumber}&ayah=${ayah.numberInSurah}`);
+                    } else {
+                      navigate(`/explanation-builder?surah=${surahNumber}&ayah=${ayah.numberInSurah}`);
+                    }
+                  }}
                 >
                   {/* Top row */}
                   <div className="flex items-center justify-between mb-3">
@@ -112,11 +180,6 @@ export default function SurahReadingPage() {
                       <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-secondary text-xs font-semibold text-primary">
                         {ayah.numberInSurah}
                       </span>
-                      {explained && (
-                        <span className="flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full bg-primary/10 text-primary">
-                          <FileText size={10} /> Explained
-                        </span>
-                      )}
                       {bookmarked && (
                         <BookmarkCheck size={14} className="text-gold" />
                       )}
@@ -150,12 +213,26 @@ export default function SurahReadingPage() {
                   </div>
 
                   {/* Arabic */}
-                  <p className="arabic-text text-xl text-center leading-[2.5] text-foreground mb-4">
+                  <p 
+                    className="arabic-text text-center text-foreground mb-4"
+                    style={{ 
+                      fontSize: `${settings.arabicFontSize}px`,
+                      lineHeight: settings.lineSpacing 
+                    }}
+                  >
                     {ayah.text}
                   </p>
 
                   {/* Translation */}
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p 
+                    className={`font-display text-muted-foreground ${settings.language === 'ur' ? 'font-arabic' : ''}`} 
+                    style={{ 
+                      fontSize: `${settings.translationFontSize}px`,
+                      lineHeight: 1.6,
+                      direction: settings.language === 'ur' ? 'rtl' : 'ltr',
+                      fontVariationSettings: settings.language === 'ur' ? 'none' : "'SOFT' 50, 'WONK' 0" 
+                    }}
+                  >
                     {ayah.translation}
                   </p>
                 </motion.div>
@@ -165,14 +242,6 @@ export default function SurahReadingPage() {
         )}
       </div>
 
-      {/* Explanation Sheet */}
-      {selectedAyah && surah && (
-        <ExplanationSheet
-          ayah={selectedAyah}
-          surah={surah}
-          onClose={() => setSelectedAyah(null)}
-        />
-      )}
     </div>
   );
 }

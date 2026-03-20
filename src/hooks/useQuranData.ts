@@ -1,35 +1,35 @@
 import { useQuery } from '@tanstack/react-query';
-import type { Surah, Ayah } from '@/types/quran';
+import type { Ayah } from '@/types/quran';
+import { surahList, type SurahMeta } from '@/data/quranMeta';
+import { useSettings } from './useAppStore';
 
 const API_BASE = 'https://api.alquran.cloud/v1';
 
 export function useSurahs() {
-  return useQuery<Surah[]>({
+  return useQuery<SurahMeta[]>({
     queryKey: ['surahs'],
     queryFn: async () => {
-      const res = await fetch(`${API_BASE}/surah`);
-      const data = await res.json();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return data.data.map((s: any) => ({
-        number: s.number,
-        name: s.name,
-        englishName: s.englishName,
-        englishNameTranslation: s.englishNameTranslation,
-        numberOfAyahs: s.numberOfAyahs,
-        revelationType: s.revelationType,
-      }));
+      return surahList;
     },
     staleTime: Infinity,
   });
 }
 
 export function useSurahAyahs(surahNumber: number) {
+  const { settings } = useSettings();
+
   return useQuery<Ayah[]>({
-    queryKey: ['surah-ayahs', surahNumber],
+    queryKey: ['surah-ayahs', surahNumber, settings.language],
     queryFn: async () => {
+      const translationEdition = 
+        settings.language === 'bn' ? 'bn.bengali' : 
+        settings.language === 'hi' ? 'hi.hindi' : 
+        settings.language === 'ur' ? 'ur.jandali' : 
+        'en.sahih';
+
       const [arabicRes, translationRes] = await Promise.all([
         fetch(`${API_BASE}/surah/${surahNumber}`),
-        fetch(`${API_BASE}/surah/${surahNumber}/en.sahih`),
+        fetch(`${API_BASE}/surah/${surahNumber}/${translationEdition}`),
       ]);
       const arabicData = await arabicRes.json();
       const translationData = await translationRes.json();
