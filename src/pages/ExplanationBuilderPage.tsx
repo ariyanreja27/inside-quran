@@ -1,117 +1,231 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
+import { useSwipeable } from 'react-swipeable';
+import { ArrowLeft, Plus, Trash2, Info, Lock, AlertCircle, CheckCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useSurahs, useSurahAyahs } from '@/hooks/useQuranData';
+import { useSurahs, useSurahVerses } from '@/hooks/useQuranData';
 import { useExplanations } from '@/hooks/useAppStore';
 import type { Explanation, ConciseBlock, RootWord, DeeperLookCategory } from '@/types/quran';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { useToast } from '@/hooks/use-toast';
+
+const generateId = () => {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+};
 
 export default function ExplanationBuilderPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const editId = searchParams.get('id');
   const urlSurah = searchParams.get('surah') ? parseInt(searchParams.get('surah')!) : null;
-  const urlAyah = searchParams.get('ayah') ? parseInt(searchParams.get('ayah')!) : null;
+  const urlVerse = searchParams.get('verse') ? parseInt(searchParams.get('verse')!) : null;
 
   const { data: surahs } = useSurahs();
   const { explanations, getExplanation, saveExplanation } = useExplanations();
+  const { toast } = useToast();
+
+  // Handled inline
 
   const [mode, setMode] = useState<'concise' | 'deeper'>('concise');
   const [selectedSurah, setSelectedSurah] = useState<number | ''>(urlSurah || '');
-  
+
   // Concise Form State
   const [conciseBlocks, setConciseBlocks] = useState<ConciseBlock[]>([]);
-  
+
   // Deeper Look Form State
-  const [ayahRange, setAyahRange] = useState<string>('');
+  const [verseRange, setVerseRange] = useState<string>('');
   const [rootWordsOn, setRootWordsOn] = useState(false);
   const [rootWords, setRootWords] = useState<RootWord[]>([]);
   const [categories, setCategories] = useState<DeeperLookCategory[]>([]);
+  const [rangeError, setRangeError] = useState<string | null>(null);
 
   // Editing logic
-  const [currentId, setCurrentId] = useState<string>(() => crypto.randomUUID());
+  const [currentId, setCurrentId] = useState<string>(() => generateId());
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Ayah data fetching
-  const { data: currentSurahAyahs } = useSurahAyahs(selectedSurah || 1);
+  // Verse data fetching
+  const { data: currentSurahVerses } = useSurahVerses(selectedSurah || 1);
 
   // Scroll ref
   const blockRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
+  const hasSelectedVerse = conciseBlocks.some(b => b.verseNumber > 0);
+  const hasConciseContent = conciseBlocks.some(b => b.verseNumber > 0 && b.explanations.some(e => e.title.trim() || e.text.trim()));
+  const hasAtLeastOneExplanation = hasConciseContent;
+
+  const [initialHash, setInitialHash] = useState<string>('');
+  const currentHash = JSON.stringify({ mode, selectedSurah, conciseBlocks, verseRange, rootWordsOn, rootWords, categories });
+
+  useEffect(() => {
+    if (isLoaded && !initialHash) {
+      setInitialHash(currentHash);
+    }
+  }, [isLoaded, currentHash, initialHash]);
+
+  const hasChanges = initialHash !== currentHash;
+
+  const isSaveDisabled = !selectedSurah ||
+    (mode === 'deeper' && (!!rangeError || !verseRange.trim())) ||
+    !hasConciseContent ||
+    !hasChanges;
 
   useEffect(() => {
     if (isLoaded) return;
-    
+
     let existing: Explanation | undefined;
-    
+
     if (editId) {
       existing = explanations.find(e => e.id === editId);
-    } else if (urlSurah && urlAyah) {
-      existing = getExplanation(urlSurah, urlAyah);
+    } else if (urlSurah && urlVerse) {
+      existing = getExplanation(urlSurah, urlVerse);
     }
 
     if (existing) {
       setCurrentId(existing.id);
       setSelectedSurah(existing.surahNumber);
       setConciseBlocks(existing.concise || []);
-      setAyahRange(existing.ayahRange || '');
+      setVerseRange(existing.verseRange || '');
       if (existing.deeperLook) {
         setRootWords(existing.deeperLook.rootWords || []);
         if (existing.deeperLook.rootWords?.length > 0) setRootWordsOn(true);
         setCategories(existing.deeperLook.categories || []);
         if (existing.concise?.length === 0 && (existing.deeperLook.rootWords?.length > 0 || existing.deeperLook.categories?.length > 0)) {
-           setMode('deeper');
+          setMode('deeper');
         }
       }
-    } else if (urlSurah && urlAyah) {
+    } else if (urlSurah && urlVerse) {
       setConciseBlocks([{
-        ayahNumber: urlAyah,
-        explanations: [{ id: crypto.randomUUID(), title: '', text: '' }]
+        verseNumber: urlVerse,
+        explanations: [{ id: generateId(), title: '', text: '' }]
       }]);
     }
-    
+
     setIsLoaded(true);
-  }, [editId, urlSurah, urlAyah, explanations, getExplanation, isLoaded]);
+  }, [editId, urlSurah, urlVerse, explanations, getExplanation, isLoaded]);
 
-  useEffect(() => {
-    if (isLoaded && urlAyah && conciseBlocks.length > 0 && mode === 'concise') {
-      const timer = setTimeout(() => {
-        const ref = blockRefs.current[urlAyah];
-        if (ref) {
-          ref.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }, 300);
-      return () => clearTimeout(timer);
+
+
+  const handleVerseRangeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let val = e.target.value;
+    val = val.replace(/[^\d,\- ]/g, '');
+    val = val.replace(/,{2,}/g, ',');
+    val = val.replace(/ {2,}/g, ' ');
+    val = val.replace(/-{2,}/g, '-');
+    val = val.replace(/ ,/g, ',');
+    val = val.replace(/ -/g, '-');
+    val = val.replace(/- /g, '-');
+    setVerseRange(val);
+
+    if (!val.trim()) {
+      setRangeError(null);
+      return;
     }
-  }, [isLoaded, urlAyah, conciseBlocks.length, mode]);
-
-  const handleSave = () => {
     if (!selectedSurah) {
-      alert("Please select a Surah first.");
+      setRangeError("Please select a Surah first.");
       return;
     }
 
-    const allAyahs = new Set<number>();
-    
-    // Only save blocks that have an ayah selected and some text
-    const validConcise = conciseBlocks.filter(b => 
-       b.ayahNumber > 0 && b.explanations.some(e => e.text.trim().length > 0 || String(e.title).trim().length > 0)
+    const maxVerses = surahs?.find(s => s.number === selectedSurah)?.verseCount || 0;
+    const parts = val.split(',').map(s => s.trim()).filter(Boolean);
+
+    for (const part of parts) {
+      if (part.includes('-')) {
+        const hyphens = part.split('-').length - 1;
+        if (hyphens > 1) {
+          setRangeError(`Invalid format: "${part}" has too many hyphens.`);
+          return;
+        }
+        const [startStr, endStr] = part.split('-');
+        if (!startStr || !endStr) continue;
+
+        const start = parseInt(startStr);
+        const end = parseInt(endStr);
+
+        if (isNaN(start) || isNaN(end)) {
+          setRangeError(`Incomplete range: "${part}".`);
+          return;
+        }
+        if (start >= end) {
+          setRangeError(`Invalid range: "${part}". Start must be less than end.`);
+          return;
+        }
+        if (start < 1) {
+          setRangeError(`Verse cannot be less than 1.`);
+          return;
+        }
+        if (end > maxVerses) {
+          setRangeError(`Verse ${end} exceeds max verses (${maxVerses}).`);
+          return;
+        }
+      } else {
+        const num = parseInt(part);
+        if (isNaN(num)) continue;
+        if (num < 1) {
+          setRangeError(`Verse cannot be less than 1.`);
+          return;
+        }
+        if (num > maxVerses) {
+          setRangeError(`Verse ${num} exceeds max verses (${maxVerses}).`);
+          return;
+        }
+      }
+    }
+    setRangeError(null);
+  };
+
+  const handleSave = () => {
+    if (!selectedSurah) {
+      toast({
+        title: "Selection Required",
+        description: "Please select a Surah first.",
+        variant: "destructive",
+        icon: <AlertCircle size={18} />
+      });
+      return;
+    }
+    if (mode === 'deeper' && rangeError) {
+      toast({
+        title: "Range Error",
+        description: "Please fix the Verse Range errors before saving.",
+        variant: "destructive",
+        icon: <AlertCircle size={18} />
+      });
+      return;
+    }
+    if (mode === 'deeper' && !verseRange.trim()) {
+      toast({
+        title: "Range Required",
+        description: "Please enter a Verse Range before saving.",
+        variant: "destructive",
+        icon: <AlertCircle size={18} />
+      });
+      return;
+    }
+
+    const allVerses = new Set<number>();
+
+    // Only save blocks that have an verse selected and some text
+    const validConcise = conciseBlocks.filter(b =>
+      b.verseNumber > 0 && b.explanations.some(e => e.text.trim().length > 0 || String(e.title).trim().length > 0)
     );
 
     validConcise.forEach(b => {
-      if (b.ayahNumber) allAyahs.add(Number(b.ayahNumber));
+      if (b.verseNumber) allVerses.add(Number(b.verseNumber));
     });
 
-    const parts = ayahRange.split(',').map(s => s.trim());
+    const parts = verseRange.split(',').map(s => s.trim());
     parts.forEach(p => {
       if (p.includes('-')) {
         const [start, end] = p.split('-').map(Number);
         for (let i = start; i <= end; i++) {
-           if (!isNaN(i) && i > 0) allAyahs.add(i);
+          if (!isNaN(i) && i > 0) allVerses.add(i);
         }
       } else if (p && !isNaN(Number(p))) {
-        allAyahs.add(Number(p));
+        allVerses.add(Number(p));
       }
     });
 
@@ -122,8 +236,8 @@ export default function ExplanationBuilderPage() {
     const newExplanation: Explanation = {
       id: currentId,
       surahNumber: Number(selectedSurah),
-      ayahs: Array.from(allAyahs).sort((a, b) => a - b),
-      ayahRange: ayahRange,
+      verses: Array.from(allVerses).sort((a, b) => a - b),
+      verseRange: verseRange,
       concise: validConcise,
       deeperLook: {
         rootWords: rootWordsOn ? validRootWords : [],
@@ -137,15 +251,15 @@ export default function ExplanationBuilderPage() {
     navigate(-1);
   };
 
-  const getAyahText = (ayahNum: number) => {
-    return currentSurahAyahs?.find(a => a.numberInSurah === Number(ayahNum))?.text || '';
+  const getVerseText = (verseNum: number) => {
+    return currentSurahVerses?.find(a => a.numberInSurah === Number(verseNum))?.text || '';
   };
 
-  const addAyahBlock = () => setConciseBlocks([...conciseBlocks, { ayahNumber: 0, explanations: [{ id: crypto.randomUUID(), title: '', text: '' }] }]);
-  const removeAyahBlock = (index: number) => { const nb = [...conciseBlocks]; nb.splice(index, 1); setConciseBlocks(nb); };
-  const updateAyahBlock = (index: number, val: number) => { const nb = [...conciseBlocks]; nb[index].ayahNumber = val; setConciseBlocks(nb); };
-  
-  const addExplanationToBlock = (bIndex: number) => { const nb = [...conciseBlocks]; nb[bIndex].explanations.push({ id: crypto.randomUUID(), title: '', text: '' }); setConciseBlocks(nb); };
+  const addVerseBlock = () => setConciseBlocks([...conciseBlocks, { verseNumber: 0, explanations: [{ id: generateId(), title: '', text: '' }] }]);
+  const removeVerseBlock = (index: number) => { const nb = [...conciseBlocks]; nb.splice(index, 1); setConciseBlocks(nb); };
+  const updateVerseBlock = (index: number, val: number) => { const nb = [...conciseBlocks]; nb[index].verseNumber = val; setConciseBlocks(nb); };
+
+  const addExplanationToBlock = (bIndex: number) => { const nb = [...conciseBlocks]; nb[bIndex].explanations.push({ id: generateId(), title: '', text: '' }); setConciseBlocks(nb); };
   const updateExplanationTitle = (bIndex: number, eIndex: number, val: string) => { const nb = [...conciseBlocks]; nb[bIndex].explanations[eIndex].title = val; setConciseBlocks(nb); };
   const updateExplanationText = (bIndex: number, eIndex: number, val: string) => { const nb = [...conciseBlocks]; nb[bIndex].explanations[eIndex].text = val; setConciseBlocks(nb); };
   const removeExplanationFromBlock = (bIndex: number, eIndex: number) => { const nb = [...conciseBlocks]; nb[bIndex].explanations.splice(eIndex, 1); setConciseBlocks(nb); };
@@ -168,8 +282,24 @@ export default function ExplanationBuilderPage() {
     setRootWords(nr);
   };
 
+  const handlers = useSwipeable({
+    onSwipedLeft: (swipeEvent) => {
+      const target = swipeEvent.event.target as HTMLElement;
+      if (target && target.closest('.no-swipe')) return;
+      if (mode === 'concise') setMode('deeper');
+    },
+    onSwipedRight: (swipeEvent) => {
+      const target = swipeEvent.event.target as HTMLElement;
+      if (target && target.closest('.no-swipe')) return;
+      if (mode === 'deeper') setMode('concise');
+    },
+    trackMouse: true,
+    preventScrollOnSwipe: true,
+    delta: 40,
+  });
+
   return (
-    <div className="min-h-screen pb-32 bg-background">
+    <div {...handlers} className="min-h-screen pb-32 bg-background">
       <div className="sticky top-0 z-40 bg-background border-b border-border/60 pb-2">
         <div className="flex items-center gap-3 px-4 h-16 pt-2">
           <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-xl transition hover:bg-accent text-foreground">
@@ -180,7 +310,7 @@ export default function ExplanationBuilderPage() {
       </div>
 
       <div className="px-4 mt-6 max-w-md mx-auto space-y-7">
-        
+
         {/* SURAH SELECTOR */}
         <div>
           <label className="block text-[11px] font-medium text-muted-foreground uppercase tracking-widest mb-2 ml-1">SURAH</label>
@@ -192,8 +322,8 @@ export default function ExplanationBuilderPage() {
               {surahs?.map(s => (
                 <SelectItem key={s.number} value={s.number.toString()} className="rounded-lg mb-1 focus:bg-accent focus:text-accent-foreground data-[state=checked]:bg-primary/10 data-[state=checked]:text-primary py-3 cursor-pointer">
                   <div className="flex justify-between items-center w-full min-w-[200px]">
-                     <span className="text-[15px] font-medium">{s.number}. {s.name}</span>
-                     <span className="font-arabic text-primary text-lg pr-3">{s.nameArabic}</span>
+                    <span className="text-[15px] font-medium">{s.number}. {s.name}</span>
+                    <span className="font-arabic text-primary text-lg pr-3">{s.nameArabic}</span>
                   </div>
                 </SelectItem>
               ))}
@@ -206,218 +336,404 @@ export default function ExplanationBuilderPage() {
           <label className="block text-[11px] font-medium text-muted-foreground uppercase tracking-widest mb-2 ml-1">MODE</label>
           <div className="flex bg-muted/40 rounded-full p-1 w-full border border-border/40 relative">
             {(['concise', 'deeper'] as const).map((m) => {
-               const active = mode === m;
-               return (
-                 <motion.button
-                   key={m}
-                   onClick={() => setMode(m)}
-                   whileTap={{ scale: 0.98 }}
-                   className={`relative flex-1 py-2 text-[14px] font-semibold rounded-full transition-colors tracking-wide z-10 ${
-                     active ? 'text-primary-foreground' : 'text-muted-foreground hover:text-primary'
-                   }`}
-                 >
-                   {active && (
-                     <motion.div
-                       layoutId="activeTab-builder"
-                       className="absolute inset-0 bg-primary rounded-full shadow-md z-[-1]"
-                       transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                     />
-                   )}
-                   {m === 'concise' ? 'Concise' : 'Deeper Look'}
-                 </motion.button>
-               );
+              const active = mode === m;
+              return (
+                <motion.button
+                  key={m}
+                  onClick={() => setMode(m)}
+                  whileTap={{ scale: 0.98 }}
+                  className={`relative flex-1 py-2 text-[14px] font-semibold rounded-full transition-colors tracking-wide z-10 ${active ? 'text-primary-foreground' : 'text-muted-foreground hover:text-primary'
+                    }`}
+                >
+                  {active && (
+                    <motion.div
+                      layoutId="activeTab-builder"
+                      className="absolute inset-0 bg-primary rounded-full shadow-md z-[-1]"
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                    />
+                  )}
+                  {m === 'concise' ? 'Concise' : 'Deeper Look'}
+                </motion.button>
+              );
             })}
           </div>
         </div>
 
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="popLayout">
           {mode === 'concise' ? (
-             /* CONCISE MODE */
-             <motion.div
-               key="concise"
-               initial={{ opacity: 0, y: 10 }}
-               animate={{ opacity: 1, y: 0 }}
-               exit={{ opacity: 0, y: -10 }}
-               transition={{ duration: 0.2, ease: "easeOut" }}
-               className="space-y-6"
-             >
-                {conciseBlocks.map((block, bIndex) => (
-                  <div key={bIndex} className="bg-card border border-border rounded-[1.5rem] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] relative" ref={(el) => (blockRefs.current[block.ayahNumber] = el)}>
-                     <div className="flex items-center justify-between mb-5">
-                        <h3 className="font-semibold text-[13px] text-muted-foreground uppercase tracking-widest">AYAH BLOCK</h3>
-                        <button onClick={() => removeAyahBlock(bIndex)} className="text-destructive p-1.5 hover:bg-destructive/10 rounded-lg transition-colors">
-                           <Trash2 size={18} />
-                        </button>
-                     </div>
-                     
-                     <div className="space-y-4">
-                        {/* Select Ayah */}
-                         <div>
-                          <label className="block text-[14px] text-muted-foreground mb-2 ml-1">Select Ayah</label>
-                          <Select value={block.ayahNumber ? block.ayahNumber.toString() : ''} onValueChange={(v) => updateAyahBlock(bIndex, Number(v))}>
-                            <SelectTrigger className="w-full bg-muted/50 border-none rounded-2xl h-[56px] px-4 text-[15px] text-foreground focus:ring-0">
-                              <SelectValue placeholder="Select Ayah" />
-                            </SelectTrigger>
+            /* CONCISE MODE */
+            <motion.div
+              key="concise"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="space-y-6"
+            >
+              {conciseBlocks.map((block, bIndex) => (
+                <div key={bIndex} className="bg-card border border-border rounded-[1.5rem] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] relative" ref={(el) => (blockRefs.current[block.verseNumber] = el)}>
+                  <div className="flex items-center justify-between mb-5">
+                    <h3 className="font-semibold text-[13px] text-muted-foreground uppercase tracking-widest">VERSE BLOCK</h3>
+                    <button onClick={() => removeVerseBlock(bIndex)} className="text-destructive p-1.5 hover:bg-destructive/10 rounded-lg transition-colors">
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
+
+                  <div className="space-y-4">
+                    {/* Select Verse */}
+                    <div>
+                      <label className="block text-[14px] text-muted-foreground mb-2 ml-1">Select Verse</label>
+                      <div>
+                        <Select disabled={!selectedSurah} value={block.verseNumber ? block.verseNumber.toString() : ''} onValueChange={(v) => updateVerseBlock(bIndex, Number(v))}>
+                          <SelectTrigger className="w-full bg-muted/50 border-none rounded-2xl h-[56px] px-4 text-[15px] text-foreground focus:ring-0 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed">
+                            <SelectValue placeholder={selectedSurah ? "Select Verse" : "Select a Surah first"} />
+                          </SelectTrigger>
+                          {selectedSurah && (
                             <SelectContent className="bg-popover border-border rounded-xl shadow-lg max-h-[250px]">
-                              {currentSurahAyahs?.map(a => (
-                                <SelectItem key={a.numberInSurah} value={a.numberInSurah.toString()} className="py-3">Ayah {a.numberInSurah}</SelectItem>
+                              {currentSurahVerses?.map(a => (
+                                <SelectItem key={a.numberInSurah} value={a.numberInSurah.toString()} className="py-3">Verse {a.numberInSurah}</SelectItem>
                               ))}
                             </SelectContent>
-                          </Select>
-                        </div>
-  
-                        {/* Ayah Display */}
-                         {block.ayahNumber > 0 && (
-                            <div className="bg-muted/50 rounded-2xl p-4 flex flex-col items-center justify-center min-h-[80px] border border-border/50">
-                               <p className="arabic-text text-2xl leading-[2.5] text-center text-foreground font-arabic" dangerouslySetInnerHTML={{ __html: getAyahText(block.ayahNumber).replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ', '<span class="bismillah-text text-xl block mb-3">﷽</span>') }} />
-                            </div>
-                         )}
-  
-                         {/* Explanation Inputs */}
-                         {block.explanations.length > 0 && (() => {
-                            const exp = block.explanations[0];
-                            const eIndex = 0;
-                            return (
-                               <div className="bg-muted/30 rounded-[1.2rem] p-4 mt-6 border border-border/30">
-                               <div className="flex items-center justify-between mb-4 border-b border-border/60 pb-3">
-                                  <span className="text-[12px] font-semibold text-muted-foreground uppercase tracking-widest pl-1">EXPLANATION</span>
-                               </div>
-                              <div className="space-y-3">
-                                 <div className="flex gap-2 mb-2 overflow-x-auto pb-1 scrollbar-hide pt-1">
-                                    <button onClick={() => insertMarkdownToConcise(bIndex, eIndex, '## Heading')} className="bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors">Heading</button>
-                                    <button onClick={() => insertMarkdownToConcise(bIndex, eIndex, '**bold**')} className="bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors">Bold</button>
-                                    <button onClick={() => insertMarkdownToConcise(bIndex, eIndex, '- list item')} className="bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors">List</button>
-                                    <button onClick={() => insertMarkdownToConcise(bIndex, eIndex, '- [ ] task')} className="bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors">Checklist</button>
-                                    <button onClick={() => insertMarkdownToConcise(bIndex, eIndex, '> quote')} className="bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors">Quote</button>
-                                    <button onClick={() => insertMarkdownToConcise(bIndex, eIndex, '`code`')} className="bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors">Code</button>
-                                    <button onClick={() => insertMarkdownToConcise(bIndex, eIndex, '| Header | Header |\n| --- | --- |\n| Cell | Cell |')} className="bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors">Table</button>
-                                    <button onClick={() => insertMarkdownToConcise(bIndex, eIndex, '[link text](url)')} className="bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors">Link</button>
-                                 </div>
-                                 <textarea 
-                                   placeholder="Write your explanation..."
-                                   value={exp.text}
-                                   onChange={e => updateExplanationText(bIndex, eIndex, e.target.value)}
-                                   className="w-full bg-card border border-border hover:border-primary/50 focus:border-primary rounded-xl p-3.5 text-[15px] text-foreground placeholder:text-muted-foreground min-h-[120px] resize-y outline-none transition-colors"
-                                 />
-                              </div>
-                           </div>
-                         );
-                         })()}
-                     </div>
-                  </div>
-                ))}
-                
-                <button onClick={addAyahBlock} className="w-full border border-dashed border-border rounded-2xl py-[18px] text-muted-foreground font-medium flex justify-center items-center gap-2 bg-card hover:bg-accent transition-all">
-                   <Plus size={18} /> Add Ayah Block
-                </button>
-             </motion.div>
-          ) : (
-             /* DEEPER LOOK MODE */
-             <motion.div
-               key="deeper"
-               initial={{ opacity: 0, y: 10 }}
-               animate={{ opacity: 1, y: 0 }}
-               exit={{ opacity: 0, y: -10 }}
-               transition={{ duration: 0.2, ease: "easeOut" }}
-               className="space-y-7"
-             >
-                {/* Ayah Range */}
-                <div>
-                  <label className="block text-[11px] font-medium text-[#A69B9B] uppercase tracking-widest mb-2 ml-1">AYAH(S)</label>
-                  <input 
-                    type="text" 
-                    placeholder="e.g., 1-3, 5, 7" 
-                    value={ayahRange}
-                    onChange={e => setAyahRange(e.target.value)}
-                    className="w-full bg-white border border-[#E8E2E2] rounded-2xl p-4 text-[15px] focus:outline-none focus:border-[#5A2A31] transition-colors placeholder:text-[#A69B9B]"
-                  />
-                  <p className="text-[12px] text-[#A69B9B] mt-2 ml-1">Supports ranges (1-3), individual (1,5), or mixed</p>
-                </div>
-  
-                {/* Root Words */}
-                <div className="bg-white border border-[#E8E2E2] rounded-[1.5rem] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
-                   <div className="flex items-center justify-between">
-                     <span className="text-[15px] text-[#3A2424] font-medium">Root Words</span>
-                     <Switch checked={rootWordsOn} onCheckedChange={setRootWordsOn} className="data-[state=checked]:bg-[#5A2A31]" />
-                   </div>
-  
-                   {rootWordsOn && (
-                      <div className="mt-5 space-y-4">
-                         {rootWords.map((rw, rIndex) => (
-                           <div key={rw.id} className="border border-[#E8E2E2] rounded-2xl p-4 bg-[#FCFAFA] relative">
-                              <div className="flex justify-between items-center mb-4">
-                                 <span className="text-[13px] text-[#8C7D7D]">Root Word</span>
-                                 <button onClick={() => { const nr = [...rootWords]; nr.splice(rIndex, 1); setRootWords(nr); }}>
-                                   <Trash2 size={16} className="text-[#E05252] hover:text-red-700" />
-                                 </button>
-                              </div>
-                              <div className="space-y-3">
-                                 <input type="text" value={rw.arabic} onChange={e => { const nr = [...rootWords]; nr[rIndex].arabic = e.target.value; setRootWords(nr); }} className="w-full bg-white border border-[#E8E2E2] rounded-full px-4 py-3 text-[14px] font-arabic focus:outline-none focus:border-[#5A2A31] transition-colors placeholder:text-[#D2C8C8] placeholder:font-body placeholder:text-[14px]" dir="rtl" placeholder="(e.g., يؤمنون) Arabic word" />
-                                 <input type="text" value={rw.transliteration} onChange={e => { const nr = [...rootWords]; nr[rIndex].transliteration = e.target.value; setRootWords(nr); }} className="w-full bg-white border border-[#E8E2E2] rounded-full px-4 py-3 text-[14px] focus:outline-none focus:border-[#5A2A31] transition-colors placeholder:text-[#A69B9B]" placeholder="Transliteration" />
-                                 <input type="text" value={rw.rootLetters} onChange={e => { const nr = [...rootWords]; nr[rIndex].rootLetters = e.target.value; setRootWords(nr); }} className="w-full bg-white border border-[#E8E2E2] rounded-full px-4 py-3 text-[14px] font-arabic focus:outline-none focus:border-[#5A2A31] transition-colors placeholder:text-[#D2C8C8] placeholder:font-body placeholder:text-[14px]" dir="rtl" placeholder="(e.g., أ-م-ن) Root letters" />
-                                    <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide pt-1">
-                                       <button onClick={() => insertMarkdownToRootWord(rIndex, '## Heading')} className="bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors">Heading</button>
-                                       <button onClick={() => insertMarkdownToRootWord(rIndex, '**bold**')} className="bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors">Bold</button>
-                                       <button onClick={() => insertMarkdownToRootWord(rIndex, '- list item')} className="bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors">List</button>
-                                       <button onClick={() => insertMarkdownToRootWord(rIndex, '- [ ] task')} className="bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors">Checklist</button>
-                                       <button onClick={() => insertMarkdownToRootWord(rIndex, '> quote')} className="bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors">Quote</button>
-                                       <button onClick={() => insertMarkdownToRootWord(rIndex, '`code`')} className="bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors">Code</button>
-                                       <button onClick={() => insertMarkdownToRootWord(rIndex, '| Header | Header |\n| --- | --- |\n| Cell | Cell |')} className="bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors">Table</button>
-                                       <button onClick={() => insertMarkdownToRootWord(rIndex, '[link text](url)')} className="bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors">Link</button>
-                                    </div>
-                                    <textarea value={rw.explanation} onChange={e => { const nr = [...rootWords]; nr[rIndex].explanation = e.target.value; setRootWords(nr); }} className="w-full bg-white border border-[#E8E2E2] rounded-2xl p-4 text-[14px] min-h-[80px] focus:outline-none focus:border-[#5A2A31] transition-colors placeholder:text-[#A69B9B]" placeholder="Explanation..." />
-                              </div>
-                           </div>
-                         ))}
-                         <button onClick={() => setRootWords([...rootWords, { id: crypto.randomUUID(), arabic: '', transliteration: '', rootLetters: '', explanation: '' }])} className="w-full border border-dashed border-[#D2C8C8] rounded-full py-3.5 text-[#8C7D7D] font-medium flex justify-center items-center gap-2 hover:bg-[#F8F6F4] transition-all">
-                           <Plus size={18} /> Add Root Word
-                         </button>
+                          )}
+                        </Select>
+                        {!selectedSurah && (
+                          <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-destructive text-[12px] font-medium mt-1.5 ml-1">
+                            Please select a Surah first.
+                          </motion.p>
+                        )}
                       </div>
-                   )}
+                    </div>
+
+                    {/* Verse Display */}
+                    {block.verseNumber > 0 && (
+                      <div className="bg-muted/50 rounded-2xl p-4 flex flex-col items-center justify-center min-h-[80px] border border-border/50">
+                        <p className="arabic-text text-2xl leading-[2.5] text-center text-foreground font-arabic" dangerouslySetInnerHTML={{ __html: (getVerseText(block.verseNumber) || '').replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ', '<span class="bismillah-text text-xl block -mb-2">﷽</span>') }} />
+                      </div>
+                    )}
+
+                    {/* Explanation Inputs */}
+                    {block.explanations.length > 0 && (() => {
+                      const exp = block.explanations[0];
+                      const eIndex = 0;
+                      return (
+                        <div className="bg-muted/30 rounded-[1.2rem] p-4 mt-6 border border-border/30">
+                          <div className="flex items-center justify-between mb-4 border-b border-border/60 pb-3">
+                            <span className="text-[12px] font-semibold text-muted-foreground uppercase tracking-widest pl-1">EXPLANATION</span>
+                          </div>
+                          <div className="space-y-3">
+                            <div className="flex gap-2 mb-2 overflow-x-auto pb-1 scrollbar-hide pt-1 no-swipe">
+                              <button disabled={block.verseNumber <= 0} onClick={() => insertMarkdownToConcise(bIndex, eIndex, '## Heading')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${block.verseNumber <= 0 ? 'opacity-50 cursor-not-allowed' : ''}`}>Heading</button>
+                              <button disabled={block.verseNumber <= 0} onClick={() => insertMarkdownToConcise(bIndex, eIndex, '**bold**')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${block.verseNumber <= 0 ? 'opacity-50 cursor-not-allowed' : ''}`}>Bold</button>
+                              <button disabled={block.verseNumber <= 0} onClick={() => insertMarkdownToConcise(bIndex, eIndex, '- list item')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${block.verseNumber <= 0 ? 'opacity-50 cursor-not-allowed' : ''}`}>List</button>
+                              <button disabled={block.verseNumber <= 0} onClick={() => insertMarkdownToConcise(bIndex, eIndex, '- [ ] task')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${block.verseNumber <= 0 ? 'opacity-50 cursor-not-allowed' : ''}`}>Checklist</button>
+                              <button disabled={block.verseNumber <= 0} onClick={() => insertMarkdownToConcise(bIndex, eIndex, '> quote')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${block.verseNumber <= 0 ? 'opacity-50 cursor-not-allowed' : ''}`}>Quote</button>
+                              <button disabled={block.verseNumber <= 0} onClick={() => insertMarkdownToConcise(bIndex, eIndex, '`code`')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${block.verseNumber <= 0 ? 'opacity-50 cursor-not-allowed' : ''}`}>Code</button>
+                              <button disabled={block.verseNumber <= 0} onClick={() => insertMarkdownToConcise(bIndex, eIndex, '| Header | Header |\n| --- | --- |\n| Cell | Cell |')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${block.verseNumber <= 0 ? 'opacity-50 cursor-not-allowed' : ''}`}>Table</button>
+                              <button disabled={block.verseNumber <= 0} onClick={() => insertMarkdownToConcise(bIndex, eIndex, '[link text](url)')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${block.verseNumber <= 0 ? 'opacity-50 cursor-not-allowed' : ''}`}>Link</button>
+                            </div>
+                            <div>
+                              <textarea
+                                disabled={block.verseNumber <= 0}
+                                placeholder={block.verseNumber <= 0 ? "Select a Verse first to write an explanation..." : "Write your explanation..."}
+                                value={exp.text}
+                                onChange={e => updateExplanationText(bIndex, eIndex, e.target.value)}
+                                className="w-full bg-card border border-border hover:border-primary/50 focus:border-primary rounded-xl p-3.5 text-[15px] text-foreground placeholder:text-muted-foreground min-h-[120px] resize-y outline-none transition-colors disabled:opacity-50 disabled:bg-muted/50 disabled:cursor-not-allowed"
+                              />
+                              {block.verseNumber <= 0 && (
+                                <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-destructive text-[12px] font-medium mt-1.5 ml-1">
+                                  Select a verse number first to write an explanation.
+                                </motion.p>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })()}
+                  </div>
                 </div>
-  
+              ))}
+
+              <button onClick={addVerseBlock} className="w-full border border-dashed border-border rounded-2xl py-[16px] text-muted-foreground font-medium flex justify-center items-center gap-2 bg-card hover:bg-accent transition-all">
+                <Plus size={18} /> Add Verse Block
+              </button>
+            </motion.div>
+          ) : (
+            /* DEEPER LOOK MODE */
+            <motion.div
+              key="deeper"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="space-y-6 pb-20 relative"
+            >
+              {!hasSelectedVerse && (
+                <div className="absolute inset-x-[-10px] inset-y-[-10px] z-[60] bg-background/60 backdrop-blur-[2px] rounded-3xl">
+                  <div className="sticky top-[40vh] flex flex-col items-center justify-center text-center p-8 pt-0">
+                    <div className="w-16 h-16 bg-muted text-muted-foreground rounded-full flex items-center justify-center mb-4 mx-auto">
+                      <Info size={28} />
+                    </div>
+                    <h4 className="text-foreground font-semibold text-lg mb-2">Verse Selection Required</h4>
+                    <p className="text-muted-foreground text-sm max-w-[240px] leading-relaxed mx-auto">
+                      Please select at least one verse in the <strong>Concise</strong> tab first.
+                    </p>
+                    <button
+                      onClick={() => setMode('concise')}
+                      className="mt-6 text-primary font-medium text-sm hover:underline mx-auto"
+                    >
+                      Go to Concise Tab
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <div className={`${!hasSelectedVerse ? 'pointer-events-none opacity-20' : ''}`}>
+                {/* Verse Range */}
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="block text-[11px] font-medium text-[#A69B9B] uppercase tracking-widest ml-1">VERSE(S)</label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button className="text-muted-foreground hover:text-primary transition-colors outline-none mr-1 p-1">
+                          <Info size={16} />
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[320px] p-5 text-sm bg-popover border-border shadow-xl rounded-2xl z-[100]">
+                        <h4 className="font-semibold text-foreground mb-3 text-[15px]">Verse Range Rules</h4>
+                        <ul className="list-disc pl-4 space-y-2 text-muted-foreground mb-4 text-[13px] leading-relaxed">
+                          <li>Only numbers, hyphens, and commas allowed.</li>
+                          <li>Use hyphens to specify a continuous range.</li>
+                          <li>Start of range must be less than end.</li>
+                          <li>Numbers cannot exceed the Surah's total Verses.</li>
+                        </ul>
+                        <h5 className="font-medium text-foreground mb-2 text-[13px]">Valid Examples:</h5>
+                        <p className="text-primary bg-primary/10 p-2.5 font-mono text-[12px] rounded-lg">1-3, 5, 7-10</p>
+                        <h5 className="font-medium text-destructive mt-4 mb-2 text-[13px]">Invalid Examples:</h5>
+                        <p className="text-destructive bg-destructive/10 p-2.5 font-mono text-[12px] opacity-90 rounded-lg">1-3-4 <span className="opacity-70">(too many hyphens)</span><br />5-3 <span className="opacity-70">(reversed range)</span></p>
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="e.g., 1-3, 5, 7"
+                    value={verseRange}
+                    onChange={handleVerseRangeChange}
+                    className={`w-full bg-background border ${rangeError ? 'border-destructive focus:border-destructive' : 'border-[#E8E2E2] focus:border-[#5A2A31]'} rounded-2xl p-4 text-[15px] focus:outline-none transition-colors placeholder:text-[#A69B9B]`}
+                  />
+                  {rangeError ? (
+                    <p className="text-[12px] text-destructive mt-2 ml-1 font-medium">{rangeError}</p>
+                  ) : (
+                    <p className="text-[12px] text-[#A69B9B] mt-2 ml-1">Supports ranges, individual, or mixed</p>
+                  )}
+                </div>
+
+                {/* Root Words */}
+                <div className="bg-white border border-[#E8E2E2] rounded-[1.5rem] p-4 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[15px] text-[#3A2424] font-medium">Root Words</span>
+                    <Switch checked={rootWordsOn} onCheckedChange={setRootWordsOn} className="data-[state=checked]:bg-[#5A2A31]" />
+                  </div>
+
+                  {rootWordsOn && (
+                    <div className="mt-5 space-y-4">
+                      {rootWords.map((rw, rIndex) => (
+                        <div key={rw.id} className="border border-[#E8E2E2] rounded-2xl p-4 bg-[#FCFAFA] relative">
+                          <div className="flex justify-between items-center mb-4">
+                            <span className="text-[13px] text-[#8C7D7D]">Root Word</span>
+                            <button onClick={() => { const nr = [...rootWords]; nr.splice(rIndex, 1); setRootWords(nr); }}>
+                              <Trash2 size={16} className="text-[#E05252] hover:text-red-700" />
+                            </button>
+                          </div>
+                          <div className="space-y-3">
+                            <input type="text" value={rw.arabic} onChange={e => { const nr = [...rootWords]; nr[rIndex].arabic = e.target.value; setRootWords(nr); }} className="w-full bg-white border border-[#E8E2E2] rounded-full px-4 py-3 text-[14px] font-arabic focus:outline-none focus:border-[#5A2A31] transition-colors placeholder:text-[#D2C8C8] placeholder:font-body placeholder:text-[14px]" dir="rtl" placeholder="(e.g., يؤمنون) Arabic word" />
+                            <div>
+                              <input disabled={!rw.arabic.trim()} type="text" value={rw.transliteration} onChange={e => { const nr = [...rootWords]; nr[rIndex].transliteration = e.target.value; setRootWords(nr); }} className="w-full bg-white border border-[#E8E2E2] rounded-full px-4 py-3 text-[14px] focus:outline-none focus:border-[#5A2A31] transition-colors placeholder:text-[#A69B9B] disabled:opacity-50 disabled:bg-[#FCFAFA] disabled:cursor-not-allowed" placeholder={rw.arabic.trim() ? "Transliteration" : "Arabic word required first"} />
+                              {!rw.arabic.trim() && (
+                                <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-destructive text-[12px] font-medium mt-1.5 ml-1">
+                                  Enter the Arabic word first.
+                                </motion.p>
+                              )}
+                            </div>
+                            <div>
+                              <input disabled={!rw.arabic.trim()} type="text" value={rw.rootLetters} onChange={e => { const nr = [...rootWords]; nr[rIndex].rootLetters = e.target.value; setRootWords(nr); }} className="w-full bg-white border border-[#E8E2E2] rounded-full px-4 py-3 text-[14px] font-arabic focus:outline-none focus:border-[#5A2A31] transition-colors placeholder:text-[#D2C8C8] placeholder:font-body placeholder:text-[14px] disabled:opacity-50 disabled:bg-[#FCFAFA] disabled:cursor-not-allowed" dir="rtl" placeholder={rw.arabic.trim() ? "(e.g., أ-م-ن) Root letters" : "Arabic word required first"} />
+                              {!rw.arabic.trim() && (
+                                <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-destructive text-[12px] font-medium mt-1.5 ml-1">
+                                  Enter the Arabic word first.
+                                </motion.p>
+                              )}
+                            </div>
+                            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide pt-1 no-swipe">
+                              <button disabled={!rw.arabic.trim()} onClick={() => insertMarkdownToRootWord(rIndex, '## Heading')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${!rw.arabic.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Heading</button>
+                              <button disabled={!rw.arabic.trim()} onClick={() => insertMarkdownToRootWord(rIndex, '**bold**')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${!rw.arabic.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Bold</button>
+                              <button disabled={!rw.arabic.trim()} onClick={() => insertMarkdownToRootWord(rIndex, '- list item')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${!rw.arabic.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>List</button>
+                              <button disabled={!rw.arabic.trim()} onClick={() => insertMarkdownToRootWord(rIndex, '- [ ] task')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${!rw.arabic.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Checklist</button>
+                              <button disabled={!rw.arabic.trim()} onClick={() => insertMarkdownToRootWord(rIndex, '> quote')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${!rw.arabic.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Quote</button>
+                              <button disabled={!rw.arabic.trim()} onClick={() => insertMarkdownToRootWord(rIndex, '`code`')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${!rw.arabic.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Code</button>
+                              <button disabled={!rw.arabic.trim()} onClick={() => insertMarkdownToRootWord(rIndex, '| Header | Header |\n| --- | --- |\n| Cell | Cell |')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${!rw.arabic.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Table</button>
+                              <button disabled={!rw.arabic.trim()} onClick={() => insertMarkdownToRootWord(rIndex, '[link text](url)')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${!rw.arabic.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Link</button>
+                            </div>
+                            <div className="relative">
+                              <textarea
+                                disabled={!rw.arabic.trim()}
+                                value={rw.explanation}
+                                onChange={e => { const nr = [...rootWords]; nr[rIndex].explanation = e.target.value; setRootWords(nr); }}
+                                className="w-full bg-white border border-[#E8E2E2] rounded-2xl p-4 text-[14px] min-h-[80px] focus:outline-none focus:border-[#5A2A31] transition-colors placeholder:text-[#A69B9B] disabled:opacity-50 disabled:bg-[#FCFAFA] disabled:cursor-not-allowed"
+                                placeholder={rw.arabic.trim() ? "Explanation..." : "Arabic word required first..."}
+                              />
+                              {!rw.arabic.trim() && (
+                                <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-destructive text-[12px] font-medium mt-1.5 ml-1">
+                                   Enter the Arabic word first to write an explanation.
+                                </motion.p>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      <div className="flex flex-col">
+                        <button
+                          disabled={!verseRange.trim() || !!rangeError}
+                          onClick={() => {
+                            setRootWords([...rootWords, { id: generateId(), arabic: '', transliteration: '', rootLetters: '', explanation: '' }]);
+                          }}
+                          className={`w-full border border-dashed border-[#D2C8C8] rounded-full py-3.5 text-[#8C7D7D] font-medium flex justify-center items-center gap-2 transition-all ${!verseRange.trim() || !!rangeError ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#F8F6F4]'}`}
+                        >
+                          <Plus size={18} /> Add Root Word
+                        </button>
+                        {(!verseRange.trim() || !!rangeError) && (
+                          <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-destructive text-[12px] font-medium mt-2 text-center w-full">
+                            {rangeError ? "Fix the verse range error first." : "Enter a Verse Range first."}
+                          </motion.p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 {/* Categories */}
                 <div className="mb-24">
-                   <label className="block text-[11px] font-medium text-[#A69B9B] uppercase tracking-widest mb-3 ml-1">CATEGORIES</label>
-                   
-                   {categories.map((cat, cIndex) => (
-                     <div key={cat.id} className="bg-white border border-[#E8E2E2] rounded-[1.5rem] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] mb-4">
-                        <div className="flex justify-between items-center mb-4">
-                           <span className="text-[13px] text-[#8C7D7D]">Category</span>
-                           <button onClick={() => { const nc = [...categories]; nc.splice(cIndex, 1); setCategories(nc); }}>
-                             <Trash2 size={16} className="text-[#E05252] hover:text-red-700" />
-                           </button>
-                        </div>
-                        <input type="text" value={cat.title} onChange={e => { const nc = [...categories]; nc[cIndex].title = e.target.value; setCategories(nc); }} className="w-full bg-white border border-[#E8E2E2] rounded-full px-4 py-3.5 text-[14px] mb-4 focus:outline-none focus:border-[#5A2A31]" placeholder="Category Title" />
-                        
-                        <div className="flex gap-2 mb-3 overflow-x-auto pb-1 scrollbar-hide">
-                           <button onClick={() => insertMarkdown(cIndex, '## Heading')} className="bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4]">Heading</button>
-                           <button onClick={() => insertMarkdown(cIndex, '**bold**')} className="bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4]">Bold</button>
-                           <button onClick={() => insertMarkdown(cIndex, '- list item')} className="bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4]">List</button>
-                           <button onClick={() => insertMarkdown(cIndex, '- [ ] task')} className="bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4]">Checklist</button>
-                           <button onClick={() => insertMarkdown(cIndex, '> quote')} className="bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4]">Quote</button>
-                           <button onClick={() => insertMarkdown(cIndex, '`code`')} className="bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4]">Code</button>
-                           <button onClick={() => insertMarkdown(cIndex, '| Header | Header |\n| --- | --- |\n| Cell | Cell |')} className="bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4]">Table</button>
-                           <button onClick={() => insertMarkdown(cIndex, '[link text](url)')} className="bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4]">Link</button>
-                        </div>
-                        
-                        <textarea value={cat.content} onChange={e => { const nc = [...categories]; nc[cIndex].content = e.target.value; setCategories(nc); }} className="w-full bg-white border border-[#E8E2E2] rounded-2xl p-4 text-[14px] min-h-[140px] focus:outline-none focus:border-[#5A2A31]" placeholder="## Heading&#10;&#10;Your content here...&#10;&#10;Use **bold** for emphasis" />
-                     </div>
-                   ))}
-  
-                   <button onClick={() => setCategories([...categories, { id: crypto.randomUUID(), title: '', content: '', order: categories.length }])} className="w-full border border-dashed border-[#D2C8C8] rounded-2xl py-[18px] text-[#8C7D7D] font-medium flex justify-center items-center gap-2 bg-white hover:bg-[#F8F6F4] transition-all">
-                     <Plus size={18} /> Add Category
-                   </button>
+                  <label className="block text-[11px] font-medium text-[#A69B9B] uppercase tracking-widest mb-3 ml-1">CATEGORIES</label>
+
+                  {categories.map((cat, cIndex) => (
+                    <div key={cat.id} className="bg-white border border-[#E8E2E2] rounded-[1.5rem] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] mb-4">
+                      <div className="flex justify-between items-center mb-4">
+                        <span className="text-[13px] text-[#8C7D7D]">Category</span>
+                        <button onClick={() => { const nc = [...categories]; nc.splice(cIndex, 1); setCategories(nc); }}>
+                          <Trash2 size={16} className="text-[#E05252] hover:text-red-700" />
+                        </button>
+                      </div>
+                      <input type="text" value={cat.title} onChange={e => { const nc = [...categories]; nc[cIndex].title = e.target.value; setCategories(nc); }} className="w-full bg-white border border-[#E8E2E2] rounded-full px-4 py-3.5 text-[14px] mb-4 focus:outline-none focus:border-[#5A2A31]" placeholder="Category Title" />
+
+                      <div className="flex gap-2 mb-3 overflow-x-auto pb-1 scrollbar-hide no-swipe">
+                        <button disabled={!cat.title.trim()} onClick={() => insertMarkdown(cIndex, '## Heading')} className={`bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4] ${!cat.title.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Heading</button>
+                        <button disabled={!cat.title.trim()} onClick={() => insertMarkdown(cIndex, '**bold**')} className={`bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4] ${!cat.title.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Bold</button>
+                        <button disabled={!cat.title.trim()} onClick={() => insertMarkdown(cIndex, '- list item')} className={`bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4] ${!cat.title.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>List</button>
+                        <button disabled={!cat.title.trim()} onClick={() => insertMarkdown(cIndex, '- [ ] task')} className={`bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4] ${!cat.title.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Checklist</button>
+                        <button disabled={!cat.title.trim()} onClick={() => insertMarkdown(cIndex, '> quote')} className={`bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4] ${!cat.title.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Quote</button>
+                        <button disabled={!cat.title.trim()} onClick={() => insertMarkdown(cIndex, '`code`')} className={`bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4] ${!cat.title.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Code</button>
+                        <button disabled={!cat.title.trim()} onClick={() => insertMarkdown(cIndex, '| Header | Header |\n| --- | --- |\n| Cell | Cell |')} className={`bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4] ${!cat.title.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Table</button>
+                        <button disabled={!cat.title.trim()} onClick={() => insertMarkdown(cIndex, '[link text](url)')} className={`bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4] ${!cat.title.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Link</button>
+                      </div>
+
+                      <div>
+                        <textarea
+                          disabled={!cat.title.trim()}
+                          value={cat.content}
+                          onChange={e => { const nc = [...categories]; nc[cIndex].content = e.target.value; setCategories(nc); }}
+                          className="w-full bg-white border border-[#E8E2E2] rounded-2xl p-4 text-[14px] min-h-[140px] focus:outline-none focus:border-[#5A2A31] disabled:opacity-50 disabled:bg-[#FCFAFA] disabled:cursor-not-allowed"
+                          placeholder={cat.title.trim() ? "## Heading\n\nYour content here...\n\nUse **bold** for emphasis" : "Category Title required first..."}
+                        />
+                        {!cat.title.trim() && (
+                          <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-destructive text-[12px] font-medium mt-1.5 ml-1">
+                            Enter the Category Title first to write content.
+                          </motion.p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+
+                  <div className="flex flex-col">
+                    <button
+                      disabled={!verseRange.trim() || !!rangeError}
+                      onClick={() => {
+                        setCategories([...categories, { id: generateId(), title: '', content: '', order: categories.length }]);
+                      }}
+                      className={`w-full border border-dashed border-[#D2C8C8] rounded-2xl py-[16px] text-[#8C7D7D] font-medium flex justify-center items-center gap-2 bg-white transition-all ${!verseRange.trim() || !!rangeError ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#F8F6F4]'}`}
+                    >
+                      <Plus size={18} /> Add Category
+                    </button>
+                    {(!verseRange.trim() || !!rangeError) && (
+                      <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-destructive text-[12px] font-medium mt-2 text-center w-full">
+                        {rangeError ? "Fix the verse range error first." : "Enter a Verse Range first."}
+                      </motion.p>
+                    )}
+                  </div>
                 </div>
-             </motion.div>
+              </div>
+            </motion.div>
           )}
         </AnimatePresence>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 p-5 pb-8 bg-gradient-to-t from-background via-background/90 to-transparent z-50">
-        <button 
-          onClick={handleSave}
-          className="w-full max-w-md mx-auto bg-primary text-primary-foreground py-[14px] rounded-full font-medium text-[16px] shadow-[0_8px_20px_rgba(var(--primary),0.25)] hover:bg-primary/90 active:scale-[0.98] transition-all flex justify-center items-center"
+      <div className="fixed bottom-0 left-0 right-0 p-5 pb-8 bg-gradient-to-t from-background via-background/90 to-transparent z-[70]">
+        <button
+          onClick={() => {
+            if (isSaveDisabled) {
+              if (!selectedSurah) {
+                toast({
+                  title: "Selection Required",
+                  description: "Please select a Surah first.",
+                  variant: "destructive",
+                  icon: <AlertCircle size={18} />
+                });
+              }
+              else if (mode === 'deeper' && !verseRange.trim()) {
+                toast({
+                  title: "Range Required",
+                  description: "Enter a verse range for the Deeper Look study.",
+                  variant: "destructive",
+                  icon: <AlertCircle size={18} />
+                });
+              }
+              else if (mode === 'deeper' && !!rangeError) {
+                toast({
+                  title: "Range Error",
+                  description: "Fix the verse range error before saving.",
+                  variant: "destructive",
+                  icon: <AlertCircle size={18} />
+                });
+              }
+              else if (!hasAtLeastOneExplanation) {
+                toast({
+                  title: "Content Missing",
+                  description: "Add at least one concise note or deeper look entry.",
+                  variant: "destructive",
+                  icon: <AlertCircle size={18} />
+                });
+              }
+              else if (!hasConciseContent) {
+                toast({
+                  title: "Content Missing",
+                  description: "Add at least one concise note in the Verse Block section.",
+                  variant: "destructive",
+                  icon: <AlertCircle size={18} />
+                });
+              }
+              else if (!hasChanges) {
+                toast({
+                  title: "No Changes",
+                  description: "Everything is already saved.",
+                  variant: "default",
+                  icon: <CheckCircle size={18} />
+                });
+              }
+              return;
+            }
+            handleSave();
+          }}
+          className={`w-full max-w-md mx-auto py-[14px] rounded-full font-medium text-[16px] transition-all flex justify-center items-center ${isSaveDisabled
+              ? 'bg-secondary text-muted-foreground/80'
+              : 'bg-primary text-primary-foreground shadow-[0_8px_20px_rgba(var(--primary),0.25)] hover:bg-primary/90 active:scale-[0.98]'
+            }`}
         >
           Save Explanation
         </button>

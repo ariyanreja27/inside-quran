@@ -3,7 +3,7 @@
 @font-face {
   font-family: 'surah-font';
   src: url('https://static-cdn.tarteel.ai/qul/fonts/surah-names/v4/surah-name-v4.ttf') format('truetype');
-  font-display: swap;
+  font-display: block;
 }
 
 @tailwind base;
@@ -115,14 +115,14 @@
 
   html {
     scrollbar-gutter: stable;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   body {
     @apply bg-background text-foreground antialiased;
     font-family: var(--font-body);
     -webkit-tap-highlight-color: transparent;
-    overflow-x: hidden;
+    overflow-x: clip;
     width: 100%;
   }
 
@@ -146,6 +146,9 @@
     font-size: 65px;
     @apply text-foreground;
     display: block;
+    height: 65px;
+    white-space: nowrap;
+    overflow: hidden;
     font-variant-ligatures: discretionary-ligatures;
     -webkit-font-feature-settings: "liga" 1, "dlig" 1;
     line-height: 1;
@@ -165,7 +168,7 @@
     border-color: hsl(var(--primary) / 0.2);
   }
 
-  .ayah-card {
+  .verse-card {
     @apply bg-card rounded-2xl border border-border p-5 transition-all duration-200;
   }
 

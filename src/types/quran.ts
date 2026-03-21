@@ -3,11 +3,11 @@ export interface Surah {
   name: string;
   englishName: string;
   englishNameTranslation: string;
-  numberOfAyahs: number;
+  numberOfVerses: number;
   revelationType: 'Meccan' | 'Medinan';
 }
 
-export interface Ayah {
+export interface Verse {
   number: number;
   numberInSurah: number;
   text: string;
@@ -41,15 +41,15 @@ export interface ConciseExplanation {
 }
 
 export interface ConciseBlock {
-  ayahNumber: number;
+  verseNumber: number;
   explanations: ConciseExplanation[];
 }
 
 export interface Explanation {
   id: string;
   surahNumber: number;
-  ayahs: number[];
-  ayahRange?: string;
+  verses: number[];
+  verseRange?: string;
   concise: ConciseBlock[];
   deeperLook: {
     rootWords: RootWord[];
@@ -62,11 +62,11 @@ export interface Explanation {
 
 export interface Bookmark {
   surahNumber: number;
-  ayahNumber: number;
+  verseNumber: number;
   createdAt: string;
 }
 
 export interface LastPosition {
   surahNumber: number;
-  ayahNumber: number;
+  verseNumber: number;
 }

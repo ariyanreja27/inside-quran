@@ -1,48 +1,70 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Star, BookmarkCheck, ArrowRight } from 'lucide-react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { useSwipeable } from 'react-swipeable';
+import { Star, BookmarkCheck, Highlighter } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useFavorites, useBookmarks } from '@/hooks/useAppStore';
-import { useSurahs, useSurahAyahs } from '@/hooks/useQuranData';
+import { useSurahs, useSurahVerses } from '@/hooks/useQuranData';
 
-type SavedView = 'favorites' | 'bookmarks';
+type SavedView = 'favorites' | 'bookmarks' | 'highlights';
 
-function BookmarkedAyahCard({ surahNumber, ayahNumber }: { surahNumber: number; ayahNumber: number }) {
+function BookmarkedVerseCard({ surahNumber, verseNumber }: { surahNumber: number; verseNumber: number }) {
   const { data: surahs } = useSurahs();
-  const { data: ayahs } = useSurahAyahs(surahNumber);
+  const { data: verses } = useSurahVerses(surahNumber);
   const surah = surahs?.find(s => s.number === surahNumber);
-  const ayah = ayahs?.find(a => a.numberInSurah === ayahNumber);
+  const verse = verses?.find(a => a.numberInSurah === verseNumber);
 
-  if (!surah || !ayah) return null;
+  if (!surah || !verse) return null;
 
   return (
-    <Link to={`/surah/${surahNumber}`} className="block">
+    <Link to={`/surah/${surahNumber}?verse=${verseNumber}`} className="block">
       <div className="surah-card">
         <div className="mb-2 flex items-center gap-2">
           <BookmarkCheck size={14} className="gold-accent" />
-          <span className="text-xs font-medium text-foreground">{surah.name} : {ayahNumber}</span>
+          <span className="text-xs font-medium text-foreground">{surah.name} : {verseNumber}</span>
         </div>
-        <p className="arabic-text line-clamp-1 text-sm text-foreground">{ayah.text}</p>
-        <p className="mt-1 line-clamp-1 text-xs text-muted-foreground">{ayah.translation}</p>
+        <p className="arabic-text line-clamp-1 text-sm text-foreground">{verse.text}</p>
+        <p className="mt-1 line-clamp-1 text-xs text-muted-foreground">{verse.translation}</p>
       </div>
     </Link>
   );
 }
 
 export default function SavedPage() {
-  const { favorites } = useFavorites();
+  const { favorites, toggleFavorite } = useFavorites();
   const { bookmarks } = useBookmarks();
   const { data: surahs } = useSurahs();
-  const [activeView, setActiveView] = useState<SavedView>('favorites');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabParam = searchParams.get('tab') as SavedView | null;
+  const activeView = tabParam === 'favorites' || tabParam === 'bookmarks' || tabParam === 'highlights' ? tabParam : 'favorites';
+
+  const setActiveView = (view: SavedView) => {
+    setSearchParams({ tab: view }, { replace: true });
+  };
 
   const favoriteSurahs = surahs?.filter(s => favorites.includes(s.number)) || [];
   const tabs: { id: SavedView; label: string }[] = [
-    { id: 'favorites', label: 'Favorite Surahs' },
-    { id: 'bookmarks', label: 'Bookmarked Ayahs' },
+    { id: 'favorites', label: 'Favorite' },
+    { id: 'bookmarks', label: 'Bookmarked' },
+    { id: 'highlights', label: 'Highlights' },
   ];
 
+  const handlers = useSwipeable({
+    onSwipedLeft: () => {
+      const idx = tabs.findIndex(t => t.id === activeView);
+      if (idx !== -1 && idx < tabs.length - 1) setActiveView(tabs[idx + 1].id);
+    },
+    onSwipedRight: () => {
+      const idx = tabs.findIndex(t => t.id === activeView);
+      if (idx > 0) setActiveView(tabs[idx - 1].id);
+    },
+    trackMouse: true,
+    preventScrollOnSwipe: true,
+    delta: 40,
+  });
+
   return (
-    <div className="min-h-screen pb-24">
+    <div {...handlers} className="min-h-screen pb-24 flex flex-col">
       <div className="px-4 pb-5 pt-12">
         <h1 className="font-display text-2xl font-bold text-foreground">Saved</h1>
         <p className="mt-1 text-sm text-muted-foreground">Your favorites and bookmarks</p>
@@ -50,16 +72,15 @@ export default function SavedPage() {
 
       <div className="px-4">
         <div className="mb-5 rounded-full border border-border bg-secondary/40 p-1 backdrop-blur-sm relative">
-          <div className="grid grid-cols-2 gap-1 relative">
+          <div className="grid grid-cols-3 gap-1 relative">
             {tabs.map((tab) => {
               const active = activeView === tab.id;
               return (
                 <button
                   key={tab.id}
                   onClick={() => setActiveView(tab.id)}
-                  className={`relative rounded-full px-4 py-2.5 text-xs font-semibold transition-colors z-10 ${
-                    active ? 'text-primary-foreground' : 'text-muted-foreground hover:text-primary'
-                  }`}
+                  className={`relative rounded-full px-4 py-2.5 text-xs font-semibold transition-colors z-10 ${active ? 'text-primary-foreground' : 'text-muted-foreground hover:text-primary'
+                    }`}
                 >
                   {active && (
                     <motion.div
@@ -76,7 +97,7 @@ export default function SavedPage() {
         </div>
 
         <AnimatePresence mode="wait">
-          {activeView === 'favorites' ? (
+          {activeView === 'favorites' && (
             <motion.div
               key="favorites"
               initial={{ opacity: 0, y: 10 }}
@@ -90,27 +111,53 @@ export default function SavedPage() {
               {favoriteSurahs.length === 0 ? (
                 <p className="py-8 text-center text-xs text-muted-foreground">No favorite surahs yet</p>
               ) : (
-                <div className="space-y-2">
-                  {favoriteSurahs.map((surah, i) => (
-                    <motion.div key={surah.number} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}>
-                      <Link to={`/surah/${surah.number}`} className="block">
-                        <div className="surah-card flex items-center justify-between">
-                          <div>
-                            <p className="font-display text-sm font-semibold">{surah.name}</p>
-                            <p className="text-xs text-muted-foreground">{surah.ayahCount} ayahs</p>
+                <div className="flex flex-col">
+                  <AnimatePresence initial={false}>
+                    {favoriteSurahs.map((surah) => (
+                      <motion.div
+                        key={surah.number}
+                        layout
+                        initial={{ opacity: 0, scale: 0.95, marginBottom: 12 }}
+                        animate={{ opacity: 1, scale: 1, height: 'auto', marginBottom: 12 }}
+                        exit={{ opacity: 0, scale: 0.9, height: 0, marginBottom: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="overflow-hidden"
+                      >
+                        <Link to={`/surah/${surah.number}`} className="block">
+                          <div className="surah-card flex items-center gap-4">
+                            {/* Surah number circle */}
+                            <div className="flex-shrink-0 w-10 h-10 rounded-full border border-border flex items-center justify-center bg-muted/30">
+                              <span className="text-xs font-mono text-muted-foreground tabular-nums">{surah.number}</span>
+                            </div>
+                            
+                            <div className="flex-1 min-w-0">
+                              <p className="font-display text-sm font-semibold truncate">{surah.name}</p>
+                              <p className="text-xs text-muted-foreground">{surah.verseCount} verses</p>
+                            </div>
+                            <div className="flex items-center gap-2 flex-shrink-0">
+                              <p className="arabic-text font-arabic text-primary ml-1 mr-2">{surah.nameArabic}</p>
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  toggleFavorite(surah.number);
+                                }}
+                                className="p-2 -mr-2 text-primary hover:bg-accent rounded-full transition-colors outline-none"
+                              >
+                                <Star size={16} className="fill-primary" />
+                              </button>
+                            </div>
                           </div>
-                          <div className="flex items-center gap-3">
-                            <p className="arabic-text font-arabic text-primary">{surah.nameArabic}</p>
-                            <ArrowRight size={14} className="text-muted-foreground" />
-                          </div>
-                        </div>
-                      </Link>
-                    </motion.div>
-                  ))}
+                        </Link>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
                 </div>
               )}
             </motion.div>
-          ) : (
+          )}
+
+          {activeView === 'bookmarks' && (
             <motion.div
               key="bookmarks"
               initial={{ opacity: 0, y: 10 }}
@@ -119,19 +166,34 @@ export default function SavedPage() {
               transition={{ duration: 0.2, ease: 'easeOut' }}
             >
               <h2 className="mb-3 flex items-center gap-2 font-display text-sm font-semibold">
-                <BookmarkCheck size={14} className="gold-accent" /> Bookmarked Ayahs
+                <BookmarkCheck size={14} className="gold-accent" /> Bookmarked Verses
               </h2>
               {bookmarks.length === 0 ? (
-                <p className="py-8 text-center text-xs text-muted-foreground">No bookmarked ayahs yet</p>
+                <p className="py-8 text-center text-xs text-muted-foreground">No bookmarked verses yet</p>
               ) : (
                 <div className="space-y-2">
                   {bookmarks.map((bm, i) => (
-                    <motion.div key={`${bm.surahNumber}-${bm.ayahNumber}`} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}>
-                      <BookmarkedAyahCard surahNumber={bm.surahNumber} ayahNumber={bm.ayahNumber} />
+                    <motion.div key={`${bm.surahNumber}-${bm.verseNumber}`} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}>
+                      <BookmarkedVerseCard surahNumber={bm.surahNumber} verseNumber={bm.verseNumber} />
                     </motion.div>
                   ))}
                 </div>
               )}
+            </motion.div>
+          )}
+
+          {activeView === 'highlights' && (
+            <motion.div
+              key="highlights"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+            >
+              <h2 className="mb-3 flex items-center gap-2 font-display text-sm font-semibold">
+                <Highlighter size={14} className="gold-accent" /> Highlights
+              </h2>
+              <p className="py-8 text-center text-xs text-muted-foreground">No highlights yet</p>
             </motion.div>
           )}
         </AnimatePresence>

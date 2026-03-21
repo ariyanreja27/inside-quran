@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import type { Ayah } from '@/types/quran';
+import type { Verse } from '@/types/quran';
 import { surahList, type SurahMeta } from '@/data/quranMeta';
 import { useSettings } from './useAppStore';
 
@@ -15,16 +15,15 @@ export function useSurahs() {
   });
 }
 
-export function useSurahAyahs(surahNumber: number) {
+export function useSurahVerses(surahNumber: number) {
   const { settings } = useSettings();
 
-  return useQuery<Ayah[]>({
-    queryKey: ['surah-ayahs', surahNumber, settings.language],
+  return useQuery<Verse[]>({
+    queryKey: ['surah-verses', surahNumber, settings.language],
     queryFn: async () => {
       const translationEdition = 
         settings.language === 'bn' ? 'bn.bengali' : 
         settings.language === 'hi' ? 'hi.hindi' : 
-        settings.language === 'ur' ? 'ur.jandali' : 
         'en.sahih';
 
       const [arabicRes, translationRes] = await Promise.all([
@@ -35,17 +34,28 @@ export function useSurahAyahs(surahNumber: number) {
       const translationData = await translationRes.json();
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return arabicData.data.ayahs.map((a: any, i: number) => ({
-        number: a.number,
-        numberInSurah: a.numberInSurah,
-        text: a.text,
-        translation: translationData.data.ayahs[i]?.text || '',
-        juz: a.juz,
-        page: a.page,
-        hizbQuarter: a.hizbQuarter,
-        ruku: a.ruku,
-        surahNumber,
-      }));
+      return arabicData.data.ayahs.map((a: any, i: number) => {
+        let text = a.text;
+        // Strip Bismillah prefix from the first verse of every surah except Surah 1 (Al-Fatihah)
+        if (surahNumber !== 1 && a.numberInSurah === 1) {
+          const bismillah = "بِسۡمِ ٱللَّهِ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ";
+          if (text.startsWith(bismillah)) {
+            text = text.substring(bismillah.length).trim();
+          }
+        }
+
+        return {
+          number: a.number,
+          numberInSurah: a.numberInSurah,
+          text: text,
+          translation: translationData.data.ayahs[i]?.text || '',
+          juz: a.juz,
+          page: a.page,
+          hizbQuarter: a.hizbQuarter,
+          ruku: a.ruku,
+          surahNumber,
+        };
+      });
     },
     staleTime: Infinity,
     enabled: surahNumber > 0,

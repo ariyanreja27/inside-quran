@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Moon, Globe, Type, BookmarkX, Bell, Cloud, Eye, Info, RotateCcw, LucideIcon } from 'lucide-react';
+import { Moon, Globe, Type, BookmarkX, Bell, Cloud, CloudUpload, Eye, Info, RotateCcw, LucideIcon, Minus, Plus } from 'lucide-react';
 import { useSettings, useDarkMode, useBookmarks, useFavorites, defaultSettings } from '@/hooks/useAppStore';
+import { Slider } from '@/components/ui/slider';
 
 export default function SettingsPage() {
   const { settings, updateSettings } = useSettings();
@@ -28,6 +29,34 @@ export default function SettingsPage() {
       <Icon size={16} className="text-primary" /> {title}
     </h2>
   );
+
+  const Stepper = ({ label, value, unit, min, max, step, onChange, description }: any) => {
+    return (
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm font-medium">{label}</p>
+          <p className="text-[11px] text-muted-foreground mt-0.5">{description || `${value}${unit}`}</p>
+        </div>
+        <div className="flex items-center gap-2 bg-secondary/30 rounded-full p-1 border border-border/50">
+          <button 
+            disabled={value <= min}
+            onClick={() => onChange(Math.max(min, Number((value - step).toFixed(1))))} 
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-background hover:bg-accent text-foreground shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed border border-border/50"
+          >
+            <Minus size={14} />
+          </button>
+          <span className="text-sm font-semibold w-12 text-center font-display">{value}{unit}</span>
+          <button 
+            disabled={value >= max}
+            onClick={() => onChange(Math.min(max, Number((value + step).toFixed(1))))} 
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-background hover:bg-accent text-foreground shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed border border-border/50"
+          >
+            <Plus size={14} />
+          </button>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen pb-24 bg-background">
@@ -60,8 +89,8 @@ export default function SettingsPage() {
         <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}>
           <SectionTitle icon={Globe} title="Language" />
           <div className="bg-card border border-border rounded-2xl p-4 space-y-3 shadow-sm">
-            {(['en', 'bn', 'hi', 'ur'] as const).map(lang => {
-              const labels = { en: 'English', bn: 'Bengali (বাংলা)', hi: 'Hindi (हिंदी)', ur: 'Urdu (اردو)' };
+            {(['en', 'bn', 'hi'] as const).map(lang => {
+              const labels = { en: 'English', bn: 'Bengali (বাংলা)', hi: 'Hindi (हिंदी)' };
               return (
                 <label key={lang} className="flex items-center justify-between cursor-pointer group">
                   <span className="text-sm font-medium group-hover:text-primary transition-colors">{labels[lang]}</span>
@@ -83,29 +112,32 @@ export default function SettingsPage() {
         <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
           <SectionTitle icon={Type} title="Reading Preferences" />
           <div className="bg-card border border-border rounded-2xl p-4 space-y-6 shadow-sm">
-            <div>
-              <div className="flex justify-between mb-2">
-                <p className="text-sm font-medium">Arabic Size</p>
-                <p className="text-xs text-muted-foreground">{settings.arabicFontSize}px</p>
-              </div>
-              <input type="range" min="16" max="48" value={settings.arabicFontSize} onChange={e => updateSettings({ arabicFontSize: Number(e.target.value) })} className="w-full accent-primary" />
-            </div>
+            <Stepper 
+              label="Arabic Size" 
+              description="Font size for Quranic text"
+              value={settings.arabicFontSize} 
+              unit="px" 
+              min={16} max={48} step={2} 
+              onChange={(val: number) => updateSettings({ arabicFontSize: val })} 
+            />
             
-            <div>
-              <div className="flex justify-between mb-2">
-                <p className="text-sm font-medium">Translation Size</p>
-                <p className="text-xs text-muted-foreground">{settings.translationFontSize}px</p>
-              </div>
-              <input type="range" min="10" max="24" value={settings.translationFontSize} onChange={e => updateSettings({ translationFontSize: Number(e.target.value) })} className="w-full accent-primary" />
-            </div>
+            <Stepper 
+              label="Translation Size" 
+              description="Font size for English/Urdu"
+              value={settings.translationFontSize} 
+              unit="px" 
+              min={10} max={24} step={1} 
+              onChange={(val: number) => updateSettings({ translationFontSize: val })} 
+            />
 
-            <div>
-              <div className="flex justify-between mb-2">
-                <p className="text-sm font-medium">Line Spacing</p>
-                <p className="text-xs text-muted-foreground">{settings.lineSpacing}x</p>
-              </div>
-              <input type="range" min="1.5" max="4.0" step="0.1" value={settings.lineSpacing} onChange={e => updateSettings({ lineSpacing: Number(e.target.value) })} className="w-full accent-primary" />
-            </div>
+            <Stepper 
+              label="Line Spacing" 
+              description="Vertical space between lines"
+              value={settings.lineSpacing} 
+              unit="x" 
+              min={1.5} max={4.0} step={0.1} 
+              onChange={(val: number) => updateSettings({ lineSpacing: val })} 
+            />
 
             <div className="pt-2 flex justify-end">
               <button 
@@ -128,8 +160,8 @@ export default function SettingsPage() {
           <SectionTitle icon={Eye} title="Filter" />
           <div className="bg-card border border-border rounded-2xl p-4 flex items-center justify-between shadow-sm">
             <div>
-              <p className="text-sm font-medium">Explained Ayahs Only</p>
-              <p className="text-xs text-muted-foreground">Hide ayahs without tafsir</p>
+              <p className="text-sm font-medium">Explained Verses Only</p>
+              <p className="text-xs text-muted-foreground">Hide verses without tafsir</p>
             </div>
             <button 
               onClick={() => updateSettings({ showOnlyExplained: !settings.showOnlyExplained })}
@@ -155,7 +187,8 @@ export default function SettingsPage() {
             </div>
             <div className="h-px bg-border my-2" />
             <div className="flex items-center justify-between">
-              <div>
+              <div className="flex items-center gap-2">
+                <CloudUpload size={16} className="text-muted-foreground" />
                 <p className="text-sm font-medium">Cloud Backup</p>
               </div>
               <span className="text-[10px] font-medium bg-secondary px-2 py-1 rounded-md text-muted-foreground">Coming Soon</span>

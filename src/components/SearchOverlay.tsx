@@ -3,7 +3,6 @@ import { Search, X, History, ArrowRight, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSearch, SearchResult } from '@/hooks/useSearch';
 import { useNavigate } from 'react-router-dom';
-import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 interface SearchOverlayProps {
   isOpen: boolean;
@@ -12,8 +11,7 @@ interface SearchOverlayProps {
 
 export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
   const navigate = useNavigate();
-  const { query, setQuery, results, isLoading, queryInfo, performAction } = useSearch();
-  const [recentSearches, setRecentSearches] = useLocalStorage<string[]>('recent-searches', []);
+  const { query, setQuery, results, isLoading, queryInfo, recentSearches, saveSearch, clearSearchHistory, performAction } = useSearch();
 
   // Clear query on open/close
   useEffect(() => {
@@ -27,10 +25,9 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
   const handleResultClick = (result: SearchResult) => {
     // Save to recent searches
     if (query.trim()) {
-      const updated = [query.trim(), ...recentSearches.filter(s => s !== query.trim())].slice(0, 5);
-      setRecentSearches(updated);
+      saveSearch(query);
     }
-    navigate(`/surah/${result.surahNumber}?ayah=${result.ayahNumberInSurah}`);
+    navigate(`/surah/${result.surahNumber}?verse=${result.verseNumberInSurah}`);
     onClose();
   };
 
@@ -61,14 +58,21 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
         {/* Search Header */}
         <div className="p-4 flex items-center gap-3 bg-card border-b border-border shadow-sm">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
             <input
               autoFocus
               type="text"
-              placeholder="Search surahs, ayahs, or keywords..."
+              placeholder="Search Surahs, Verses, or Keywords"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && performAction()}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  const didNavigate = performAction();
+                  if (didNavigate || query.trim() === '') {
+                    onClose();
+                  }
+                }
+              }}
               className="w-full pl-10 pr-10 py-3 rounded-2xl bg-muted/50 border-none text-base focus:ring-2 focus:ring-primary/20 transition-all outline-none"
             />
             {query && (
@@ -96,12 +100,15 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               className="mb-6 p-4 rounded-2xl bg-primary/5 border border-primary/10 flex items-center justify-between group cursor-pointer"
-              onClick={performAction}
+              onClick={() => {
+                performAction();
+                onClose();
+              }}
             >
               <div>
                 <p className="text-primary font-medium text-sm">Direct Navigation</p>
                 <p className="text-muted-foreground text-[13px]">
-                  Go to {queryInfo.type === 'coordinate' ? `Surah ${queryInfo.surah}, Ayah ${queryInfo.ayah}` : `Surah ${queryInfo.number}`}
+                  Go to {queryInfo.type === 'coordinate' ? `Surah ${queryInfo.surah}, Verse ${queryInfo.verse}` : `Surah ${queryInfo.number}`}
                 </p>
               </div>
               <ArrowRight className="text-primary group-hover:translate-x-1 transition-transform" size={20} />
@@ -111,7 +118,15 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
           {/* Recent Searches */}
           {!query && recentSearches.length > 0 && (
             <div className="mb-8">
-              <h3 className="text-[12px] font-bold text-muted-foreground uppercase tracking-wider mb-3 ml-1">Recent Searches</h3>
+              <div className="flex items-center justify-between mb-3 ml-1 mr-1">
+                <h3 className="text-[12px] font-bold text-muted-foreground uppercase tracking-wider">Recent Searches</h3>
+                <button 
+                  onClick={clearSearchHistory} 
+                  className="text-[11px] font-medium text-muted-foreground hover:text-destructive transition-colors"
+                >
+                  Clear All
+                </button>
+              </div>
               <div className="flex flex-wrap gap-2">
                 {recentSearches.map((s, i) => (
                   <button
@@ -143,14 +158,14 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
-                  key={`${res.surahNumber}-${res.ayahNumber}`}
+                  key={`${res.surahNumber}-${res.verseNumber}`}
                   onClick={() => handleResultClick(res)}
                   className="p-4 rounded-2xl bg-card border border-border hover:border-primary/30 hover:shadow-md transition-all cursor-pointer group"
                 >
                   <div className="flex justify-between items-start mb-2">
                     <div className="flex items-center gap-2">
                       <span className="text-[13px] font-bold text-primary bg-primary/5 px-2 py-0.5 rounded text-center">
-                        {res.surahNumber}:{res.ayahNumberInSurah}
+                        {res.surahNumber}:{res.verseNumberInSurah}
                       </span>
                       <span className="font-display font-semibold text-sm text-foreground">
                         {res.surahName}
@@ -177,7 +192,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                 <Search size={32} className="text-muted-foreground" />
               </div>
               <h3 className="font-semibold text-foreground mb-1">No results found</h3>
-              <p className="text-muted-foreground text-sm">Try searching for a different surah, ayah, or keyword.</p>
+              <p className="text-muted-foreground text-sm">Try searching for a different surah, verse, or keyword.</p>
             </div>
           ) : !query && (
             <div className="flex flex-col items-center justify-center py-20 text-center opacity-40">

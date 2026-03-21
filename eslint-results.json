@@ -1,0 +1,1277 @@
+[
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\eslint.config.js",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\playwright-fixture.ts",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\playwright.config.ts",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\postcss.config.js",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\App.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\BottomNav.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\DraggableBottomSheet.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\NavLink.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ScrollToTop.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\SearchOverlay.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\SurahCard.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ThemeToggleFloating.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\accordion.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\alert-dialog.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\alert.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\aspect-ratio.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\avatar.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\badge.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\breadcrumb.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\button.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\calendar.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\card.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\carousel.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\chart.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\checkbox.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\collapsible.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\command.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\context-menu.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\dialog.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\drawer.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\dropdown-menu.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\form.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\hover-card.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\input-otp.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\input.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\label.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\menubar.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\navigation-menu.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\pagination.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\popover.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\progress.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\radio-group.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\resizable.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\scroll-area.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\select.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\separator.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\sheet.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\sidebar.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\skeleton.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\slider.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\sonner.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\switch.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\table.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\tabs.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\textarea.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\toast.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\toaster.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\toggle-group.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\toggle.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\tooltip.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\components\\ui\\use-toast.ts",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\data\\quranMeta.ts",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\hooks\\use-mobile.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\hooks\\use-toast.ts",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\hooks\\useAppStore.ts",
+        "messages": [
+            {
+                "ruleId": "@typescript-eslint/no-explicit-any",
+                "severity": 2,
+                "message": "Unexpected any. Specify a different type.",
+                "line": 54,
+                "column": 110,
+                "nodeType": "TSAnyKeyword",
+                "messageId": "unexpectedAny",
+                "endLine": 54,
+                "endColumn": 113,
+                "suggestions": [
+                    {
+                        "messageId": "suggestUnknown",
+                        "fix": {
+                            "range": [
+                                1666,
+                                1669
+                            ],
+                            "text": "unknown"
+                        },
+                        "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+                    },
+                    {
+                        "messageId": "suggestNever",
+                        "fix": {
+                            "range": [
+                                1666,
+                                1669
+                            ],
+                            "text": "never"
+                        },
+                        "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+                    }
+                ]
+            },
+            {
+                "ruleId": "@typescript-eslint/no-explicit-any",
+                "severity": 2,
+                "message": "Unexpected any. Specify a different type.",
+                "line": 56,
+                "column": 108,
+                "nodeType": "TSAnyKeyword",
+                "messageId": "unexpectedAny",
+                "endLine": 56,
+                "endColumn": 111,
+                "suggestions": [
+                    {
+                        "messageId": "suggestUnknown",
+                        "fix": {
+                            "range": [
+                                1828,
+                                1831
+                            ],
+                            "text": "unknown"
+                        },
+                        "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+                    },
+                    {
+                        "messageId": "suggestNever",
+                        "fix": {
+                            "range": [
+                                1828,
+                                1831
+                            ],
+                            "text": "never"
+                        },
+                        "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+                    }
+                ]
+            },
+            {
+                "ruleId": "@typescript-eslint/no-explicit-any",
+                "severity": 2,
+                "message": "Unexpected any. Specify a different type.",
+                "line": 63,
+                "column": 98,
+                "nodeType": "TSAnyKeyword",
+                "messageId": "unexpectedAny",
+                "endLine": 63,
+                "endColumn": 101,
+                "suggestions": [
+                    {
+                        "messageId": "suggestUnknown",
+                        "fix": {
+                            "range": [
+                                2143,
+                                2146
+                            ],
+                            "text": "unknown"
+                        },
+                        "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+                    },
+                    {
+                        "messageId": "suggestNever",
+                        "fix": {
+                            "range": [
+                                2143,
+                                2146
+                            ],
+                            "text": "never"
+                        },
+                        "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+                    }
+                ]
+            },
+            {
+                "ruleId": "@typescript-eslint/no-explicit-any",
+                "severity": 2,
+                "message": "Unexpected any. Specify a different type.",
+                "line": 74,
+                "column": 80,
+                "nodeType": "TSAnyKeyword",
+                "messageId": "unexpectedAny",
+                "endLine": 74,
+                "endColumn": 83,
+                "suggestions": [
+                    {
+                        "messageId": "suggestUnknown",
+                        "fix": {
+                            "range": [
+                                2586,
+                                2589
+                            ],
+                            "text": "unknown"
+                        },
+                        "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+                    },
+                    {
+                        "messageId": "suggestNever",
+                        "fix": {
+                            "range": [
+                                2586,
+                                2589
+                            ],
+                            "text": "never"
+                        },
+                        "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+                    }
+                ]
+            },
+            {
+                "ruleId": "@typescript-eslint/no-explicit-any",
+                "severity": 2,
+                "message": "Unexpected any. Specify a different type.",
+                "line": 77,
+                "column": 80,
+                "nodeType": "TSAnyKeyword",
+                "messageId": "unexpectedAny",
+                "endLine": 77,
+                "endColumn": 83,
+                "suggestions": [
+                    {
+                        "messageId": "suggestUnknown",
+                        "fix": {
+                            "range": [
+                                2779,
+                                2782
+                            ],
+                            "text": "unknown"
+                        },
+                        "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+                    },
+                    {
+                        "messageId": "suggestNever",
+                        "fix": {
+                            "range": [
+                                2779,
+                                2782
+                            ],
+                            "text": "never"
+                        },
+                        "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+                    }
+                ]
+            }
+        ],
+        "suppressedMessages": [],
+        "errorCount": 5,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "source": "import { useEffect } from 'react';\nimport { useLocalStorage } from './useLocalStorage';\nimport type { Explanation, Bookmark, LastPosition } from '@/types/quran';\n\nexport interface UserSettings {\n  language: 'en' | 'bn' | 'hi' | 'ur';\n  arabicFontSize: number;\n  translationFontSize: number;\n  lineSpacing: number;\n  showOnlyExplained: boolean;\n}\n\nexport const defaultSettings: UserSettings = {\n  language: 'en',\n  arabicFontSize: 24,\n  translationFontSize: 14,\n  lineSpacing: 2.0,\n  showOnlyExplained: false,\n};\n\nexport function useSettings() {\n  const [settings, setSettings] = useLocalStorage<UserSettings>('iq-settings', defaultSettings);\n\n  const updateSettings = (newSettings: Partial<UserSettings>) => {\n    setSettings((prev) => ({ ...prev, ...newSettings }));\n  };\n\n  return { settings, updateSettings };\n}\n\nexport function useFavorites() {\n  const [favorites, setFavorites] = useLocalStorage<number[]>('iq-favorites', []);\n\n  const toggleFavorite = (surahNumber: number) => {\n    setFavorites(prev =>\n      prev.includes(surahNumber)\n        ? prev.filter(n => n !== surahNumber)\n        : [...prev, surahNumber]\n    );\n  };\n\n  const isFavorite = (surahNumber: number) => favorites.includes(surahNumber);\n  \n  const clearFavorites = () => setFavorites([]);\n\n  return { favorites, toggleFavorite, isFavorite, clearFavorites };\n}\n\nexport function useBookmarks() {\n  const [bookmarks, setBookmarks] = useLocalStorage<Bookmark[]>('iq-bookmarks', []);\n\n  const toggleBookmark = (surahNumber: number, verseNumber: number) => {\n    setBookmarks(prev => {\n      const exists = prev.some(b => b.surahNumber === surahNumber && (b.verseNumber === verseNumber || (b as any).ayahNumber === verseNumber));\n      if (exists) {\n        return prev.filter(b => !(b.surahNumber === surahNumber && (b.verseNumber === verseNumber || (b as any).ayahNumber === verseNumber)));\n      }\n      return [...prev, { surahNumber, verseNumber, createdAt: new Date().toISOString() }];\n    });\n  };\n\n  const isBookmarked = (surahNumber: number, verseNumber: number) =>\n    bookmarks.some(b => b.surahNumber === surahNumber && (b.verseNumber === verseNumber || (b as any).ayahNumber === verseNumber));\n\n  const clearBookmarks = () => setBookmarks([]);\n\n  return { bookmarks, toggleBookmark, isBookmarked, clearBookmarks };\n}\n\nexport function useExplanations() {\n  const [explanations, setExplanations] = useLocalStorage<Explanation[]>('iq-explanations', []);\n\n  const getExplanation = (surahNumber: number, verseNumber: number) =>\n    explanations.find(e => e.surahNumber === surahNumber && (e.verses || (e as any).ayahs || []).includes(verseNumber));\n\n  const hasExplanation = (surahNumber: number, verseNumber: number) =>\n    explanations.some(e => e.surahNumber === surahNumber && (e.verses || (e as any).ayahs || []).includes(verseNumber));\n\n  const saveExplanation = (explanation: Explanation) => {\n    setExplanations(prev => {\n      const idx = prev.findIndex(e => e.id === explanation.id);\n      if (idx >= 0) {\n        const updated = [...prev];\n        updated[idx] = { ...explanation, updatedAt: new Date().toISOString() };\n        return updated;\n      }\n      return [...prev, explanation];\n    });\n  };\n\n  const deleteExplanation = (id: string) => {\n    setExplanations(prev => prev.filter(e => e.id !== id));\n  };\n\n  return { explanations, getExplanation, hasExplanation, saveExplanation, deleteExplanation };\n}\n\nexport function useLastPosition() {\n  const [position, setPosition] = useLocalStorage<LastPosition | null>('iq-last-position', null);\n  return { position, setPosition };\n}\n\nexport function useDarkMode() {\n  const [isDark, setIsDark] = useLocalStorage<boolean>('iq-dark-mode', false);\n\n  useEffect(() => {\n    document.documentElement.classList.toggle('dark', isDark);\n  }, [isDark]);\n\n  const setDarkMode = (value: boolean) => {\n    setIsDark(value);\n  };\n\n  const toggle = () => {\n    setIsDark(prev => !prev);\n  };\n\n  return { isDark, setDarkMode, toggle };\n}\n\nexport function useCustomTranslations() {\n  const [customTranslations, setCustomTranslations] = useLocalStorage<Record<string, string>>('iq-custom-translations', {});\n\n  const getCustomTranslation = (surahNumber: number, verseNumber: number, language: string) => {\n    return customTranslations[`${surahNumber}-${verseNumber}-${language}`];\n  };\n\n  const saveCustomTranslation = (surahNumber: number, verseNumber: number, language: string, text: string) => {\n    setCustomTranslations(prev => ({\n      ...prev,\n      [`${surahNumber}-${verseNumber}-${language}`]: text\n    }));\n  };\n\n  const resetCustomTranslation = (surahNumber: number, verseNumber: number, language: string) => {\n    setCustomTranslations(prev => {\n      const next = { ...prev };\n      delete next[`${surahNumber}-${verseNumber}-${language}`];\n      return next;\n    });\n  };\n\n  return { customTranslations, getCustomTranslation, saveCustomTranslation, resetCustomTranslation };\n}\n",
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\hooks\\useLocalStorage.ts",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\hooks\\useQuranData.ts",
+        "messages": [],
+        "suppressedMessages": [
+            {
+                "ruleId": "@typescript-eslint/no-explicit-any",
+                "severity": 2,
+                "message": "Unexpected any. Specify a different type.",
+                "line": 37,
+                "column": 44,
+                "nodeType": "TSAnyKeyword",
+                "messageId": "unexpectedAny",
+                "endLine": 37,
+                "endColumn": 47,
+                "suggestions": [
+                    {
+                        "messageId": "suggestUnknown",
+                        "fix": {
+                            "range": [
+                                1222,
+                                1225
+                            ],
+                            "text": "unknown"
+                        },
+                        "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+                    },
+                    {
+                        "messageId": "suggestNever",
+                        "fix": {
+                            "range": [
+                                1222,
+                                1225
+                            ],
+                            "text": "never"
+                        },
+                        "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+                    }
+                ],
+                "suppressions": [
+                    {
+                        "kind": "directive",
+                        "justification": ""
+                    }
+                ]
+            }
+        ],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\hooks\\useSearch.ts",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\lib\\utils.ts",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\main.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\pages\\ExplanationBuilderPage.tsx",
+        "messages": [
+            {
+                "ruleId": "no-extra-boolean-cast",
+                "severity": 2,
+                "message": "Redundant double negation.",
+                "line": 785,
+                "column": 47,
+                "nodeType": "UnaryExpression",
+                "messageId": "unexpectedNegation",
+                "endLine": 785,
+                "endColumn": 59,
+                "fix": {
+                    "range": [
+                        48031,
+                        48043
+                    ],
+                    "text": "rangeError"
+                }
+            },
+            {
+                "ruleId": "no-extra-boolean-cast",
+                "severity": 2,
+                "message": "Redundant double negation.",
+                "line": 940,
+                "column": 45,
+                "nodeType": "UnaryExpression",
+                "messageId": "unexpectedNegation",
+                "endLine": 940,
+                "endColumn": 57,
+                "fix": {
+                    "range": [
+                        58370,
+                        58382
+                    ],
+                    "text": "rangeError"
+                }
+            }
+        ],
+        "suppressedMessages": [],
+        "errorCount": 2,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 2,
+        "fixableWarningCount": 0,
+        "source": "import { useState, useEffect, useRef } from 'react';\nimport { useNavigate, useSearchParams } from 'react-router-dom';\nimport { useSwipeable } from 'react-swipeable';\nimport { ArrowLeft, Plus, Trash2, Info, Lock, AlertCircle, CheckCircle } from 'lucide-react';\nimport { motion, AnimatePresence } from 'framer-motion';\nimport { useSurahs, useSurahVerses } from '@/hooks/useQuranData';\nimport { useExplanations } from '@/hooks/useAppStore';\nimport type { Explanation, ConciseBlock, RootWord, DeeperLookCategory } from '@/types/quran';\nimport { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';\nimport { Switch } from '@/components/ui/switch';\nimport { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';\nimport { useToast } from '@/hooks/use-toast';\n\nconst generateId = () => {\n  if (typeof crypto !== 'undefined' && crypto.randomUUID) {\n    return crypto.randomUUID();\n  }\n  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);\n};\n\nexport default function ExplanationBuilderPage() {\n  const navigate = useNavigate();\n  const [searchParams] = useSearchParams();\n  const editId = searchParams.get('id');\n  const urlSurah = searchParams.get('surah') ? parseInt(searchParams.get('surah')!) : null;\n  const urlVerse = searchParams.get('verse') ? parseInt(searchParams.get('verse')!) : null;\n\n  const { data: surahs } = useSurahs();\n  const { explanations, getExplanation, saveExplanation } = useExplanations();\n  const { toast } = useToast();\n\n  const [mode, setMode] = useState<'concise' | 'deeper'>('concise');\n  const [selectedSurah, setSelectedSurah] = useState<number | ''>(urlSurah || '');\n  \n  // Concise Form State\n  const [conciseBlocks, setConciseBlocks] = useState<ConciseBlock[]>([]);\n  \n  // Deeper Look Form State\n  const [verseRange, setVerseRange] = useState<string>('');\n  const [rootWordsOn, setRootWordsOn] = useState(false);\n  const [rootWords, setRootWords] = useState<RootWord[]>([]);\n  const [categories, setCategories] = useState<DeeperLookCategory[]>([]);\n  const [rangeError, setRangeError] = useState<string | null>(null);\n\n  // Editing logic\n  const [currentId, setCurrentId] = useState<string>(() => generateId());\n  const [isLoaded, setIsLoaded] = useState(false);\n\n  // Verse data fetching\n  const { data: currentSurahVerses } = useSurahVerses(selectedSurah || 1);\n\n  // Scroll ref\n  const blockRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});\n  const hasSelectedVerse = conciseBlocks.some(b => b.verseNumber > 0);\n  const hasConciseContent = conciseBlocks.some(b => b.verseNumber > 0 && b.explanations.some(e => e.title.trim() || e.text.trim()));\n  const hasAtLeastOneExplanation = hasConciseContent;\n\n  const [initialHash, setInitialHash] = useState<string>('');\n  const currentHash = JSON.stringify({ mode, selectedSurah, conciseBlocks, verseRange, rootWordsOn, rootWords, categories });\n  \n  useEffect(() => {\n    if (isLoaded && !initialHash) {\n      setInitialHash(currentHash);\n    }\n  }, [isLoaded, currentHash, initialHash]);\n\n  const hasChanges = initialHash !== currentHash;\n\n  const isSaveDisabled = !selectedSurah || \n    (mode === 'deeper' && (!!rangeError || !verseRange.trim())) || \n    !hasConciseContent || \n    !hasChanges;\n\n  useEffect(() => {\n    if (isLoaded) return;\n    \n    let existing: Explanation | undefined;\n    \n    if (editId) {\n      existing = explanations.find(e => e.id === editId);\n    } else if (urlSurah && urlVerse) {\n      existing = getExplanation(urlSurah, urlVerse);\n    }\n\n    if (existing) {\n      setCurrentId(existing.id);\n      setSelectedSurah(existing.surahNumber);\n      setConciseBlocks(existing.concise || []);\n      setVerseRange(existing.verseRange || '');\n      if (existing.deeperLook) {\n        setRootWords(existing.deeperLook.rootWords || []);\n        if (existing.deeperLook.rootWords?.length > 0) setRootWordsOn(true);\n        setCategories(existing.deeperLook.categories || []);\n        if (existing.concise?.length === 0 && (existing.deeperLook.rootWords?.length > 0 || existing.deeperLook.categories?.length > 0)) {\n           setMode('deeper');\n        }\n      }\n    } else if (urlSurah && urlVerse) {\n      setConciseBlocks([{\n        verseNumber: urlVerse,\n        explanations: [{ id: generateId(), title: '', text: '' }]\n      }]);\n    }\n    \n    setIsLoaded(true);\n  }, [editId, urlSurah, urlVerse, explanations, getExplanation, isLoaded]);\n\n\n\n  const handleVerseRangeChange = (e: React.ChangeEvent<HTMLInputElement>) => {\n    let val = e.target.value;\n    val = val.replace(/[^\\d,\\- ]/g, '');\n    val = val.replace(/,{2,}/g, ',');\n    val = val.replace(/ {2,}/g, ' ');\n    val = val.replace(/-{2,}/g, '-');\n    val = val.replace(/ ,/g, ',');\n    val = val.replace(/ -/g, '-');\n    val = val.replace(/- /g, '-');\n    setVerseRange(val);\n    \n    if (!val.trim()) {\n      setRangeError(null);\n      return;\n    }\n    if (!selectedSurah) {\n      setRangeError(\"Please select a Surah first.\");\n      return;\n    }\n\n    const maxVerses = surahs?.find(s => s.number === selectedSurah)?.verseCount || 0;\n    const parts = val.split(',').map(s => s.trim()).filter(Boolean);\n    \n    for (const part of parts) {\n      if (part.includes('-')) {\n        const hyphens = part.split('-').length - 1;\n        if (hyphens > 1) {\n          setRangeError(`Invalid format: \"${part}\" has too many hyphens.`);\n          return;\n        }\n        const [startStr, endStr] = part.split('-');\n        if (!startStr || !endStr) continue;\n        \n        const start = parseInt(startStr);\n        const end = parseInt(endStr);\n        \n        if (isNaN(start) || isNaN(end)) {\n          setRangeError(`Incomplete range: \"${part}\".`);\n          return;\n        }\n        if (start >= end) {\n          setRangeError(`Invalid range: \"${part}\". Start must be less than end.`);\n          return;\n        }\n        if (start < 1) {\n          setRangeError(`Verse cannot be less than 1.`);\n          return;\n        }\n        if (end > maxVerses) {\n          setRangeError(`Verse ${end} exceeds max verses (${maxVerses}).`);\n          return;\n        }\n      } else {\n        const num = parseInt(part);\n        if (isNaN(num)) continue;\n        if (num < 1) {\n          setRangeError(`Verse cannot be less than 1.`);\n          return;\n        }\n        if (num > maxVerses) {\n          setRangeError(`Verse ${num} exceeds max verses (${maxVerses}).`);\n          return;\n        }\n      }\n    }\n    setRangeError(null);\n  };\n\n  const handleSave = () => {\n    if (!selectedSurah) {\n      alert(\"Please select a Surah first.\");\n      return;\n    }\n    if (mode === 'deeper' && rangeError) {\n      alert(\"Please fix the Verse Range errors before saving.\");\n      return;\n    }\n    if (mode === 'deeper' && !verseRange.trim()) {\n      alert(\"Please enter a Verse Range before saving.\");\n      return;\n    }\n\n    const allVerses = new Set<number>();\n    \n    // Only save blocks that have an verse selected and some text\n    const validConcise = conciseBlocks.filter(b => \n       b.verseNumber > 0 && b.explanations.some(e => e.text.trim().length > 0 || String(e.title).trim().length > 0)\n    );\n\n    validConcise.forEach(b => {\n      if (b.verseNumber) allVerses.add(Number(b.verseNumber));\n    });\n\n    const parts = verseRange.split(',').map(s => s.trim());\n    parts.forEach(p => {\n      if (p.includes('-')) {\n        const [start, end] = p.split('-').map(Number);\n        for (let i = start; i <= end; i++) {\n           if (!isNaN(i) && i > 0) allVerses.add(i);\n        }\n      } else if (p && !isNaN(Number(p))) {\n        allVerses.add(Number(p));\n      }\n    });\n\n    // Clean up empty root words and categories so view page isn't polluted\n    const validRootWords = rootWords.filter(rw => rw.arabic.trim() || rw.rootLetters.trim() || rw.explanation.trim());\n    const validCategories = categories.filter(c => c.title.trim() || c.content.trim());\n\n    const newExplanation: Explanation = {\n      id: currentId,\n      surahNumber: Number(selectedSurah),\n      verses: Array.from(allVerses).sort((a, b) => a - b),\n      verseRange: verseRange,\n      concise: validConcise,\n      deeperLook: {\n        rootWords: rootWordsOn ? validRootWords : [],\n        categories: validCategories\n      },\n      createdAt: new Date().toISOString(),\n      updatedAt: new Date().toISOString(),\n    };\n\n    saveExplanation(newExplanation);\n    navigate(-1);\n  };\n\n  const getVerseText = (verseNum: number) => {\n    return currentSurahVerses?.find(a => a.numberInSurah === Number(verseNum))?.text || '';\n  };\n\n  const addVerseBlock = () => setConciseBlocks([...conciseBlocks, { verseNumber: 0, explanations: [{ id: generateId(), title: '', text: '' }] }]);\n  const removeVerseBlock = (index: number) => { const nb = [...conciseBlocks]; nb.splice(index, 1); setConciseBlocks(nb); };\n  const updateVerseBlock = (index: number, val: number) => { const nb = [...conciseBlocks]; nb[index].verseNumber = val; setConciseBlocks(nb); };\n  \n  const addExplanationToBlock = (bIndex: number) => { const nb = [...conciseBlocks]; nb[bIndex].explanations.push({ id: generateId(), title: '', text: '' }); setConciseBlocks(nb); };\n  const updateExplanationTitle = (bIndex: number, eIndex: number, val: string) => { const nb = [...conciseBlocks]; nb[bIndex].explanations[eIndex].title = val; setConciseBlocks(nb); };\n  const updateExplanationText = (bIndex: number, eIndex: number, val: string) => { const nb = [...conciseBlocks]; nb[bIndex].explanations[eIndex].text = val; setConciseBlocks(nb); };\n  const removeExplanationFromBlock = (bIndex: number, eIndex: number) => { const nb = [...conciseBlocks]; nb[bIndex].explanations.splice(eIndex, 1); setConciseBlocks(nb); };\n\n  const insertMarkdown = (cIndex: number, text: string) => {\n    const nc = [...categories];\n    nc[cIndex].content = nc[cIndex].content + (nc[cIndex].content ? '\\n' : '') + text;\n    setCategories(nc);\n  };\n\n  const insertMarkdownToConcise = (bIndex: number, eIndex: number, text: string) => {\n    const nb = [...conciseBlocks];\n    nb[bIndex].explanations[eIndex].text = nb[bIndex].explanations[eIndex].text + (nb[bIndex].explanations[eIndex].text ? '\\n' : '') + text;\n    setConciseBlocks(nb);\n  };\n\n  const insertMarkdownToRootWord = (rIndex: number, text: string) => {\n    const nr = [...rootWords];\n    nr[rIndex].explanation = nr[rIndex].explanation + (nr[rIndex].explanation ? '\\n' : '') + text;\n    setRootWords(nr);\n  };\n\n  const handlers = useSwipeable({\n    onSwipedLeft: () => {\n      if (mode === 'concise') setMode('deeper');\n    },\n    onSwipedRight: () => {\n      if (mode === 'deeper') setMode('concise');\n    },\n    trackMouse: true,\n    preventScrollOnSwipe: true,\n    delta: 40,\n  });\n\n  return (\n    <div {...handlers} className=\"min-h-screen pb-32 bg-background\">\n      <div className=\"sticky top-0 z-40 bg-background border-b border-border/60 pb-2\">\n        <div className=\"flex items-center gap-3 px-4 h-16 pt-2\">\n          <button onClick={() => navigate(-1)} className=\"p-2 -ml-2 rounded-xl transition hover:bg-accent text-foreground\">\n            <ArrowLeft size={22} />\n          </button>\n          <h1 className=\"font-display text-[20px] font-semibold text-foreground flex-1\">Add Explanation</h1>\n        </div>\n      </div>\n\n      <div className=\"px-4 mt-6 max-w-md mx-auto space-y-7\">\n        \n        {/* SURAH SELECTOR */}\n        <div>\n          <label className=\"block text-[11px] font-medium text-muted-foreground uppercase tracking-widest mb-2 ml-1\">SURAH</label>\n          <Select value={selectedSurah ? selectedSurah.toString() : ''} onValueChange={(v) => setSelectedSurah(Number(v))}>\n            <SelectTrigger className=\"w-full bg-card border border-border rounded-2xl h-[56px] px-4 text-[15px] font-medium text-foreground shadow-[0_2px_10px_rgba(0,0,0,0.02)] focus:ring-1 focus:ring-primary/20 [&>span]:flex-1\">\n              <SelectValue placeholder=\"Select a Surah\" />\n            </SelectTrigger>\n            <SelectContent className=\"bg-popover border-border rounded-xl shadow-lg p-2 max-h-[300px]\">\n              {surahs?.map(s => (\n                <SelectItem key={s.number} value={s.number.toString()} className=\"rounded-lg mb-1 focus:bg-accent focus:text-accent-foreground data-[state=checked]:bg-primary/10 data-[state=checked]:text-primary py-3 cursor-pointer\">\n                  <div className=\"flex justify-between items-center w-full min-w-[200px]\">\n                     <span className=\"text-[15px] font-medium\">{s.number}. {s.name}</span>\n                     <span className=\"font-arabic text-primary text-lg pr-3\">{s.nameArabic}</span>\n                  </div>\n                </SelectItem>\n              ))}\n            </SelectContent>\n          </Select>\n        </div>\n\n        {/* MODE TOGGLE */}\n        <div>\n          <label className=\"block text-[11px] font-medium text-muted-foreground uppercase tracking-widest mb-2 ml-1\">MODE</label>\n          <div className=\"flex bg-muted/40 rounded-full p-1 w-full border border-border/40 relative\">\n            {(['concise', 'deeper'] as const).map((m) => {\n               const active = mode === m;\n               return (\n                 <motion.button\n                   key={m}\n                   onClick={() => {\n                      if (m === 'deeper' && !hasSelectedVerse) {\n                        toast({\n                          title: \"Section Locked\",\n                          description: \"Select a verse in the Concise tab first to unlock Deeper Look.\",\n                          variant: \"destructive\",\n                          icon: <Lock size={18} />\n                        });\n                        return;\n                      }\n                      setMode(m);\n                    }}\n                   whileTap={{ scale: 0.98 }}\n                   className={`relative flex-1 py-2 text-[14px] font-semibold rounded-full transition-colors tracking-wide z-10 ${\n                     active ? 'text-primary-foreground' : 'text-muted-foreground hover:text-primary'\n                   } ${m === 'deeper' && !hasSelectedVerse ? 'opacity-40 cursor-not-allowed' : ''}`}\n                 >\n                   {active && (\n                     <motion.div\n                       layoutId=\"activeTab-builder\"\n                       className=\"absolute inset-0 bg-primary rounded-full shadow-md z-[-1]\"\n                       transition={{ type: \"spring\", bounce: 0.2, duration: 0.6 }}\n                     />\n                   )}\n                   {m === 'concise' ? 'Concise' : 'Deeper Look'}\n                 </motion.button>\n               );\n            })}\n          </div>\n        </div>\n\n        <AnimatePresence mode=\"popLayout\">\n          {mode === 'concise' ? (\n             /* CONCISE MODE */\n             <motion.div\n               key=\"concise\"\n               initial={{ opacity: 0, y: 10 }}\n               animate={{ opacity: 1, y: 0 }}\n               exit={{ opacity: 0, y: -10 }}\n               transition={{ duration: 0.2, ease: \"easeOut\" }}\n               className=\"space-y-6\"\n             >\n                {conciseBlocks.map((block, bIndex) => (\n                  <div key={bIndex} className=\"bg-card border border-border rounded-[1.5rem] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] relative\" ref={(el) => (blockRefs.current[block.verseNumber] = el)}>\n                     <div className=\"flex items-center justify-between mb-5\">\n                        <h3 className=\"font-semibold text-[13px] text-muted-foreground uppercase tracking-widest\">VERSE BLOCK</h3>\n                        <button onClick={() => removeVerseBlock(bIndex)} className=\"text-destructive p-1.5 hover:bg-destructive/10 rounded-lg transition-colors\">\n                           <Trash2 size={18} />\n                        </button>\n                     </div>\n\n                     <div className=\"space-y-4\">\n                        {/* Select Verse */}\n                         <div>\n                          <label className=\"block text-[14px] text-muted-foreground mb-2 ml-1\">Select Verse</label>\n                          <div onClick={() => {\n                            if (!selectedSurah) {\n                              toast({\n                                title: \"Selection Required\",\n                                description: \"Please select a Surah first to choose a verse.\",\n                                variant: \"destructive\",\n                                icon: <Lock size={20} />\n                              });\n                            }\n                          }}>\n                            <Select disabled={!selectedSurah} value={block.verseNumber ? block.verseNumber.toString() : ''} onValueChange={(v) => updateVerseBlock(bIndex, Number(v))}>\n                              <SelectTrigger className=\"w-full bg-muted/50 border-none rounded-2xl h-[56px] px-4 text-[15px] text-foreground focus:ring-0 data-[disabled]:opacity-50\">\n                                <SelectValue placeholder={selectedSurah ? \"Select Verse\" : \"Select a Surah first\"} />\n                              </SelectTrigger>\n                              {selectedSurah && (\n                                <SelectContent className=\"bg-popover border-border rounded-xl shadow-lg max-h-[250px]\">\n                                  {currentSurahVerses?.map(a => (\n                                    <SelectItem key={a.numberInSurah} value={a.numberInSurah.toString()} className=\"py-3\">Verse {a.numberInSurah}</SelectItem>\n                                  ))}\n                                </SelectContent>\n                              )}\n                            </Select>\n                          </div>\n                        </div>\n\n                        {/* Verse Display */}\n                         {block.verseNumber > 0 && (\n                            <div className=\"bg-muted/50 rounded-2xl p-4 flex flex-col items-center justify-center min-h-[80px] border border-border/50\">\n                               <p className=\"arabic-text text-2xl leading-[2.5] text-center text-foreground font-arabic\" dangerouslySetInnerHTML={{ __html: (getVerseText(block.verseNumber) || '').replace('╪¿┘É╪│┘Æ┘à┘É ┘▒┘ä┘ä┘æ┘Ä┘ç┘É ┘▒┘ä╪▒┘æ┘Ä╪¡┘Æ┘à┘Ä┘░┘å┘É ┘▒┘ä╪▒┘æ┘Ä╪¡┘É┘è┘à┘É', '<span class=\"bismillah-text text-xl block -mb-2\">∩╖╜</span>') }} />\n                            </div>\n                         )}\n\n                         {/* Explanation Inputs */}\n                         {block.explanations.length > 0 && (() => {\n                            const exp = block.explanations[0];\n                            const eIndex = 0;\n                            return (\n                               <div className=\"bg-muted/30 rounded-[1.2rem] p-4 mt-6 border border-border/30\">\n                               <div className=\"flex items-center justify-between mb-4 border-b border-border/60 pb-3\">\n                                  <span className=\"text-[12px] font-semibold text-muted-foreground uppercase tracking-widest pl-1\">EXPLANATION</span>\n                               </div>\n                              <div className=\"space-y-3\">\n                                 <div className=\"flex gap-2 mb-2 overflow-x-auto pb-1 scrollbar-hide pt-1\">\n                                    <button onClick={() => {\n                                        if (block.verseNumber <= 0) {\n                                          toast({ \n                                            title: \"Editor Locked\", \n                                            description: \"Select a verse number first to use the editor.\", \n                                            variant: \"destructive\",\n                                            icon: <Lock size={18} />\n                                          });\n                                          return;\n                                        }\n                                        insertMarkdownToConcise(bIndex, eIndex, '## Heading');\n                                     }} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${block.verseNumber <= 0 ? 'opacity-50' : ''}`}>Heading</button>\n                                    <button onClick={() => {\n                                        if (block.verseNumber <= 0) {\n                                          toast({ \n                                            title: \"Editor Locked\", \n                                            description: \"Select a verse number first to use the editor.\", \n                                            variant: \"destructive\",\n                                            icon: <Lock size={18} />\n                                          });\n                                          return;\n                                        }\n                                        insertMarkdownToConcise(bIndex, eIndex, '**bold**');\n                                     }} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${block.verseNumber <= 0 ? 'opacity-50' : ''}`}>Bold</button>\n                                    <button onClick={() => {\n                                        if (block.verseNumber <= 0) {\n                                          toast({ \n                                            title: \"Editor Locked\", \n                                            description: \"Select a verse number first to use the editor.\", \n                                            variant: \"destructive\",\n                                            icon: <Lock size={18} />\n                                          });\n                                          return;\n                                        }\n                                        insertMarkdownToConcise(bIndex, eIndex, '- list item');\n                                     }} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${block.verseNumber <= 0 ? 'opacity-50' : ''}`}>List</button>\n                                    <button onClick={() => {\n                                        if (block.verseNumber <= 0) {\n                                          toast({ \n                                            title: \"Editor Locked\", \n                                            description: \"Select a verse number first to use the editor.\", \n                                            variant: \"destructive\",\n                                            icon: <Lock size={18} />\n                                          });\n                                          return;\n                                        }\n                                        insertMarkdownToConcise(bIndex, eIndex, '- [ ] task');\n                                     }} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${block.verseNumber <= 0 ? 'opacity-50' : ''}`}>Checklist</button>\n                                    <button onClick={() => {\n                                        if (block.verseNumber <= 0) {\n                                          toast({ \n                                            title: \"Editor Locked\", \n                                            description: \"Select a verse number first to use the editor.\", \n                                            variant: \"destructive\",\n                                            icon: <Lock size={18} />\n                                          });\n                                          return;\n                                        }\n                                        insertMarkdownToConcise(bIndex, eIndex, '> quote');\n                                     }} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${block.verseNumber <= 0 ? 'opacity-50' : ''}`}>Quote</button>\n                                    <button onClick={() => {\n                                        if (block.verseNumber <= 0) {\n                                          toast({ \n                                            title: \"Editor Locked\", \n                                            description: \"Select a verse number first to use the editor.\", \n                                            variant: \"destructive\",\n                                            icon: <Lock size={18} />\n                                          });\n                                          return;\n                                        }\n                                        insertMarkdownToConcise(bIndex, eIndex, '`code`');\n                                     }} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${block.verseNumber <= 0 ? 'opacity-50' : ''}`}>Code</button>\n                                    <button onClick={() => {\n                                        if (block.verseNumber <= 0) {\n                                          toast({ \n                                            title: \"Editor Locked\", \n                                            description: \"Select a verse number first to use the editor.\", \n                                            variant: \"destructive\",\n                                            icon: <Lock size={18} />\n                                          });\n                                          return;\n                                        }\n                                        insertMarkdownToConcise(bIndex, eIndex, '| Header | Header |\\n| --- | --- |\\n| Cell | Cell |');\n                                     }} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${block.verseNumber <= 0 ? 'opacity-50' : ''}`}>Table</button>\n                                    <button onClick={() => {\n                                        if (block.verseNumber <= 0) {\n                                          toast({ \n                                            title: \"Editor Locked\", \n                                            description: \"Select a verse number first to use the editor.\", \n                                            variant: \"destructive\",\n                                            icon: <Lock size={18} />\n                                          });\n                                          return;\n                                        }\n                                        insertMarkdownToConcise(bIndex, eIndex, '[link text](url)');\n                                     }} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${block.verseNumber <= 0 ? 'opacity-50' : ''}`}>Link</button>\n                                     </div>\n                                     <div onClick={() => { \n                                     if (block.verseNumber <= 0) {\n                                       toast({ \n                                         title: \"Editor Locked\", \n                                         description: \"Select a verse number first to write an explanation.\", \n                                         variant: \"destructive\",\n                                         icon: <Lock size={20} />\n                                       }); \n                                     }\n                                   }}>\n                                     <textarea\n                                       disabled={block.verseNumber <= 0}\n                                       placeholder={block.verseNumber <= 0 ? \"Select a Verse first to write an explanation...\" : \"Write your explanation...\"}\n                                       value={exp.text}\n                                       onChange={e => updateExplanationText(bIndex, eIndex, e.target.value)}\n                                       className=\"w-full bg-card border border-border hover:border-primary/50 focus:border-primary rounded-xl p-3.5 text-[15px] text-foreground placeholder:text-muted-foreground min-h-[120px] resize-y outline-none transition-colors disabled:opacity-50 disabled:bg-muted/50 disabled:cursor-not-allowed\"\n                                     />\n                                   </div>\n                               </div>\n                            </div>\n                         );\n                         })()}\n                     </div>\n                  </div>\n                ))}\n\n                <button onClick={addVerseBlock} className=\"w-full border border-dashed border-border rounded-2xl py-[16px] text-muted-foreground font-medium flex justify-center items-center gap-2 bg-card hover:bg-accent transition-all\">\n                   <Plus size={18} /> Add Verse Block\n                </button>\n             </motion.div>\n          ) : (\n             /* DEEPER LOOK MODE */\n              <motion.div\n                key=\"deeper\"\n                initial={{ opacity: 0, y: 10 }}\n                animate={{ opacity: 1, y: 0 }}\n                exit={{ opacity: 0, y: -10 }}\n                transition={{ duration: 0.2, ease: \"easeOut\" }}\n                className=\"space-y-6 pb-20 relative\"\n              >\n                {!hasSelectedVerse && (\n                  <div className=\"absolute inset-x-[-10px] inset-y-[-10px] z-[60] bg-background/60 backdrop-blur-[2px] rounded-3xl flex flex-col items-center justify-center text-center p-8 pt-20\">\n                    <div className=\"w-16 h-16 bg-muted text-muted-foreground rounded-full flex items-center justify-center mb-4\">\n                      <Info size={28} />\n                    </div>\n                    <h4 className=\"text-foreground font-semibold text-lg mb-2\">Verse Selection Required</h4>\n                    <p className=\"text-muted-foreground text-sm max-w-[240px] leading-relaxed\">\n                      Please select at least one verse in the <strong>Concise</strong> tab first.\n                    </p>\n                    <button\n                      onClick={() => setMode('concise')}\n                      className=\"mt-6 text-primary font-medium text-sm hover:underline\"\n                    >\n                      Go to Concise Tab\n                    </button>\n                  </div>\n                )}\n\n                <div className={`${!hasSelectedVerse ? 'pointer-events-none opacity-20' : ''}`}>\n                  {/* Verse Range */}\n                <div>\n                  <div className=\"flex items-center justify-between mb-2\">\n                    <label className=\"block text-[11px] font-medium text-[#A69B9B] uppercase tracking-widest ml-1\">VERSE(S)</label>\n                    <Popover>\n                       <PopoverTrigger asChild>\n                         <button className=\"text-muted-foreground hover:text-primary transition-colors outline-none mr-1 p-1\">\n                            <Info size={16} />\n                         </button>\n                       </PopoverTrigger>\n                       <PopoverContent className=\"w-[320px] p-5 text-sm bg-popover border-border shadow-xl rounded-2xl z-[100]\">\n                         <h4 className=\"font-semibold text-foreground mb-3 text-[15px]\">Verse Range Rules</h4>\n                         <ul className=\"list-disc pl-4 space-y-2 text-muted-foreground mb-4 text-[13px] leading-relaxed\">\n                           <li>Only numbers, hyphens, and commas allowed.</li>\n                           <li>Use hyphens to specify a continuous range.</li>\n                           <li>Start of range must be less than end.</li>\n                           <li>Numbers cannot exceed the Surah's total Verses.</li>\n                         </ul>\n                         <h5 className=\"font-medium text-foreground mb-2 text-[13px]\">Valid Examples:</h5>\n                         <p className=\"text-primary bg-primary/10 p-2.5 font-mono text-[12px] rounded-lg\">1-3, 5, 7-10</p>\n                         <h5 className=\"font-medium text-destructive mt-4 mb-2 text-[13px]\">Invalid Examples:</h5>\n                         <p className=\"text-destructive bg-destructive/10 p-2.5 font-mono text-[12px] opacity-90 rounded-lg\">1-3-4 <span className=\"opacity-70\">(too many hyphens)</span><br/>5-3 <span className=\"opacity-70\">(reversed range)</span></p>\n                       </PopoverContent>\n                    </Popover>\n                  </div>\n                  <input\n                    type=\"text\"\n                    placeholder=\"e.g., 1-3, 5, 7\"\n                    value={verseRange}\n                    onChange={handleVerseRangeChange}\n                    className={`w-full bg-background border ${rangeError ? 'border-destructive focus:border-destructive' : 'border-[#E8E2E2] focus:border-[#5A2A31]'} rounded-2xl p-4 text-[15px] focus:outline-none transition-colors placeholder:text-[#A69B9B]`}\n                  />\n                  {rangeError ? (\n                    <p className=\"text-[12px] text-destructive mt-2 ml-1 font-medium\">{rangeError}</p>\n                  ) : (\n                    <p className=\"text-[12px] text-[#A69B9B] mt-2 ml-1\">Supports ranges, individual, or mixed</p>\n                  )}\n                </div>\n\n                {/* Root Words */}\n                <div className=\"bg-white border border-[#E8E2E2] rounded-[1.5rem] p-4 shadow-[0_4px_20px_rgba(0,0,0,0.03)]\">\n                   <div className=\"flex items-center justify-between\">\n                     <span className=\"text-[15px] text-[#3A2424] font-medium\">Root Words</span>\n                     <Switch checked={rootWordsOn} onCheckedChange={setRootWordsOn} className=\"data-[state=checked]:bg-[#5A2A31]\" />\n                   </div>\n\n                   {rootWordsOn && (\n                      <div className=\"mt-5 space-y-4\">\n                         {rootWords.map((rw, rIndex) => (\n                           <div key={rw.id} className=\"border border-[#E8E2E2] rounded-2xl p-4 bg-[#FCFAFA] relative\">\n                              <div className=\"flex justify-between items-center mb-4\">\n                                 <span className=\"text-[13px] text-[#8C7D7D]\">Root Word</span>\n                                 <button onClick={() => { const nr = [...rootWords]; nr.splice(rIndex, 1); setRootWords(nr); }}>\n                                   <Trash2 size={16} className=\"text-[#E05252] hover:text-red-700\" />\n                                 </button>\n                              </div>\n                              <div className=\"space-y-3\">\n                                 <input type=\"text\" value={rw.arabic} onChange={e => { const nr = [...rootWords]; nr[rIndex].arabic = e.target.value; setRootWords(nr); }} className=\"w-full bg-white border border-[#E8E2E2] rounded-full px-4 py-3 text-[14px] font-arabic focus:outline-none focus:border-[#5A2A31] transition-colors placeholder:text-[#D2C8C8] placeholder:font-body placeholder:text-[14px]\" dir=\"rtl\" placeholder=\"(e.g., ┘è╪ñ┘à┘å┘ê┘å) Arabic word\" />\n                                 <div onClick={() => {\n                                   if (!rw.arabic.trim()) {\n                                     toast({\n                                       title: \"Input Locked\",\n                                       description: \"Enter the Arabic word first.\",\n                                       variant: \"destructive\",\n                                       icon: <Lock size={18} />\n                                     });\n                                   }\n                                 }}>\n                                   <input disabled={!rw.arabic.trim()} type=\"text\" value={rw.transliteration} onChange={e => { const nr = [...rootWords]; nr[rIndex].transliteration = e.target.value; setRootWords(nr); }} className=\"w-full bg-white border border-[#E8E2E2] rounded-full px-4 py-3 text-[14px] focus:outline-none focus:border-[#5A2A31] transition-colors placeholder:text-[#A69B9B] disabled:opacity-50 disabled:bg-[#FCFAFA]\" placeholder={rw.arabic.trim() ? \"Transliteration\" : \"Arabic word required first\"} />\n                                 </div>\n                                 <div onClick={() => {\n                                   if (!rw.arabic.trim()) {\n                                     toast({\n                                       title: \"Input Locked\",\n                                       description: \"Enter the Arabic word first.\",\n                                       variant: \"destructive\",\n                                       icon: <Lock size={18} />\n                                     });\n                                   }\n                                 }}>\n                                   <input disabled={!rw.arabic.trim()} type=\"text\" value={rw.rootLetters} onChange={e => { const nr = [...rootWords]; nr[rIndex].rootLetters = e.target.value; setRootWords(nr); }} className=\"w-full bg-white border border-[#E8E2E2] rounded-full px-4 py-3 text-[14px] font-arabic focus:outline-none focus:border-[#5A2A31] transition-colors placeholder:text-[#D2C8C8] placeholder:font-body placeholder:text-[14px] disabled:opacity-50 disabled:bg-[#FCFAFA]\" dir=\"rtl\" placeholder={rw.arabic.trim() ? \"(e.g., ╪ú-┘à-┘å) Root letters\" : \"Arabic word required first\"} />\n                                 </div>\n                                    <div className=\"flex gap-2 overflow-x-auto pb-1 scrollbar-hide pt-1\">\n                                       <button onClick={() => {\n                                          if (!rw.arabic.trim()) {\n                                            toast({ \n                                              title: \"Editor Locked\", \n                                              description: \"Enter the Arabic word first to use the editor.\", \n                                              variant: \"destructive\",\n                                              icon: <Lock size={18} />\n                                            });\n                                            return;\n                                          }\n                                          insertMarkdownToRootWord(rIndex, '## Heading');\n                                       }} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${!rw.arabic.trim() ? 'opacity-50' : ''}`}>Heading</button>\n                                       <button onClick={() => {\n                                          if (!rw.arabic.trim()) {\n                                            toast({ \n                                              title: \"Editor Locked\", \n                                              description: \"Enter the Arabic word first to use the editor.\", \n                                              variant: \"destructive\",\n                                              icon: <Lock size={18} />\n                                            });\n                                            return;\n                                          }\n                                          insertMarkdownToRootWord(rIndex, '**bold**');\n                                       }} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${!rw.arabic.trim() ? 'opacity-50' : ''}`}>Bold</button>\n                                       <button onClick={() => {\n                                          if (!rw.arabic.trim()) {\n                                            toast({ \n                                              title: \"Editor Locked\", \n                                              description: \"Enter the Arabic word first to use the editor.\", \n                                              variant: \"destructive\",\n                                              icon: <Lock size={18} />\n                                            });\n                                            return;\n                                          }\n                                          insertMarkdownToRootWord(rIndex, '- list item');\n                                       }} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${!rw.arabic.trim() ? 'opacity-50' : ''}`}>List</button>\n                                       <button onClick={() => {\n                                          if (!rw.arabic.trim()) {\n                                            toast({ \n                                              title: \"Editor Locked\", \n                                              description: \"Enter the Arabic word first to use the editor.\", \n                                              variant: \"destructive\",\n                                              icon: <Lock size={18} />\n                                            });\n                                            return;\n                                          }\n                                          insertMarkdownToRootWord(rIndex, '- [ ] task');\n                                       }} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${!rw.arabic.trim() ? 'opacity-50' : ''}`}>Checklist</button>\n                                       <button onClick={() => {\n                                          if (!rw.arabic.trim()) {\n                                            toast({ \n                                              title: \"Editor Locked\", \n                                              description: \"Enter the Arabic word first to use the editor.\", \n                                              variant: \"destructive\",\n                                              icon: <Lock size={18} />\n                                            });\n                                            return;\n                                          }\n                                          insertMarkdownToRootWord(rIndex, '> quote');\n                                       }} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${!rw.arabic.trim() ? 'opacity-50' : ''}`}>Quote</button>\n                                       <button onClick={() => {\n                                          if (!rw.arabic.trim()) {\n                                            toast({ \n                                              title: \"Editor Locked\", \n                                              description: \"Enter the Arabic word first to use the editor.\", \n                                              variant: \"destructive\",\n                                              icon: <Lock size={18} />\n                                            });\n                                            return;\n                                          }\n                                          insertMarkdownToRootWord(rIndex, '`code`');\n                                       }} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${!rw.arabic.trim() ? 'opacity-50' : ''}`}>Code</button>\n                                       <button onClick={() => {\n                                          if (!rw.arabic.trim()) {\n                                            toast({ \n                                              title: \"Editor Locked\", \n                                              description: \"Enter the Arabic word first to use the editor.\", \n                                              variant: \"destructive\",\n                                              icon: <Lock size={18} />\n                                            });\n                                            return;\n                                          }\n                                          insertMarkdownToRootWord(rIndex, '| Header | Header |\\n| --- | --- |\\n| Cell | Cell |');\n                                       }} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${!rw.arabic.trim() ? 'opacity-50' : ''}`}>Table</button>\n                                       <button onClick={() => {\n                                          if (!rw.arabic.trim()) {\n                                            toast({ \n                                              title: \"Editor Locked\", \n                                              description: \"Enter the Arabic word first to use the editor.\", \n                                              variant: \"destructive\",\n                                              icon: <Lock size={18} />\n                                            });\n                                            return;\n                                          }\n                                          insertMarkdownToRootWord(rIndex, '[link text](url)');\n                                       }} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${!rw.arabic.trim() ? 'opacity-50' : ''}`}>Link</button>\n                                    </div>\n                                    <div \n                                      className=\"relative\"\n                                      onClick={() => { \n                                        if (!rw.arabic.trim()) {\n                                          toast({ \n                                            title: \"Editor Locked\", \n                                            description: \"Enter the Arabic word first to write an explanation.\", \n                                            variant: \"destructive\",\n                                              icon: <Lock size={20} />\n                                          }); \n                                        } \n                                      }}\n                                    >\n                                      <textarea\n                                        disabled={!rw.arabic.trim()}\n                                        value={rw.explanation}\n                                        onChange={e => { const nr = [...rootWords]; nr[rIndex].explanation = e.target.value; setRootWords(nr); }}\n                                        className=\"w-full bg-white border border-[#E8E2E2] rounded-2xl p-4 text-[14px] min-h-[80px] focus:outline-none focus:border-[#5A2A31] transition-colors placeholder:text-[#A69B9B] disabled:opacity-50 disabled:bg-[#FCFAFA]\"\n                                        placeholder={rw.arabic.trim() ? \"Explanation...\" : \"Arabic word required first...\"}\n                                      />\n                                    </div>\n                              </div>\n                           </div>\n                         ))}\n                         <button \n                           onClick={() => {\n                             if (!verseRange.trim() || !!rangeError) {\n                               toast({\n                                 title: \"Action Locked\",\n                                 description: !!rangeError ? \"Fix the range error first.\" : \"Enter a Verse Range (e.g., 1-5) above first.\",\n                                 variant: \"destructive\",\n                                 icon: <Lock size={18} />\n                               });\n                               return;\n                             }\n                             setRootWords([...rootWords, { id: generateId(), arabic: '', transliteration: '', rootLetters: '', explanation: '' }]);\n                           }} \n                           className={`w-full border border-dashed border-[#D2C8C8] rounded-full py-3.5 text-[#8C7D7D] font-medium flex justify-center items-center gap-2 transition-all ${!verseRange.trim() || !!rangeError ? 'opacity-50' : 'hover:bg-[#F8F6F4]'}`}\n                         >\n                           <Plus size={18} /> Add Root Word\n                         </button>\n                      </div>\n                   )}\n                </div>\n\n                {/* Categories */}\n                <div className=\"mb-24\">\n                   <label className=\"block text-[11px] font-medium text-[#A69B9B] uppercase tracking-widest mb-3 ml-1\">CATEGORIES</label>\n\n                   {categories.map((cat, cIndex) => (\n                     <div key={cat.id} className=\"bg-white border border-[#E8E2E2] rounded-[1.5rem] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] mb-4\">\n                        <div className=\"flex justify-between items-center mb-4\">\n                           <span className=\"text-[13px] text-[#8C7D7D]\">Category</span>\n                           <button onClick={() => { const nc = [...categories]; nc.splice(cIndex, 1); setCategories(nc); }}>\n                             <Trash2 size={16} className=\"text-[#E05252] hover:text-red-700\" />\n                           </button>\n                        </div>\n                        <input type=\"text\" value={cat.title} onChange={e => { const nc = [...categories]; nc[cIndex].title = e.target.value; setCategories(nc); }} className=\"w-full bg-white border border-[#E8E2E2] rounded-full px-4 py-3.5 text-[14px] mb-4 focus:outline-none focus:border-[#5A2A31]\" placeholder=\"Category Title\" />\n\n                        <div className=\"flex gap-2 mb-3 overflow-x-auto pb-1 scrollbar-hide\">\n                           <button onClick={() => {\n                              if (!cat.title.trim()) {\n                                toast({ \n                                  title: \"Editor Locked\", \n                                  description: \"Enter the Category Title first to use the editor.\", \n                                  variant: \"destructive\",\n                                  icon: <Lock size={18} />\n                                });\n                                return;\n                              }\n                              insertMarkdown(cIndex, '## Heading');\n                           }} className={`bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4] ${!cat.title.trim() ? 'opacity-50' : ''}`}>Heading</button>\n                           <button onClick={() => {\n                               if (!cat.title.trim()) {\n                                 toast({ \n                                   title: \"Editor Locked\", \n                                   description: \"Enter the Category Title first to use the editor.\", \n                                   variant: \"destructive\",\n                                   icon: <Lock size={18} />\n                                 });\n                                 return;\n                               }\n                               insertMarkdown(cIndex, '**bold**');\n                            }} className={`bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4] ${!cat.title.trim() ? 'opacity-50' : ''}`}>Bold</button>\n                           <button onClick={() => {\n                               if (!cat.title.trim()) {\n                                 toast({ \n                                   title: \"Editor Locked\", \n                                   description: \"Enter the Category Title first to use the editor.\", \n                                   variant: \"destructive\",\n                                   icon: <Lock size={18} />\n                                 });\n                                 return;\n                               }\n                               insertMarkdown(cIndex, '- list item');\n                            }} className={`bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4] ${!cat.title.trim() ? 'opacity-50' : ''}`}>List</button>\n                           <button onClick={() => {\n                               if (!cat.title.trim()) {\n                                 toast({ \n                                   title: \"Editor Locked\", \n                                   description: \"Enter the Category Title first to use the editor.\", \n                                   variant: \"destructive\",\n                                   icon: <Lock size={18} />\n                                 });\n                                 return;\n                               }\n                               insertMarkdown(cIndex, '- [ ] task');\n                            }} className={`bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4] ${!cat.title.trim() ? 'opacity-50' : ''}`}>Checklist</button>\n                           <button onClick={() => {\n                               if (!cat.title.trim()) {\n                                 toast({ \n                                   title: \"Editor Locked\", \n                                   description: \"Enter the Category Title first to use the editor.\", \n                                   variant: \"destructive\",\n                                   icon: <Lock size={18} />\n                                 });\n                                 return;\n                               }\n                               insertMarkdown(cIndex, '> quote');\n                            }} className={`bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4] ${!cat.title.trim() ? 'opacity-50' : ''}`}>Quote</button>\n                           <button onClick={() => {\n                               if (!cat.title.trim()) {\n                                 toast({ \n                                   title: \"Editor Locked\", \n                                   description: \"Enter the Category Title first to use the editor.\", \n                                   variant: \"destructive\",\n                                   icon: <Lock size={18} />\n                                 });\n                                 return;\n                               }\n                               insertMarkdown(cIndex, '`code`');\n                            }} className={`bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4] ${!cat.title.trim() ? 'opacity-50' : ''}`}>Code</button>\n                           <button onClick={() => {\n                               if (!cat.title.trim()) {\n                                 toast({ \n                                   title: \"Editor Locked\", \n                                   description: \"Enter the Category Title first to use the editor.\", \n                                   variant: \"destructive\",\n                                   icon: <Lock size={18} />\n                                 });\n                                 return;\n                               }\n                               insertMarkdown(cIndex, '| Header | Header |\\n| --- | --- |\\n| Cell | Cell |');\n                            }} className={`bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4] ${!cat.title.trim() ? 'opacity-50' : ''}`}>Table</button>\n                           <button onClick={() => {\n                               if (!cat.title.trim()) {\n                                 toast({ \n                                   title: \"Editor Locked\", \n                                   description: \"Enter the Category Title first to use the editor.\", \n                                   variant: \"destructive\",\n                                   icon: <Lock size={18} />\n                                 });\n                                 return;\n                               }\n                               insertMarkdown(cIndex, '[link text](url)');\n                            }} className={`bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4] ${!cat.title.trim() ? 'opacity-50' : ''}`}>Link</button>\n                        </div>\n\n                        <div onClick={() => { \n                           if (!cat.title.trim()) {\n                              toast({ \n                                title: \"Editor Locked\", \n                                description: \"Enter the Category Title first to write content.\", \n                                variant: \"destructive\",\n                                icon: <Lock size={20} />\n                              }); \n                           } \n                        }}>\n                          <textarea\n                             disabled={!cat.title.trim()}\n                             value={cat.content}\n                             onChange={e => { const nc = [...categories]; nc[cIndex].content = e.target.value; setCategories(nc); }}\n                             className=\"w-full bg-white border border-[#E8E2E2] rounded-2xl p-4 text-[14px] min-h-[140px] focus:outline-none focus:border-[#5A2A31] disabled:opacity-50 disabled:bg-[#FCFAFA]\"\n                             placeholder={cat.title.trim() ? \"## Heading\\n\\nYour content here...\\n\\nUse **bold** for emphasis\" : \"Category Title required first...\"}\n                           />\n                        </div>\n                     </div>\n                   ))}\n\n                   <button\n                      onClick={() => {\n                         if (!verseRange.trim() || !!rangeError) {\n                            toast({\n                               title: \"Action Locked\",\n                               description: !!rangeError ? \"Fix the range error first.\" : \"Enter a Verse Range (e.g., 1-5) above first.\",\n                               variant: \"destructive\",\n                               icon: <Lock size={18} />\n                            });\n                            return;\n                         }\n                         setCategories([...categories, { id: generateId(), title: '', content: '', order: categories.length }]);\n                      }}\n                      className={`w-full border border-dashed border-[#D2C8C8] rounded-2xl py-[16px] text-[#8C7D7D] font-medium flex justify-center items-center gap-2 bg-white transition-all ${!verseRange.trim() || !!rangeError ? 'opacity-50' : 'hover:bg-[#F8F6F4]'}`}\n                   >\n                     <Plus size={18} /> Add Category\n                   </button>\n                 </div>\n                </div>\n              </motion.div>\n          )}\n        </AnimatePresence>\n      </div>\n\n      <div className=\"fixed bottom-0 left-0 right-0 p-5 pb-8 bg-gradient-to-t from-background via-background/90 to-transparent z-50\">\n        <button\n          onClick={() => {\n            if (isSaveDisabled) {\n              if (!selectedSurah) {\n                toast({ \n                  title: \"Selection Required\", \n                  description: \"Please select a Surah first.\", \n                  variant: \"destructive\",\n                  icon: <AlertCircle size={18} />\n                });\n              }\n              else if (mode === 'deeper' && !verseRange.trim()) {\n                toast({ \n                  title: \"Range Required\", \n                  description: \"Enter a verse range for the Deeper Look study.\", \n                  variant: \"destructive\",\n                  icon: <AlertCircle size={18} />\n                });\n              }\n              else if (mode === 'deeper' && !!rangeError) {\n                toast({ \n                  title: \"Range Error\", \n                  description: \"Fix the verse range error before saving.\", \n                  variant: \"destructive\",\n                  icon: <AlertCircle size={18} />\n                });\n              }\n              else if (!hasAtLeastOneExplanation) {\n                toast({ \n                  title: \"Content Missing\", \n                  description: \"Add at least one concise note or deeper look entry.\", \n                  variant: \"destructive\",\n                  icon: <AlertCircle size={18} />\n                });\n              }\n              else if (!hasConciseContent) {\n                 toast({ \n                   title: \"Content Missing\", \n                   description: \"Add at least one concise note in the Verse Block section.\", \n                   variant: \"destructive\",\n                   icon: <AlertCircle size={18} />\n                 });\n            }\n            else if (!hasChanges) {\n                toast({ \n                  title: \"No Changes\", \n                  description: \"Everything is already saved.\", \n                  variant: \"default\",\n                  icon: <CheckCircle size={18} />\n                });\n              }\n              return;\n            }\n            handleSave();\n          }}\n          className={`w-full max-w-md mx-auto py-[14px] rounded-full font-medium text-[16px] transition-all flex justify-center items-center ${\n            isSaveDisabled\n              ? 'bg-secondary text-muted-foreground/80'\n              : 'bg-primary text-primary-foreground shadow-[0_8px_20px_rgba(var(--primary),0.25)] hover:bg-primary/90 active:scale-[0.98]'\n          }`}\n        >\n          Save Explanation\n        </button>\n      </div>\n    </div>\n  );\n}\n",
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\pages\\ExplanationViewPage.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\pages\\Index.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\pages\\ManageExplanationsPage.tsx",
+        "messages": [
+            {
+                "ruleId": "@typescript-eslint/no-explicit-any",
+                "severity": 2,
+                "message": "Unexpected any. Specify a different type.",
+                "line": 138,
+                "column": 79,
+                "nodeType": "TSAnyKeyword",
+                "messageId": "unexpectedAny",
+                "endLine": 138,
+                "endColumn": 82,
+                "suggestions": [
+                    {
+                        "messageId": "suggestUnknown",
+                        "fix": {
+                            "range": [
+                                6547,
+                                6550
+                            ],
+                            "text": "unknown"
+                        },
+                        "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+                    },
+                    {
+                        "messageId": "suggestNever",
+                        "fix": {
+                            "range": [
+                                6547,
+                                6550
+                            ],
+                            "text": "never"
+                        },
+                        "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+                    }
+                ]
+            },
+            {
+                "ruleId": "@typescript-eslint/no-explicit-any",
+                "severity": 2,
+                "message": "Unexpected any. Specify a different type.",
+                "line": 170,
+                "column": 177,
+                "nodeType": "TSAnyKeyword",
+                "messageId": "unexpectedAny",
+                "endLine": 170,
+                "endColumn": 180,
+                "suggestions": [
+                    {
+                        "messageId": "suggestUnknown",
+                        "fix": {
+                            "range": [
+                                8773,
+                                8776
+                            ],
+                            "text": "unknown"
+                        },
+                        "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+                    },
+                    {
+                        "messageId": "suggestNever",
+                        "fix": {
+                            "range": [
+                                8773,
+                                8776
+                            ],
+                            "text": "never"
+                        },
+                        "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+                    }
+                ]
+            }
+        ],
+        "suppressedMessages": [],
+        "errorCount": 2,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "source": "import { useState } from 'react';\nimport { useNavigate } from 'react-router-dom';\nimport { ArrowLeft, Plus, Edit2, Trash2, FileText, Search, BookOpen, Bookmark } from 'lucide-react';\nimport { motion, AnimatePresence } from 'framer-motion';\nimport { useExplanations } from '@/hooks/useAppStore';\nimport { useSurahs } from '@/hooks/useQuranData';\nimport {\n  AlertDialog,\n  AlertDialogAction,\n  AlertDialogCancel,\n  AlertDialogContent,\n  AlertDialogDescription,\n  AlertDialogFooter,\n  AlertDialogHeader,\n  AlertDialogTitle,\n  AlertDialogTrigger,\n} from \"@/components/ui/alert-dialog\";\n\nexport default function ManageExplanationsPage() {\n  const navigate = useNavigate();\n  const { explanations, deleteExplanation } = useExplanations();\n  const { data: surahs } = useSurahs();\n  const [searchQuery, setSearchQuery] = useState('');\n\n  // Group explanations by Surah\n  const groupedExplanations = explanations.reduce((acc, exp) => {\n    if (!acc[exp.surahNumber]) acc[exp.surahNumber] = [];\n    acc[exp.surahNumber].push(exp);\n    return acc;\n  }, {} as Record<number, typeof explanations>);\n\n  const getSurahName = (num: number) => surahs?.find(s => s.number === num)?.name || `Surah ${num}`;\n  const getSurahArabic = (num: number) => surahs?.find(s => s.number === num)?.nameArabic || '';\n\n  const filteredSurahNumbers = Object.keys(groupedExplanations)\n    .map(Number)\n    .filter(num => {\n      const name = getSurahName(num).toLowerCase();\n      const query = searchQuery.toLowerCase();\n      return name.includes(query) || num.toString().includes(query);\n    })\n    .sort((a, b) => a - b);\n\n  const handleDelete = (id: string) => {\n    deleteExplanation(id);\n  };\n\n  return (\n    <div className=\"min-h-screen bg-background pb-32\">\n      {/* Header */}\n      <div className=\"sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border/60 pb-2\">\n        <div className=\"flex items-center gap-3 px-4 h-16 pt-2\">\n          <button \n            onClick={() => navigate('/')} \n            className=\"p-2 -ml-2 rounded-xl transition hover:bg-accent text-foreground\"\n          >\n            <ArrowLeft size={22} />\n          </button>\n          <h1 className=\"font-display text-[20px] font-semibold text-foreground flex-1\">\n            Manage Explanations\n          </h1>\n        </div>\n      </div>\n\n      <div className=\"px-4 mt-6 max-w-md mx-auto space-y-6\">\n        \n        {/* Search & Add New */}\n        <div className=\"flex gap-3\">\n          <div className=\"relative flex-1 group\">\n            <Search className=\"absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-hover:text-primary transition-colors\" size={18} />\n            <input \n              type=\"text\"\n              placeholder=\"Search by Surah\"\n              value={searchQuery}\n              onChange={e => setSearchQuery(e.target.value)}\n              className=\"w-full pl-10 pr-4 py-3 rounded-2xl bg-card border border-border text-sm text-foreground focus:outline-none focus:border-primary/50 transition-colors\"\n            />\n          </div>\n          <button \n            onClick={() => navigate('/explanation-builder')}\n            className=\"bg-primary text-primary-foreground px-4 rounded-2xl flex items-center justify-center shadow-sm hover:opacity-90 transition-opacity whitespace-nowrap gap-2 font-medium text-[14px]\"\n          >\n            <Plus size={18} /> Add New\n          </button>\n        </div>\n\n        {/* Explanations List */}\n        {explanations.length === 0 ? (\n          <div className=\"flex flex-col items-center justify-center py-20 text-center opacity-60\">\n            <div className=\"w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4\">\n              <FileText size={32} className=\"text-muted-foreground\" />\n            </div>\n            <p className=\"text-[15px] font-medium text-foreground mb-1\">No explanations yet</p>\n            <p className=\"text-[13px] text-muted-foreground\">Start deep-diving into the Quran by adding your first explanation.</p>\n          </div>\n        ) : filteredSurahNumbers.length === 0 ? (\n          <div className=\"flex flex-col items-center justify-center py-10 text-center\">\n            <p className=\"text-[15px] text-muted-foreground\">No matching explanations found.</p>\n          </div>\n        ) : (\n          <div className=\"space-y-6\">\n            <AnimatePresence mode=\"popLayout\">\n              {filteredSurahNumbers.map(surahNum => (\n                <motion.div \n                  layout\n                  initial={{ opacity: 0, y: 10 }}\n                  animate={{ opacity: 1, y: 0 }}\n                  exit={{ opacity: 0, scale: 0.95 }}\n                  key={`group-${surahNum}`} \n                  className=\"space-y-3\"\n                >\n                  <div className=\"flex items-center justify-between pb-1 border-b border-border/40\">\n                    <h3 className=\"font-semibold text-[14px] text-muted-foreground flex items-center gap-2\">\n                      <span className=\"w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[11px] font-bold tabular-nums\">\n                        {surahNum}\n                      </span>\n                      {getSurahName(surahNum)}\n                    </h3>\n                    <span className=\"font-arabic text-primary/70 text-lg\">\n                      {getSurahArabic(surahNum)}\n                    </span>\n                  </div>\n                  \n                  <div className=\"space-y-3\">\n                    <AnimatePresence mode=\"popLayout\">\n                      {groupedExplanations[surahNum].map(exp => (\n                        <motion.div \n                          layout\n                          initial={{ opacity: 0, scale: 0.95 }}\n                          animate={{ opacity: 1, scale: 1 }}\n                          exit={{ opacity: 0, scale: 0.95 }}\n                          key={exp.id}\n                          className=\"bg-card border border-border rounded-[1.2rem] p-4 shadow-[0_2px_10px_rgba(0,0,0,0.02)] flex items-center justify-between gap-4 group hover:border-primary/20 transition-colors\"\n                        >\n                          <div className=\"flex-1 flex items-center min-w-0 pr-4\">\n                            <div className=\"inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-primary font-medium text-[13px] border border-primary/10 shadow-sm\">\n                              <Bookmark size={14} className=\"opacity-70\" />\n                              Verse {exp.verseRange || (exp.verses || (exp as any).ayahs || []).join(', ')}\n                            </div>\n                          </div>\n                          <div className=\"flex items-center gap-1.5 sm:gap-2\">\n                            <button \n                              onClick={() => navigate(`/explanation-view?id=${exp.id}`)}\n                              className=\"h-9 px-3 flex items-center justify-center gap-1.5 rounded-xl bg-primary/5 text-primary hover:bg-primary/20 transition-colors font-medium text-[13px] border border-primary/10 shadow-sm\"\n                              aria-label=\"View\"\n                            >\n                              <BookOpen size={16} />\n                              View\n                            </button>\n                            <button \n                              onClick={() => navigate(`/explanation-builder?id=${exp.id}`)}\n                              className=\"w-9 h-9 flex items-center justify-center rounded-xl bg-secondary text-foreground hover:bg-secondary/80 transition-colors\"\n                              aria-label=\"Edit\"\n                            >\n                              <Edit2 size={16} />\n                            </button>\n                            <AlertDialog>\n                              <AlertDialogTrigger asChild>\n                                <button \n                                  className=\"w-9 h-9 flex items-center justify-center rounded-xl bg-destructive/10 text-destructive hover:bg-destructive/20 transition-colors\"\n                                  aria-label=\"Delete\"\n                                >\n                                  <Trash2 size={16} />\n                                </button>\n                              </AlertDialogTrigger>\n                              <AlertDialogContent className=\"w-[90vw] max-w-[400px] rounded-[1.5rem]\">\n                                <AlertDialogHeader>\n                                  <AlertDialogTitle>Delete Explanation?</AlertDialogTitle>\n                                  <AlertDialogDescription>\n                                    Are you sure you want to delete your explanation for <strong>Surah {getSurahName(surahNum)} Verse {exp.verseRange || (exp.verses || (exp as any).ayahs || []).join(', ')}</strong>? This action cannot be undone.\n                                  </AlertDialogDescription>\n                                </AlertDialogHeader>\n                                <AlertDialogFooter className=\"flex gap-2 sm:gap-0 mt-2\">\n                                  <AlertDialogCancel className=\"rounded-xl border-border h-11\">Cancel</AlertDialogCancel>\n                                  <AlertDialogAction \n                                    onClick={() => handleDelete(exp.id)}\n                                    className=\"rounded-xl bg-destructive hover:bg-destructive/90 text-destructive-foreground h-11\"\n                                  >\n                                    Delete\n                                  </AlertDialogAction>\n                                </AlertDialogFooter>\n                              </AlertDialogContent>\n                            </AlertDialog>\n                          </div>\n                        </motion.div>\n                      ))}\n                    </AnimatePresence>\n                  </div>\n                </motion.div>\n              ))}\n            </AnimatePresence>\n          </div>\n        )}\n      </div>\n    </div>\n  );\n}\n",
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\pages\\NotFound.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\pages\\SavedPage.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\pages\\SettingsPage.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\pages\\SurahListPage.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\pages\\SurahReadingPage.tsx",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\test\\example.test.ts",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\test\\setup.ts",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\types\\quran.ts",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\src\\vite-env.d.ts",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\tailwind.config.ts",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\vite.config.ts",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    },
+    {
+        "filePath": "C:\\Users\\ariya\\Downloads\\Inside-Quran\\Inside-Quran\\vitest.config.ts",
+        "messages": [],
+        "suppressedMessages": [],
+        "errorCount": 0,
+        "fatalErrorCount": 0,
+        "warningCount": 0,
+        "fixableErrorCount": 0,
+        "fixableWarningCount": 0,
+        "usedDeprecatedRules": []
+    }
+]

@@ -11,7 +11,9 @@ import SavedPage from "@/pages/SavedPage";
 import SettingsPage from "@/pages/SettingsPage";
 import ExplanationBuilderPage from "@/pages/ExplanationBuilderPage";
 import ExplanationViewPage from "@/pages/ExplanationViewPage";
+import ManageExplanationsPage from "@/pages/ManageExplanationsPage";
 import NotFound from "@/pages/NotFound";
+import ScrollToTop from "@/components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +23,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<SurahListPage />} />
           <Route path="/surah/:number" element={<SurahReadingPage />} />
@@ -28,6 +31,7 @@ const App = () => (
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/explanation-builder" element={<ExplanationBuilderPage />} />
           <Route path="/explanation-view" element={<ExplanationViewPage />} />
+          <Route path="/manage-explanations" element={<ManageExplanationsPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <BottomNav />

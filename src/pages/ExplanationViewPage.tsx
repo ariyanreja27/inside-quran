@@ -1,11 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { X, Volume2, Info, SquarePen, Bookmark, MoreHorizontal, BookOpen } from 'lucide-react';
+import { useSwipeable } from 'react-swipeable';
+import { X, Volume2, Info, SquarePen, Share2, MoreHorizontal, BookOpen, FileText, FileDown } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useSurahAyahs, useSurahs } from '@/hooks/useQuranData';
-import { useExplanations, useSettings } from '@/hooks/useAppStore';
+import { useSurahVerses, useSurahs } from '@/hooks/useQuranData';
+import { useExplanations, useSettings, useCustomTranslations } from '@/hooks/useAppStore';
 import type { Explanation, RootWord } from '@/types/quran';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Drawer, DrawerContent, DrawerTitle, DrawerDescription } from '@/components/ui/drawer';
@@ -16,11 +23,12 @@ export default function ExplanationViewPage() {
   const [searchParams] = useSearchParams();
   const explanationId = searchParams.get('id');
   const surahNumber = searchParams.get('surah') ? Number(searchParams.get('surah')) : null;
-  const ayahNumber = searchParams.get('ayah') ? Number(searchParams.get('ayah')) : null;
+  const verseNumber = searchParams.get('verse') ? Number(searchParams.get('verse')) : null;
 
   const { getExplanation, explanations } = useExplanations();
   const { data: surahs } = useSurahs();
   const { settings } = useSettings();
+  const { getCustomTranslation } = useCustomTranslations();
 
   const [explanation, setExplanation] = useState<Explanation | null>(null);
   const [activeTab, setActiveTab] = useState<'concise' | 'deeper' | 'ask'>('concise');
@@ -29,8 +37,8 @@ export default function ExplanationViewPage() {
     let match: Explanation | undefined;
     if (explanationId) {
       match = explanations.find(e => e.id === explanationId);
-    } else if (surahNumber && ayahNumber) {
-      match = getExplanation(surahNumber, ayahNumber);
+    } else if (surahNumber && verseNumber) {
+      match = getExplanation(surahNumber, verseNumber);
     }
     setExplanation(match || null);
     
@@ -39,16 +47,17 @@ export default function ExplanationViewPage() {
             setActiveTab('deeper');
         }
     }
-  }, [explanationId, surahNumber, ayahNumber, explanations, getExplanation]);
+  }, [explanationId, surahNumber, verseNumber, explanations, getExplanation]);
 
-  const { data: currentSurahAyahs } = useSurahAyahs(explanation?.surahNumber || 1);
+  const { data: currentSurahVerses } = useSurahVerses(explanation?.surahNumber || 1);
   const surah = surahs?.find(s => s.number === explanation?.surahNumber);
 
-  const getAyah = (num: number) => {
-    return currentSurahAyahs?.find(a => a.numberInSurah === num);
+  const getVerse = (num: number) => {
+    return currentSurahVerses?.find(a => a.numberInSurah === num);
   };
 
   const [selectedRootWord, setSelectedRootWord] = useState<RootWord | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   // Pre-select first root word if none selected and tab is deeper
   useEffect(() => {
@@ -58,69 +67,107 @@ export default function ExplanationViewPage() {
   }, [activeTab, explanation, selectedRootWord]);
 
   // We'll use selectedRootWord for isActive
+  const handleOpenRootWord = (rw: RootWord) => {
+    setSelectedRootWord(rw);
+    setIsDrawerOpen(true);
+  };
+
+  const tabs = ['concise', 'deeper', 'ask'] as const;
+  const handlers = useSwipeable({
+    onSwipedLeft: () => {
+      const idx = tabs.indexOf(activeTab);
+      if (idx !== -1 && idx < tabs.length - 1) setActiveTab(tabs[idx + 1]);
+    },
+    onSwipedRight: () => {
+      const idx = tabs.indexOf(activeTab);
+      if (idx > 0) setActiveTab(tabs[idx - 1]);
+    },
+    trackMouse: true,
+    preventScrollOnSwipe: true,
+    delta: 40,
+  });
 
   if (!explanation) {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6 text-center">
          <p className="text-muted-foreground mb-4">Explanation not found, or there are no notes here yet.</p>
-         <button onClick={() => navigate(`/explanation-builder${surahNumber && ayahNumber ? `?surah=${surahNumber}&ayah=${ayahNumber}` : ''}`)} className="bg-[#5A2A31] text-white rounded-full px-6 py-3 font-medium">Add Explanation</button>
+         <button onClick={() => navigate(`/explanation-builder${surahNumber && verseNumber ? `?surah=${surahNumber}&verse=${verseNumber}` : ''}`)} className="bg-[#5A2A31] text-white rounded-full px-6 py-3 font-medium">Add Explanation</button>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background pb-24">
-      {/* Top Floating Buttons */}
-      <div className="flex items-center justify-between pt-6 px-5 mb-6">
-        <button onClick={() => navigate(-1)} className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent transition shadow-sm">
-          <X size={16} />
-        </button>
-        
-        <div className="flex items-center gap-2">
-          <button 
-             onClick={() => navigate(`/explanation-builder?id=${explanation.id}`)} 
-             className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent transition active:scale-95 shadow-sm"
-             aria-label="Edit Explanation"
-          >
-            <SquarePen size={14} />
+    <div {...handlers} className="min-h-screen bg-background pb-24">
+      {/* Sticky Header block */}
+      <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-md pt-5 pb-4 mb-6 border-b border-border/50 shadow-sm transform-gpu">
+        {/* Top Floating Buttons */}
+        <div className="flex items-center justify-between px-5 mb-5">
+          <button onClick={() => navigate(-1)} className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent transition shadow-sm">
+            <X size={16} />
           </button>
-          <button className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent transition shadow-sm">
-            <Bookmark size={14} />
-          </button>
-          <button className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent transition shadow-sm">
-            <MoreHorizontal size={16} />
-          </button>
+          
+          <div className="flex items-center gap-2">
+            <button 
+               onClick={() => navigate(`/explanation-builder?id=${explanation.id}`)} 
+               className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent transition active:scale-95 shadow-sm"
+               aria-label="Edit Explanation"
+            >
+              <SquarePen size={14} />
+            </button>
+            <DropdownMenu modal={false}>
+              <DropdownMenuTrigger asChild>
+                <button className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent transition shadow-sm" aria-label="More">
+                  <MoreHorizontal size={16} />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56 p-1.5 rounded-2xl bg-white/95 backdrop-blur-sm dark:bg-black/95 border-border shadow-xl animate-in fade-in-0 zoom-in-95">
+                <DropdownMenuItem 
+                  onClick={() => alert("Export as Markdown coming soon!")}
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer focus:bg-primary/5 focus:text-primary transition-colors"
+                >
+                  <FileText size={18} />
+                  <span className="font-medium text-[13.5px]">Export as Markdown</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => alert("Export as PDF coming soon!")}
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer focus:bg-primary/5 focus:text-primary transition-colors"
+                >
+                  <FileDown size={18} />
+                  <span className="font-medium text-[13.5px]">Export as PDF</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
-      </div>
 
-      {/* Tabs and Actions Row */}
-      <div className="px-5 mb-10 flex flex-col gap-4">
-        
-        <div className="flex bg-muted/50 rounded-full p-[4px] w-full relative">
-          {(['concise', 'deeper', 'ask'] as const).map((tab) => {
-            const isActive = activeTab === tab;
-            return (
-              <motion.button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                whileTap={{ scale: 0.98 }}
-                className={`relative flex-1 py-1.5 text-[13.5px] font-[500] rounded-full transition-colors tracking-wide z-10 ${
-                  isActive 
-                    ? 'text-primary-foreground' 
-                    : 'text-muted-foreground hover:text-primary'
-                }`}
-              >
-                {isActive && (
-                  <motion.div
-                    layoutId="activeTab-view"
-                    className="absolute inset-0 bg-primary rounded-full shadow-sm z-[-1]"
-                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                  />
-                )}
-                {tab === 'concise' ? 'Concise' : tab === 'deeper' ? 'Deeper Look' : 'Ask Ustadh'}
-              </motion.button>
-            );
-          })}
+        {/* Tabs and Actions Row */}
+        <div className="px-5">
+          <div className="flex bg-muted/50 rounded-full p-[4px] w-full relative">
+            {(['concise', 'deeper', 'ask'] as const).map((tab) => {
+              const isActive = activeTab === tab;
+              return (
+                <motion.button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  whileTap={{ scale: 0.98 }}
+                  className={`relative flex-1 py-1.5 text-[13.5px] font-[500] rounded-full transition-colors tracking-wide z-10 ${
+                    isActive 
+                      ? 'text-primary-foreground' 
+                      : 'text-muted-foreground hover:text-primary'
+                  }`}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeTab-view"
+                      className="absolute inset-0 bg-primary rounded-full shadow-sm z-[-1]"
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                    />
+                  )}
+                  {tab === 'concise' ? 'Concise' : tab === 'deeper' ? 'Deeper Look' : 'Ask Ustadh'}
+                </motion.button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
@@ -141,42 +188,47 @@ export default function ExplanationViewPage() {
                    <p className="text-center text-muted-foreground py-8">No concise explanations added.</p>
                 )}
                 {explanation.concise?.map((block, i) => {
-                   const ayahData = getAyah(block.ayahNumber);
+                   const hasExplanationContent = block.explanations.some(exp => exp.text?.trim().length > 0);
+                   if (!hasExplanationContent) return null;
+                   
+                   const verseData = getVerse(block.verseNumber);
                    return (
                      <div key={i} className="space-y-6">
-                        {/* Divider logic for Ayah blocks! */}
+                        {/* Divider logic for Verse blocks! */}
                         <div className="flex items-center gap-4">
                            <div className="h-px bg-border flex-1"></div>
-                           <span className="text-primary font-display font-medium italic text-[15px]">Ayah {block.ayahNumber}</span>
+                           <span className="text-primary font-display font-medium italic text-[15px]">Verse {block.verseNumber}</span>
                            <div className="h-px bg-border flex-1"></div>
                         </div>
                         
-                        {/* Ayah Text Box */}
-                        {ayahData && (
+                        {/* Verse Text Box */}
+                        {verseData && (
                           <div className="bg-card/50 dark:bg-card/30 rounded-3xl p-6 flex items-center justify-center min-h-[100px] shadow-[0_2px_10px_rgba(0,0,0,0.02)] mb-6 border border-border/50">
-                             <p className="font-arabic text-3xl leading-loose text-center text-foreground" style={{ fontSize: `${settings.arabicFontSize + 6}px` }} dangerouslySetInnerHTML={{ __html: ayahData.text.replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ', '<span class="bismillah-text text-2xl block mb-4">﷽</span>') }} />
+                             <p className="font-arabic text-3xl leading-loose text-center text-foreground" style={{ fontSize: `${settings.arabicFontSize + 6}px` }} dangerouslySetInnerHTML={{ __html: (verseData.text || '').replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ', '<span class="bismillah-text text-2xl block -mb-4">﷽</span>') }} />
                           </div>
                         )}
 
                         {/* Translation */}
-                        {ayahData && (
+                        {verseData && (
                           <p className="italic text-muted-foreground text-[16px] leading-relaxed mb-8" style={{ fontSize: `${settings.translationFontSize}px` }}>
-                             "{ayahData.translation}"
+                             "{getCustomTranslation(explanation.surahNumber, block.verseNumber, settings.language) || verseData.translation}"
                           </p>
                         )}
 
                         {/* Explanations */}
                         <div className="space-y-8">
                            {block.explanations.map((exp, j) => (
-                             <div key={j}>
-                                {exp.title && <h3 className="font-display font-semibold text-[17px] text-foreground mb-3">{exp.title}</h3>}
-                                <div className="prose prose-sm max-w-none text-muted-foreground leading-[1.8] text-[16px]
-                                  prose-headings:font-display prose-headings:font-bold prose-headings:text-foreground 
-                                  prose-headings:mt-6 prose-headings:mb-3
-                                  prose-strong:font-bold prose-strong:text-foreground">
-                                   <ReactMarkdown remarkPlugins={[remarkGfm]}>{exp.text}</ReactMarkdown>
-                                </div>
-                             </div>
+                             exp.text?.trim().length > 0 && (
+                               <div key={j}>
+                                  {exp.title && <h3 className="font-display font-semibold text-[17px] text-foreground mb-3">{exp.title}</h3>}
+                                  <div className="prose prose-sm max-w-none text-muted-foreground leading-[1.8] text-[16px]
+                                    prose-headings:font-display prose-headings:font-bold prose-headings:text-foreground 
+                                    prose-headings:mt-6 prose-headings:mb-3
+                                    prose-strong:font-bold prose-strong:text-foreground">
+                                     <ReactMarkdown remarkPlugins={[remarkGfm]}>{exp.text}</ReactMarkdown>
+                                  </div>
+                               </div>
+                             )
                            ))}
                         </div>
                      </div>
@@ -198,10 +250,11 @@ export default function ExplanationViewPage() {
                    <p className="text-center text-muted-foreground py-8">No deeper look data available.</p>
                 )}
 
-                {/* Assuming we are viewing Ayah 1 or the range... */}
-                <div className="uppercase text-[12px] text-muted-foreground tracking-[0.15em] font-semibold mb-6">
-                   AYAH {explanation.ayahRange || (explanation.ayahs?.length > 0 ? explanation.ayahs.join(', ') : '1')}
-                </div>
+                {(explanation.deeperLook?.rootWords?.length > 0 || explanation.deeperLook?.categories?.length > 0) && (
+                   <div className="uppercase text-[12px] text-muted-foreground tracking-[0.15em] font-semibold mb-6 text-center">
+                      VERSE {explanation.verseRange || explanation.verses?.join(', ') || ''}
+                   </div>
+                )}
 
                 {explanation.deeperLook?.rootWords?.length > 0 && (
                    <div className="space-y-4 mb-10">
@@ -211,11 +264,11 @@ export default function ExplanationViewPage() {
                       
                       <div className="flex flex-wrap gap-2.5">
                          {explanation.deeperLook.rootWords.map((rw) => {
-                            const isActive = selectedRootWord?.id === rw.id;
+                            const isActive = selectedRootWord?.id === rw.id && isDrawerOpen;
                             return (
                               <button
                                  key={rw.id}
-                                 onClick={() => setSelectedRootWord(rw)}
+                                 onClick={() => handleOpenRootWord(rw)}
                                  className={`font-arabic text-[14px] px-[18px] py-1.5 rounded-full border transition-all ${
                                    isActive 
                                      ? 'bg-primary/20 border-primary/20 text-primary font-bold shadow-sm' 
@@ -279,7 +332,18 @@ export default function ExplanationViewPage() {
       </div>
 
       {/* Root Word Drawer */}
-      <Drawer open={!!selectedRootWord} onOpenChange={(open) => !open && setSelectedRootWord(null)}>
+      <Drawer 
+        open={isDrawerOpen} 
+        onOpenChange={(open) => {
+          setIsDrawerOpen(open);
+          if (!open) {
+            setTimeout(() => setSelectedRootWord(null), 350);
+            if (document.activeElement instanceof HTMLElement) {
+              document.activeElement.blur();
+            }
+          }
+        }}
+      >
          <DrawerContent className="rounded-t-[2rem] bg-white border-none focus:outline-none h-[80vh] flex flex-col">
             {selectedRootWord && (
                <>
@@ -313,7 +377,13 @@ export default function ExplanationViewPage() {
                   
                   {/* Fixed Footer with Close Button */}
                   <div className="px-7 pb-10 pt-4 bg-background border-t border-border shrink-0">
-                     <button onClick={() => setSelectedRootWord(null)} className="w-full bg-muted hover:bg-muted/80 text-muted-foreground font-medium py-[14px] rounded-full transition-colors text-[15px]">
+                     <button 
+                        onClick={() => {
+                          setIsDrawerOpen(false);
+                          setTimeout(() => setSelectedRootWord(null), 350);
+                        }} 
+                        className="w-full bg-muted hover:bg-muted/80 text-muted-foreground font-medium py-[14px] rounded-full transition-colors text-[15px]"
+                     >
                         Close
                      </button>
                   </div>

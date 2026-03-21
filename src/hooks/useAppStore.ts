@@ -49,18 +49,18 @@ export function useFavorites() {
 export function useBookmarks() {
   const [bookmarks, setBookmarks] = useLocalStorage<Bookmark[]>('iq-bookmarks', []);
 
-  const toggleBookmark = (surahNumber: number, ayahNumber: number) => {
+  const toggleBookmark = (surahNumber: number, verseNumber: number) => {
     setBookmarks(prev => {
-      const exists = prev.some(b => b.surahNumber === surahNumber && b.ayahNumber === ayahNumber);
+      const exists = prev.some(b => b.surahNumber === surahNumber && (b.verseNumber === verseNumber || (b as unknown as Record<string, unknown>).ayahNumber === verseNumber));
       if (exists) {
-        return prev.filter(b => !(b.surahNumber === surahNumber && b.ayahNumber === ayahNumber));
+        return prev.filter(b => !(b.surahNumber === surahNumber && (b.verseNumber === verseNumber || (b as unknown as Record<string, unknown>).ayahNumber === verseNumber)));
       }
-      return [...prev, { surahNumber, ayahNumber, createdAt: new Date().toISOString() }];
+      return [...prev, { surahNumber, verseNumber, createdAt: new Date().toISOString() }];
     });
   };
 
-  const isBookmarked = (surahNumber: number, ayahNumber: number) =>
-    bookmarks.some(b => b.surahNumber === surahNumber && b.ayahNumber === ayahNumber);
+  const isBookmarked = (surahNumber: number, verseNumber: number) =>
+    bookmarks.some(b => b.surahNumber === surahNumber && (b.verseNumber === verseNumber || (b as unknown as Record<string, unknown>).ayahNumber === verseNumber));
 
   const clearBookmarks = () => setBookmarks([]);
 
@@ -70,11 +70,11 @@ export function useBookmarks() {
 export function useExplanations() {
   const [explanations, setExplanations] = useLocalStorage<Explanation[]>('iq-explanations', []);
 
-  const getExplanation = (surahNumber: number, ayahNumber: number) =>
-    explanations.find(e => e.surahNumber === surahNumber && e.ayahs.includes(ayahNumber));
+  const getExplanation = (surahNumber: number, verseNumber: number) =>
+    explanations.find(e => e.surahNumber === surahNumber && (e.verses || (e as unknown as Record<string, number[]>).ayahs || []).includes(verseNumber));
 
-  const hasExplanation = (surahNumber: number, ayahNumber: number) =>
-    explanations.some(e => e.surahNumber === surahNumber && e.ayahs.includes(ayahNumber));
+  const hasExplanation = (surahNumber: number, verseNumber: number) =>
+    explanations.some(e => e.surahNumber === surahNumber && (e.verses || (e as unknown as Record<string, number[]>).ayahs || []).includes(verseNumber));
 
   const saveExplanation = (explanation: Explanation) => {
     setExplanations(prev => {
@@ -104,7 +104,8 @@ export function useDarkMode() {
   const [isDark, setIsDark] = useLocalStorage<boolean>('iq-dark-mode', false);
 
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', isDark);
+    // document.documentElement.classList.toggle('dark', isDark);
+    document.documentElement.classList.remove('dark'); // Force light mode per user request
   }, [isDark]);
 
   const setDarkMode = (value: boolean) => {
@@ -116,4 +117,29 @@ export function useDarkMode() {
   };
 
   return { isDark, setDarkMode, toggle };
+}
+
+export function useCustomTranslations() {
+  const [customTranslations, setCustomTranslations] = useLocalStorage<Record<string, string>>('iq-custom-translations', {});
+
+  const getCustomTranslation = (surahNumber: number, verseNumber: number, language: string) => {
+    return customTranslations[`${surahNumber}-${verseNumber}-${language}`];
+  };
+
+  const saveCustomTranslation = (surahNumber: number, verseNumber: number, language: string, text: string) => {
+    setCustomTranslations(prev => ({
+      ...prev,
+      [`${surahNumber}-${verseNumber}-${language}`]: text
+    }));
+  };
+
+  const resetCustomTranslation = (surahNumber: number, verseNumber: number, language: string) => {
+    setCustomTranslations(prev => {
+      const next = { ...prev };
+      delete next[`${surahNumber}-${verseNumber}-${language}`];
+      return next;
+    });
+  };
+
+  return { customTranslations, getCustomTranslation, saveCustomTranslation, resetCustomTranslation };
 }

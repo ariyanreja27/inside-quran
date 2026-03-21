@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Menu, Plus, Settings } from 'lucide-react';
+import { Search, Menu, FileText, Settings } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,13 +38,14 @@ export default function SurahListPage() {
 
   return (
     <div className="min-h-screen pb-24">
-      {/* Header */}
-      <div className="sticky top-0 z-40 bg-card/95 backdrop-blur-md border-b border-border">
-        <div className="flex items-center justify-between px-4 h-16">
+      {/* Sticky Header */}
+      <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-md pb-2 pt-1 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border-b border-border/60 transform-gpu">
+        {/* Header */}
+        <div className="flex items-center justify-between px-4 h-14">
           <h1 className="font-display text-xl font-semibold text-foreground">
             Inside Quran
           </h1>
-          <DropdownMenu>
+          <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <button 
                 className="w-10 h-10 flex items-center justify-center rounded-full text-foreground hover:bg-accent active:scale-95 transition-all outline-none"
@@ -55,11 +56,11 @@ export default function SurahListPage() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56 p-1.5 rounded-2xl bg-white/95 backdrop-blur-sm dark:bg-black/95 border-border shadow-xl animate-in fade-in-0 zoom-in-95">
               <DropdownMenuItem 
-                onClick={() => navigate('/explanation-builder')}
+                onClick={() => navigate('/manage-explanations')}
                 className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer focus:bg-primary/5 focus:text-primary transition-colors"
               >
-                <Plus size={18} />
-                <span className="font-medium text-[13.5px]">Add Explanation</span>
+                <FileText size={18} />
+                <span className="font-medium text-[13.5px]">Manage Explanations</span>
               </DropdownMenuItem>
               <DropdownMenuItem 
                 onClick={() => navigate('/settings')}
@@ -73,33 +74,36 @@ export default function SurahListPage() {
         </div>
       </div>
 
-      {/* Search Trigger */}
-      <div className="px-4 mt-4">
-        <div 
-          onClick={() => setIsSearchOpen(true)}
-          className="relative cursor-pointer group"
-        >
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-hover:text-primary transition-colors" size={18} />
-          <div className="w-full pl-10 pr-4 py-3 rounded-2xl bg-card border border-border text-sm text-muted-foreground font-body group-hover:border-primary/30 transition-all">
-            Search surahs, ayahs, or keywords...
+      {/* Search & Filters */}
+      <div className="pb-4 pt-3 mb-2">
+        {/* Search Trigger */}
+        <div className="px-4">
+          <div 
+            onClick={() => setIsSearchOpen(true)}
+            className="relative cursor-pointer group"
+          >
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-hover:text-primary transition-colors" size={18} />
+            <div className="w-full pl-10 pr-4 py-3 rounded-2xl bg-card border border-border text-sm text-muted-foreground font-body group-hover:border-primary/30 transition-all">
+              Search Surahs, Verses, or Keywords
+            </div>
           </div>
+        </div>
+
+        {/* Filters */}
+        <div className="flex gap-2 px-4 mt-4">
+          {filters.map(f => (
+            <button
+              key={f.value}
+              onClick={() => setFilter(f.value)}
+              className={filter === f.value ? 'filter-chip-active' : 'filter-chip'}
+            >
+              {f.label}
+            </button>
+          ))}
         </div>
       </div>
 
       <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
-
-      {/* Filters */}
-      <div className="flex gap-2 px-4 mt-4">
-        {filters.map(f => (
-          <button
-            key={f.value}
-            onClick={() => setFilter(f.value)}
-            className={filter === f.value ? 'filter-chip-active' : 'filter-chip'}
-          >
-            {f.label}
-          </button>
-        ))}
-      </div>
 
       {/* Surah List */}
       <div className="px-4 mt-4 space-y-3">

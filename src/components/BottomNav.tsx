@@ -1,12 +1,19 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Bookmark, Home, Settings } from 'lucide-react';
+import { Bookmark, Home, Settings, FileText } from 'lucide-react';
 
 export default function BottomNav() {
   const location = useLocation();
 
+  // Hide BottomNav on detail screens
+  const hiddenOn = ['/surah', '/explanation-builder', '/explanation-view'];
+  if (hiddenOn.some(path => location.pathname.startsWith(path))) {
+    return null;
+  }
+
   const links = [
     { to: '/', icon: Home, label: 'Home' },
     { to: '/saved', icon: Bookmark, label: 'Saved' },
+    { to: '/manage-explanations', icon: FileText, label: 'Manage' },
     { to: '/settings', icon: Settings, label: 'Settings' },
   ];
 

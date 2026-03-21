@@ -33,7 +33,7 @@ export default function SurahCard({ surah, isFavorite, onToggleFavorite }: Surah
             <div className="flex items-center gap-2">
               <span className="font-medium text-[14.5px] text-foreground truncate">{surah.name}</span>
             </div>
-            <span className="text-[12px] text-muted-foreground">{surah.meaning} • {surah.ayahCount} Ayahs</span>
+            <span className="text-[12px] text-muted-foreground">{surah.meaning} • {surah.verseCount} Verses</span>
           </div>
 
           {/* Arabic name */}
