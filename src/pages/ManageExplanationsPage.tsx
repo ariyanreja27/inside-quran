@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, Edit2, Trash2, FileText, Search, BookOpen, Bookmark, ArrowUpDown, Check } from 'lucide-react';
+import { ArrowLeft, Plus, Edit2, Trash2, FileText, Search, BookOpen, Bookmark, ArrowUpDown, Check, ChevronUp, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useExplanations } from '@/hooks/useAppStore';
 import { useSurahs } from '@/hooks/useQuranData';
@@ -30,6 +30,16 @@ export default function ManageExplanationsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   type SortOrder = 'asc' | 'desc' | 'lastEdited' | 'dateAdded';
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+  const [collapsedSurahs, setCollapsedSurahs] = useState<Set<number>>(new Set());
+
+  const toggleSurah = (surahNum: number) => {
+    setCollapsedSurahs(prev => {
+      const next = new Set(prev);
+      if (next.has(surahNum)) next.delete(surahNum);
+      else next.add(surahNum);
+      return next;
+    });
+  };
 
   const sortLabels: Record<SortOrder, string> = {
     asc: 'Ascending',
@@ -161,20 +171,37 @@ export default function ManageExplanationsPage() {
                   key={`group-${surahNum}`} 
                   className="space-y-3"
                 >
-                  <div className="flex items-center justify-between pb-1 border-b border-border/40">
-                    <h3 className="font-semibold text-[14px] text-muted-foreground flex items-center gap-2">
+                  <div 
+                    onClick={() => toggleSurah(surahNum)}
+                    className="flex items-center justify-between pb-1 border-b border-border/40 cursor-pointer group"
+                  >
+                    <h3 className="font-semibold text-[14px] text-muted-foreground flex items-center gap-2 group-hover:text-foreground transition-colors">
                       <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[11px] font-bold tabular-nums">
                         {surahNum}
                       </span>
                       {getSurahName(surahNum)}
                     </h3>
-                    <span className="font-arabic text-primary/70 text-lg">
-                      {getSurahArabic(surahNum)}
-                    </span>
+                    <div className="flex items-center gap-3">
+                      <span className="font-arabic text-primary/70 text-lg">
+                        {getSurahArabic(surahNum)}
+                      </span>
+                      <button className="text-muted-foreground group-hover:text-foreground transition-colors p-1 -mr-1 rounded-md hover:bg-accent flex items-center justify-center">
+                        {collapsedSurahs.has(surahNum) ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
+                      </button>
+                    </div>
                   </div>
                   
-                  <div className="space-y-3">
-                    <AnimatePresence mode="popLayout">
+                  <AnimatePresence initial={false}>
+                    {!collapsedSurahs.has(surahNum) && (
+                      <motion.div 
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="space-y-3 pt-3 pb-1">
+                          <AnimatePresence mode="popLayout">
                   {sortExplanations(groupedExplanations[surahNum]).map(exp => {
                     const verseText = (
                       formatVerseRange(exp.concise?.length
@@ -243,10 +270,13 @@ export default function ManageExplanationsPage() {
                             </AlertDialog>
                           </div>
                         </motion.div>
-                      );
-                    })}
-                    </AnimatePresence>
-                  </div>
+                    );
+                  })}
+                          </AnimatePresence>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </motion.div>
               ))}
             </AnimatePresence>
