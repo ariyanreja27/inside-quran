@@ -12,6 +12,11 @@ export default function SettingsPage() {
   const { clearBookmarks, bookmarks } = useBookmarks();
   const { clearFavorites, favorites } = useFavorites();
 
+  const isModified = 
+    settings.arabicFontSize !== defaultSettings.arabicFontSize ||
+    settings.translationFontSize !== defaultSettings.translationFontSize ||
+    settings.lineSpacing !== defaultSettings.lineSpacing;
+
   const handleClearBookmarks = () => {
     if (bookmarks.length === 0) return alert('No bookmarks to clear.');
     if (window.confirm('Are you sure you want to completely clear all saved bookmarks?')) {
@@ -233,7 +238,11 @@ export default function SettingsPage() {
                   translationFontSize: defaultSettings.translationFontSize,
                   lineSpacing: defaultSettings.lineSpacing,
                 })}
-                className="text-[10px] font-semibold text-primary/60 hover:text-primary transition-colors flex items-center gap-1 uppercase tracking-wider"
+                className={`text-[10px] font-semibold transition-colors flex items-center gap-1 uppercase tracking-wider ${
+                  isModified 
+                    ? 'text-red-500 hover:text-red-600' 
+                    : 'text-muted-foreground/40 hover:text-primary/60'
+                }`}
               >
                 <RotateCcw size={10} />
                 Reset to defaults
