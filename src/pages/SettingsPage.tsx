@@ -114,27 +114,38 @@ export default function SettingsPage() {
 
   const Stepper = ({ label, value, unit, min, max, step, onChange, description }: any) => {
     return (
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium">{label}</p>
-          <p className="text-[11px] text-muted-foreground mt-0.5">{description || `${value}${unit}`}</p>
+      <div className="flex items-center justify-between group">
+        <div className="flex-1 pr-4 text-left">
+          <p className="text-sm font-semibold text-foreground/90 tracking-tight group-hover:text-foreground transition-colors">{label}</p>
+          <p className="text-[11px] text-muted-foreground leading-tight mt-1 opacity-80">{description || `${value}${unit}`}</p>
         </div>
-        <div className="flex items-center gap-2 bg-secondary/30 rounded-full p-1 border border-border/50">
-          <button 
+        <div className="flex items-center bg-secondary/20 rounded-full p-1 border border-border/40 shadow-inner">
+          <motion.button 
+            whileTap={{ scale: 0.85 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
             disabled={value <= min}
             onClick={() => onChange(Math.max(min, Number((value - step).toFixed(1))))} 
-            className="w-8 h-8 flex items-center justify-center rounded-full bg-background hover:bg-accent text-foreground shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed border border-border/50"
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-background/90 text-foreground shadow-[0_2px_10px_rgba(0,0,0,0.05)] hover:bg-background hover:shadow-md disabled:opacity-20 disabled:cursor-not-allowed border border-border/50"
+            aria-label="Decrease"
           >
-            <Minus size={14} />
-          </button>
-          <span className="text-sm font-semibold w-12 text-center font-display">{value}{unit}</span>
-          <button 
+            <Minus size={14} strokeWidth={2.5} />
+          </motion.button>
+          <div className="px-5 min-w-[75px] flex items-center justify-center">
+            <span className="text-sm font-bold text-foreground font-Amiri tabular-nums">
+              {value}
+              <span className="text-[10px] ml-1 opacity-50 font-medium">{unit}</span>
+            </span>
+          </div>
+          <motion.button 
+            whileTap={{ scale: 0.85 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
             disabled={value >= max}
             onClick={() => onChange(Math.min(max, Number((value + step).toFixed(1))))} 
-            className="w-8 h-8 flex items-center justify-center rounded-full bg-background hover:bg-accent text-foreground shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed border border-border/50"
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-background/90 text-foreground shadow-[0_2px_10px_rgba(0,0,0,0.05)] hover:bg-background hover:shadow-md disabled:opacity-20 disabled:cursor-not-allowed border border-border/50"
+            aria-label="Increase"
           >
-            <Plus size={14} />
-          </button>
+            <Plus size={14} strokeWidth={2.5} />
+          </motion.button>
         </div>
       </div>
     );
