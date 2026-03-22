@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
 import { X, Volume2, Info, SquarePen, Share2, MoreHorizontal, BookOpen, FileText, FileDown } from 'lucide-react';
@@ -33,6 +33,8 @@ export default function ExplanationViewPage() {
   const [explanation, setExplanation] = useState<Explanation | null>(null);
   const [activeTab, setActiveTab] = useState<'concise' | 'deeper' | 'ask'>('concise');
 
+  const scrolledRef = useRef(false);
+
   useEffect(() => {
     let match: Explanation | undefined;
     if (explanationId) {
@@ -41,6 +43,7 @@ export default function ExplanationViewPage() {
       match = getExplanation(surahNumber, verseNumber);
     }
     setExplanation(match || null);
+    scrolledRef.current = false;
     
     if (match) {
         if (!match.concise?.length && (match.deeperLook?.rootWords?.length || match.deeperLook?.categories?.length)) {
@@ -55,6 +58,30 @@ export default function ExplanationViewPage() {
   const getVerse = (num: number) => {
     return currentSurahVerses?.find(a => a.numberInSurah === num);
   };
+
+  // Scroll to the target verse block once content is ready
+  useEffect(() => {
+    if (!verseNumber || scrolledRef.current || !explanation) return;
+
+    // First verse block = no scroll needed (page starts at top naturally)
+    const firstVerseNumber = explanation.concise?.[0]?.verseNumber;
+    if (verseNumber === firstVerseNumber) {
+      scrolledRef.current = true;
+      window.scrollTo({ top: 0 });
+      return;
+    }
+
+    const el = document.getElementById(`verse-block-${verseNumber}`);
+    if (el) {
+      scrolledRef.current = true;
+      setTimeout(() => {
+        // Account for the sticky header (~130px) so verse starts right below it
+        const headerOffset = 160;
+        const top = el.getBoundingClientRect().top + window.scrollY - headerOffset;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }, 350);
+    }
+  });
 
   const [selectedRootWord, setSelectedRootWord] = useState<RootWord | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -193,7 +220,7 @@ export default function ExplanationViewPage() {
                    
                    const verseData = getVerse(block.verseNumber);
                    return (
-                     <div key={i} className="space-y-6">
+                     <div key={i} id={`verse-block-${block.verseNumber}`} className="space-y-6">
                         {/* Divider logic for Verse blocks! */}
                         <div className="flex items-center gap-4">
                            <div className="h-px bg-border flex-1"></div>
