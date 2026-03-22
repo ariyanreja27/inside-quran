@@ -170,5 +170,9 @@ export function useLastRead() {
     });
   }, [setLastRead]);
 
-  return { lastRead, saveLastRead };
+  const removeLastRead = useCallback((surahNumber: number) => {
+    setLastRead(prev => prev.filter(item => item.surahNumber !== surahNumber));
+  }, [setLastRead]);
+
+  return { lastRead, saveLastRead, removeLastRead };
 }

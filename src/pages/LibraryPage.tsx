@@ -1,10 +1,16 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, MoreHorizontal, Book, Download } from 'lucide-react';
+import { ArrowLeft, MoreHorizontal, Book, Download, Trash2 } from 'lucide-react';
 import { useSurahs } from '@/hooks/useQuranData';
 import { useLastRead } from '@/hooks/useAppStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSwipeable } from 'react-swipeable';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 function formatRelativeTime(timestamp: string): string {
   if (!timestamp) return '';
@@ -32,7 +38,7 @@ function formatRelativeTime(timestamp: string): string {
 export default function LibraryPage() {
   const navigate = useNavigate();
   const { data: surahs } = useSurahs();
-  const { lastRead } = useLastRead();
+  const { lastRead, removeLastRead } = useLastRead();
   
   const tabs = ['last-read', 'downloads'] as const;
   const [activeTab, setActiveTab] = useState<'last-read' | 'downloads'>('last-read');
@@ -52,30 +58,33 @@ export default function LibraryPage() {
   });
 
   return (
-    <motion.div {...handlers} className="min-h-screen pb-24">
+    <motion.div {...handlers} className="min-h-screen pb-24 flex flex-col">
       {/* Header */}
-      <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-md pt-5 pb-4 mb-3 border-b border-border/50 shadow-sm transform-gpu">
-        <div className="flex items-center gap-3 px-5 mb-5">
+      <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-md pb-2 pt-1 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border-b border-border/60 transform-gpu">
+        <div className="flex items-center gap-3 px-4 h-14">
           <button 
             onClick={() => navigate('/')} 
-            className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent transition active:scale-95 shadow-sm"
+            className="w-10 h-10 flex items-center justify-center rounded-full transition-all hover:bg-accent active:scale-95 text-foreground outline-none"
+            aria-label="Back"
           >
-            <ArrowLeft size={16} />
+            <ArrowLeft size={22} />
           </button>
-          <h1 className="font-display font-semibold text-[22px] text-foreground">Library</h1>
+          <h1 className="font-display text-xl font-semibold text-foreground flex-1">
+            Library
+          </h1>
         </div>
+      </div>
 
-        {/* Tabs and Actions Row */}
-        <div className="px-5">
-          <div className="flex bg-muted/50 rounded-full p-[4px] w-full relative">
+      <div className="px-4 mt-6 max-w-lg mx-auto w-full">
+        <div className="mb-5 rounded-full border border-border bg-secondary/40 p-1 backdrop-blur-sm relative">
+          <div className="grid grid-cols-2 gap-1 relative">
             {(['last-read', 'downloads'] as const).map((tab) => {
               const isActive = activeTab === tab;
               return (
-                <motion.button
+                <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  whileTap={{ scale: 0.98 }}
-                  className={`relative flex-1 py-1.5 text-[13.5px] font-[500] rounded-full transition-colors tracking-wide z-10 ${
+                  className={`relative rounded-full px-4 py-2.5 text-xs font-semibold transition-colors z-10 ${
                     isActive 
                       ? 'text-primary-foreground' 
                       : 'text-muted-foreground hover:text-primary'
@@ -89,15 +98,14 @@ export default function LibraryPage() {
                     />
                   )}
                   {tab === 'last-read' ? 'Last Read' : 'Downloads'}
-                </motion.button>
+                </button>
               );
             })}
           </div>
         </div>
-      </div>
 
       {/* Content */}
-      <div className="px-5 max-w-lg mx-auto overflow-hidden">
+      <div className="overflow-hidden">
         <AnimatePresence mode="wait">
           {activeTab === 'last-read' && (
             <motion.div
@@ -106,7 +114,7 @@ export default function LibraryPage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
-              className="space-y-3"
+              className=""
             >
               {lastRead.length === 0 ? (
                 <div className="text-center py-20 flex flex-col items-center">
@@ -125,54 +133,83 @@ export default function LibraryPage() {
                   </button>
                 </div>
               ) : (
-                lastRead.map((item) => {
-                  const surah = surahs?.find(s => s.number === item.surahNumber);
-                  if (!surah) return null;
+                <div className="flex flex-col">
+                  <AnimatePresence initial={false}>
+                    {lastRead.map((item) => {
+                      const surah = surahs?.find(s => s.number === item.surahNumber);
+                      if (!surah) return null;
 
-                  const timeString = formatRelativeTime(item.timestamp);
+                      const timeString = formatRelativeTime(item.timestamp);
 
-                  return (
-                    <div
-                      key={`${item.surahNumber}-${item.verseNumber}`}
-                      onClick={() => navigate(`/surah/${item.surahNumber}?verse=${item.verseNumber}`)}
-                      className="flex items-center bg-card border border-border rounded-[1.25rem] p-4 cursor-pointer active:scale-[0.98] hover:bg-secondary/40 transition-all shadow-[0_4px_20px_rgba(0,0,0,0.02)]"
-                    >
-                      <div className="relative flex items-center justify-center w-12 h-12 shrink-0">
-                        <div className="absolute inset-0 bg-primary/10 rounded-xl rotate-45 transform origin-center transition-transform group-hover:rotate-90"></div>
-                        <span className="relative z-10 text-primary font-bold text-sm">
-                          {surah.number}
-                        </span>
-                      </div>
-                      
-                      <div className="ml-4 flex-1">
-                        <h3 className="font-display font-semibold text-[16px] text-foreground mb-0.5">
-                          {surah.name}
-                        </h3>
-                        <div className="flex items-center gap-2 text-[12px] text-muted-foreground">
-                          <span className="font-medium">Verse {item.verseNumber}</span>
-                          <span className="w-1 h-1 rounded-full bg-border"></span>
-                          <span>{timeString}</span>
-                        </div>
-                      </div>
+                      return (
+                        <motion.div
+                          layout
+                          initial={{ opacity: 0, scale: 0.95, marginBottom: 12 }}
+                          animate={{ opacity: 1, scale: 1, height: 'auto', marginBottom: 12 }}
+                          exit={{ opacity: 0, scale: 0.9, height: 0, marginBottom: 0 }}
+                          transition={{ duration: 0.2 }}
+                          key={`${item.surahNumber}-${item.verseNumber}`}
+                          className="overflow-hidden"
+                        >
+                          <div className="flex items-stretch bg-card border border-border rounded-[1.25rem] shadow-[0_4px_20px_rgba(0,0,0,0.02)] transition-all hover:border-primary/20">
+                            <div
+                              onClick={() => navigate(`/surah/${item.surahNumber}?verse=${item.verseNumber}`)}
+                              className="flex-1 flex items-center p-4 cursor-pointer active:scale-[0.98] active:bg-secondary/60 transition-transform origin-left rounded-[1.25rem] group"
+                            >
+                              <div className="relative flex items-center justify-center w-12 h-12 shrink-0">
+                              <div className="absolute inset-0 bg-primary/10 rounded-full transition-transform group-hover:scale-110"></div>
+                              <span className="relative z-10 text-primary font-bold text-sm">
+                                {surah.number}
+                              </span>
+                            </div>
+                            
+                            <div className="ml-4 flex-1">
+                              <h3 className="font-display font-semibold text-[16px] text-foreground mb-0.5">
+                                {surah.name}
+                              </h3>
+                              <div className="flex items-center gap-2 text-[12px] text-muted-foreground">
+                                <span className="font-medium">Verse {item.verseNumber}</span>
+                                <span className="w-1 h-1 rounded-full bg-border"></span>
+                                <span>{timeString}</span>
+                              </div>
+                            </div>
 
-                      <div className="flex flex-col items-end shrink-0 pl-2">
-                        <p className="arabic-text text-xl text-primary mb-1">
-                          {surah.nameArabic}
-                        </p>
-                      </div>
+                            <div className="flex flex-col items-end shrink-0 pl-2">
+                              <p className="arabic-text text-xl text-primary mb-1">
+                                {surah.nameArabic}
+                              </p>
+                            </div>
+                          </div>
 
-                      <button 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          // Placeholder for 3-dot menu action
-                        }}
-                        className="p-2 ml-2 -mr-2 rounded-lg hover:bg-secondary transition-colors text-muted-foreground"
-                      >
-                        <MoreHorizontal size={20} />
-                      </button>
-                    </div>
-                  );
-                })
+                          <div className="pr-4 py-4 flex items-center justify-center">
+                            <DropdownMenu modal={false}>
+                              <DropdownMenuTrigger asChild>
+                                <button 
+                                  className="p-2 -mr-2 rounded-lg hover:bg-secondary transition-colors text-muted-foreground outline-none"
+                                >
+                                  <MoreHorizontal size={20} />
+                                </button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end" className="w-44 p-1.5 rounded-2xl bg-white/95 backdrop-blur-sm dark:bg-black/95 border-border shadow-xl animate-in fade-in-0 zoom-in-95">
+                                <DropdownMenuItem 
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    removeLastRead(item.surahNumber);
+                                  }}
+                                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive transition-colors outline-none"
+                                >
+                                  <Trash2 size={16} />
+                                  <span className="font-medium text-[13.5px]">Clear History</span>
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </div>
+                          </div>
+                        </motion.div>
+                      );
+                    })}
+                  </AnimatePresence>
+                </div>
               )}
             </motion.div>
           )}
@@ -196,6 +233,7 @@ export default function LibraryPage() {
             </motion.div>
           )}
         </AnimatePresence>
+      </div>
       </div>
     </motion.div>
   );
