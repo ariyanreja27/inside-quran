@@ -1,13 +1,24 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
-import { X, Volume2, Info, SquarePen, Share2, MoreHorizontal, BookOpen, FileText, FileDown } from 'lucide-react';
+import { X, Volume2, Info, SquarePen, Share2, MoreHorizontal, BookOpen, FileText, FileDown, Trash2 } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -26,13 +37,22 @@ export default function ExplanationViewPage() {
   const surahNumber = searchParams.get('surah') ? Number(searchParams.get('surah')) : null;
   const verseNumber = searchParams.get('verse') ? Number(searchParams.get('verse')) : null;
 
-  const { getExplanation, explanations } = useExplanations();
+  const { getExplanation, explanations, deleteExplanation } = useExplanations();
   const { data: surahs } = useSurahs();
   const { settings } = useSettings();
   const { getCustomTranslation } = useCustomTranslations();
 
   const [explanation, setExplanation] = useState<Explanation | null>(null);
   const [activeTab, setActiveTab] = useState<'concise' | 'deeper' | 'ask'>('concise');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDelete = () => {
+    setIsDeleting(true);
+    setTimeout(() => {
+      if (explanation) deleteExplanation(explanation.id);
+      navigate(-1);
+    }, 300);
+  };
 
   const scrolledRef = useRef(false);
 
@@ -125,7 +145,9 @@ export default function ExplanationViewPage() {
   }
 
   return (
-    <div {...handlers} className="min-h-screen bg-background pb-24">
+    <AnimatePresence>
+      {!isDeleting && (
+        <motion.div {...handlers} exit={{ opacity: 0, scale: 0.96, y: 15 }} transition={{ duration: 0.25, ease: 'easeOut' }} className="min-h-screen bg-background pb-24">
       {/* Sticky Header block */}
       <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-md pt-5 pb-4 mb-6 border-b border-border/50 shadow-sm transform-gpu">
         {/* Top Floating Buttons */}
@@ -142,6 +164,35 @@ export default function ExplanationViewPage() {
             >
               <SquarePen size={14} />
             </button>
+
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <button 
+                  className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-destructive/80 hover:text-destructive hover:bg-destructive/10 transition active:scale-95 shadow-sm"
+                  aria-label="Delete Explanation"
+                >
+                  <Trash2 size={14} />
+                </button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className="w-[90vw] max-w-[400px] rounded-[1.5rem]">
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Delete Explanation?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to delete this explanation? This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter className="flex gap-2 sm:gap-0 mt-2">
+                  <AlertDialogCancel className="rounded-xl border-border h-11">Cancel</AlertDialogCancel>
+                  <AlertDialogAction 
+                    onClick={handleDelete}
+                    className="rounded-xl bg-destructive hover:bg-destructive/90 text-destructive-foreground h-11"
+                  >
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+
             <DropdownMenu modal={false}>
               <DropdownMenuTrigger asChild>
                 <button className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent transition shadow-sm" aria-label="More">
@@ -423,6 +474,8 @@ export default function ExplanationViewPage() {
             )}
          </DrawerContent>
       </Drawer>
-    </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
