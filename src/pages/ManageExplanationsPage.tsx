@@ -1,9 +1,15 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, Edit2, Trash2, FileText, Search, BookOpen, Bookmark } from 'lucide-react';
+import { ArrowLeft, Plus, Edit2, Trash2, FileText, Search, BookOpen, Bookmark, ArrowUpDown, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useExplanations } from '@/hooks/useAppStore';
 import { useSurahs } from '@/hooks/useQuranData';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,6 +27,27 @@ export default function ManageExplanationsPage() {
   const { explanations, deleteExplanation } = useExplanations();
   const { data: surahs } = useSurahs();
   const [searchQuery, setSearchQuery] = useState('');
+  type SortOrder = 'asc' | 'desc' | 'lastEdited' | 'dateAdded';
+  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+
+  const sortLabels: Record<SortOrder, string> = {
+    asc: 'Ascending',
+    desc: 'Descending',
+    lastEdited: 'Last Edited',
+    dateAdded: 'Date Added',
+  };
+
+  const sortExplanations = (list: typeof explanations) => {
+    return [...list].sort((a, b) => {
+      const aVerse = (a.concise?.length ? a.concise.map(c => c.verseNumber).filter(v => v > 0) : a.verses || []).sort((x, y) => x - y)[0] ?? 0;
+      const bVerse = (b.concise?.length ? b.concise.map(c => c.verseNumber).filter(v => v > 0) : b.verses || []).sort((x, y) => x - y)[0] ?? 0;
+      if (sortOrder === 'asc') return aVerse - bVerse;
+      if (sortOrder === 'desc') return bVerse - aVerse;
+      if (sortOrder === 'lastEdited') return new Date(b.updatedAt || 0).getTime() - new Date(a.updatedAt || 0).getTime();
+      if (sortOrder === 'dateAdded') return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
+      return 0;
+    });
+  };
 
   // Group explanations by Surah
   const groupedExplanations = explanations.reduce((acc, exp) => {
@@ -64,7 +91,7 @@ export default function ManageExplanationsPage() {
 
       <div className="px-4 mt-6 max-w-md mx-auto space-y-6">
         
-        {/* Search & Add New */}
+        {/* Search, Filter & Add New */}
         <div className="flex gap-3">
           <div className="relative flex-1 group">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-hover:text-primary transition-colors" size={18} />
@@ -76,6 +103,30 @@ export default function ManageExplanationsPage() {
               className="w-full pl-10 pr-4 py-3 rounded-2xl bg-card border border-border text-sm text-foreground focus:outline-none focus:border-primary/50 transition-colors"
             />
           </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="h-[46px] px-3.5 flex items-center gap-1.5 rounded-full bg-card border border-border text-muted-foreground hover:text-primary hover:border-primary/30 transition-colors font-medium text-[13px] whitespace-nowrap">
+                <ArrowUpDown size={15} />
+                <span className="hidden sm:inline">{sortLabels[sortOrder]}</span>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-44 p-1.5 rounded-2xl bg-white/95 backdrop-blur-sm dark:bg-black/95 border-border shadow-xl">
+              {(['asc', 'desc', 'lastEdited', 'dateAdded'] as SortOrder[]).map(opt => (
+                <DropdownMenuItem
+                  key={opt}
+                  onClick={() => setSortOrder(opt)}
+                  className={`flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer transition-colors ${
+                    sortOrder === opt
+                      ? 'bg-primary/25 text-primary font-semibold'
+                      : 'text-foreground data-[highlighted]:bg-foreground/[0.05] data-[highlighted]:text-foreground font-medium'
+                  }`}
+                >
+                  <span className="text-[13.5px] font-medium">{sortLabels[opt]}</span>
+                  {sortOrder === opt && <Check size={14} className="text-primary" />}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
           <button 
             onClick={() => navigate('/explanation-builder')}
             className="bg-primary text-primary-foreground px-4 rounded-2xl flex items-center justify-center shadow-sm hover:opacity-90 transition-opacity whitespace-nowrap gap-2 font-medium text-[14px]"
@@ -123,7 +174,7 @@ export default function ManageExplanationsPage() {
                   
                   <div className="space-y-3">
                     <AnimatePresence mode="popLayout">
-                      {groupedExplanations[surahNum].map(exp => (
+                  {sortExplanations(groupedExplanations[surahNum]).map(exp => (
                         <motion.div 
                           layout
                           initial={{ opacity: 0, scale: 0.95 }}
@@ -135,7 +186,12 @@ export default function ManageExplanationsPage() {
                           <div className="flex-1 flex items-center min-w-0 pr-4">
                             <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-primary font-medium text-[13px] border border-primary/10 shadow-sm">
                               <Bookmark size={14} className="opacity-70" />
-                              Verse {exp.verseRange || (exp.verses || (exp as unknown as Record<string, number[]>).ayahs || []).join(', ')}
+                              Verse {(
+                                (exp.concise?.length
+                                  ? exp.concise.map(b => b.verseNumber).filter(v => v > 0)
+                                  : exp.verses || [])
+                                .slice().sort((a, b) => a - b).join(', ')
+                              ) || exp.verseRange}
                             </div>
                           </div>
                           <div className="flex items-center gap-1.5 sm:gap-2">
@@ -167,7 +223,12 @@ export default function ManageExplanationsPage() {
                                 <AlertDialogHeader>
                                   <AlertDialogTitle>Delete Explanation?</AlertDialogTitle>
                                   <AlertDialogDescription>
-                                    Are you sure you want to delete your explanation for <strong>Surah {getSurahName(surahNum)} Verse {exp.verseRange || (exp.verses || (exp as unknown as Record<string, number[]>).ayahs || []).join(', ')}</strong>? This action cannot be undone.
+                                    Are you sure you want to delete your explanation for <strong>Surah {getSurahName(surahNum)} Verse {(
+                                      (exp.concise?.length
+                                        ? exp.concise.map(b => b.verseNumber).filter(v => v > 0)
+                                        : exp.verses || [])
+                                      .slice().sort((a, b) => a - b).join(', ')
+                                    ) || exp.verseRange}</strong>? This action cannot be undone.
                                   </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter className="flex gap-2 sm:gap-0 mt-2">
