@@ -4,6 +4,7 @@ import { ArrowLeft, Plus, Edit2, Trash2, FileText, Search, BookOpen, Bookmark, A
 import { motion, AnimatePresence } from 'framer-motion';
 import { useExplanations } from '@/hooks/useAppStore';
 import { useSurahs } from '@/hooks/useQuranData';
+import { formatVerseRange } from '@/lib/utils';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -174,7 +175,15 @@ export default function ManageExplanationsPage() {
                   
                   <div className="space-y-3">
                     <AnimatePresence mode="popLayout">
-                  {sortExplanations(groupedExplanations[surahNum]).map(exp => (
+                  {sortExplanations(groupedExplanations[surahNum]).map(exp => {
+                    const verseText = (
+                      formatVerseRange(exp.concise?.length
+                        ? exp.concise.map(b => b.verseNumber).filter(v => v > 0)
+                        : exp.verses || [])
+                    ) || exp.verseRange || '';
+                    const isMultiple = verseText.includes('-') || verseText.includes(',');
+
+                    return (
                         <motion.div 
                           layout
                           initial={{ opacity: 0, scale: 0.95 }}
@@ -186,12 +195,7 @@ export default function ManageExplanationsPage() {
                           <div className="flex-1 flex items-center min-w-0 pr-4">
                             <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-primary font-medium text-[13px] border border-primary/10 shadow-sm">
                               <Bookmark size={14} className="opacity-70" />
-                              Verse {(
-                                (exp.concise?.length
-                                  ? exp.concise.map(b => b.verseNumber).filter(v => v > 0)
-                                  : exp.verses || [])
-                                .slice().sort((a, b) => a - b).join(', ')
-                              ) || exp.verseRange}
+                              {isMultiple ? 'Verses' : 'Verse'} {verseText}
                             </div>
                           </div>
                           <div className="flex items-center gap-1.5 sm:gap-2">
@@ -223,12 +227,7 @@ export default function ManageExplanationsPage() {
                                 <AlertDialogHeader>
                                   <AlertDialogTitle>Delete Explanation?</AlertDialogTitle>
                                   <AlertDialogDescription>
-                                    Are you sure you want to delete your explanation for <strong>Surah {getSurahName(surahNum)} Verse {(
-                                      (exp.concise?.length
-                                        ? exp.concise.map(b => b.verseNumber).filter(v => v > 0)
-                                        : exp.verses || [])
-                                      .slice().sort((a, b) => a - b).join(', ')
-                                    ) || exp.verseRange}</strong>? This action cannot be undone.
+                                    Are you sure you want to delete your explanation for <strong>Surah {getSurahName(surahNum)} {isMultiple ? 'Verses' : 'Verse'} {verseText}</strong>? This action cannot be undone.
                                   </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter className="flex gap-2 sm:gap-0 mt-2">
@@ -244,7 +243,8 @@ export default function ManageExplanationsPage() {
                             </AlertDialog>
                           </div>
                         </motion.div>
-                      ))}
+                      );
+                    })}
                     </AnimatePresence>
                   </div>
                 </motion.div>

@@ -12,6 +12,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSurahVerses, useSurahs } from '@/hooks/useQuranData';
+import { formatVerseRange } from '@/lib/utils';
 import { useExplanations, useSettings, useCustomTranslations } from '@/hooks/useAppStore';
 import type { Explanation, RootWord } from '@/types/quran';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -277,11 +278,15 @@ export default function ExplanationViewPage() {
                    <p className="text-center text-muted-foreground py-8">No deeper look data available.</p>
                 )}
 
-                {(explanation.deeperLook?.rootWords?.length > 0 || explanation.deeperLook?.categories?.length > 0) && (
-                   <div className="uppercase text-[12px] text-muted-foreground tracking-[0.15em] font-semibold mb-6 text-center">
-                      VERSE {explanation.verseRange || explanation.verses?.join(', ') || ''}
-                   </div>
-                )}
+                {(explanation.deeperLook?.rootWords?.length > 0 || explanation.deeperLook?.categories?.length > 0) && (() => {
+                   const verseText = explanation.verseRange || (explanation.verses ? formatVerseRange(explanation.verses) : '');
+                   const isMultiple = verseText.includes('-') || verseText.includes(',');
+                   return (
+                     <div className="uppercase text-[12px] text-muted-foreground tracking-[0.15em] font-semibold mb-6 text-center">
+                        {isMultiple ? 'VERSES' : 'VERSE'} {verseText}
+                     </div>
+                   );
+                })()}
 
                 {explanation.deeperLook?.rootWords?.length > 0 && (
                    <div className="space-y-4 mb-10">
