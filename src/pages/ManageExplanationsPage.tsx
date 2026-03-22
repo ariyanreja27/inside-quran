@@ -161,13 +161,13 @@ export default function ManageExplanationsPage() {
           </div>
         ) : (
           <div className="space-y-6">
-            <AnimatePresence mode="popLayout">
+            <AnimatePresence>
               {filteredSurahNumbers.map(surahNum => (
                 <motion.div 
-                  layout
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
                   key={`group-${surahNum}`} 
                   className="space-y-3"
                 >
@@ -197,11 +197,11 @@ export default function ManageExplanationsPage() {
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.2 }}
+                        transition={{ duration: 0.25, ease: "easeOut" }}
                         className="overflow-hidden"
                       >
                         <div className="space-y-3 pt-3 pb-1">
-                          <AnimatePresence mode="popLayout">
+                          <AnimatePresence>
                   {sortExplanations(groupedExplanations[surahNum]).map(exp => {
                     const verseText = (
                       formatVerseRange(exp.concise?.length
@@ -212,10 +212,10 @@ export default function ManageExplanationsPage() {
 
                     return (
                         <motion.div 
-                          layout
                           initial={{ opacity: 0, scale: 0.95 }}
                           animate={{ opacity: 1, scale: 1 }}
                           exit={{ opacity: 0, scale: 0.95 }}
+                          transition={{ duration: 0.25, ease: "easeOut" }}
                           key={exp.id}
                           className="bg-card border border-border rounded-[1.2rem] p-4 shadow-[0_2px_10px_rgba(0,0,0,0.02)] flex items-center justify-between gap-4 group hover:border-primary/20 transition-colors"
                         >
