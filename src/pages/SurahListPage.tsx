@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Menu, FileText, Settings } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -90,38 +91,72 @@ export default function SurahListPage() {
         </div>
 
         {/* Filters */}
-        <div className="flex gap-2 px-4 mt-4">
-          {filters.map(f => (
-            <button
-              key={f.value}
-              onClick={() => setFilter(f.value)}
-              className={filter === f.value ? 'filter-chip-active' : 'filter-chip'}
-            >
-              {f.label}
-            </button>
-          ))}
+        <div className="flex gap-2 px-4 mt-4 relative isolate">
+          {filters.map(f => {
+            const isActive = filter === f.value;
+            return (
+              <button
+                key={f.value}
+                onClick={() => setFilter(f.value)}
+                className={`relative px-3.5 py-1.5 rounded-full text-[13px] font-medium transition-colors outline-none ${
+                  isActive ? 'text-primary-foreground' : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                {/* Base background for all buttons */}
+                <div className="absolute inset-0 bg-secondary rounded-full -z-20 transition-colors group-hover:bg-secondary/80" />
+                
+                {/* Sliding active background */}
+                {isActive && (
+                  <motion.div
+                    layoutId="filterIndicator"
+                    className="absolute inset-0 bg-primary rounded-full -z-10 shadow-sm"
+                    initial={false}
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                  />
+                )}
+                <span className="relative z-10">{f.label}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
       <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
 
       {/* Surah List */}
-      <div className="px-4 mt-4 space-y-3">
-        {isLoading ? (
-          Array.from({ length: 10 }).map((_, i) => (
-            <div key={i} className="surah-card animate-pulse h-16" />
-          ))
-        ) : (
-          filtered.map(surah => (
-            <SurahCard
-              key={surah.number}
-              surah={surah}
-              isFavorite={isFavorite(surah.number)}
-              onToggleFavorite={toggleFavorite}
-            />
-          ))
-        )}
-      </div>
+      <motion.div layout className="px-4 mt-4 space-y-3">
+        <AnimatePresence mode="popLayout" initial={false}>
+          {isLoading ? (
+            Array.from({ length: 10 }).map((_, i) => (
+              <motion.div 
+                key={`skeleton-${i}`}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+                className="surah-card animate-pulse h-16" 
+              />
+            ))
+          ) : (
+            filtered.map(surah => (
+              <motion.div
+                key={surah.number}
+                layout
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+              >
+                <SurahCard
+                  surah={surah}
+                  isFavorite={isFavorite(surah.number)}
+                  onToggleFavorite={toggleFavorite}
+                />
+              </motion.div>
+            ))
+          )}
+        </AnimatePresence>
+      </motion.div>
     </div>
   );
 }

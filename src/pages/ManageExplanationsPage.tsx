@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, Edit2, Trash2, FileText, Search, BookOpen, Bookmark, ArrowUpDown, Check, ChevronUp, ChevronDown } from 'lucide-react';
+import { ArrowLeft, Plus, Edit2, Trash2, FileText, Search, BookOpen, Bookmark, ArrowUpDown, Check, ChevronUp, ChevronDown, MoreVertical } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useExplanations } from '@/hooks/useAppStore';
 import { useSurahs } from '@/hooks/useQuranData';
@@ -10,6 +10,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import {
   AlertDialog,
@@ -28,6 +29,12 @@ export default function ManageExplanationsPage() {
   const { explanations, deleteExplanation } = useExplanations();
   const { data: surahs } = useSurahs();
   const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 300);
+    return () => clearTimeout(timer);
+  }, []);
   type SortOrder = 'asc' | 'desc' | 'lastEdited' | 'dateAdded';
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
   const [collapsedSurahs, setCollapsedSurahs] = useState<Set<number>>(new Set());
@@ -88,8 +95,8 @@ export default function ManageExplanationsPage() {
       {/* Header */}
       <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-md pb-2 pt-1 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border-b border-border/60 transform-gpu">
         <div className="flex items-center gap-3 px-4 h-14">
-          <button 
-            onClick={() => navigate('/')} 
+          <button
+            onClick={() => navigate('/')}
             className="w-10 h-10 flex items-center justify-center rounded-full transition-all hover:bg-accent active:scale-95 text-foreground outline-none"
             aria-label="Back"
           >
@@ -102,12 +109,12 @@ export default function ManageExplanationsPage() {
       </div>
 
       <div className="px-4 mt-6 max-w-md mx-auto space-y-6">
-        
+
         {/* Search, Filter & Add New */}
         <div className="flex gap-3">
           <div className="relative flex-1 group">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-hover:text-primary transition-colors" size={18} />
-            <input 
+            <input
               type="text"
               placeholder="Search by Surah"
               value={searchQuery}
@@ -127,11 +134,10 @@ export default function ManageExplanationsPage() {
                 <DropdownMenuItem
                   key={opt}
                   onClick={() => setSortOrder(opt)}
-                  className={`flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer transition-colors ${
-                    sortOrder === opt
+                  className={`flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer transition-colors ${sortOrder === opt
                       ? 'bg-primary/25 text-primary font-semibold'
                       : 'text-foreground data-[highlighted]:bg-foreground/[0.05] data-[highlighted]:text-foreground font-medium'
-                  }`}
+                    }`}
                 >
                   <span className="text-[13.5px] font-medium">{sortLabels[opt]}</span>
                   {sortOrder === opt && <Check size={14} className="text-primary" />}
@@ -139,7 +145,7 @@ export default function ManageExplanationsPage() {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
-          <button 
+          <button
             onClick={() => navigate('/explanation-builder')}
             className="bg-primary text-primary-foreground px-4 rounded-2xl flex items-center justify-center shadow-sm hover:opacity-90 transition-opacity whitespace-nowrap gap-2 font-medium text-[14px]"
           >
@@ -148,141 +154,197 @@ export default function ManageExplanationsPage() {
         </div>
 
         {/* Explanations List */}
-        {explanations.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-center opacity-60">
-            <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
-              <FileText size={32} className="text-muted-foreground" />
-            </div>
-            <p className="text-[15px] font-medium text-foreground mb-1">No explanations yet</p>
-            <p className="text-[13px] text-muted-foreground">Start deep-diving into the Quran by adding your first explanation.</p>
-          </div>
-        ) : filteredSurahNumbers.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-10 text-center">
-            <p className="text-[15px] text-muted-foreground">No matching explanations found.</p>
-          </div>
-        ) : (
-          <div className="space-y-6">
-            <AnimatePresence>
-              {filteredSurahNumbers.map(surahNum => (
-                <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.25, ease: "easeOut" }}
-                  key={`group-${surahNum}`} 
-                  className="space-y-3"
-                >
-                  <div 
-                    onClick={() => toggleSurah(surahNum)}
-                    className="flex items-center justify-between pb-1 border-b border-border/40 cursor-pointer group"
-                  >
-                    <h3 className="font-semibold text-[14px] text-muted-foreground flex items-center gap-2 group-hover:text-foreground transition-colors">
-                      <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[11px] font-bold tabular-nums">
-                        {surahNum}
-                      </span>
-                      {getSurahName(surahNum)}
-                    </h3>
-                    <div className="flex items-center gap-3">
-                      <span className="font-arabic text-primary/70 text-lg">
-                        {getSurahArabic(surahNum)}
-                      </span>
-                      <button className="text-muted-foreground group-hover:text-foreground transition-colors p-1 -mr-1 rounded-md hover:bg-accent flex items-center justify-center">
-                        {collapsedSurahs.has(surahNum) ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
-                      </button>
-                    </div>
-                  </div>
-                  
-                  <AnimatePresence initial={false}>
-                    {!collapsedSurahs.has(surahNum) && (
-                      <motion.div 
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.25, ease: "easeOut" }}
-                        className="overflow-hidden"
-                      >
-                        <div className="space-y-3 pt-3 pb-1">
-                          <AnimatePresence>
-                  {sortExplanations(groupedExplanations[surahNum]).map(exp => {
-                    const verseText = (
-                      formatVerseRange(exp.concise?.length
-                        ? exp.concise.map(b => b.verseNumber).filter(v => v > 0)
-                        : exp.verses || [])
-                    ) || exp.verseRange || '';
-                    const isMultiple = verseText.includes('-') || verseText.includes(',');
-
-                    return (
-                        <motion.div 
-                          initial={{ opacity: 0, scale: 0.95 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.95 }}
-                          transition={{ duration: 0.25, ease: "easeOut" }}
-                          key={exp.id}
-                          className="bg-card border border-border rounded-[1.2rem] p-4 shadow-[0_2px_10px_rgba(0,0,0,0.02)] flex items-center justify-between gap-4 group hover:border-primary/20 transition-colors"
-                        >
-                          <div className="flex-1 flex items-center min-w-0 pr-4">
-                            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-primary font-medium text-[13px] border border-primary/10 shadow-sm">
-                              <Bookmark size={14} className="opacity-70" />
-                              {isMultiple ? 'Verses' : 'Verse'} {verseText}
+        <div className="relative min-h-[50vh]">
+          <AnimatePresence mode="wait">
+            {loading ? (
+              <motion.div
+                key="loading-skeleton"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-8 w-full"
+              >
+                {(filteredSurahNumbers.length > 0 ? filteredSurahNumbers : [1, 2, 3]).map((surahNum, i) => {
+                  const items = filteredSurahNumbers.length > 0 ? sortExplanations(groupedExplanations[surahNum]) : Array.from({ length: i === 1 ? 3 : 1 });
+                  return (
+                    <div key={surahNum} className="space-y-3">
+                      <div className="flex items-center justify-between pb-1 border-b border-border/40">
+                        <div className="flex items-center gap-2">
+                          <div className="w-6 h-6 rounded-full bg-primary/5 animate-pulse" />
+                          <div className="h-4 w-24 bg-muted/50 animate-pulse rounded" />
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <div className="h-6 w-16 bg-muted/40 animate-pulse rounded" />
+                          <div className="w-6 h-6 bg-muted/40 animate-pulse rounded-md" />
+                        </div>
+                      </div>
+                      <div className="space-y-3 pt-3 pb-1">
+                        {items.map((exp, j) => (
+                          <div key={filteredSurahNumbers.length > 0 ? (exp as any).id : j} className="bg-muted/10 border border-border/50 rounded-[1.2rem] p-4 flex items-center justify-between gap-4">
+                            <div className="flex-1 flex items-center min-w-0 pr-4">
+                              <div className="h-[34px] w-[100px] rounded-full bg-primary/[0.03] animate-pulse border border-primary/5" />
+                            </div>
+                            <div className="flex items-center">
+                              <div className="w-10 h-10 rounded-full bg-secondary/40 animate-pulse" />
                             </div>
                           </div>
-                          <div className="flex items-center gap-1.5 sm:gap-2">
-                            <button 
-                              onClick={() => navigate(`/explanation-view?id=${exp.id}`)}
-                              className="h-9 px-3 flex items-center justify-center gap-1.5 rounded-xl bg-primary/5 text-primary hover:bg-primary/20 transition-colors font-medium text-[13px] border border-primary/10 shadow-sm"
-                              aria-label="View"
-                            >
-                              <BookOpen size={16} />
-                              View
-                            </button>
-                            <button 
-                              onClick={() => navigate(`/explanation-builder?id=${exp.id}`)}
-                              className="w-9 h-9 flex items-center justify-center rounded-xl bg-secondary text-foreground hover:bg-secondary/80 transition-colors"
-                              aria-label="Edit"
-                            >
-                              <Edit2 size={16} />
-                            </button>
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                <button 
-                                  className="w-9 h-9 flex items-center justify-center rounded-xl bg-destructive/10 text-destructive hover:bg-destructive/20 transition-colors"
-                                  aria-label="Delete"
-                                >
-                                  <Trash2 size={16} />
-                                </button>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent className="w-[90vw] max-w-[400px] rounded-[1.5rem]">
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>Delete Explanation?</AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    Are you sure you want to delete your explanation for <strong>Surah {getSurahName(surahNum)} {isMultiple ? 'Verses' : 'Verse'} {verseText}</strong>? This action cannot be undone.
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter className="flex gap-2 sm:gap-0 mt-2">
-                                  <AlertDialogCancel className="rounded-xl border-border h-11">Cancel</AlertDialogCancel>
-                                  <AlertDialogAction 
-                                    onClick={() => handleDelete(exp.id)}
-                                    className="rounded-xl bg-destructive hover:bg-destructive/90 text-destructive-foreground h-11"
-                                  >
-                                    Delete
-                                  </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </motion.div>
+            ) : (
+              <motion.div
+                key="content"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.25 }}
+                className="w-full"
+              >
+                {explanations.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-20 text-center opacity-60">
+                    <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
+                      <FileText size={32} className="text-muted-foreground" />
+                    </div>
+                    <p className="text-[15px] font-medium text-foreground mb-1">No explanations yet</p>
+                    <p className="text-[13px] text-muted-foreground">Start deep-diving into the Quran by adding your first explanation.</p>
+                  </div>
+                ) : filteredSurahNumbers.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-10 text-center">
+                    <p className="text-[15px] text-muted-foreground">No matching explanations found.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    <AnimatePresence>
+                      {filteredSurahNumbers.map(surahNum => (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.95 }}
+                          transition={{ duration: 0.25, ease: "easeOut" }}
+                          key={`group-${surahNum}`}
+                          className="space-y-3"
+                        >
+                          <div
+                            onClick={() => toggleSurah(surahNum)}
+                            className="flex items-center justify-between pb-1 border-b border-border/40 cursor-pointer group"
+                          >
+                            <h3 className="font-semibold text-[14px] text-muted-foreground flex items-center gap-2 group-hover:text-foreground transition-colors">
+                              <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[11px] font-bold tabular-nums">
+                                {surahNum}
+                              </span>
+                              {getSurahName(surahNum)}
+                            </h3>
+                            <div className="flex items-center gap-3">
+                              <span className="font-arabic text-primary/70 text-lg">
+                                {getSurahArabic(surahNum)}
+                              </span>
+                              <button className="text-muted-foreground group-hover:text-foreground transition-colors p-1 -mr-1 rounded-md hover:bg-accent flex items-center justify-center">
+                                {collapsedSurahs.has(surahNum) ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
+                              </button>
+                            </div>
                           </div>
-                        </motion.div>
-                    );
-                  })}
+
+                          <AnimatePresence initial={false}>
+                            {!collapsedSurahs.has(surahNum) && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.25, ease: "easeOut" }}
+                                className="overflow-hidden"
+                              >
+                                <div className="space-y-3 pt-3 pb-1">
+                                  <AnimatePresence>
+                                    {sortExplanations(groupedExplanations[surahNum]).map(exp => {
+                                      const verseText = (
+                                        formatVerseRange(exp.concise?.length
+                                          ? exp.concise.map(b => b.verseNumber).filter(v => v > 0)
+                                          : exp.verses || [])
+                                      ) || exp.verseRange || '';
+                                      const isMultiple = verseText.includes('-') || verseText.includes(',');
+
+                                      return (
+                                        <motion.div
+                                          initial={{ opacity: 0, scale: 0.95 }}
+                                          animate={{ opacity: 1, scale: 1 }}
+                                          exit={{ opacity: 0, scale: 0.95 }}
+                                          transition={{ duration: 0.25, ease: "easeOut" }}
+                                          key={exp.id}
+                                          onClick={() => navigate(`/explanation-view?id=${exp.id}`)}
+                                          className="bg-card border border-border rounded-[1.2rem] p-4 shadow-[0_2px_10px_rgba(0,0,0,0.02)] flex items-center justify-between gap-4 group hover:border-primary/40 cursor-pointer active:scale-[0.98] transition-all"
+                                        >
+                                          <div className="flex-1 flex items-center min-w-0 pr-4">
+                                            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-primary font-medium text-[13px] border border-primary/10 shadow-sm">
+                                              <Bookmark size={14} className="opacity-70" />
+                                              {isMultiple ? 'Verses' : 'Verse'} {verseText}
+                                            </div>
+                                          </div>
+                                          <div className="flex items-center" onClick={e => e.stopPropagation()}>
+                                            <DropdownMenu>
+                                              <DropdownMenuTrigger asChild>
+                                                <button className="w-10 h-10 flex items-center justify-center rounded-full text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors outline-none cursor-pointer">
+                                                  <MoreVertical size={20} />
+                                                </button>
+                                              </DropdownMenuTrigger>
+                                              <DropdownMenuContent align="end" className="w-48 p-1.5 rounded-2xl bg-white/95 backdrop-blur-sm dark:bg-black/95 border-border shadow-[0_10px_30px_rgba(0,0,0,0.05)]">
+                                                <DropdownMenuItem 
+                                                  onClick={() => navigate(`/explanation-builder?id=${exp.id}`)}
+                                                  className="flex items-center gap-2.5 px-3 py-2.5 outline-none rounded-xl cursor-pointer hover:bg-secondary transition-colors text-[14px] font-medium"
+                                                >
+                                                  <Edit2 size={16} /> Edit
+                                                </DropdownMenuItem>
+                                                <DropdownMenuSeparator className="bg-border/50 my-1 mx-1" />
+                                                <AlertDialog>
+                                                  <AlertDialogTrigger asChild>
+                                                    <DropdownMenuItem 
+                                                      onSelect={e => e.preventDefault()}
+                                                      className="flex items-center gap-2.5 px-3 py-2.5 outline-none bg-destructive/5 rounded-xl cursor-pointer hover:bg-destructive/10 text-destructive transition-colors text-[14px] font-medium"
+                                                    >
+                                                      <Trash2 size={16} /> Delete
+                                                    </DropdownMenuItem>
+                                                  </AlertDialogTrigger>
+                                                  <AlertDialogContent className="w-[90vw] max-w-[400px] rounded-[1.5rem]" onClick={e => e.stopPropagation()}>
+                                                    <AlertDialogHeader>
+                                                      <AlertDialogTitle>Delete Explanation?</AlertDialogTitle>
+                                                      <AlertDialogDescription>
+                                                        Are you sure you want to delete your explanation for <strong>Surah {getSurahName(surahNum)} {isMultiple ? 'Verses' : 'Verse'} {verseText}</strong>? This action cannot be undone.
+                                                      </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter className="flex gap-2 sm:gap-0 mt-2">
+                                                      <AlertDialogCancel className="rounded-xl border-border h-11">Cancel</AlertDialogCancel>
+                                                      <AlertDialogAction
+                                                        onClick={() => handleDelete(exp.id)}
+                                                        className="rounded-xl bg-destructive hover:bg-destructive/90 text-destructive-foreground h-11"
+                                                      >
+                                                        Delete
+                                                      </AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                  </AlertDialogContent>
+                                                </AlertDialog>
+                                              </DropdownMenuContent>
+                                            </DropdownMenu>
+                                          </div>
+                                        </motion.div>
+                                      );
+                                    })}
+                                  </AnimatePresence>
+                                </div>
+                              </motion.div>
+                            )}
                           </AnimatePresence>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
-        )}
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+                  </div>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   );
