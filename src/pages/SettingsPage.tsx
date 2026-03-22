@@ -202,7 +202,27 @@ export default function SettingsPage() {
 
         {/* SECTION 3: READING */}
         <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-          <SectionTitle icon={Type} title="Reading Preferences" />
+          <div className="flex items-center justify-between">
+            <SectionTitle icon={Type} title="Reading Preferences" />
+            <motion.button
+              initial={false}
+              animate={{ 
+                opacity: isModified ? 1 : 0,
+                scale: isModified ? 1 : 0.8,
+                rotate: isModified ? 0 : -90
+              }}
+              onClick={() => updateSettings({
+                arabicFontSize: defaultSettings.arabicFontSize,
+                translationFontSize: defaultSettings.translationFontSize,
+                lineSpacing: defaultSettings.lineSpacing,
+              })}
+              disabled={!isModified}
+              className="w-8 h-8 flex items-center justify-center rounded-full text-red-600 hover:text-red-700 transition-colors active:scale-90 disabled:cursor-default"
+              title="Reset Reading Preferences"
+            >
+              <RotateCcw size={16} strokeWidth={2.5} />
+            </motion.button>
+          </div>
           <div className="bg-card border border-border rounded-2xl p-4 space-y-6 shadow-sm">
             <Stepper 
               label="Arabic Size" 
@@ -230,24 +250,6 @@ export default function SettingsPage() {
               min={1.5} max={4.0} step={0.1} 
               onChange={(val: number) => updateSettings({ lineSpacing: val })} 
             />
-
-            <div className="pt-2 flex justify-end">
-              <button 
-                onClick={() => updateSettings({
-                  arabicFontSize: defaultSettings.arabicFontSize,
-                  translationFontSize: defaultSettings.translationFontSize,
-                  lineSpacing: defaultSettings.lineSpacing,
-                })}
-                className={`text-[10px] font-semibold transition-colors flex items-center gap-1 uppercase tracking-wider ${
-                  isModified 
-                    ? 'text-red-500 hover:text-red-600' 
-                    : 'text-muted-foreground/40 hover:text-primary/60'
-                }`}
-              >
-                <RotateCcw size={10} />
-                Reset to defaults
-              </button>
-            </div>
           </div>
         </motion.section>
 
