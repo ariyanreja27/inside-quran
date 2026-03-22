@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Moon, Globe, Type, BookmarkX, Bell, Cloud, CloudUpload, Eye, Info, RotateCcw, LucideIcon, Minus, Plus } from 'lucide-react';
+import { Moon, Globe, Type, BookmarkX, Bell, Cloud, CloudUpload, Eye, Info, RotateCcw, LucideIcon, Minus, Plus, Download, Upload } from 'lucide-react';
 import { useSettings, useDarkMode, useBookmarks, useFavorites, defaultSettings } from '@/hooks/useAppStore';
 import { Slider } from '@/components/ui/slider';
 
@@ -22,6 +22,81 @@ export default function SettingsPage() {
     if (window.confirm('Are you sure you want to completely clear all favorite Surahs?')) {
       clearFavorites();
     }
+  };
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleExportBackup = () => {
+    try {
+      const keysToBackup = [
+        'iq-settings', 'iq-favorites', 'iq-bookmarks', 'iq-explanations', 
+        'iq-last-position', 'iq-dark-mode', 'iq-custom-translations'
+      ];
+      const backupData: Record<string, any> = {};
+      
+      keysToBackup.forEach(key => {
+        const item = localStorage.getItem(key);
+        if (item) {
+          backupData[key] = JSON.parse(item);
+        }
+      });
+      
+      const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      const now = new Date();
+      const pad = (n: number) => n.toString().padStart(2, '0');
+      const dateStr = `${pad(now.getDate())}-${pad(now.getMonth() + 1)}-${now.getFullYear()}-${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}`;
+      a.download = `Inside-Quran-Backup-${dateStr}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Backup failed", error);
+      alert("Failed to create backup.");
+    }
+  };
+
+  const handleImportBackup = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const content = e.target?.result as string;
+        const data = JSON.parse(content);
+        
+        if (!data || typeof data !== 'object') throw new Error("Invalid backup file.");
+        
+        const validKeys = [
+          'iq-settings', 'iq-favorites', 'iq-bookmarks', 'iq-explanations', 
+          'iq-last-position', 'iq-dark-mode', 'iq-custom-translations'
+        ];
+        
+        let restoredCount = 0;
+        validKeys.forEach(key => {
+          if (data[key] !== undefined) {
+            localStorage.setItem(key, JSON.stringify(data[key]));
+            restoredCount++;
+          }
+        });
+
+        if (restoredCount > 0) {
+          alert("Backup restored successfully! The app will now reload to apply changes.");
+          window.location.reload();
+        } else {
+          alert("No valid Inside Quran data found in this backup file.");
+        }
+      } catch (error) {
+        console.error("Restore failed", error);
+        alert("Failed to restore backup. Please ensure you selected a valid JSON backup file.");
+      }
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    };
+    reader.readAsText(file);
   };
 
   const SectionTitle = ({ icon: Icon, title }: { icon: LucideIcon; title: string }) => (
@@ -174,24 +249,47 @@ export default function SettingsPage() {
 
 
 
-        {/* SECTION 5 & 6: PLACEHOLDERS */}
+        {/* SECTION 5 & 6: BACKUP & RESTORE */}
         <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
-          <SectionTitle icon={Cloud} title="Sync & Notifications" />
-          <div className="bg-card border border-border rounded-2xl p-4 space-y-4 shadow-sm opacity-60 pointer-events-none">
+          <SectionTitle icon={Cloud} title="Data Backup & Restore" />
+          <div className="bg-card border border-border rounded-2xl p-4 space-y-4 shadow-sm">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Bell size={16} className="text-muted-foreground" />
-                <p className="text-sm font-medium">Daily Reminders</p>
+              <div>
+                <p className="text-sm font-medium">Export Backup</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Save your explanations & settings</p>
               </div>
-              <span className="text-[10px] font-medium bg-secondary px-2 py-1 rounded-md text-muted-foreground">Coming Soon</span>
+              <button 
+                onClick={handleExportBackup}
+                className="h-9 px-3.5 bg-primary/10 text-primary hover:bg-primary/20 rounded-xl flex items-center gap-2 font-medium text-sm transition-colors"
+                aria-label="Export Backup"
+              >
+                <Download size={15} />
+                Export
+              </button>
             </div>
+            
             <div className="h-px bg-border my-2" />
+            
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <CloudUpload size={16} className="text-muted-foreground" />
-                <p className="text-sm font-medium">Cloud Backup</p>
+              <div>
+                <p className="text-sm font-medium">Restore Backup</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Load from a .json file</p>
               </div>
-              <span className="text-[10px] font-medium bg-secondary px-2 py-1 rounded-md text-muted-foreground">Coming Soon</span>
+              <button 
+                onClick={() => fileInputRef.current?.click()}
+                className="h-9 px-3.5 bg-secondary text-foreground hover:bg-secondary/80 rounded-xl flex items-center gap-2 font-medium text-sm transition-colors"
+                aria-label="Restore Backup"
+              >
+                <Upload size={15} />
+                Restore
+              </button>
+              <input 
+                type="file" 
+                accept=".json" 
+                ref={fileInputRef} 
+                onChange={handleImportBackup} 
+                className="hidden" 
+              />
             </div>
           </div>
         </motion.section>

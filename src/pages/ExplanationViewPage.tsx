@@ -1,13 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
-import { X, Volume2, Info, SquarePen, Share2, MoreHorizontal, BookOpen, FileText, FileDown, Trash2 } from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { X, Volume2, Info, SquarePen, Share2, BookOpen, Trash2 } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -148,6 +142,7 @@ export default function ExplanationViewPage() {
     <AnimatePresence>
       {!isDeleting && (
         <motion.div {...handlers} exit={{ opacity: 0, scale: 0.96, y: 15 }} transition={{ duration: 0.25, ease: 'easeOut' }} className="min-h-screen bg-background pb-24">
+      
       {/* Sticky Header block */}
       <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-md pt-5 pb-4 mb-6 border-b border-border/50 shadow-sm transform-gpu">
         {/* Top Floating Buttons */}
@@ -193,29 +188,6 @@ export default function ExplanationViewPage() {
               </AlertDialogContent>
             </AlertDialog>
 
-            <DropdownMenu modal={false}>
-              <DropdownMenuTrigger asChild>
-                <button className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent transition shadow-sm" aria-label="More">
-                  <MoreHorizontal size={16} />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 p-1.5 rounded-2xl bg-white/95 backdrop-blur-sm dark:bg-black/95 border-border shadow-xl animate-in fade-in-0 zoom-in-95">
-                <DropdownMenuItem 
-                  onClick={() => alert("Export as Markdown coming soon!")}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer focus:bg-primary/5 focus:text-primary transition-colors"
-                >
-                  <FileText size={18} />
-                  <span className="font-medium text-[13.5px]">Export as Markdown</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem 
-                  onClick={() => alert("Export as PDF coming soon!")}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer focus:bg-primary/5 focus:text-primary transition-colors"
-                >
-                  <FileDown size={18} />
-                  <span className="font-medium text-[13.5px]">Export as PDF</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
           </div>
         </div>
 

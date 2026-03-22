@@ -116,7 +116,7 @@ export default function ManageExplanationsPage() {
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="h-[46px] px-3.5 flex items-center gap-1.5 rounded-full bg-card border border-border text-muted-foreground hover:text-primary hover:border-primary/30 transition-colors font-medium text-[13px] whitespace-nowrap">
+              <button className="h-[46px] w-[46px] sm:w-auto sm:px-4 flex items-center justify-center gap-1.5 rounded-full bg-card border border-border text-muted-foreground hover:text-primary hover:border-primary/30 transition-colors font-medium text-[13px] whitespace-nowrap">
                 <ArrowUpDown size={15} />
                 <span className="hidden sm:inline">{sortLabels[sortOrder]}</span>
               </button>
