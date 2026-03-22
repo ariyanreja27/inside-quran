@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
-import { Star, BookmarkCheck, Highlighter } from 'lucide-react';
+import { Star, BookmarkCheck, Highlighter, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useFavorites, useBookmarks } from '@/hooks/useAppStore';
 import { useSurahs, useSurahVerses } from '@/hooks/useQuranData';
@@ -31,6 +31,7 @@ function BookmarkedVerseCard({ surahNumber, verseNumber }: { surahNumber: number
 }
 
 export default function SavedPage() {
+  const navigate = useNavigate();
   const { favorites, toggleFavorite } = useFavorites();
   const { bookmarks } = useBookmarks();
   const { data: surahs } = useSurahs();
@@ -65,12 +66,23 @@ export default function SavedPage() {
 
   return (
     <div {...handlers} className="min-h-screen pb-24 flex flex-col">
-      <div className="px-4 pb-5 pt-12">
-        <h1 className="font-display text-2xl font-bold text-foreground">Saved</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Your favorites and bookmarks</p>
+      {/* Header */}
+      <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-md pb-2 pt-1 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border-b border-border/60 transform-gpu">
+        <div className="flex items-center gap-3 px-4 h-14">
+          <button 
+            onClick={() => navigate('/')} 
+            className="w-10 h-10 flex items-center justify-center rounded-full transition-all hover:bg-accent active:scale-95 text-foreground outline-none"
+            aria-label="Back"
+          >
+            <ArrowLeft size={22} />
+          </button>
+          <h1 className="font-display text-xl font-semibold text-foreground flex-1">
+            Saved
+          </h1>
+        </div>
       </div>
 
-      <div className="px-4">
+      <div className="px-4 mt-6">
         <div className="mb-5 rounded-full border border-border bg-secondary/40 p-1 backdrop-blur-sm relative">
           <div className="grid grid-cols-3 gap-1 relative">
             {tabs.map((tab) => {

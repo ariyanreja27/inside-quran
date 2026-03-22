@@ -1,10 +1,12 @@
 import { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Moon, Globe, Type, BookmarkX, Bell, Cloud, CloudUpload, Eye, Info, RotateCcw, LucideIcon, Minus, Plus, Download, Upload } from 'lucide-react';
+import { Moon, Globe, Type, BookmarkX, Bell, Cloud, CloudUpload, Eye, Info, RotateCcw, LucideIcon, Minus, Plus, Download, Upload, ArrowLeft } from 'lucide-react';
 import { useSettings, useDarkMode, useBookmarks, useFavorites, defaultSettings } from '@/hooks/useAppStore';
 import { Slider } from '@/components/ui/slider';
 
 export default function SettingsPage() {
+  const navigate = useNavigate();
   const { settings, updateSettings } = useSettings();
   const { isDark, toggle: toggleDark } = useDarkMode();
   const { clearBookmarks, bookmarks } = useBookmarks();
@@ -136,9 +138,19 @@ export default function SettingsPage() {
   return (
     <div className="min-h-screen pb-24 bg-background">
       {/* Header */}
-      <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border px-4 py-4">
-        <h1 className="font-display text-2xl font-bold text-foreground">Settings</h1>
-        <p className="text-sm text-muted-foreground mt-1">Preferences and configurations</p>
+      <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-md pb-2 pt-1 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border-b border-border/60 transform-gpu">
+        <div className="flex items-center gap-3 px-4 h-14">
+          <button 
+            onClick={() => navigate('/')} 
+            className="w-10 h-10 flex items-center justify-center rounded-full transition-all hover:bg-accent active:scale-95 text-foreground outline-none"
+            aria-label="Back"
+          >
+            <ArrowLeft size={22} />
+          </button>
+          <h1 className="font-display text-xl font-semibold text-foreground flex-1">
+            Settings
+          </h1>
+        </div>
       </div>
 
       <div className="px-4 py-6 space-y-8 max-w-lg mx-auto">

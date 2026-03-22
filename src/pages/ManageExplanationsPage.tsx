@@ -86,15 +86,16 @@ export default function ManageExplanationsPage() {
   return (
     <div className="min-h-screen bg-background pb-32">
       {/* Header */}
-      <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border/60 pb-2">
-        <div className="flex items-center gap-3 px-4 h-16 pt-2">
+      <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-md pb-2 pt-1 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border-b border-border/60 transform-gpu">
+        <div className="flex items-center gap-3 px-4 h-14">
           <button 
             onClick={() => navigate('/')} 
-            className="p-2 -ml-2 rounded-xl transition hover:bg-accent text-foreground"
+            className="w-10 h-10 flex items-center justify-center rounded-full transition-all hover:bg-accent active:scale-95 text-foreground outline-none"
+            aria-label="Back"
           >
             <ArrowLeft size={22} />
           </button>
-          <h1 className="font-display text-[20px] font-semibold text-foreground flex-1">
+          <h1 className="font-display text-xl font-semibold text-foreground flex-1">
             Manage Explanations
           </h1>
         </div>
