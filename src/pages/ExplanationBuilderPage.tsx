@@ -57,6 +57,13 @@ export default function ExplanationBuilderPage() {
   const hasConciseContent = conciseBlocks.some(b => b.verseNumber > 0 && b.explanations.some(e => e.title.trim() || e.text.trim()));
   const hasAtLeastOneExplanation = hasConciseContent;
 
+  // Verses already used in OTHER saved explanations for the same Surah
+  const crossSurahUsedVerses = new Set(
+    explanations
+      .filter(e => e.surahNumber === Number(selectedSurah) && e.id !== currentId)
+      .flatMap(e => (e.concise || []).map(b => b.verseNumber).filter(v => v > 0))
+  );
+
   const [initialHash, setInitialHash] = useState<string>('');
   const currentHash = JSON.stringify({ mode, selectedSurah, conciseBlocks, verseRange, rootWordsOn, rootWords, categories });
 
@@ -208,10 +215,22 @@ export default function ExplanationBuilderPage() {
 
     const allVerses = new Set<number>();
 
-    // Only save blocks that have an verse selected and some text
+    // Only save blocks that have a verse selected and some text
     const validConcise = conciseBlocks.filter(b =>
       b.verseNumber > 0 && b.explanations.some(e => e.text.trim().length > 0 || String(e.title).trim().length > 0)
     );
+
+    // Block save if any verse is already used in another explanation for this Surah
+    const duplicateVerse = validConcise.find(b => crossSurahUsedVerses.has(b.verseNumber));
+    if (duplicateVerse) {
+      toast({
+        title: "Duplicate Verse",
+        description: `Verse ${duplicateVerse.verseNumber} is already used in another explanation for this Surah.`,
+        variant: "destructive",
+        icon: <AlertCircle size={18} />
+      });
+      return;
+    }
 
     validConcise.forEach(b => {
       if (b.verseNumber) allVerses.add(Number(b.verseNumber));
@@ -388,13 +407,28 @@ export default function ExplanationBuilderPage() {
                           <SelectTrigger className="w-full bg-muted/50 border-none rounded-2xl h-[56px] px-4 text-[15px] text-foreground focus:ring-0 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed">
                             <SelectValue placeholder={selectedSurah ? "Select Verse" : "Select a Surah first"} />
                           </SelectTrigger>
-                          {selectedSurah && (
-                            <SelectContent className="bg-popover border-border rounded-xl shadow-lg max-h-[250px]">
-                              {currentSurahVerses?.map(a => (
-                                <SelectItem key={a.numberInSurah} value={a.numberInSurah.toString()} className="py-3">Verse {a.numberInSurah}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          )}
+                          {selectedSurah && (() => {
+                            const withinPageUsed = new Set(
+                              conciseBlocks
+                                .filter((_, i) => i !== bIndex)
+                                .map(b => b.verseNumber)
+                                .filter(v => v > 0)
+                            );
+                            return (
+                              <SelectContent className="bg-popover border-border rounded-xl shadow-lg max-h-[250px]">
+                                {currentSurahVerses?.map(a => (
+                                  <SelectItem
+                                    key={a.numberInSurah}
+                                    value={a.numberInSurah.toString()}
+                                    disabled={withinPageUsed.has(a.numberInSurah) || crossSurahUsedVerses.has(a.numberInSurah)}
+                                    className="py-3 data-[disabled]:opacity-40 data-[disabled]:cursor-not-allowed"
+                                  >
+                                    Verse {a.numberInSurah}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            );
+                          })()}
                         </Select>
                         {!selectedSurah && (
                           <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-destructive text-[12px] font-medium mt-1.5 ml-1">
