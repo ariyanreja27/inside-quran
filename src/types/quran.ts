@@ -70,3 +70,9 @@ export interface LastPosition {
   surahNumber: number;
   verseNumber: number;
 }
+
+export interface LastReadItem {
+  surahNumber: number;
+  verseNumber: number;
+  timestamp: string;
+}

@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useLocalStorage } from './useLocalStorage';
-import type { Explanation, Bookmark, LastPosition } from '@/types/quran';
+import type { Explanation, Bookmark, LastPosition, LastReadItem } from '@/types/quran';
 
 export interface UserSettings {
   language: 'en' | 'bn' | 'hi' | 'ur';
@@ -142,4 +142,33 @@ export function useCustomTranslations() {
   };
 
   return { customTranslations, getCustomTranslation, saveCustomTranslation, resetCustomTranslation };
+}
+
+export function useLastRead() {
+  const [lastRead, setLastRead] = useLocalStorage<LastReadItem[]>('iq-last-read', []);
+
+  const saveLastRead = useCallback((surahNumber: number, verseNumber: number) => {
+    setLastRead(prev => {
+      const now = new Date().toISOString();
+      const existingIdx = prev.findIndex(item => item.surahNumber === surahNumber);
+      
+      let newList = [...prev];
+      if (existingIdx !== -1) {
+        // If it's already at the top and verse hasn't changed, just update time maybe? 
+        // We can just remove and insert at top.
+        newList.splice(existingIdx, 1);
+      }
+      
+      newList.unshift({ surahNumber, verseNumber, timestamp: now });
+      
+      // Optional limit history to say 50 items
+      if (newList.length > 50) {
+        newList = newList.slice(0, 50);
+      }
+      
+      return newList;
+    });
+  }, [setLastRead]);
+
+  return { lastRead, saveLastRead };
 }

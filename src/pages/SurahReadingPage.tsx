@@ -3,7 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, MoreVertical, BookmarkCheck, Bookmark as BookmarkIcon, FileText, Pencil, BookOpen } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSurahVerses, useSurahs } from '@/hooks/useQuranData';
-import { useBookmarks, useExplanations, useLastPosition, useSettings, useCustomTranslations } from '@/hooks/useAppStore';
+import { useBookmarks, useExplanations, useLastPosition, useLastRead, useSettings, useCustomTranslations } from '@/hooks/useAppStore';
 import {
   Drawer,
   DrawerContent,
@@ -26,7 +26,9 @@ export default function SurahReadingPage() {
   const { setPosition } = useLastPosition();
   const { settings } = useSettings();
   const { getCustomTranslation, saveCustomTranslation, resetCustomTranslation } = useCustomTranslations();
+  const { saveLastRead } = useLastRead();
   
+  const [isRendered, setIsRendered] = useState(false);
   const [menuVerse, setMenuVerse] = useState<number | null>(null);
   const [currentJuz, setCurrentJuz] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState<number | null>(null);
@@ -39,16 +41,20 @@ export default function SurahReadingPage() {
   const isResetDisabled = !activeCustomTrans;
 
   const menuRef = useRef<HTMLDivElement>(null);
+  const saveTimeoutRef = useRef<NodeJS.Timeout>();
 
   const surah = surahs?.find(s => s.number === surahNumber);
 
   useEffect(() => {
     if (surahNumber && !targetVerse) {
       setPosition({ surahNumber, verseNumber: 1 });
+      saveLastRead(surahNumber, 1);
     } else if (surahNumber && targetVerse) {
-      setPosition({ surahNumber, verseNumber: parseInt(targetVerse) });
+      const targetInt = parseInt(targetVerse);
+      setPosition({ surahNumber, verseNumber: targetInt });
+      saveLastRead(surahNumber, targetInt);
     }
-  }, [surahNumber, targetVerse, setPosition]);
+  }, [surahNumber, targetVerse, setPosition, saveLastRead]);
 
   useEffect(() => {
     if (verses && verses.length > 0 && !currentJuz) {
@@ -58,35 +64,92 @@ export default function SurahReadingPage() {
   }, [verses, currentJuz]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visibleEntry = entries.find(entry => entry.isIntersecting);
-        if (visibleEntry) {
-          const verseId = visibleEntry.target.id;
-          const verseNum = parseInt(verseId.split('-')[1]);
-          const verse = verses?.find(a => a.numberInSurah === verseNum);
+    if (!isRendered || isLoading) return;
+
+    let scrollTimeout: NodeJS.Timeout;
+    const headerOffset = 70; // 56px sticky header + 14px safety buffer
+
+    const handleScroll = () => {
+      if (scrollTimeout) clearTimeout(scrollTimeout);
+      
+      scrollTimeout = setTimeout(() => {
+        const verseElements = document.querySelectorAll('[id^="verse-"]');
+        let topMostVerseNum = -1;
+
+        for (let i = 0; i < verseElements.length; i++) {
+          const el = verseElements[i];
+          const arabicEl = el.querySelector('.arabic-text');
+          const transEl = el.querySelector('p.font-display.text-muted-foreground');
+          
+          let isVisible = false;
+
+          if (arabicEl) {
+            const rect = arabicEl.getBoundingClientRect();
+            if (rect.bottom > headerOffset && rect.top < window.innerHeight) {
+              isVisible = true;
+            }
+          }
+
+          if (transEl && !isVisible) {
+            const rect = transEl.getBoundingClientRect();
+            if (rect.bottom > headerOffset && rect.top < window.innerHeight) {
+              isVisible = true;
+            }
+          }
+
+          // Fallback if neither exists
+          if (!arabicEl && !transEl) {
+            const rect = el.getBoundingClientRect();
+            if (rect.bottom > headerOffset && rect.top < window.innerHeight) {
+              isVisible = true;
+            }
+          }
+
+          if (isVisible) {
+            topMostVerseNum = parseInt(el.id.split('-')[1]);
+            break;
+          }
+        }
+
+        if (topMostVerseNum !== -1) {
+          const verse = verses?.find(a => a.numberInSurah === topMostVerseNum);
           if (verse) {
             setCurrentJuz(verse.juz);
             setCurrentPage(verse.page);
+            if (surahNumber) {
+              if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+              saveTimeoutRef.current = setTimeout(() => {
+                saveLastRead(surahNumber, topMostVerseNum);
+              }, 400); // 400ms exit-debounce prevents browser scroll restoration bugs
+            }
           }
         }
-      },
-      { threshold: 0.1, rootMargin: '-60px 0px -80% 0px' }
-    );
+      }, 100); // Highly efficient 100ms throttle
+    };
 
-    const verseElements = document.querySelectorAll('[id^="verse-"]');
-    verseElements.forEach((el) => observer.observe(el));
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Check state immediately after rendering
 
-    return () => observer.disconnect();
-  }, [verses, isLoading]);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollTimeout) clearTimeout(scrollTimeout);
+      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+    };
+  }, [verses, isLoading, surahNumber, saveLastRead, isRendered]);
 
   // Scroll to target verse if provided in URL
   useEffect(() => {
-    if (!isLoading && targetVerse && verses) {
+    if (!isLoading && targetVerse && verses && isRendered) {
       const element = document.getElementById(`verse-${targetVerse}`);
       if (element) {
         setTimeout(() => {
-          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          const headerOffset = 64; // 56px header + 8px padding
+          const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+          window.scrollTo({
+            top: elementPosition - headerOffset,
+            behavior: 'smooth'
+          });
+          
           // Highlight effect
           element.classList.add('ring-2', 'ring-primary/50', 'bg-primary/5');
           setTimeout(() => {
@@ -95,7 +158,7 @@ export default function SurahReadingPage() {
         }, 300);
       }
     }
-  }, [isLoading, targetVerse, verses]);
+  }, [isLoading, targetVerse, verses, isRendered]);
 
   // Close menu on outside click
   useEffect(() => {
@@ -202,7 +265,10 @@ export default function SurahReadingPage() {
             </div>
 
             {/* Verses */}
-            <div className="px-4 space-y-3 mt-2">
+            <div 
+              className="px-4 space-y-3 mt-2"
+              ref={(el) => { if (el && !isRendered) setIsRendered(true); }}
+            >
               {verses?.map((verse) => {
             const dividers: string[] = [];
             if (verse.juz !== lastJuz) { dividers.push(`Juz ${verse.juz}`); lastJuz = verse.juz; }

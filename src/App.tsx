@@ -12,6 +12,7 @@ import SettingsPage from "@/pages/SettingsPage";
 import ExplanationBuilderPage from "@/pages/ExplanationBuilderPage";
 import ExplanationViewPage from "@/pages/ExplanationViewPage";
 import ManageExplanationsPage from "@/pages/ManageExplanationsPage";
+import LibraryPage from "@/pages/LibraryPage";
 import NotFound from "@/pages/NotFound";
 import ScrollToTop from "@/components/ScrollToTop";
 
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/explanation-builder" element={<ExplanationBuilderPage />} />
           <Route path="/explanation-view" element={<ExplanationViewPage />} />
           <Route path="/manage-explanations" element={<ManageExplanationsPage />} />
+          <Route path="/library" element={<LibraryPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <BottomNav />
