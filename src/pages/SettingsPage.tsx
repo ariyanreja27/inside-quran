@@ -1,8 +1,14 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Moon, Globe, Type, BookmarkX, Bell, Cloud, CloudUpload, Eye, Info, RotateCcw, LucideIcon, Minus, Plus, Download, Upload, ArrowLeft, Settings, Star, Book, PenLine } from 'lucide-react';
-import { useSettings, useDarkMode, useBookmarks, useFavorites, defaultSettings } from '@/hooks/useAppStore';
+import { Moon, Globe, Type, BookmarkX, Bell, Cloud, CloudUpload, Eye, Info, RotateCcw, LucideIcon, Minus, Plus, Download, Upload, ArrowLeft, Settings, Star, Book, PenLine, Database, HardDrive, Trash2 } from 'lucide-react';
+import { 
+  useSettings, useDarkMode, useBookmarks, useFavorites, 
+  useExplanations, useTafsirSources, useCustomTafsirs, 
+  useCollections, useNotes, useLastPosition, 
+  useLastRead, useCustomTranslations,
+  defaultSettings 
+} from '@/hooks/useAppStore';
 import { Slider } from '@/components/ui/slider';
 import {
   Dialog,
@@ -21,6 +27,14 @@ export default function SettingsPage() {
   const { isDark, toggle: toggleDark } = useDarkMode();
   const { clearBookmarks, bookmarks } = useBookmarks();
   const { clearFavorites, favorites } = useFavorites();
+  const { explanations } = useExplanations();
+  const { sources } = useTafsirSources();
+  const { tafsirRecords } = useCustomTafsirs();
+  const { collections } = useCollections();
+  const { notes } = useNotes();
+  const { position } = useLastPosition();
+  const { lastRead } = useLastRead();
+  const { customTranslations } = useCustomTranslations();
 
   const isModified = 
     settings.arabicFontSize !== defaultSettings.arabicFontSize ||
@@ -43,11 +57,14 @@ export default function SettingsPage() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isExportDialogOpen, setIsExportDialogOpen] = useState(false);
+  const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
+  const [selectedResetTypes, setSelectedResetTypes] = useState<string[]>([]);
+  const [storageUsage, setStorageUsage] = useState<Record<string, number>>({});
   const [selectedTypes, setSelectedTypes] = useState<string[]>([
     'bookmarks', 'favorites', 'explanations', 'tafsirs', 'notes', 'collections', 'settings'
   ]);
 
-  const backupMapping: Record<string, string[]> = {
+  const backupMapping: Record<string, string[]> = useMemo(() => ({
     bookmarks: ['iq-bookmarks'],
     favorites: ['iq-favorites'],
     explanations: ['iq-explanations'],
@@ -55,12 +72,62 @@ export default function SettingsPage() {
     notes: ['iq-notes'],
     collections: ['iq-collections'],
     settings: ['iq-settings', 'iq-dark-mode', 'iq-last-position', 'iq-custom-translations', 'iq-last-read']
+  }), []);
+
+  const calculateStorage = useCallback(() => {
+    const usage: Record<string, number> = {};
+    Object.entries(backupMapping).forEach(([category, keys]) => {
+      let categorySize = 0;
+      keys.forEach(key => {
+        const item = localStorage.getItem(key);
+        if (item) categorySize += item.length;
+      });
+      usage[category] = categorySize;
+    });
+    setStorageUsage(usage);
+  }, [backupMapping]);
+
+  useEffect(() => {
+    calculateStorage();
+  }, [
+    calculateStorage,
+    isExportDialogOpen, 
+    bookmarks, favorites, explanations, 
+    sources, tafsirRecords, collections, 
+    notes, position, lastRead, customTranslations
+  ]);
+
+  const formatSize = (bytes: number) => {
+    if (bytes === 0) return '0 B';
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   };
+
+  const totalUsage = Object.values(storageUsage).reduce((a, b) => a + b, 0);
 
   const toggleType = (type: string) => {
     setSelectedTypes(prev => 
       prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
     );
+  };
+
+  const toggleResetType = (type: string) => {
+    setSelectedResetTypes(prev => 
+      prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
+    );
+  };
+
+  const handleResetSelected = () => {
+    if (selectedResetTypes.length === 0) return;
+    
+    selectedResetTypes.forEach(type => {
+      const keys = backupMapping[type];
+      keys.forEach(key => localStorage.removeItem(key));
+    });
+    
+    setIsResetDialogOpen(false);
+    window.location.reload();
   };
 
   const handleExportBackup = () => {
@@ -334,44 +401,100 @@ export default function SettingsPage() {
         {/* SECTION 5 & 6: BACKUP & RESTORE */}
         <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
           <SectionTitle icon={Cloud} title="Data Backup & Restore" />
-          <div className="bg-card border border-border rounded-2xl p-4 space-y-4 shadow-sm">
+          <div className="bg-card border border-border rounded-2xl p-5 space-y-5 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium">Export Backup</p>
-                <p className="text-xs text-muted-foreground mt-0.5">Save your data to a .json file</p>
+                <p className="text-sm font-semibold text-foreground">Export Backup</p>
+                <p className="text-[11px] text-muted-foreground mt-0.5 opacity-70">Save your data to a .json file</p>
               </div>
               <button 
                 onClick={() => setIsExportDialogOpen(true)}
-                className="h-9 px-3.5 bg-primary/10 text-primary rounded-xl flex items-center gap-2 font-medium text-sm transition-colors"
-                aria-label="Export Backup"
+                className="h-9 px-4 bg-primary text-primary-foreground rounded-xl flex items-center gap-2 font-bold text-xs shadow-sm shadow-primary/10 transition-all active:scale-95"
               >
-                <Download size={15} />
+                <Download size={14} strokeWidth={2.5} />
                 Export
               </button>
             </div>
             
-            <div className="h-px bg-border my-2" />
+            <div className="h-px bg-border/50" />
             
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium">Import Backup</p>
-                <p className="text-xs text-muted-foreground mt-0.5">Load from a .json file</p>
+                <p className="text-sm font-semibold text-foreground">Import Backup</p>
+                <p className="text-[11px] text-muted-foreground mt-0.5 opacity-70">Load from a .json file</p>
               </div>
               <button 
                 onClick={() => fileInputRef.current?.click()}
-                className="h-9 px-3.5 bg-secondary text-foreground rounded-xl flex items-center gap-2 font-medium text-sm transition-colors"
-                 aria-label="Import Backup"
+                className="h-9 px-4 bg-secondary text-foreground rounded-xl flex items-center gap-2 font-bold text-xs border border-border/50 transition-all active:scale-95"
               >
-                <Upload size={15} />
+                <Upload size={14} strokeWidth={2.5} />
                 Import
               </button>
-              <input 
-                type="file" 
-                accept=".json" 
-                ref={fileInputRef} 
-                onChange={handleImportBackup} 
-                className="hidden" 
-              />
+              <input type="file" accept=".json" ref={fileInputRef} onChange={handleImportBackup} className="hidden" />
+            </div>
+          </div>
+        </motion.section>
+
+        {/* SECTION: STORAGE & RESET */}
+        <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.28 }}>
+          <SectionTitle icon={HardDrive} title="Data & Storage" />
+          <div className="bg-card border border-border rounded-2xl p-5 space-y-6 shadow-sm">
+            {/* Storage Usage Dashboard */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-semibold text-foreground">Local Storage Usage</p>
+                  <p className="text-[11px] text-muted-foreground opacity-70">Total used: {formatSize(totalUsage)}</p>
+                </div>
+                <Database size={16} className="text-muted-foreground/40" />
+              </div>
+              
+              <div className="space-y-2.5">
+                {[
+                  { id: 'bookmarks', label: 'Bookmarks', color: 'bg-blue-500' },
+                  { id: 'favorites', label: 'Favorites', color: 'bg-amber-500' },
+                  { id: 'explanations', label: 'Explanations', color: 'bg-emerald-500' },
+                  { id: 'tafsirs', label: 'Tafsirs', color: 'bg-violet-500' },
+                  { id: 'notes', label: 'Notes', color: 'bg-orange-500' },
+                  { id: 'collections', label: 'Collections', color: 'bg-pink-500' },
+                  { id: 'settings', label: 'App Settings', color: 'bg-slate-500' },
+                ].map(cat => {
+                  const usage = storageUsage[cat.id] || 0;
+                  const percent = totalUsage > 0 ? (usage / totalUsage) * 100 : 0;
+                  if (usage === 0) return null;
+                  return (
+                    <div key={cat.id} className="space-y-1">
+                      <div className="flex justify-between text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                        <span>{cat.label}</span>
+                        <span>{formatSize(usage)}</span>
+                      </div>
+                      <div className="h-1.5 w-full bg-secondary/50 rounded-full overflow-hidden">
+                        <motion.div 
+                          initial={{ width: 0 }}
+                          animate={{ width: `${percent}%` }}
+                          className={`h-full ${cat.color} rounded-full`}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="h-px bg-border/50" />
+
+            <div className="pt-2">
+              <button 
+                onClick={() => {
+                  setSelectedResetTypes([]);
+                  setIsResetDialogOpen(true);
+                }}
+                className="w-full h-12 rounded-xl flex items-center justify-center gap-2 text-destructive font-bold text-sm bg-destructive/5 hover:bg-destructive/10 border border-destructive/10 transition-colors"
+                aria-label="Reset Data"
+              >
+                <Trash2 size={16} />
+                Reset
+              </button>
             </div>
           </div>
         </motion.section>
@@ -396,11 +519,11 @@ export default function SettingsPage() {
           <div className="p-6 pb-2 text-center">
             <DialogHeader className="space-y-1">
               <DialogTitle className="text-xl font-display font-semibold text-foreground">Backup Data</DialogTitle>
-              <p className="text-[11px] text-muted-foreground opacity-60">Select items to include</p>
+              <p className="text-[11px] text-muted-foreground opacity-60">Select items to include in backup</p>
             </DialogHeader>
           </div>
           
-          <div className="px-4 py-2 space-y-1.5 max-h-[300px] overflow-y-auto scrollbar-hide">
+          <div className="px-4 py-2 space-y-1.5 max-h-[300px] overflow-y-auto scrollbar-hide [mask-image:linear-gradient(to_bottom,transparent,black_20px,black_calc(100%-20px),transparent)]">
             {[
               { id: 'bookmarks', label: 'Bookmarks', icon: BookmarkX, color: 'text-blue-500', bg: 'bg-blue-500/10' },
               { id: 'favorites', label: 'Favorites', icon: Star, color: 'text-amber-500', bg: 'bg-amber-500/10' },
@@ -421,15 +544,15 @@ export default function SettingsPage() {
                 onClick={() => toggleType(type.id)}
               >
                 <div className="flex items-center gap-2.5">
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${type.bg} ${type.color} shadow-sm`}>
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${type.bg} ${type.color} shadow-sm border border-border/10`}>
                     <type.icon size={15} strokeWidth={2} />
                   </div>
-                  <span className="text-[13px] font-semibold text-foreground/80">{type.label}</span>
+                  <span className="text-[13px] font-bold text-foreground/80">{type.label}</span>
                 </div>
                 <div 
                   className={`w-5 h-5 rounded-full flex items-center justify-center transition-all border ${
                     selectedTypes.includes(type.id)
-                      ? 'bg-primary border-primary'
+                      ? 'bg-primary border-primary shadow-sm'
                       : 'bg-transparent border-muted-foreground/20'
                   }`}
                 >
@@ -449,7 +572,7 @@ export default function SettingsPage() {
             <button
               onClick={handleExportBackup}
               disabled={selectedTypes.length === 0}
-              className="w-full h-12 bg-primary text-primary-foreground rounded-xl font-bold text-sm shadow-md shadow-primary/10 hover:shadow-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 disabled:opacity-50"
+              className="w-full h-12 bg-primary text-primary-foreground rounded-2xl font-bold text-sm shadow-md shadow-primary/10 hover:shadow-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 disabled:opacity-50"
             >
               <Download size={16} strokeWidth={2.5} />
               Export Now
@@ -457,6 +580,79 @@ export default function SettingsPage() {
             <DialogClose asChild>
               <button className="w-full h-10 text-muted-foreground text-[12px] font-bold hover:text-foreground transition-colors">
                 Maybe later
+              </button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Reset Selection Dialog */}
+      <Dialog open={isResetDialogOpen} onOpenChange={setIsResetDialogOpen}>
+        <DialogContent className="max-w-[320px] rounded-[2rem] p-0 border-none shadow-2xl bg-white/95 dark:bg-background/95 backdrop-blur-xl overflow-hidden [&>button]:top-7 [&>button]:right-7">
+          <div className="p-6 pb-2 text-center">
+            <DialogHeader className="space-y-1">
+              <DialogTitle className="text-xl font-display font-semibold text-foreground">Reset Data</DialogTitle>
+              <p className="text-[11px] text-muted-foreground opacity-60">Select items to permanently delete</p>
+            </DialogHeader>
+          </div>
+          
+          <div className="px-4 py-2 space-y-1.5 max-h-[300px] overflow-y-auto scrollbar-hide [mask-image:linear-gradient(to_bottom,transparent,black_20px,black_calc(100%-20px),transparent)]">
+            {[
+              { id: 'bookmarks', label: 'Bookmarks', icon: BookmarkX, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+              { id: 'favorites', label: 'Favorites', icon: Star, color: 'text-amber-500', bg: 'bg-amber-500/10' },
+              { id: 'explanations', label: 'Explanations', icon: Globe, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
+              { id: 'tafsirs', label: 'Tafsirs', icon: Book, color: 'text-violet-500', bg: 'bg-violet-500/10' },
+              { id: 'notes', label: 'Notes', icon: PenLine, color: 'text-orange-500', bg: 'bg-orange-500/10' },
+              { id: 'collections', label: 'Collections', icon: Bell, color: 'text-pink-500', bg: 'bg-pink-500/10' },
+              { id: 'settings', label: 'Settings', icon: Settings, color: 'text-slate-500', bg: 'bg-slate-500/10' },
+            ].map((type) => (
+              <motion.div 
+                key={type.id} 
+                whileTap={{ scale: 0.97 }}
+                className={`flex items-center justify-between p-2.5 rounded-xl transition-all cursor-pointer border shadow-sm ${
+                  selectedResetTypes.includes(type.id) 
+                    ? 'bg-destructive/5 border-destructive/20' 
+                    : 'bg-secondary/10 border-border/40 hover:bg-secondary/20'
+                }`}
+                onClick={() => toggleResetType(type.id)}
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${type.bg} ${type.color} shadow-sm border border-border/10`}>
+                    <type.icon size={15} strokeWidth={2} />
+                  </div>
+                  <span className="text-[13px] font-bold text-foreground/80">{type.label}</span>
+                </div>
+                <div 
+                  className={`w-5 h-5 rounded-full flex items-center justify-center transition-all border ${
+                    selectedResetTypes.includes(type.id)
+                      ? 'bg-destructive border-destructive shadow-sm'
+                      : 'bg-transparent border-muted-foreground/20'
+                  }`}
+                >
+                  {selectedResetTypes.includes(type.id) && (
+                    <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </motion.div>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <DialogFooter className="p-5 pt-2 flex flex-col gap-2 sm:flex-col">
+            <button
+              onClick={handleResetSelected}
+              disabled={selectedResetTypes.length === 0}
+              className="w-full h-12 bg-destructive text-destructive-foreground rounded-2xl font-bold text-sm shadow-md shadow-destructive/10 hover:shadow-destructive/20 transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 disabled:opacity-50"
+            >
+              <Trash2 size={16} strokeWidth={2.5} />
+              Reset Selection
+            </button>
+            <DialogClose asChild>
+              <button className="w-full h-10 text-muted-foreground text-[12px] font-bold hover:text-foreground transition-colors">
+                Cancel
               </button>
             </DialogClose>
           </DialogFooter>
