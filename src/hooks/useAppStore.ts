@@ -2,6 +2,20 @@ import { useEffect, useCallback } from 'react';
 import { useLocalStorage } from './useLocalStorage';
 import type { Explanation, Bookmark, LastPosition, LastReadItem } from '@/types/quran';
 
+export interface TafsirSource {
+  id: string;
+  name: string;
+}
+
+export interface TafsirRecord {
+  id: string;
+  surahNumber: number;
+  verseNumber: number;
+  tafsirs: Record<string, string>;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface UserSettings {
   language: 'en' | 'bn' | 'hi' | 'ur';
   arabicFontSize: number;
@@ -175,4 +189,56 @@ export function useLastRead() {
   }, [setLastRead]);
 
   return { lastRead, saveLastRead, removeLastRead };
+}
+
+export function useTafsirSources() {
+  const defaultSources: TafsirSource[] = [
+    { id: '1', name: 'Ibn Kathir' },
+    { id: '2', name: 'Jalalayn' }
+  ];
+  const [sources, setSources] = useLocalStorage<TafsirSource[]>('iq-tafsir-sources', defaultSources);
+
+  const addSource = (name: string) => {
+    setSources(prev => [...prev, { id: Date.now().toString(), name }]);
+  };
+
+  const updateSource = (id: string, name: string) => {
+    setSources(prev => prev.map(s => s.id === id ? { ...s, name } : s));
+  };
+
+  const deleteSource = (id: string) => {
+    setSources(prev => prev.filter(s => s.id !== id));
+  };
+
+  return { sources, addSource, updateSource, deleteSource };
+}
+
+export function useCustomTafsirs() {
+  const [tafsirRecords, setTafsirRecords] = useLocalStorage<TafsirRecord[]>('iq-tafsir-records', []);
+
+  const getTafsirRecord = (surahNumber: number, verseNumber: number) => {
+    return tafsirRecords.find(t => t.surahNumber === surahNumber && t.verseNumber === verseNumber);
+  };
+
+  const hasTafsir = (surahNumber: number, verseNumber: number) => {
+    return tafsirRecords.some(t => t.surahNumber === surahNumber && t.verseNumber === verseNumber);
+  };
+
+  const saveTafsirRecord = (record: TafsirRecord) => {
+    setTafsirRecords(prev => {
+      const idx = prev.findIndex(t => t.id === record.id);
+      if (idx !== -1) {
+        const next = [...prev];
+        next[idx] = { ...record, updatedAt: new Date().toISOString() };
+        return next;
+      }
+      return [...prev, record];
+    });
+  };
+
+  const deleteTafsirRecord = (id: string) => {
+    setTafsirRecords(prev => prev.filter(t => t.id !== id));
+  };
+
+  return { tafsirRecords, getTafsirRecord, hasTafsir, saveTafsirRecord, deleteTafsirRecord };
 }

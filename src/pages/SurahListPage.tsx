@@ -56,13 +56,7 @@ export default function SurahListPage() {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56 p-1.5 rounded-2xl bg-white/95 backdrop-blur-sm dark:bg-black/95 border-border shadow-xl animate-in fade-in-0 zoom-in-95">
-              <DropdownMenuItem 
-                onClick={() => navigate('/manage-explanations')}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer focus:bg-primary/5 focus:text-primary transition-colors"
-              >
-                <FileText size={18} />
-                <span className="font-medium text-[13.5px]">Manage Explanations</span>
-              </DropdownMenuItem>
+
               <DropdownMenuItem 
                 onClick={() => navigate('/settings')}
                 className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer focus:bg-primary/5 focus:text-primary transition-colors"
@@ -98,20 +92,16 @@ export default function SurahListPage() {
               <button
                 key={f.value}
                 onClick={() => setFilter(f.value)}
-                className={`relative px-3.5 py-1 rounded-full text-[13px] font-medium transition-colors outline-none ${
-                  isActive ? 'text-primary-foreground' : 'text-foreground/80 hover:text-foreground'
+                className={`relative px-4 py-1.5 rounded-full text-[13px] font-medium transition-colors outline-none z-10 ${
+                  isActive ? 'text-primary-foreground' : 'text-foreground/70 hover:text-foreground bg-muted/40'
                 }`}
               >
-                {/* Base background for all buttons */}
-                <div className="absolute inset-0 bg-secondary rounded-full -z-20 transition-colors group-hover:bg-secondary/80" />
-                
                 {/* Sliding active background */}
                 {isActive && (
                   <motion.div
-                    layoutId="filterIndicator"
+                    layoutId="surahFilterIndicator"
                     className="absolute inset-0 bg-primary rounded-full -z-10 shadow-sm"
-                    initial={false}
-                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    transition={{ type: "spring", bounce: 0, duration: 0.4 }}
                   />
                 )}
                 <span className="relative z-10">{f.label}</span>
@@ -127,16 +117,7 @@ export default function SurahListPage() {
       <motion.div layout className="px-4 mt-4 space-y-3">
         <AnimatePresence mode="popLayout" initial={false}>
           {isLoading ? (
-            Array.from({ length: 10 }).map((_, i) => (
-              <motion.div 
-                key={`skeleton-${i}`}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.2 }}
-                className="surah-card animate-pulse h-16" 
-              />
-            ))
+            null
           ) : (
             filtered.map(surah => (
               <motion.div

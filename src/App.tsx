@@ -11,8 +11,10 @@ import SavedPage from "@/pages/SavedPage";
 import SettingsPage from "@/pages/SettingsPage";
 import ExplanationBuilderPage from "@/pages/ExplanationBuilderPage";
 import ExplanationViewPage from "@/pages/ExplanationViewPage";
-import ManageExplanationsPage from "@/pages/ManageExplanationsPage";
 import LibraryPage from "@/pages/LibraryPage";
+import TafsirBuilderPage from "@/pages/TafsirBuilderPage";
+import TafsirViewPage from "@/pages/TafsirViewPage";
+import ManageExplanationsPage from "@/pages/ManageExplanationsPage";
 import NotFound from "@/pages/NotFound";
 import ScrollToTop from "@/components/ScrollToTop";
 
@@ -32,6 +34,8 @@ const App = () => (
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/explanation-builder" element={<ExplanationBuilderPage />} />
           <Route path="/explanation-view" element={<ExplanationViewPage />} />
+          <Route path="/tafsir-builder" element={<TafsirBuilderPage />} />
+          <Route path="/tafsir-view" element={<TafsirViewPage />} />
           <Route path="/manage-explanations" element={<ManageExplanationsPage />} />
           <Route path="/library" element={<LibraryPage />} />
           <Route path="*" element={<NotFound />} />

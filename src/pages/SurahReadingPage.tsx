@@ -3,7 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, MoreVertical, BookmarkCheck, Bookmark as BookmarkIcon, FileText, Pencil, BookOpen } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSurahVerses, useSurahs } from '@/hooks/useQuranData';
-import { useBookmarks, useExplanations, useLastPosition, useLastRead, useSettings, useCustomTranslations } from '@/hooks/useAppStore';
+import { useBookmarks, useExplanations, useLastPosition, useLastRead, useSettings, useCustomTranslations, useCustomTafsirs } from '@/hooks/useAppStore';
 import {
   Drawer,
   DrawerContent,
@@ -23,6 +23,7 @@ export default function SurahReadingPage() {
   const targetVerse = queryParams.get('verse');
   const { isBookmarked, toggleBookmark } = useBookmarks();
   const { hasExplanation, getExplanation } = useExplanations();
+  const { hasTafsir } = useCustomTafsirs();
   const { setPosition } = useLastPosition();
   const { settings } = useSettings();
   const { getCustomTranslation, saveCustomTranslation, resetCustomTranslation } = useCustomTranslations();
@@ -213,38 +214,7 @@ export default function SurahReadingPage() {
 
       <AnimatePresence mode="wait">
         {isLoading ? (
-          <motion.div
-            key="loading"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="animate-pulse"
-          >
-            {/* Calligraphy Skeleton */}
-            <div className="text-center py-5 px-4 flex flex-col items-center gap-3">
-              <div className="h-[65px] w-[200px] bg-foreground/5 rounded-2xl" />
-              {surahNumber !== 1 && surahNumber !== 9 && (
-                <div className="h-10 w-[150px] bg-foreground/5 rounded-xl mt-3" />
-              )}
-            </div>
-
-            {/* Verses Skeleton */}
-            <div className="px-4 space-y-3 mt-2">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <div key={`skel-${i}`} className="bg-card rounded-2xl border border-border p-5 h-32 flex flex-col justify-between">
-                  <div className="flex justify-between items-center">
-                    <div className="w-8 h-8 rounded-lg bg-foreground/5" />
-                    <div className="w-6 h-6 rounded-md bg-foreground/5" />
-                  </div>
-                  <div className="flex flex-col items-center gap-3 mt-4">
-                    <div className="h-4 bg-foreground/5 rounded-full w-3/4" />
-                    <div className="h-4 bg-foreground/5 rounded-full w-1/2" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
+          null
         ) : (
           <motion.div
             key="content"
@@ -276,6 +246,7 @@ export default function SurahReadingPage() {
             if (verse.ruku !== lastRuku) { dividers.push(`Ruku ${verse.ruku}`); lastRuku = verse.ruku; }
 
             const explained = hasExplanation(surahNumber, verse.numberInSurah);
+            const tafsirExists = hasTafsir(surahNumber, verse.numberInSurah);
             const bookmarked = isBookmarked(surahNumber, verse.numberInSurah);
             const customTrans = getCustomTranslation(surahNumber, verse.numberInSurah, settings.language);
             const displayTranslation = customTrans || verse.translation;
@@ -330,6 +301,21 @@ export default function SurahReadingPage() {
                           >
                             <BookmarkIcon size={16} className="text-muted-foreground mr-1" />
                             {bookmarked ? 'Remove Bookmark' : 'Bookmark'}
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setMenuVerse(null);
+                              if (tafsirExists) {
+                                navigate(`/tafsir-view?surah=${surahNumber}&verse=${verse.numberInSurah}`);
+                              } else {
+                                navigate(`/tafsir-builder?surah=${surahNumber}&verse=${verse.numberInSurah}`);
+                              }
+                            }}
+                            className="flex items-center gap-2 w-full px-3 py-2 text-[15px] font-medium hover:bg-secondary transition text-foreground/90"
+                          >
+                            <FileText size={16} className="text-muted-foreground mr-1" />
+                            {tafsirExists ? 'View Tafsirs' : 'Add Tafsirs'}
                           </button>
                           <button
                             onClick={(e) => {

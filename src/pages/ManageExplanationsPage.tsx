@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Plus, Edit2, Trash2, FileText, Search, Eye, Bookmark, ArrowUpDown, Check, ChevronUp, ChevronDown, MoreVertical } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useExplanations } from '@/hooks/useAppStore';
+import { useSwipeable } from 'react-swipeable';
+import { useExplanations, useCustomTafsirs } from '@/hooks/useAppStore';
 import { useSurahs } from '@/hooks/useQuranData';
-import { formatVerseRange } from '@/lib/utils';
+import { formatVerseRange, cn } from '@/lib/utils';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,14 +28,37 @@ import {
 export default function ManageExplanationsPage() {
   const navigate = useNavigate();
   const { explanations, deleteExplanation } = useExplanations();
+  const { tafsirRecords, deleteTafsirRecord } = useCustomTafsirs();
   const { data: surahs } = useSurahs();
+  
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabParam = searchParams.get('tab');
+  const activeTab = tabParam === 'tafsirs' ? 'tafsirs' : 'explanations';
+  
+  const setActiveTab = (tab: 'explanations' | 'tafsirs') => {
+    setSearchParams({ tab }, { replace: true });
+  };
+
+  const handlers = useSwipeable({
+    onSwipedLeft: () => {
+      if (activeTab === 'explanations') setActiveTab('tafsirs');
+    },
+    onSwipedRight: () => {
+      if (activeTab === 'tafsirs') setActiveTab('explanations');
+    },
+    trackMouse: true,
+    preventScrollOnSwipe: true,
+    delta: 40,
+  });
+
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     const timer = setTimeout(() => setLoading(false), 300);
     return () => clearTimeout(timer);
-  }, []);
+  }, [activeTab]);
   type SortOrder = 'asc' | 'desc' | 'lastEdited' | 'dateAdded';
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
   const [collapsedSurahs, setCollapsedSurahs] = useState<Set<number>>(new Set());
@@ -55,10 +79,23 @@ export default function ManageExplanationsPage() {
     dateAdded: 'Date Added',
   };
 
-  const sortExplanations = (list: typeof explanations) => {
+  const items = activeTab === 'explanations' ? explanations : tafsirRecords;
+
+  const sortItems = (list: (typeof explanations[0] | typeof tafsirRecords[0])[]) => {
     return [...list].sort((a, b) => {
-      const aVerse = (a.concise?.length ? a.concise.map(c => c.verseNumber).filter(v => v > 0) : a.verses || []).sort((x, y) => x - y)[0] ?? 0;
-      const bVerse = (b.concise?.length ? b.concise.map(c => c.verseNumber).filter(v => v > 0) : b.verses || []).sort((x, y) => x - y)[0] ?? 0;
+      let aVerse = 0;
+      let bVerse = 0;
+
+      if (activeTab === 'explanations') {
+        const exp = a as typeof explanations[0];
+        const nextExp = b as typeof explanations[0];
+        aVerse = (exp.concise?.length ? exp.concise.map((c: {verseNumber: number}) => c.verseNumber).filter((v: number) => v > 0) : exp.verses || []).sort((x: number, y: number) => x - y)[0] ?? 0;
+        bVerse = (nextExp.concise?.length ? nextExp.concise.map((c: {verseNumber: number}) => c.verseNumber).filter((v: number) => v > 0) : nextExp.verses || []).sort((x: number, y: number) => x - y)[0] ?? 0;
+      } else {
+        aVerse = (a as typeof tafsirRecords[0]).verseNumber;
+        bVerse = (b as typeof tafsirRecords[0]).verseNumber;
+      }
+
       if (sortOrder === 'asc') return aVerse - bVerse;
       if (sortOrder === 'desc') return bVerse - aVerse;
       if (sortOrder === 'lastEdited') return new Date(b.updatedAt || 0).getTime() - new Date(a.updatedAt || 0).getTime();
@@ -67,17 +104,17 @@ export default function ManageExplanationsPage() {
     });
   };
 
-  // Group explanations by Surah
-  const groupedExplanations = explanations.reduce((acc, exp) => {
-    if (!acc[exp.surahNumber]) acc[exp.surahNumber] = [];
-    acc[exp.surahNumber].push(exp);
+  // Group by Surah
+  const groupedItems = items.reduce((acc, item) => {
+    if (!acc[item.surahNumber]) acc[item.surahNumber] = [];
+    acc[item.surahNumber].push(item);
     return acc;
-  }, {} as Record<number, typeof explanations>);
+  }, {} as Record<number, (typeof explanations[0] | typeof tafsirRecords[0])[]>);
 
   const getSurahName = (num: number) => surahs?.find(s => s.number === num)?.name || `Surah ${num}`;
   const getSurahArabic = (num: number) => surahs?.find(s => s.number === num)?.nameArabic || '';
 
-  const filteredSurahNumbers = Object.keys(groupedExplanations)
+  const filteredSurahNumbers = Object.keys(groupedItems)
     .map(Number)
     .filter(num => {
       const name = getSurahName(num).toLowerCase();
@@ -87,11 +124,15 @@ export default function ManageExplanationsPage() {
     .sort((a, b) => a - b);
 
   const handleDelete = (id: string) => {
-    deleteExplanation(id);
+    if (activeTab === 'explanations') {
+      deleteExplanation(id);
+    } else {
+      deleteTafsirRecord(id);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-background pb-32">
+    <motion.div {...handlers} className="min-h-screen bg-background pb-32">
       {/* Header */}
       <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-md pb-2 pt-1 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border-b border-border/60 transform-gpu">
         <div className="flex items-center gap-3 px-4 h-14">
@@ -103,12 +144,42 @@ export default function ManageExplanationsPage() {
             <ArrowLeft size={22} />
           </button>
           <h1 className="font-display text-xl font-semibold text-foreground flex-1">
-            Manage Explanations
+            Manage {activeTab === 'explanations' ? 'Explanations' : 'Tafsirs'}
           </h1>
         </div>
       </div>
 
       <div className="px-4 mt-6 max-w-md mx-auto space-y-6">
+        {/* Tabs */}
+        <div className="mb-4 rounded-full border border-border bg-secondary/40 p-1 backdrop-blur-sm relative">
+          <div className="grid grid-cols-2 gap-1 relative">
+            {[
+              { id: 'explanations', label: 'Explanations' },
+              { id: 'tafsirs', label: 'Tafsirs' },
+            ].map((tab) => {
+              const active = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as 'explanations' | 'tafsirs')}
+                  className={cn(
+                    "relative rounded-full px-4 py-2.5 text-xs font-semibold transition-colors z-10",
+                    active ? 'text-primary-foreground' : 'text-muted-foreground hover:text-primary'
+                  )}
+                >
+                  {active && (
+                    <motion.div
+                      layoutId="manageTabIndicator"
+                      className="absolute inset-0 bg-primary rounded-full shadow-sm z-[-1]"
+                      transition={{ type: "spring", bounce: 0, duration: 0.4 }}
+                    />
+                  )}
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
 
         {/* Search, Filter & Add New */}
         <div className="flex gap-3">
@@ -146,7 +217,7 @@ export default function ManageExplanationsPage() {
             </DropdownMenuContent>
           </DropdownMenu>
           <button
-            onClick={() => navigate('/explanation-builder')}
+            onClick={() => navigate(activeTab === 'explanations' ? '/explanation-builder' : '/tafsir-builder')}
             className="bg-primary text-primary-foreground px-4 rounded-2xl flex items-center justify-center shadow-sm hover:opacity-90 transition-opacity whitespace-nowrap gap-2 font-medium text-[14px]"
           >
             <Plus size={18} /> Add New
@@ -166,7 +237,7 @@ export default function ManageExplanationsPage() {
                 className="space-y-8 w-full"
               >
                 {(filteredSurahNumbers.length > 0 ? filteredSurahNumbers : [1, 2, 3]).map((surahNum, i) => {
-                  const items = filteredSurahNumbers.length > 0 ? sortExplanations(groupedExplanations[surahNum]) : Array.from({ length: i === 1 ? 3 : 1 });
+                  const subItems = filteredSurahNumbers.length > 0 ? sortItems(groupedItems[surahNum]) : Array.from({ length: i === 1 ? 3 : 1 });
                   return (
                     <div key={surahNum} className="space-y-3">
                       <div className="flex items-center justify-between pb-1 border-b border-border/40">
@@ -180,8 +251,8 @@ export default function ManageExplanationsPage() {
                         </div>
                       </div>
                       <div className="space-y-3 pt-3 pb-1">
-                        {items.map((exp, j) => (
-                          <div key={filteredSurahNumbers.length > 0 ? (exp as {id: string}).id : j} className="bg-muted/10 border border-border/50 rounded-[1.2rem] p-4 flex items-center justify-between gap-4">
+                        {subItems.map((_, j) => (
+                          <div key={filteredSurahNumbers.length > 0 ? (subItems[j] as {id: string}).id : j} className="bg-muted/10 border border-border/50 rounded-[1.2rem] p-4 flex items-center justify-between gap-4">
                             <div className="flex-1 flex items-center min-w-0 pr-4">
                               <div className="h-[34px] w-[100px] rounded-full bg-primary/[0.03] animate-pulse border border-primary/5" />
                             </div>
@@ -204,17 +275,17 @@ export default function ManageExplanationsPage() {
                 transition={{ duration: 0.25 }}
                 className="w-full"
               >
-                {explanations.length === 0 ? (
+                {items.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-20 text-center opacity-60">
                     <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
                       <FileText size={32} className="text-muted-foreground" />
                     </div>
-                    <p className="text-[15px] font-medium text-foreground mb-1">No explanations yet</p>
-                    <p className="text-[13px] text-muted-foreground">Start deep-diving into the Quran by adding your first explanation.</p>
+                    <p className="text-[15px] font-medium text-foreground mb-1">No {activeTab} yet</p>
+                    <p className="text-[13px] text-muted-foreground">Start deep-diving into the Quran by adding your first {activeTab === 'explanations' ? 'explanation' : 'tafsir'}.</p>
                   </div>
                 ) : filteredSurahNumbers.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-10 text-center">
-                    <p className="text-[15px] text-muted-foreground">No matching explanations found.</p>
+                    <p className="text-[15px] text-muted-foreground">No matching {activeTab} found.</p>
                   </div>
                 ) : (
                   <div className="space-y-6">
@@ -259,13 +330,12 @@ export default function ManageExplanationsPage() {
                               >
                                 <div className="space-y-3 pt-3 pb-1">
                                   <AnimatePresence>
-                                    {sortExplanations(groupedExplanations[surahNum]).map(exp => {
-                                      const verseText = (
-                                        formatVerseRange(exp.concise?.length
-                                          ? exp.concise.map(b => b.verseNumber).filter(v => v > 0)
-                                          : exp.verses || [])
-                                      ) || exp.verseRange || '';
-                                      const isMultiple = verseText.includes('-') || verseText.includes(',');
+                                    {sortItems(groupedItems[surahNum]).map(item => {
+                                      const verseText = activeTab === 'explanations' 
+                                        ? (formatVerseRange((item as typeof explanations[0]).concise?.length ? (item as typeof explanations[0]).concise.map((b: {verseNumber: number}) => b.verseNumber).filter((v: number) => v > 0) : (item as typeof explanations[0]).verses || []) || (item as typeof explanations[0]).verseRange || '')
+                                        : `Verse ${(item as typeof tafsirRecords[0]).verseNumber}`;
+                                      
+                                      const isMultiple = activeTab === 'explanations' && (verseText.includes('-') || verseText.includes(','));
 
                                       return (
                                         <motion.div
@@ -273,14 +343,14 @@ export default function ManageExplanationsPage() {
                                           animate={{ opacity: 1, scale: 1 }}
                                           exit={{ opacity: 0, scale: 0.95 }}
                                           transition={{ duration: 0.25, ease: "easeOut" }}
-                                          key={exp.id}
-                                          onClick={() => navigate(`/explanation-view?id=${exp.id}`)}
+                                          key={item.id}
+                                          onClick={() => navigate(activeTab === 'explanations' ? `/explanation-view?id=${item.id}` : `/tafsir-view?surah=${item.surahNumber}&verse=${(item as typeof tafsirRecords[0]).verseNumber}`)}
                                           className="bg-card border border-border rounded-[1.2rem] p-4 shadow-[0_2px_10px_rgba(0,0,0,0.02)] flex items-center justify-between gap-4 group hover:border-primary/40 cursor-pointer active:scale-[0.98] transition-all"
                                         >
                                           <div className="flex-1 flex items-center min-w-0 pr-4">
                                             <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-primary font-medium text-[13px] border border-primary/10 shadow-sm">
                                               <Bookmark size={14} className="opacity-70" />
-                                              {isMultiple ? 'Verses' : 'Verse'} {verseText}
+                                              {activeTab === 'explanations' ? (isMultiple ? 'Verses' : 'Verse') : ''} {verseText}
                                             </div>
                                           </div>
                                           <div className="flex items-center" onClick={e => e.stopPropagation()}>
@@ -294,8 +364,10 @@ export default function ManageExplanationsPage() {
                                                 <DropdownMenuItem 
                                                   onClick={(e) => {
                                                     e.stopPropagation();
-                                                    const firstVerse = (exp.concise?.length ? exp.concise.map(c => c.verseNumber).filter(v => v > 0) : exp.verses || []).sort((x, y) => x - y)[0];
-                                                    navigate(firstVerse ? `/surah/${surahNum}?verse=${firstVerse}` : `/surah/${surahNum}`);
+                                                    const v = activeTab === 'explanations' 
+                                                      ? ((item as typeof explanations[0]).concise?.length ? (item as typeof explanations[0]).concise.map((c: {verseNumber: number}) => c.verseNumber).filter((v: number) => v > 0) : (item as typeof explanations[0]).verses || []).sort((x: number, y: number) => x - y)[0]
+                                                      : (item as typeof tafsirRecords[0]).verseNumber;
+                                                    navigate(v ? `/surah/${surahNum}?verse=${v}` : `/surah/${surahNum}`);
                                                   }}
                                                   className="flex items-center gap-2.5 px-3 py-2.5 outline-none rounded-xl cursor-pointer hover:bg-secondary transition-colors text-[14px] font-medium"
                                                 >
@@ -304,7 +376,7 @@ export default function ManageExplanationsPage() {
                                                 <DropdownMenuItem 
                                                   onClick={(e) => {
                                                     e.stopPropagation();
-                                                    navigate(`/explanation-builder?id=${exp.id}`);
+                                                    navigate(activeTab === 'explanations' ? `/explanation-builder?id=${item.id}` : `/tafsir-builder?surah=${item.surahNumber}&verse=${(item as typeof tafsirRecords[0]).verseNumber}`);
                                                   }}
                                                   className="flex items-center gap-2.5 px-3 py-2.5 outline-none rounded-xl cursor-pointer hover:bg-secondary transition-colors text-[14px] font-medium"
                                                 >
@@ -322,15 +394,15 @@ export default function ManageExplanationsPage() {
                                                   </AlertDialogTrigger>
                                                   <AlertDialogContent className="w-[90vw] max-w-[400px] rounded-[1.5rem]" onClick={e => e.stopPropagation()}>
                                                     <AlertDialogHeader>
-                                                      <AlertDialogTitle>Delete Explanation?</AlertDialogTitle>
+                                                      <AlertDialogTitle>Delete {activeTab === 'explanations' ? 'Explanation' : 'Tafsir'}?</AlertDialogTitle>
                                                       <AlertDialogDescription>
-                                                        Are you sure you want to delete your explanation for <strong>Surah {getSurahName(surahNum)} {isMultiple ? 'Verses' : 'Verse'} {verseText}</strong>? This action cannot be undone.
+                                                        Are you sure you want to delete this {activeTab === 'explanations' ? 'explanation' : 'tafsir'} for <strong>Surah {getSurahName(surahNum)} {verseText}</strong>? This action cannot be undone.
                                                       </AlertDialogDescription>
                                                     </AlertDialogHeader>
                                                     <AlertDialogFooter className="flex gap-2 sm:gap-0 mt-2">
                                                       <AlertDialogCancel className="rounded-xl border-border h-11">Cancel</AlertDialogCancel>
                                                       <AlertDialogAction
-                                                        onClick={() => handleDelete(exp.id)}
+                                                        onClick={() => handleDelete(item.id)}
                                                         className="rounded-xl bg-destructive hover:bg-destructive/90 text-destructive-foreground h-11"
                                                       >
                                                         Delete
@@ -359,6 +431,6 @@ export default function ManageExplanationsPage() {
           </AnimatePresence>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

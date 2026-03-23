@@ -211,7 +211,7 @@ export default function ExplanationViewPage() {
                     <motion.div
                       layoutId="activeTab-view"
                       className="absolute inset-0 bg-primary rounded-full shadow-sm z-[-1]"
-                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      transition={{ type: "spring", bounce: 0, duration: 0.4 }}
                     />
                   )}
                   {tab === 'concise' ? 'Concise' : tab === 'deeper' ? 'Deeper Look' : 'Ask Ustadh'}

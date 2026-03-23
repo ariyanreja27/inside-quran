@@ -5,6 +5,7 @@ import { Star, BookmarkCheck, Highlighter, ArrowLeft, MoreHorizontal, Trash2 } f
 import { motion, AnimatePresence } from 'framer-motion';
 import { useFavorites, useBookmarks } from '@/hooks/useAppStore';
 import { useSurahs, useSurahVerses } from '@/hooks/useQuranData';
+import { useEffect } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,13 +15,12 @@ import {
 
 type SavedView = 'favorites' | 'bookmarks' | 'highlights';
 
-function BookmarkedVerseCard({ surahNumber, verseNumber }: { surahNumber: number; verseNumber: number }) {
+function BookmarkedVerseCard({ surahNumber, verseNumber, onRemove }: { surahNumber: number; verseNumber: number; onRemove: (s: number, v: number) => void }) {
   const { data: surahs } = useSurahs();
   const { data: verses } = useSurahVerses(surahNumber);
   const surah = surahs?.find(s => s.number === surahNumber);
   const verse = verses?.find(a => a.numberInSurah === verseNumber);
   const navigate = useNavigate();
-  const { toggleBookmark } = useBookmarks();
 
   if (!surah || !verse) return null;
 
@@ -52,7 +52,7 @@ function BookmarkedVerseCard({ surahNumber, verseNumber }: { surahNumber: number
             <DropdownMenuItem
               onClick={(e) => {
                 e.stopPropagation();
-                toggleBookmark(surahNumber, verseNumber);
+                onRemove(surahNumber, verseNumber);
               }}
               className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive transition-colors outline-none"
             >
@@ -69,8 +69,9 @@ function BookmarkedVerseCard({ surahNumber, verseNumber }: { surahNumber: number
 export default function SavedPage() {
   const navigate = useNavigate();
   const { favorites, toggleFavorite } = useFavorites();
-  const { bookmarks } = useBookmarks();
+  const { bookmarks, toggleBookmark } = useBookmarks();
   const { data: surahs } = useSurahs();
+  const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const tabParam = searchParams.get('tab') as SavedView | null;
   const activeView = tabParam === 'favorites' || tabParam === 'bookmarks' || tabParam === 'highlights' ? tabParam : 'favorites';
@@ -78,6 +79,12 @@ export default function SavedPage() {
   const setActiveView = (view: SavedView) => {
     setSearchParams({ tab: view }, { replace: true });
   };
+
+  useEffect(() => {
+    setLoading(true);
+    const timer = setTimeout(() => setLoading(false), 300);
+    return () => clearTimeout(timer);
+  }, [activeView]);
 
   const favoriteSurahs = surahs?.filter(s => favorites.includes(s.number)) || [];
   const tabs: { id: SavedView; label: string }[] = [
@@ -132,9 +139,9 @@ export default function SavedPage() {
                 >
                   {active && (
                     <motion.div
-                      layoutId="activeTab-saved"
+                      layoutId="savedTabIndicator"
                       className="absolute inset-0 bg-primary rounded-full shadow-sm z-[-1]"
-                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      transition={{ type: "spring", bounce: 0, duration: 0.4 }}
                     />
                   )}
                   {tab.label}
@@ -145,7 +152,9 @@ export default function SavedPage() {
         </div>
 
         <AnimatePresence mode="wait">
-          {activeView === 'favorites' && (
+          {loading ? (
+            null
+          ) : activeView === 'favorites' && (
             <motion.div
               key="favorites"
               initial={{ opacity: 0, y: 10 }}
@@ -153,11 +162,11 @@ export default function SavedPage() {
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
             >
-              <h2 className="mb-3 flex items-center gap-2 font-display text-sm font-semibold">
+              <h2 className="mb-3 flex items-center gap-2 font-display text-sm font-semibold text-muted-foreground/80">
                 <Star size={14} className="gold-accent" /> Favorite Surahs
               </h2>
               {favoriteSurahs.length === 0 ? (
-                <p className="py-8 text-center text-xs text-muted-foreground">No favorite surahs yet</p>
+                <p className="py-20 text-center text-[13px] text-muted-foreground opacity-60">No favorite surahs yet</p>
               ) : (
                 <div className="flex flex-col">
                   <AnimatePresence initial={false}>
@@ -205,7 +214,7 @@ export default function SavedPage() {
             </motion.div>
           )}
 
-          {activeView === 'bookmarks' && (
+          {!loading && activeView === 'bookmarks' && (
             <motion.div
               key="bookmarks"
               initial={{ opacity: 0, y: 10 }}
@@ -213,34 +222,41 @@ export default function SavedPage() {
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
             >
-              <h2 className="mb-3 flex items-center gap-2 font-display text-sm font-semibold">
+              <h2 className="mb-3 flex items-center gap-2 font-display text-sm font-semibold text-muted-foreground/80">
                 <BookmarkCheck size={14} className="gold-accent" /> Bookmarked Verses
               </h2>
               {bookmarks.length === 0 ? (
-                <p className="py-8 text-center text-xs text-muted-foreground">No bookmarked verses yet</p>
+                <p className="py-20 text-center text-[13px] text-muted-foreground opacity-60">No bookmarked verses yet</p>
               ) : (
                 <div className="flex flex-col">
                   <AnimatePresence initial={false}>
-                    {bookmarks.map((bm) => (
-                      <motion.div 
-                        layout
-                        key={`${bm.surahNumber}-${bm.verseNumber}`} 
-                        initial={{ opacity: 0, scale: 0.95, marginBottom: 8 }} 
-                        animate={{ opacity: 1, scale: 1, height: 'auto', marginBottom: 8 }} 
-                        exit={{ opacity: 0, scale: 0.9, height: 0, marginBottom: 0 }} 
-                        transition={{ duration: 0.2 }}
-                        className="overflow-hidden"
-                      >
-                        <BookmarkedVerseCard surahNumber={bm.surahNumber} verseNumber={bm.verseNumber} />
-                      </motion.div>
-                    ))}
+                    {bookmarks.map((bm) => {
+                      const vNumber = bm.verseNumber || (bm as unknown as Record<string, number>).ayahNumber;
+                      return (
+                        <motion.div 
+                          layout
+                          key={`${bm.surahNumber}-${vNumber}`} 
+                          initial={{ opacity: 0, scale: 0.95, marginBottom: 8 }} 
+                          animate={{ opacity: 1, scale: 1, height: 'auto', marginBottom: 8 }} 
+                          exit={{ opacity: 0, scale: 0.9, height: 0, marginBottom: 0 }} 
+                          transition={{ duration: 0.2 }}
+                          className="overflow-hidden"
+                        >
+                          <BookmarkedVerseCard 
+                            surahNumber={bm.surahNumber} 
+                            verseNumber={vNumber}
+                            onRemove={toggleBookmark}
+                          />
+                        </motion.div>
+                      );
+                    })}
                   </AnimatePresence>
                 </div>
               )}
             </motion.div>
           )}
 
-          {activeView === 'highlights' && (
+          {!loading && activeView === 'highlights' && (
             <motion.div
               key="highlights"
               initial={{ opacity: 0, y: 10 }}
@@ -248,10 +264,10 @@ export default function SavedPage() {
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
             >
-              <h2 className="mb-3 flex items-center gap-2 font-display text-sm font-semibold">
+              <h2 className="mb-3 flex items-center gap-2 font-display text-sm font-semibold text-muted-foreground/80">
                 <Highlighter size={14} className="gold-accent" /> Highlights
               </h2>
-              <p className="py-8 text-center text-xs text-muted-foreground">No highlights yet</p>
+              <p className="py-20 text-center text-[13px] text-muted-foreground opacity-60">No highlights yet</p>
             </motion.div>
           )}
         </AnimatePresence>

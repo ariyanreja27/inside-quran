@@ -10,6 +10,17 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useToast } from '@/hooks/use-toast';
+import LoadingScreen from '@/components/LoadingScreen';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
 
 const generateId = () => {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
@@ -317,8 +328,21 @@ export default function ExplanationBuilderPage() {
     delta: 40,
   });
 
+  if (!isLoaded || !surahs) {
+    return <LoadingScreen message="Preparing Explanation Builder..." />;
+  }
+
   return (
-    <div {...handlers} className="min-h-screen pb-32 bg-background">
+    <AnimatePresence mode="wait">
+      <motion.div
+        key="main-content"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3 }}
+        {...handlers}
+        className="min-h-screen pb-32 bg-background"
+      >
       <div className="sticky top-0 z-40 bg-background border-b border-border/60 pb-2">
         <div className="flex items-center gap-3 px-4 h-16 pt-2">
           <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-xl transition hover:bg-accent text-foreground">
@@ -368,7 +392,7 @@ export default function ExplanationBuilderPage() {
                     <motion.div
                       layoutId="activeTab-builder"
                       className="absolute inset-0 bg-primary rounded-full shadow-md z-[-1]"
-                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      transition={{ type: "spring", bounce: 0, duration: 0.4 }}
                     />
                   )}
                   {m === 'concise' ? 'Concise' : 'Deeper Look'}
@@ -393,9 +417,36 @@ export default function ExplanationBuilderPage() {
                 <div key={bIndex} className="bg-card border border-border rounded-[1.5rem] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] relative" ref={(el) => (blockRefs.current[block.verseNumber] = el)}>
                   <div className="flex items-center justify-between mb-5">
                     <h3 className="font-semibold text-[13px] text-muted-foreground uppercase tracking-widest">VERSE BLOCK</h3>
-                    <button onClick={() => removeVerseBlock(bIndex)} className="text-destructive p-1.5 hover:bg-destructive/10 rounded-lg transition-colors">
-                      <Trash2 size={18} />
-                    </button>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <button className="text-destructive p-1.5 hover:bg-destructive/10 rounded-lg transition-colors outline-none">
+                          <Trash2 size={18} />
+                        </button>
+                      </DialogTrigger>
+                      <DialogContent className="w-[92vw] max-w-[360px] rounded-[1.5rem] z-[100] border-none shadow-2xl p-6 [&>button]:hidden">
+                        <DialogHeader className="space-y-2">
+                          <DialogTitle className="text-center text-lg font-bold">Delete Verse Block?</DialogTitle>
+                          <DialogDescription className="text-center text-sm leading-relaxed">
+                            Are you sure you want to delete this verse block? All concise notes written for this verse will be removed.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter className="flex flex-col gap-2 mt-4">
+                          <DialogClose asChild>
+                            <button
+                              onClick={() => removeVerseBlock(bIndex)}
+                              className="w-full h-11 rounded-xl bg-destructive text-destructive-foreground font-semibold text-[15px] transition-all active:scale-95 hover:bg-destructive/90"
+                            >
+                              Delete
+                            </button>
+                          </DialogClose>
+                          <DialogClose asChild>
+                            <button className="w-full h-11 rounded-xl bg-background text-foreground font-medium text-[15px] transition-all active:scale-95 hover:bg-secondary/50 border border-border">
+                              Cancel
+                            </button>
+                          </DialogClose>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
                   </div>
 
                   <div className="space-y-4">
@@ -453,18 +504,49 @@ export default function ExplanationBuilderPage() {
                         <div className="bg-muted/30 rounded-[1.2rem] p-4 mt-6 border border-border/30">
                           <div className="flex items-center justify-between mb-4 border-b border-border/60 pb-3">
                             <span className="text-[12px] font-semibold text-muted-foreground uppercase tracking-widest pl-1">EXPLANATION</span>
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <button className="text-muted-foreground hover:text-primary transition-colors p-1 outline-none">
+                                  <Info size={18} />
+                                </button>
+                              </PopoverTrigger>
+                              <PopoverContent className="w-[280px] p-4 text-sm bg-popover border-border shadow-2xl rounded-[1.5rem] z-[100] outline-none" align="end">
+                                <div className="space-y-3">
+                                  <h4 className="font-semibold text-foreground text-[14px] px-0.5">Markdown Guide</h4>
+                                  <div className="max-h-[260px] overflow-auto pr-1 custom-scrollbar">
+                                    <div className="grid grid-cols-1 gap-y-1 pb-2">
+                                      {[
+                                        { s: "# H1", d: "Heading 1" },
+                                        { s: "## H2", d: "Heading 2" },
+                                        { s: "### H3", d: "Heading 3" },
+                                        { s: "**bold**", d: "Bold text" },
+                                        { s: "*italic*", d: "Italic text" },
+                                        { s: "***text***", d: "Bold & Italic" },
+                                        { s: "- item", d: "Bullet List" },
+                                        { s: "1. item", d: "Numbered List" },
+                                        { s: "- [ ] task", d: "Task List" },
+                                        { s: "> quote", d: "Blockquote" },
+                                        { s: "`code`", d: "Inline Code" },
+                                        { s: "```code```", d: "Code Block" },
+                                        { s: "[link](url)", d: "Hyperlink" },
+                                        { s: "---", d: "Divider Line" },
+                                        { s: "| a | b |", d: "Table Row" },
+                                        { s: "~~strike~~", d: "Strikethrough" },
+                                      ].map((item, i) => (
+                                        <div key={i} className="grid grid-cols-[90px,1fr] gap-x-3 items-center text-[12px] group py-2 border-b border-border/30 last:border-0 px-0.5">
+                                          <code className="bg-primary/5 text-primary px-1.5 py-0.5 rounded font-mono text-[11px] whitespace-nowrap flex-shrink-0 group-hover:bg-primary/10 transition-colors justify-self-start">
+                                            {item.s}
+                                          </code>
+                                          <span className="text-muted-foreground text-right truncate group-hover:text-foreground transition-colors">{item.d}</span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </div>
+                              </PopoverContent>
+                            </Popover>
                           </div>
                           <div className="space-y-3">
-                            <div className="flex gap-2 mb-2 overflow-x-auto pb-1 scrollbar-hide pt-1 no-swipe">
-                              <button disabled={block.verseNumber <= 0} onClick={() => insertMarkdownToConcise(bIndex, eIndex, '## Heading')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${block.verseNumber <= 0 ? 'opacity-50 cursor-not-allowed' : ''}`}>Heading</button>
-                              <button disabled={block.verseNumber <= 0} onClick={() => insertMarkdownToConcise(bIndex, eIndex, '**bold**')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${block.verseNumber <= 0 ? 'opacity-50 cursor-not-allowed' : ''}`}>Bold</button>
-                              <button disabled={block.verseNumber <= 0} onClick={() => insertMarkdownToConcise(bIndex, eIndex, '- list item')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${block.verseNumber <= 0 ? 'opacity-50 cursor-not-allowed' : ''}`}>List</button>
-                              <button disabled={block.verseNumber <= 0} onClick={() => insertMarkdownToConcise(bIndex, eIndex, '- [ ] task')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${block.verseNumber <= 0 ? 'opacity-50 cursor-not-allowed' : ''}`}>Checklist</button>
-                              <button disabled={block.verseNumber <= 0} onClick={() => insertMarkdownToConcise(bIndex, eIndex, '> quote')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${block.verseNumber <= 0 ? 'opacity-50 cursor-not-allowed' : ''}`}>Quote</button>
-                              <button disabled={block.verseNumber <= 0} onClick={() => insertMarkdownToConcise(bIndex, eIndex, '`code`')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${block.verseNumber <= 0 ? 'opacity-50 cursor-not-allowed' : ''}`}>Code</button>
-                              <button disabled={block.verseNumber <= 0} onClick={() => insertMarkdownToConcise(bIndex, eIndex, '| Header | Header |\n| --- | --- |\n| Cell | Cell |')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${block.verseNumber <= 0 ? 'opacity-50 cursor-not-allowed' : ''}`}>Table</button>
-                              <button disabled={block.verseNumber <= 0} onClick={() => insertMarkdownToConcise(bIndex, eIndex, '[link text](url)')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${block.verseNumber <= 0 ? 'opacity-50 cursor-not-allowed' : ''}`}>Link</button>
-                            </div>
                             <div>
                               <textarea
                                 disabled={block.verseNumber <= 0}
@@ -574,9 +656,36 @@ export default function ExplanationBuilderPage() {
                         <div key={rw.id} className="border border-[#E8E2E2] rounded-2xl p-4 bg-[#FCFAFA] relative">
                           <div className="flex justify-between items-center mb-4">
                             <span className="text-[13px] text-[#8C7D7D]">Root Word</span>
-                            <button onClick={() => { const nr = [...rootWords]; nr.splice(rIndex, 1); setRootWords(nr); }}>
-                              <Trash2 size={16} className="text-[#E05252] hover:text-red-700" />
-                            </button>
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <button className="outline-none">
+                                  <Trash2 size={16} className="text-[#E05252] hover:text-red-700 transition-colors" />
+                                </button>
+                              </DialogTrigger>
+                              <DialogContent className="w-[92vw] max-w-[360px] rounded-[1.5rem] z-[100] border-none shadow-2xl p-6 [&>button]:hidden">
+                                <DialogHeader className="space-y-2">
+                                  <DialogTitle className="text-center text-lg font-bold">Delete Root Word?</DialogTitle>
+                                  <DialogDescription className="text-center text-sm leading-relaxed">
+                                    Are you sure you want to delete this root word analysis? All content inside this block will be lost.
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <DialogFooter className="flex flex-col gap-2 mt-4">
+                                  <DialogClose asChild>
+                                    <button
+                                      onClick={() => { const nr = [...rootWords]; nr.splice(rIndex, 1); setRootWords(nr); }}
+                                      className="w-full h-11 rounded-xl bg-destructive text-destructive-foreground font-semibold text-[15px] transition-all active:scale-95 hover:bg-destructive/90"
+                                    >
+                                      Delete
+                                    </button>
+                                  </DialogClose>
+                                  <DialogClose asChild>
+                                    <button className="w-full h-11 rounded-xl bg-background text-foreground font-medium text-[15px] transition-all active:scale-95 hover:bg-secondary/50 border border-border">
+                                      Cancel
+                                    </button>
+                                  </DialogClose>
+                                </DialogFooter>
+                              </DialogContent>
+                            </Dialog>
                           </div>
                           <div className="space-y-3">
                             <input type="text" value={rw.arabic} onChange={e => { const nr = [...rootWords]; nr[rIndex].arabic = e.target.value; setRootWords(nr); }} className="w-full bg-white border border-[#E8E2E2] rounded-full px-4 py-3 text-[14px] font-arabic focus:outline-none focus:border-[#5A2A31] transition-colors placeholder:text-[#D2C8C8] placeholder:font-body placeholder:text-[14px]" dir="rtl" placeholder="(e.g., يؤمنون) Arabic word" />
@@ -596,15 +705,49 @@ export default function ExplanationBuilderPage() {
                                 </motion.p>
                               )}
                             </div>
-                            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide pt-1 no-swipe">
-                              <button disabled={!rw.arabic.trim()} onClick={() => insertMarkdownToRootWord(rIndex, '## Heading')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${!rw.arabic.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Heading</button>
-                              <button disabled={!rw.arabic.trim()} onClick={() => insertMarkdownToRootWord(rIndex, '**bold**')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${!rw.arabic.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Bold</button>
-                              <button disabled={!rw.arabic.trim()} onClick={() => insertMarkdownToRootWord(rIndex, '- list item')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${!rw.arabic.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>List</button>
-                              <button disabled={!rw.arabic.trim()} onClick={() => insertMarkdownToRootWord(rIndex, '- [ ] task')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${!rw.arabic.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Checklist</button>
-                              <button disabled={!rw.arabic.trim()} onClick={() => insertMarkdownToRootWord(rIndex, '> quote')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${!rw.arabic.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Quote</button>
-                              <button disabled={!rw.arabic.trim()} onClick={() => insertMarkdownToRootWord(rIndex, '`code`')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${!rw.arabic.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Code</button>
-                              <button disabled={!rw.arabic.trim()} onClick={() => insertMarkdownToRootWord(rIndex, '| Header | Header |\n| --- | --- |\n| Cell | Cell |')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${!rw.arabic.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Table</button>
-                              <button disabled={!rw.arabic.trim()} onClick={() => insertMarkdownToRootWord(rIndex, '[link text](url)')} className={`bg-background border border-border text-muted-foreground px-3 py-1.5 rounded-md text-[11px] whitespace-nowrap hover:bg-accent hover:text-primary transition-colors ${!rw.arabic.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Link</button>
+                            <div className="flex items-center justify-between mt-2 mb-1 px-1">
+                              <span className="text-[12px] font-semibold text-muted-foreground uppercase tracking-widest">EXPLANATION</span>
+                              <Popover>
+                                <PopoverTrigger asChild>
+                                  <button className="text-muted-foreground hover:text-primary transition-colors p-1 outline-none">
+                                    <Info size={18} />
+                                  </button>
+                                </PopoverTrigger>
+                                  <PopoverContent className="w-[280px] p-4 text-sm bg-popover border-border shadow-2xl rounded-[1.5rem] z-[100] outline-none" align="end">
+                                    <div className="space-y-3">
+                                      <h4 className="font-semibold text-foreground text-[14px] px-0.5">Markdown Guide</h4>
+                                      <div className="max-h-[260px] overflow-auto pr-1 custom-scrollbar">
+                                        <div className="grid grid-cols-1 gap-y-1 pb-2">
+                                          {[
+                                            { s: "# H1", d: "Heading 1" },
+                                            { s: "## H2", d: "Heading 2" },
+                                            { s: "### H3", d: "Heading 3" },
+                                            { s: "**bold**", d: "Bold text" },
+                                            { s: "*italic*", d: "Italic text" },
+                                            { s: "***text***", d: "Bold & Italic" },
+                                            { s: "- item", d: "Bullet List" },
+                                            { s: "1. item", d: "Numbered List" },
+                                            { s: "- [ ] task", d: "Task List" },
+                                            { s: "> quote", d: "Blockquote" },
+                                            { s: "`code`", d: "Inline Code" },
+                                            { s: "```code```", d: "Code Block" },
+                                            { s: "[link](url)", d: "Hyperlink" },
+                                            { s: "---", d: "Divider Line" },
+                                            { s: "| a | b |", d: "Table Row" },
+                                            { s: "~~strike~~", d: "Strikethrough" },
+                                          ].map((item, i) => (
+                                            <div key={i} className="grid grid-cols-[90px,1fr] gap-x-3 items-center text-[12px] group py-2 border-b border-border/30 last:border-0 px-0.5">
+                                              <code className="bg-primary/5 text-primary px-1.5 py-0.5 rounded font-mono text-[11px] whitespace-nowrap flex-shrink-0 group-hover:bg-primary/10 transition-colors justify-self-start">
+                                                {item.s}
+                                              </code>
+                                              <span className="text-muted-foreground text-right truncate group-hover:text-foreground transition-colors">{item.d}</span>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </PopoverContent>
+                              </Popover>
                             </div>
                             <div className="relative">
                               <textarea
@@ -651,21 +794,82 @@ export default function ExplanationBuilderPage() {
                     <div key={cat.id} className="bg-white border border-[#E8E2E2] rounded-[1.5rem] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] mb-4">
                       <div className="flex justify-between items-center mb-4">
                         <span className="text-[13px] text-[#8C7D7D]">Category</span>
-                        <button onClick={() => { const nc = [...categories]; nc.splice(cIndex, 1); setCategories(nc); }}>
-                          <Trash2 size={16} className="text-[#E05252] hover:text-red-700" />
-                        </button>
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <button className="outline-none">
+                              <Trash2 size={16} className="text-[#E05252] hover:text-red-700 transition-colors" />
+                            </button>
+                          </DialogTrigger>
+                          <DialogContent className="w-[92vw] max-w-[360px] rounded-[1.5rem] z-[100] border-none shadow-2xl p-6 [&>button]:hidden">
+                            <DialogHeader className="space-y-2">
+                              <DialogTitle className="text-center text-lg font-bold">Delete Category?</DialogTitle>
+                              <DialogDescription className="text-center text-sm leading-relaxed">
+                                Are you sure you want to delete this category? All content written inside will be lost.
+                              </DialogDescription>
+                            </DialogHeader>
+                            <DialogFooter className="flex flex-col gap-2 mt-4">
+                              <DialogClose asChild>
+                                <button
+                                  onClick={() => { const nc = [...categories]; nc.splice(cIndex, 1); setCategories(nc); }}
+                                  className="w-full h-11 rounded-xl bg-destructive text-destructive-foreground font-semibold text-[15px] transition-all active:scale-95 hover:bg-destructive/90"
+                                >
+                                  Delete
+                                </button>
+                              </DialogClose>
+                              <DialogClose asChild>
+                                <button className="w-full h-11 rounded-xl bg-background text-foreground font-medium text-[15px] transition-all active:scale-95 hover:bg-secondary/50 border border-border">
+                                  Cancel
+                                </button>
+                              </DialogClose>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
                       </div>
                       <input type="text" value={cat.title} onChange={e => { const nc = [...categories]; nc[cIndex].title = e.target.value; setCategories(nc); }} className="w-full bg-white border border-[#E8E2E2] rounded-full px-4 py-3.5 text-[14px] mb-4 focus:outline-none focus:border-[#5A2A31]" placeholder="Category Title" />
 
-                      <div className="flex gap-2 mb-3 overflow-x-auto pb-1 scrollbar-hide no-swipe">
-                        <button disabled={!cat.title.trim()} onClick={() => insertMarkdown(cIndex, '## Heading')} className={`bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4] ${!cat.title.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Heading</button>
-                        <button disabled={!cat.title.trim()} onClick={() => insertMarkdown(cIndex, '**bold**')} className={`bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4] ${!cat.title.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Bold</button>
-                        <button disabled={!cat.title.trim()} onClick={() => insertMarkdown(cIndex, '- list item')} className={`bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4] ${!cat.title.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>List</button>
-                        <button disabled={!cat.title.trim()} onClick={() => insertMarkdown(cIndex, '- [ ] task')} className={`bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4] ${!cat.title.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Checklist</button>
-                        <button disabled={!cat.title.trim()} onClick={() => insertMarkdown(cIndex, '> quote')} className={`bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4] ${!cat.title.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Quote</button>
-                        <button disabled={!cat.title.trim()} onClick={() => insertMarkdown(cIndex, '`code`')} className={`bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4] ${!cat.title.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Code</button>
-                        <button disabled={!cat.title.trim()} onClick={() => insertMarkdown(cIndex, '| Header | Header |\n| --- | --- |\n| Cell | Cell |')} className={`bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4] ${!cat.title.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Table</button>
-                        <button disabled={!cat.title.trim()} onClick={() => insertMarkdown(cIndex, '[link text](url)')} className={`bg-[#F3F0EF] text-[#8C7D7D] px-3 py-1.5 rounded-md text-[12px] whitespace-nowrap hover:bg-[#EBE6E4] ${!cat.title.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>Link</button>
+                      <div className="flex items-center justify-between mb-3 px-1">
+                        <span className="text-[12px] font-semibold text-[#8C7D7D] uppercase tracking-widest">CONTENT</span>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <button className="text-muted-foreground hover:text-primary transition-colors p-1 outline-none">
+                              <Info size={18} />
+                            </button>
+                          </PopoverTrigger>
+                            <PopoverContent className="w-[280px] p-4 text-sm bg-popover border-border shadow-2xl rounded-[1.5rem] z-[100] outline-none" align="end">
+                              <div className="space-y-3">
+                                <h4 className="font-semibold text-foreground text-[14px] px-0.5">Markdown Guide</h4>
+                                <div className="max-h-[260px] overflow-auto pr-1 custom-scrollbar">
+                                  <div className="grid grid-cols-1 gap-y-1 pb-2">
+                                    {[
+                                      { s: "# H1", d: "Heading 1" },
+                                      { s: "## H2", d: "Heading 2" },
+                                      { s: "### H3", d: "Heading 3" },
+                                      { s: "**bold**", d: "Bold text" },
+                                      { s: "*italic*", d: "Italic text" },
+                                      { s: "***text***", d: "Bold & Italic" },
+                                      { s: "- item", d: "Bullet List" },
+                                      { s: "1. item", d: "Numbered List" },
+                                      { s: "- [ ] task", d: "Task List" },
+                                      { s: "> quote", d: "Blockquote" },
+                                      { s: "`code`", d: "Inline Code" },
+                                      { s: "```code```", d: "Code Block" },
+                                      { s: "[link](url)", d: "Hyperlink" },
+                                      { s: "---", d: "Divider Line" },
+                                      { s: "| a | b |", d: "Table Row" },
+                                      { s: "~~strike~~", d: "Strikethrough" },
+                                    ].map((item, i) => (
+                                      <div key={i} className="grid grid-cols-[90px,1fr] gap-x-3 items-center text-[12px] group py-2 border-b border-border/30 last:border-0 px-0.5">
+                                        <code className="bg-primary/5 text-primary px-1.5 py-0.5 rounded font-mono text-[11px] whitespace-nowrap flex-shrink-0 group-hover:bg-primary/10 transition-colors justify-self-start">
+                                          {item.s}
+                                        </code>
+                                        <span className="text-muted-foreground text-right truncate group-hover:text-foreground transition-colors">{item.d}</span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                            </PopoverContent>
+                        </Popover>
                       </div>
 
                       <div>
@@ -708,7 +912,7 @@ export default function ExplanationBuilderPage() {
         </AnimatePresence>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 p-5 pb-8 bg-gradient-to-t from-background via-background/90 to-transparent z-[70]">
+      <div className="fixed bottom-0 left-0 right-0 p-5 pb-8 bg-gradient-to-t from-background via-background/90 to-transparent z-40">
         <button
           onClick={() => {
             if (isSaveDisabled) {
@@ -772,6 +976,7 @@ export default function ExplanationBuilderPage() {
           Save Explanation
         </button>
       </div>
-    </div>
+      </motion.div>
+    </AnimatePresence>
   );
 }

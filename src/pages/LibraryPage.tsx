@@ -5,6 +5,7 @@ import { useSurahs } from '@/hooks/useQuranData';
 import { useLastRead } from '@/hooks/useAppStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSwipeable } from 'react-swipeable';
+import { useEffect } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,6 +43,13 @@ export default function LibraryPage() {
 
   const tabs = ['last-read', 'downloads'] as const;
   const [activeTab, setActiveTab] = useState<'last-read' | 'downloads'>('last-read');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    const timer = setTimeout(() => setLoading(false), 300);
+    return () => clearTimeout(timer);
+  }, [activeTab]);
 
   const handlers = useSwipeable({
     onSwipedLeft: () => {
@@ -92,9 +100,9 @@ export default function LibraryPage() {
                 >
                   {isActive && (
                     <motion.div
-                      layoutId="activeTab-library"
+                      layoutId="libraryTabIndicator"
                       className="absolute inset-0 bg-primary rounded-full shadow-sm z-[-1]"
-                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      transition={{ type: "spring", bounce: 0, duration: 0.4 }}
                     />
                   )}
                   {tab === 'last-read' ? 'Last Read' : 'Downloads'}
@@ -107,7 +115,9 @@ export default function LibraryPage() {
         {/* Content */}
         <div className="overflow-hidden">
           <AnimatePresence mode="wait">
-            {activeTab === 'last-read' && (
+            {loading ? (
+              null
+            ) : activeTab === 'last-read' && (
               <motion.div
                 key="last-read"
                 initial={{ opacity: 0, y: 10 }}
@@ -122,7 +132,7 @@ export default function LibraryPage() {
                       <Book size={28} />
                     </div>
                     <h3 className="font-display font-medium text-lg text-foreground mb-1">No reading history</h3>
-                    <p className="text-sm text-muted-foreground px-8">
+                    <p className="text-sm text-muted-foreground px-8 text-muted-foreground/80">
                       Your recently read surahs will appear here. Start reading to build your history.
                     </p>
                     <button
@@ -213,7 +223,7 @@ export default function LibraryPage() {
               </motion.div>
             )}
 
-            {activeTab === 'downloads' && (
+            {!loading && activeTab === 'downloads' && (
               <motion.div
                 key="downloads"
                 initial={{ opacity: 0, y: 10 }}
@@ -226,13 +236,14 @@ export default function LibraryPage() {
                   <Download size={36} />
                 </div>
                 <h3 className="font-display font-medium text-xl text-foreground">Downloads</h3>
-                <p className="text-[15px] text-muted-foreground max-w-[280px] leading-relaxed">
+                <p className="text-[15px] text-muted-foreground max-w-[280px] leading-relaxed opacity-70">
                   This feature is coming soon. You'll be able to download recitations and translations for offline use.
                 </p>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
+
       </div>
     </motion.div>
   );

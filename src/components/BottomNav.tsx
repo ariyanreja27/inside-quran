@@ -5,7 +5,7 @@ export default function BottomNav() {
   const location = useLocation();
 
   // Hide BottomNav on detail screens
-  const hiddenOn = ['/surah', '/explanation-builder', '/explanation-view'];
+  const hiddenOn = ['/surah', '/explanation-builder', '/explanation-view', '/tafsir-builder', '/tafsir-view'];
   if (hiddenOn.some(path => location.pathname.startsWith(path))) {
     return null;
   }
