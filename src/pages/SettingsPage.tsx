@@ -1,9 +1,19 @@
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Moon, Globe, Type, BookmarkX, Bell, Cloud, CloudUpload, Eye, Info, RotateCcw, LucideIcon, Minus, Plus, Download, Upload, ArrowLeft } from 'lucide-react';
+import { Moon, Globe, Type, BookmarkX, Bell, Cloud, CloudUpload, Eye, Info, RotateCcw, LucideIcon, Minus, Plus, Download, Upload, ArrowLeft, Settings, Star, Book, PenLine } from 'lucide-react';
 import { useSettings, useDarkMode, useBookmarks, useFavorites, defaultSettings } from '@/hooks/useAppStore';
 import { Slider } from '@/components/ui/slider';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 export default function SettingsPage() {
   const navigate = useNavigate();
@@ -32,21 +42,52 @@ export default function SettingsPage() {
   };
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isExportDialogOpen, setIsExportDialogOpen] = useState(false);
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([
+    'bookmarks', 'favorites', 'explanations', 'tafsirs', 'notes', 'collections', 'settings'
+  ]);
+
+  const backupMapping: Record<string, string[]> = {
+    bookmarks: ['iq-bookmarks'],
+    favorites: ['iq-favorites'],
+    explanations: ['iq-explanations'],
+    tafsirs: ['iq-tafsir-sources', 'iq-tafsir-records'],
+    notes: ['iq-notes'],
+    collections: ['iq-collections'],
+    settings: ['iq-settings', 'iq-dark-mode', 'iq-last-position', 'iq-custom-translations', 'iq-last-read']
+  };
+
+  const toggleType = (type: string) => {
+    setSelectedTypes(prev => 
+      prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
+    );
+  };
 
   const handleExportBackup = () => {
     try {
-      const keysToBackup = [
-        'iq-settings', 'iq-favorites', 'iq-bookmarks', 'iq-explanations', 
-        'iq-last-position', 'iq-dark-mode', 'iq-custom-translations'
-      ];
+      if (selectedTypes.length === 0) {
+        alert("Please select at least one data type to backup.");
+        return;
+      }
+
+      const keysToBackup = selectedTypes.flatMap(type => backupMapping[type]);
       const backupData: Record<string, unknown> = {};
       
       keysToBackup.forEach(key => {
         const item = localStorage.getItem(key);
         if (item) {
-          backupData[key] = JSON.parse(item);
+          try {
+            backupData[key] = JSON.parse(item);
+          } catch (e) {
+            backupData[key] = item;
+          }
         }
       });
+
+      if (Object.keys(backupData).length === 0) {
+        alert("No data found for the selected categories.");
+        return;
+      }
       
       const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
@@ -60,6 +101,7 @@ export default function SettingsPage() {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+      setIsExportDialogOpen(false);
     } catch (error) {
       console.error("Backup failed", error);
       alert("Failed to create backup.");
@@ -78,21 +120,18 @@ export default function SettingsPage() {
         
         if (!data || typeof data !== 'object') throw new Error("Invalid backup file.");
         
-        const validKeys = [
-          'iq-settings', 'iq-favorites', 'iq-bookmarks', 'iq-explanations', 
-          'iq-last-position', 'iq-dark-mode', 'iq-custom-translations'
-        ];
+        const allPossibleKeys = Object.values(backupMapping).flat();
         
         let restoredCount = 0;
-        validKeys.forEach(key => {
-          if (data[key] !== undefined) {
+        Object.keys(data).forEach(key => {
+          if (key.startsWith('iq-')) {
             localStorage.setItem(key, JSON.stringify(data[key]));
             restoredCount++;
           }
         });
 
         if (restoredCount > 0) {
-          alert("Backup restored successfully! The app will now reload to apply changes.");
+          alert(`Backup restored successfully (${restoredCount} items). The app will now reload to apply changes.`);
           window.location.reload();
         } else {
           alert("No valid Inside Quran data found in this backup file.");
@@ -299,10 +338,10 @@ export default function SettingsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium">Export Backup</p>
-                <p className="text-xs text-muted-foreground mt-0.5">Save your explanations & settings</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Save your data to a .json file</p>
               </div>
               <button 
-                onClick={handleExportBackup}
+                onClick={() => setIsExportDialogOpen(true)}
                 className="h-9 px-3.5 bg-primary/10 text-primary rounded-xl flex items-center gap-2 font-medium text-sm transition-colors"
                 aria-label="Export Backup"
               >
@@ -350,6 +389,79 @@ export default function SettingsPage() {
         </motion.section>
         
       </div>
+
+      {/* Backup Selection Dialog */}
+      <Dialog open={isExportDialogOpen} onOpenChange={setIsExportDialogOpen}>
+        <DialogContent className="max-w-[320px] rounded-[2rem] p-0 border-none shadow-2xl bg-white/95 dark:bg-background/95 backdrop-blur-xl overflow-hidden [&>button]:top-7 [&>button]:right-7">
+          <div className="p-6 pb-2 text-center">
+            <DialogHeader className="space-y-1">
+              <DialogTitle className="text-xl font-display font-semibold text-foreground">Backup Data</DialogTitle>
+              <p className="text-[11px] text-muted-foreground opacity-60">Select items to include</p>
+            </DialogHeader>
+          </div>
+          
+          <div className="px-4 py-2 space-y-1.5 max-h-[300px] overflow-y-auto scrollbar-hide">
+            {[
+              { id: 'bookmarks', label: 'Bookmarks', icon: BookmarkX, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+              { id: 'favorites', label: 'Favorites', icon: Star, color: 'text-amber-500', bg: 'bg-amber-500/10' },
+              { id: 'explanations', label: 'Explanations', icon: Globe, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
+              { id: 'tafsirs', label: 'Tafsirs', icon: Book, color: 'text-violet-500', bg: 'bg-violet-500/10' },
+              { id: 'notes', label: 'Notes', icon: PenLine, color: 'text-orange-500', bg: 'bg-orange-500/10' },
+              { id: 'collections', label: 'Collections', icon: Bell, color: 'text-pink-500', bg: 'bg-pink-500/10' },
+              { id: 'settings', label: 'Settings', icon: Settings, color: 'text-slate-500', bg: 'bg-slate-500/10' },
+            ].map((type) => (
+              <motion.div 
+                key={type.id} 
+                whileTap={{ scale: 0.97 }}
+                className={`flex items-center justify-between p-2.5 rounded-xl transition-all cursor-pointer border shadow-sm ${
+                  selectedTypes.includes(type.id) 
+                    ? 'bg-primary/5 border-primary/20' 
+                    : 'bg-secondary/10 border-border/40 hover:bg-secondary/20'
+                }`}
+                onClick={() => toggleType(type.id)}
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${type.bg} ${type.color} shadow-sm`}>
+                    <type.icon size={15} strokeWidth={2} />
+                  </div>
+                  <span className="text-[13px] font-semibold text-foreground/80">{type.label}</span>
+                </div>
+                <div 
+                  className={`w-5 h-5 rounded-full flex items-center justify-center transition-all border ${
+                    selectedTypes.includes(type.id)
+                      ? 'bg-primary border-primary'
+                      : 'bg-transparent border-muted-foreground/20'
+                  }`}
+                >
+                  {selectedTypes.includes(type.id) && (
+                    <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </motion.div>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <DialogFooter className="p-5 pt-2 flex flex-col gap-2 sm:flex-col">
+            <button
+              onClick={handleExportBackup}
+              disabled={selectedTypes.length === 0}
+              className="w-full h-12 bg-primary text-primary-foreground rounded-xl font-bold text-sm shadow-md shadow-primary/10 hover:shadow-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 disabled:opacity-50"
+            >
+              <Download size={16} strokeWidth={2.5} />
+              Export Now
+            </button>
+            <DialogClose asChild>
+              <button className="w-full h-10 text-muted-foreground text-[12px] font-bold hover:text-foreground transition-colors">
+                Maybe later
+              </button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
