@@ -292,7 +292,20 @@ export default function ManageExplanationsPage() {
                                               </DropdownMenuTrigger>
                                               <DropdownMenuContent align="end" className="w-48 p-1.5 rounded-2xl bg-white/95 backdrop-blur-sm dark:bg-black/95 border-border shadow-[0_10px_30px_rgba(0,0,0,0.05)]">
                                                 <DropdownMenuItem 
-                                                  onClick={() => navigate(`/explanation-builder?id=${exp.id}`)}
+                                                  onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    const firstVerse = (exp.concise?.length ? exp.concise.map(c => c.verseNumber).filter(v => v > 0) : exp.verses || []).sort((x, y) => x - y)[0];
+                                                    navigate(firstVerse ? `/surah/${surahNum}?verse=${firstVerse}` : `/surah/${surahNum}`);
+                                                  }}
+                                                  className="flex items-center gap-2.5 px-3 py-2.5 outline-none rounded-xl cursor-pointer hover:bg-secondary transition-colors text-[14px] font-medium"
+                                                >
+                                                  <BookOpen size={16} /> Show Verse
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem 
+                                                  onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    navigate(`/explanation-builder?id=${exp.id}`);
+                                                  }}
                                                   className="flex items-center gap-2.5 px-3 py-2.5 outline-none rounded-xl cursor-pointer hover:bg-secondary transition-colors text-[14px] font-medium"
                                                 >
                                                   <Edit2 size={16} /> Edit
