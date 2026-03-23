@@ -1,10 +1,16 @@
 import { useState } from 'react';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
-import { Star, BookmarkCheck, Highlighter, ArrowLeft } from 'lucide-react';
+import { Star, BookmarkCheck, Highlighter, ArrowLeft, MoreHorizontal, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useFavorites, useBookmarks } from '@/hooks/useAppStore';
 import { useSurahs, useSurahVerses } from '@/hooks/useQuranData';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 type SavedView = 'favorites' | 'bookmarks' | 'highlights';
 
@@ -13,20 +19,50 @@ function BookmarkedVerseCard({ surahNumber, verseNumber }: { surahNumber: number
   const { data: verses } = useSurahVerses(surahNumber);
   const surah = surahs?.find(s => s.number === surahNumber);
   const verse = verses?.find(a => a.numberInSurah === verseNumber);
+  const navigate = useNavigate();
+  const { toggleBookmark } = useBookmarks();
 
   if (!surah || !verse) return null;
 
   return (
-    <Link to={`/surah/${surahNumber}?verse=${verseNumber}`} className="block">
-      <div className="surah-card">
+    <div className="relative group">
+      <div 
+        onClick={() => navigate(`/surah/${surahNumber}?verse=${verseNumber}`)}
+        className="surah-card block cursor-pointer pr-12 active:scale-[0.98] transition-transform origin-left"
+      >
         <div className="mb-2 flex items-center gap-2">
           <BookmarkCheck size={14} className="gold-accent" />
           <span className="text-xs font-medium text-foreground">{surah.name} : {verseNumber}</span>
         </div>
-        <p className="arabic-text line-clamp-1 text-sm text-foreground">{verse.text}</p>
-        <p className="mt-1 line-clamp-1 text-xs text-muted-foreground">{verse.translation}</p>
+        <p className="arabic-text truncate leading-loose py-1 text-sm text-foreground">{verse.text}</p>
+        <p className="mt-1 truncate text-xs text-muted-foreground">{verse.translation}</p>
       </div>
-    </Link>
+
+      <div className="absolute right-3 top-3 z-10">
+        <DropdownMenu modal={false}>
+          <DropdownMenuTrigger asChild>
+            <button
+              onClick={(e) => e.stopPropagation()}
+              className="p-2 -mr-2 rounded-lg hover:bg-secondary transition-colors text-muted-foreground outline-none"
+            >
+              <MoreHorizontal size={20} />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-44 p-1.5 rounded-2xl bg-white/95 backdrop-blur-sm dark:bg-black/95 border-border shadow-xl animate-in fade-in-0 zoom-in-95">
+            <DropdownMenuItem
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleBookmark(surahNumber, verseNumber);
+              }}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive transition-colors outline-none"
+            >
+              <Trash2 size={16} />
+              <span className="font-medium text-[13.5px]">Remove</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </div>
   );
 }
 
@@ -183,12 +219,22 @@ export default function SavedPage() {
               {bookmarks.length === 0 ? (
                 <p className="py-8 text-center text-xs text-muted-foreground">No bookmarked verses yet</p>
               ) : (
-                <div className="space-y-2">
-                  {bookmarks.map((bm, i) => (
-                    <motion.div key={`${bm.surahNumber}-${bm.verseNumber}`} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}>
-                      <BookmarkedVerseCard surahNumber={bm.surahNumber} verseNumber={bm.verseNumber} />
-                    </motion.div>
-                  ))}
+                <div className="flex flex-col">
+                  <AnimatePresence initial={false}>
+                    {bookmarks.map((bm) => (
+                      <motion.div 
+                        layout
+                        key={`${bm.surahNumber}-${bm.verseNumber}`} 
+                        initial={{ opacity: 0, scale: 0.95, marginBottom: 8 }} 
+                        animate={{ opacity: 1, scale: 1, height: 'auto', marginBottom: 8 }} 
+                        exit={{ opacity: 0, scale: 0.9, height: 0, marginBottom: 0 }} 
+                        transition={{ duration: 0.2 }}
+                        className="overflow-hidden"
+                      >
+                        <BookmarkedVerseCard surahNumber={bm.surahNumber} verseNumber={bm.verseNumber} />
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
                 </div>
               )}
             </motion.div>
