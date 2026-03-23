@@ -404,11 +404,11 @@ export default function TafsirBuilderPage() {
       {/* MANAGE SOURCES DRAWER */}
       <Drawer open={isManageSourcesOpen} onOpenChange={handleDrawerOpenChange} repositionInputs={false}>
         <DrawerContent className="rounded-t-[2rem] bg-white border-none focus:outline-none flex flex-col max-h-[85dvh]">
-          <div className="flex-1 overflow-y-auto px-7 pt-5 pb-8 scrollbar-hide">
+          <div className="flex-1 overflow-y-auto px-7 pt-5 pb-4 scrollbar-hide">
             <DrawerTitle className="font-display text-xl mb-1 text-foreground">Manage Tafsir Sources</DrawerTitle>
             <DrawerDescription className="text-muted-foreground mb-6">Add, rename, or delete the Tafsir sources you want to use.</DrawerDescription>
             
-            <div className="space-y-4 mb-8">
+            <div className="space-y-4">
               {sources.map(source => (
                 <div key={source.id} className="flex items-center gap-2 p-3 bg-muted/30 border border-border rounded-2xl">
                   {editingSourceId === source.id ? (
@@ -480,36 +480,37 @@ export default function TafsirBuilderPage() {
                 </div>
               ))}
             </div>
+          </div>
 
-            <div className="pt-4 border-t border-border">
-              <label className="block text-[11px] font-semibold text-muted-foreground uppercase tracking-widest mb-3">Add New Source</label>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="e.g. Tafsir As-Sa'di"
-                  value={newSourceName}
-                  onChange={e => setNewSourceName(e.target.value)}
-                  className="flex-1 bg-muted/30 border border-border rounded-xl p-3 text-[15px] focus:outline-none focus:border-primary transition-colors text-foreground"
-                  onKeyDown={e => {
-                    if (e.key === 'Enter' && newSourceName.trim()) {
-                      addSource(newSourceName.trim());
-                      setNewSourceName('');
-                    }
-                  }}
-                />
-                <button
-                  onClick={() => {
-                    if (newSourceName.trim()) {
-                      addSource(newSourceName.trim());
-                      setNewSourceName('');
-                    }
-                  }}
-                  disabled={!newSourceName.trim()}
-                  className="px-4 bg-primary text-primary-foreground rounded-xl text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed outline-none"
-                >
-                  <Plus size={18} />
-                </button>
-              </div>
+          {/* STICKY ADD NEW SOURCE FOOTER */}
+          <div className="px-7 py-4 border-t border-border bg-white">
+            <label className="block text-[11px] font-semibold text-muted-foreground uppercase tracking-widest mb-3">Add New Source</label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="e.g. Tafsir As-Sa'di"
+                value={newSourceName}
+                onChange={e => setNewSourceName(e.target.value)}
+                className="flex-1 bg-muted/30 border border-border rounded-xl p-3 text-[15px] focus:outline-none focus:border-primary transition-colors text-foreground"
+                onKeyDown={e => {
+                  if (e.key === 'Enter' && newSourceName.trim()) {
+                    addSource(newSourceName.trim());
+                    setNewSourceName('');
+                  }
+                }}
+              />
+              <button
+                onClick={() => {
+                  if (newSourceName.trim()) {
+                    addSource(newSourceName.trim());
+                    setNewSourceName('');
+                  }
+                }}
+                disabled={!newSourceName.trim()}
+                className="px-4 bg-primary text-primary-foreground rounded-xl text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed outline-none"
+              >
+                <Plus size={18} />
+              </button>
             </div>
           </div>
         </DrawerContent>

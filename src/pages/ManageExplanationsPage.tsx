@@ -348,10 +348,22 @@ export default function ManageExplanationsPage() {
                                           className="bg-card border border-border rounded-[1.2rem] p-4 shadow-[0_2px_10px_rgba(0,0,0,0.02)] flex items-center justify-between gap-4 cursor-pointer transition-all"
                                         >
                                           <div className="flex-1 flex items-center min-w-0 pr-4">
-                                            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-primary font-medium text-[13px] border border-primary/10 shadow-sm">
+                                            <button
+                                              type="button"
+                                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-primary font-medium text-[13px] border border-primary/10 shadow-sm hover:bg-primary/5 transition-colors"
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                const v = activeTab === 'explanations'
+                                                  ? ((item as typeof explanations[0]).concise?.length
+                                                    ? (item as typeof explanations[0]).concise.map((c: { verseNumber: number }) => c.verseNumber).filter((v: number) => v > 0).sort((x: number, y: number) => x - y)[0]
+                                                    : (item as typeof explanations[0]).verses || [])
+                                                  : (item as typeof tafsirRecords[0]).verseNumber;
+                                                navigate(v ? `/surah/${surahNum}?verse=${v}` : `/surah/${surahNum}`);
+                                              }}
+                                            >
                                               <Bookmark size={14} className="opacity-70" />
                                               {activeTab === 'explanations' ? (isMultiple ? 'Verses' : 'Verse') : ''} {verseText}
-                                            </div>
+                                            </button>
                                           </div>
                                           <div className="flex items-center" onClick={e => e.stopPropagation()}>
                                             <DropdownMenu>
