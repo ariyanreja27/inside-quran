@@ -315,16 +315,16 @@ export default function SettingsPage() {
             
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium">Restore Backup</p>
+                <p className="text-sm font-medium">Import Backup</p>
                 <p className="text-xs text-muted-foreground mt-0.5">Load from a .json file</p>
               </div>
               <button 
                 onClick={() => fileInputRef.current?.click()}
                 className="h-9 px-3.5 bg-secondary text-foreground rounded-xl flex items-center gap-2 font-medium text-sm transition-colors"
-                aria-label="Restore Backup"
+                 aria-label="Import Backup"
               >
                 <Upload size={15} />
-                Restore
+                Import
               </button>
               <input 
                 type="file" 
