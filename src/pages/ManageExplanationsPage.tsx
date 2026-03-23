@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, Edit2, Trash2, FileText, Search, BookOpen, Bookmark, ArrowUpDown, Check, ChevronUp, ChevronDown, MoreVertical } from 'lucide-react';
+import { ArrowLeft, Plus, Edit2, Trash2, FileText, Search, Eye, Bookmark, ArrowUpDown, Check, ChevronUp, ChevronDown, MoreVertical } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useExplanations } from '@/hooks/useAppStore';
 import { useSurahs } from '@/hooks/useQuranData';
@@ -299,7 +299,7 @@ export default function ManageExplanationsPage() {
                                                   }}
                                                   className="flex items-center gap-2.5 px-3 py-2.5 outline-none rounded-xl cursor-pointer hover:bg-secondary transition-colors text-[14px] font-medium"
                                                 >
-                                                  <BookOpen size={16} /> Show Verse
+                                                  <Eye size={16} /> Show Verse
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem 
                                                   onClick={(e) => {
