@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from 'react';
 import { useLocalStorage } from './useLocalStorage';
-import type { Explanation, Bookmark, LastPosition, LastReadItem } from '@/types/quran';
+import type { Explanation, Bookmark, LastPosition, LastReadItem, Collection, CollectionItem } from '@/types/quran';
 
 export interface TafsirSource {
   id: string;
@@ -241,4 +241,60 @@ export function useCustomTafsirs() {
   };
 
   return { tafsirRecords, getTafsirRecord, hasTafsir, saveTafsirRecord, deleteTafsirRecord };
+}
+
+export function useCollections() {
+  const [collections, setCollections] = useLocalStorage<Collection[]>('iq-collections', []);
+
+  const addCollection = (name: string) => {
+    const newCollection: Collection = {
+      id: Date.now().toString(),
+      name,
+      items: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    setCollections(prev => [...prev, newCollection]);
+  };
+
+  const deleteCollection = (id: string) => {
+    setCollections(prev => prev.filter(c => c.id !== id));
+  };
+
+  const renameCollection = (id: string, name: string) => {
+    setCollections(prev => prev.map(c => 
+      c.id === id ? { ...c, name, updatedAt: new Date().toISOString() } : c
+    ));
+  };
+
+  const addItemToCollection = (collectionId: string, surahNumber: number, verseNumber: number) => {
+    setCollections(prev => prev.map(c => {
+      if (c.id === collectionId) {
+        const itemExists = c.items.some(item => item.surahNumber === surahNumber && item.verseNumber === verseNumber);
+        if (itemExists) return c;
+        
+        return {
+          ...c,
+          items: [...c.items, { surahNumber, verseNumber, timestamp: new Date().toISOString() }],
+          updatedAt: new Date().toISOString(),
+        };
+      }
+      return c;
+    }));
+  };
+
+  const removeItemFromCollection = (collectionId: string, surahNumber: number, verseNumber: number) => {
+    setCollections(prev => prev.map(c => {
+      if (c.id === collectionId) {
+        return {
+          ...c,
+          items: c.items.filter(item => !(item.surahNumber === surahNumber && item.verseNumber === verseNumber)),
+          updatedAt: new Date().toISOString(),
+        };
+      }
+      return c;
+    }));
+  };
+
+  return { collections, addCollection, deleteCollection, renameCollection, addItemToCollection, removeItemFromCollection };
 }

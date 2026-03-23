@@ -76,3 +76,17 @@ export interface LastReadItem {
   verseNumber: number;
   timestamp: string;
 }
+
+export interface CollectionItem {
+  surahNumber: number;
+  verseNumber: number;
+  timestamp: string;
+}
+
+export interface Collection {
+  id: string;
+  name: string;
+  items: CollectionItem[];
+  createdAt: string;
+  updatedAt: string;
+}
