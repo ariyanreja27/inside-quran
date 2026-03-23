@@ -156,9 +156,8 @@ export default function LibraryPage() {
                               onClick={() => navigate(`/surah/${item.surahNumber}?verse=${item.verseNumber}`)}
                               className="flex-1 flex items-center p-4 cursor-pointer active:scale-[0.98] active:bg-secondary/60 transition-transform origin-left rounded-[1.25rem] group"
                             >
-                              <div className="relative flex items-center justify-center w-12 h-12 shrink-0">
-                                <div className="absolute inset-0 bg-primary/10 rounded-full transition-transform group-hover:scale-110"></div>
-                                <span className="relative z-10 text-primary font-bold text-sm">
+                              <div className="flex-shrink-0 w-10 h-10 rounded-full border border-border flex items-center justify-center bg-muted/30 transition-transform group-hover:scale-105">
+                                <span className="text-xs font-mono text-muted-foreground tabular-nums">
                                   {surah.number}
                                 </span>
                               </div>
