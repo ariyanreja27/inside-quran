@@ -39,7 +39,7 @@ export default function SettingsPage() {
         'iq-settings', 'iq-favorites', 'iq-bookmarks', 'iq-explanations', 
         'iq-last-position', 'iq-dark-mode', 'iq-custom-translations'
       ];
-      const backupData: Record<string, any> = {};
+      const backupData: Record<string, unknown> = {};
       
       keysToBackup.forEach(key => {
         const item = localStorage.getItem(key);
@@ -112,7 +112,16 @@ export default function SettingsPage() {
     </h2>
   );
 
-  const Stepper = ({ label, value, unit, min, max, step, onChange, description }: any) => {
+  const Stepper = ({ label, value, unit, min, max, step, onChange, description }: {
+    label: string;
+    value: number;
+    unit: string;
+    min: number;
+    max: number;
+    step: number;
+    onChange: (val: number) => void;
+    description?: string;
+  }) => {
     return (
       <div className="flex items-center justify-between group">
         <div className="flex-1 pr-4 text-left">

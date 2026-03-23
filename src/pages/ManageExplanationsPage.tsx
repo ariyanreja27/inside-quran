@@ -181,7 +181,7 @@ export default function ManageExplanationsPage() {
                       </div>
                       <div className="space-y-3 pt-3 pb-1">
                         {items.map((exp, j) => (
-                          <div key={filteredSurahNumbers.length > 0 ? (exp as any).id : j} className="bg-muted/10 border border-border/50 rounded-[1.2rem] p-4 flex items-center justify-between gap-4">
+                          <div key={filteredSurahNumbers.length > 0 ? (exp as {id: string}).id : j} className="bg-muted/10 border border-border/50 rounded-[1.2rem] p-4 flex items-center justify-between gap-4">
                             <div className="flex-1 flex items-center min-w-0 pr-4">
                               <div className="h-[34px] w-[100px] rounded-full bg-primary/[0.03] animate-pulse border border-primary/5" />
                             </div>

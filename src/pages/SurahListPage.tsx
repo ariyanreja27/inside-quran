@@ -98,8 +98,8 @@ export default function SurahListPage() {
               <button
                 key={f.value}
                 onClick={() => setFilter(f.value)}
-                className={`relative px-3.5 py-1.5 rounded-full text-[13px] font-medium transition-colors outline-none ${
-                  isActive ? 'text-primary-foreground' : 'text-muted-foreground hover:text-foreground'
+                className={`relative px-3.5 py-1 rounded-full text-[13px] font-medium transition-colors outline-none ${
+                  isActive ? 'text-primary-foreground' : 'text-foreground/80 hover:text-foreground'
                 }`}
               >
                 {/* Base background for all buttons */}
