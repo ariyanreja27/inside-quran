@@ -257,6 +257,9 @@ export default function TafsirBuilderPage() {
                 ))}
               </SelectContent>
             </Select>
+            {!selectedSurah && (
+              <p className="text-destructive text-[12px] font-medium mt-2 ml-1">Please select a Surah first.</p>
+            )}
           </div>
           <div className="w-full">
             <label className="block text-[11px] font-medium text-muted-foreground uppercase tracking-widest mb-2 ml-1">VERSE</label>
@@ -274,6 +277,9 @@ export default function TafsirBuilderPage() {
                 </SelectContent>
               )}
             </Select>
+            {!selectedVerse && selectedSurah && (
+              <p className="text-destructive text-[12px] font-medium mt-2 ml-1">Select a verse number first to write a Tafsir.</p>
+            )}
           </div>
         </div>
 
@@ -330,62 +336,63 @@ export default function TafsirBuilderPage() {
         </div>
 
         {/* EDITOR AREA */}
-        {activeSourceId && selectedSurah && selectedVerse && (
-          <motion.div key={activeSourceId} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-card border border-border rounded-[1.5rem] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] relative">
-            <div className="flex items-center justify-between mb-4 border-b border-border/60 pb-3">
-              <span className="text-[12px] font-semibold text-muted-foreground uppercase tracking-widest pl-1">TAFSIR: {sources.find(s => s.id === activeSourceId)?.name.toUpperCase()}</span>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <button className="text-muted-foreground transition-colors p-1 outline-none">
-                    <Info size={18} />
-                  </button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[280px] p-4 text-sm bg-popover border-border shadow-2xl rounded-[1.5rem] z-[100] outline-none" align="end">
-                  <div className="space-y-3">
-                    <h4 className="font-semibold text-foreground text-[14px] px-0.5">Markdown Guide</h4>
-                    <div className="max-h-[260px] overflow-auto pr-1 custom-scrollbar">
-                      <div className="grid grid-cols-1 gap-y-1 pb-2">
-                        {[
-                          { s: "# H1", d: "Heading 1" },
-                          { s: "## H2", d: "Heading 2" },
-                          { s: "### H3", d: "Heading 3" },
-                          { s: "**bold**", d: "Bold text" },
-                          { s: "*italic*", d: "Italic text" },
-                          { s: "***text***", d: "Bold & Italic" },
-                          { s: "- item", d: "Bullet List" },
-                          { s: "1. item", d: "Numbered List" },
-                          { s: "- [ ] task", d: "Task List" },
-                          { s: "> quote", d: "Blockquote" },
-                          { s: "`code`", d: "Inline Code" },
-                          { s: "```code```", d: "Code Block" },
-                          { s: "[link](url)", d: "Hyperlink" },
-                          { s: "---", d: "Divider Line" },
-                          { s: "| a | b |", d: "Table Row" },
-                          { s: "~~strike~~", d: "Strikethrough" },
-                        ].map((item, i) => (
-                          <div key={i} className="grid grid-cols-[90px,1fr] gap-x-3 items-center text-[12px] group py-2 border-b border-border/30 last:border-0 px-0.5">
-                            <code className="bg-primary/5 text-primary px-1.5 py-0.5 rounded font-mono text-[11px] whitespace-nowrap flex-shrink-0 transition-colors justify-self-start">
-                              {item.s}
-                            </code>
-                            <span className="text-muted-foreground text-right truncate transition-colors">{item.d}</span>
-                          </div>
-                        ))}
-                      </div>
+        <div className="bg-card border border-border rounded-[1.5rem] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] relative">
+          <div className="flex items-center justify-between mb-4 border-b border-border/60 pb-3">
+            <span className="text-[12px] font-semibold text-muted-foreground uppercase tracking-widest pl-1">
+              TAFSIR: {sources.find(s => s.id === activeSourceId)?.name.toUpperCase() || 'SELECT SOURCE'}
+            </span>
+            <Popover>
+              <PopoverTrigger asChild>
+                <button className="text-muted-foreground transition-colors p-1 outline-none">
+                  <Info size={18} />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[280px] p-4 text-sm bg-popover border-border shadow-2xl rounded-[1.5rem] z-[100] outline-none" align="end">
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-foreground text-[14px] px-0.5">Markdown Guide</h4>
+                  <div className="max-h-[260px] overflow-auto pr-1 custom-scrollbar">
+                    <div className="grid grid-cols-1 gap-y-1 pb-2">
+                      {[
+                        { s: "# H1", d: "Heading 1" },
+                        { s: "## H2", d: "Heading 2" },
+                        { s: "### H3", d: "Heading 3" },
+                        { s: "**bold**", d: "Bold text" },
+                        { s: "*italic*", d: "Italic text" },
+                        { s: "***text***", d: "Bold & Italic" },
+                        { s: "- item", d: "Bullet List" },
+                        { s: "1. item", d: "Numbered List" },
+                        { s: "- [ ] task", d: "Task List" },
+                        { s: "> quote", d: "Blockquote" },
+                        { s: "`code`", d: "Inline Code" },
+                        { s: "```code```", d: "Code Block" },
+                        { s: "[link](url)", d: "Hyperlink" },
+                        { s: "---", d: "Divider Line" },
+                        { s: "| a | b |", d: "Table Row" },
+                        { s: "~~strike~~", d: "Strikethrough" },
+                      ].map((item, i) => (
+                        <div key={i} className="grid grid-cols-[90px,1fr] gap-x-3 items-center text-[12px] group py-2 border-b border-border/30 last:border-0 px-0.5">
+                          <code className="bg-primary/5 text-primary px-1.5 py-0.5 rounded font-mono text-[11px] whitespace-nowrap flex-shrink-0 transition-colors justify-self-start">
+                            {item.s}
+                          </code>
+                          <span className="text-muted-foreground text-right truncate transition-colors">{item.d}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                </PopoverContent>
-              </Popover>
-            </div>
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
 
-            <textarea
-              value={notes[activeSourceId] || ''}
-              onChange={e => handleNoteChange(e.target.value)}
-              dir={settings.language === 'ur' ? 'rtl' : 'ltr'}
-              className="w-full bg-background/50 border border-border focus:border-primary rounded-xl p-4 text-[15px] font-display text-foreground placeholder:text-muted-foreground min-h-[220px] resize-y outline-none transition-colors"
-              placeholder={`Write your tafsir notes from ${sources.find(s => s.id === activeSourceId)?.name} here...`}
-            />
-          </motion.div>
-        )}
+          <textarea
+            value={notes[activeSourceId] || ''}
+            onChange={e => handleNoteChange(e.target.value)}
+            disabled={!selectedSurah || !selectedVerse}
+            dir={settings.language === 'ur' ? 'rtl' : 'ltr'}
+            className="w-full bg-background/50 border border-border focus:border-primary rounded-xl p-4 text-[15px] font-display text-foreground placeholder:text-muted-foreground min-h-[220px] resize-y outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            placeholder={!selectedSurah || !selectedVerse ? "Select a Surah and Verse first to start writing..." : `Write your tafsir notes from ${sources.find(s => s.id === activeSourceId)?.name} here...`}
+          />
+        </div>
       </div>
 
       <div className={`fixed bottom-0 left-0 right-0 p-5 pb-8 bg-gradient-to-t from-background via-background/90 to-transparent transition-all duration-300 ${isManageSourcesOpen ? 'z-30 opacity-0 pointer-events-none' : 'z-[45] opacity-100'}`}>

@@ -3,8 +3,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Plus, Edit2, Trash2, FileText, Search, Eye, Bookmark, ArrowUpDown, Check, ChevronUp, ChevronDown, MoreVertical } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSwipeable } from 'react-swipeable';
-import { useExplanations, useCustomTafsirs } from '@/hooks/useAppStore';
-import { useSurahs } from '@/hooks/useQuranData';
+import { useExplanations, useCustomTafsirs, useNotes } from '@/hooks/useAppStore';
+import { useSurahs, useSurahVerses } from '@/hooks/useQuranData';
 import { formatVerseRange, cn } from '@/lib/utils';
 import {
   DropdownMenu,
@@ -25,26 +25,29 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-export default function ManageExplanationsPage() {
+export default function ManagePage() {
   const navigate = useNavigate();
   const { explanations, deleteExplanation } = useExplanations();
   const { tafsirRecords, deleteTafsirRecord } = useCustomTafsirs();
+  const { notes, addNote, updateNote, deleteNote } = useNotes();
   const { data: surahs } = useSurahs();
   
   const [searchParams, setSearchParams] = useSearchParams();
   const tabParam = searchParams.get('tab');
-  const activeTab = tabParam === 'tafsirs' ? 'tafsirs' : 'explanations';
+  const activeTab = (tabParam as 'explanations' | 'tafsirs' | 'notes') || 'explanations';
   
-  const setActiveTab = (tab: 'explanations' | 'tafsirs') => {
+  const setActiveTab = (tab: 'explanations' | 'tafsirs' | 'notes') => {
     setSearchParams({ tab }, { replace: true });
   };
 
   const handlers = useSwipeable({
     onSwipedLeft: () => {
       if (activeTab === 'explanations') setActiveTab('tafsirs');
+      else if (activeTab === 'tafsirs') setActiveTab('notes');
     },
     onSwipedRight: () => {
-      if (activeTab === 'tafsirs') setActiveTab('explanations');
+      if (activeTab === 'notes') setActiveTab('tafsirs');
+      else if (activeTab === 'tafsirs') setActiveTab('explanations');
     },
     trackMouse: true,
     preventScrollOnSwipe: true,
@@ -59,6 +62,7 @@ export default function ManageExplanationsPage() {
     const timer = setTimeout(() => setLoading(false), 300);
     return () => clearTimeout(timer);
   }, [activeTab]);
+
   type SortOrder = 'asc' | 'desc' | 'lastEdited' | 'dateAdded';
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
   const [collapsedSurahs, setCollapsedSurahs] = useState<Set<number>>(new Set());
@@ -78,10 +82,9 @@ export default function ManageExplanationsPage() {
     lastEdited: 'Last Edited',
     dateAdded: 'Date Added',
   };
+  const items = activeTab === 'explanations' ? explanations : activeTab === 'tafsirs' ? tafsirRecords : notes;
 
-  const items = activeTab === 'explanations' ? explanations : tafsirRecords;
-
-  const sortItems = (list: (typeof explanations[0] | typeof tafsirRecords[0])[]) => {
+  const sortItems = (list: (typeof explanations[0] | typeof tafsirRecords[0] | typeof notes[0])[]) => {
     return [...list].sort((a, b) => {
       let aVerse = 0;
       let bVerse = 0;
@@ -91,9 +94,12 @@ export default function ManageExplanationsPage() {
         const nextExp = b as typeof explanations[0];
         aVerse = (exp.concise?.length ? exp.concise.map((c: {verseNumber: number}) => c.verseNumber).filter((v: number) => v > 0) : exp.verses || []).sort((x: number, y: number) => x - y)[0] ?? 0;
         bVerse = (nextExp.concise?.length ? nextExp.concise.map((c: {verseNumber: number}) => c.verseNumber).filter((v: number) => v > 0) : nextExp.verses || []).sort((x: number, y: number) => x - y)[0] ?? 0;
-      } else {
+      } else if (activeTab === 'tafsirs') {
         aVerse = (a as typeof tafsirRecords[0]).verseNumber;
         bVerse = (b as typeof tafsirRecords[0]).verseNumber;
+      } else {
+        aVerse = (a as typeof notes[0]).verseNumber;
+        bVerse = (b as typeof notes[0]).verseNumber;
       }
 
       if (sortOrder === 'asc') return aVerse - bVerse;
@@ -109,7 +115,7 @@ export default function ManageExplanationsPage() {
     if (!acc[item.surahNumber]) acc[item.surahNumber] = [];
     acc[item.surahNumber].push(item);
     return acc;
-  }, {} as Record<number, (typeof explanations[0] | typeof tafsirRecords[0])[]>);
+  }, {} as Record<number, (typeof explanations[0] | typeof tafsirRecords[0] | typeof notes[0])[]>);
 
   const getSurahName = (num: number) => surahs?.find(s => s.number === num)?.name || `Surah ${num}`;
   const getSurahArabic = (num: number) => surahs?.find(s => s.number === num)?.nameArabic || '';
@@ -126,25 +132,30 @@ export default function ManageExplanationsPage() {
   const handleDelete = (id: string) => {
     if (activeTab === 'explanations') {
       deleteExplanation(id);
-    } else {
+    } else if (activeTab === 'tafsirs') {
       deleteTafsirRecord(id);
+    } else {
+      deleteNote(id);
     }
   };
+
+
+
 
   return (
     <motion.div {...handlers} className="min-h-screen bg-background pb-32">
       {/* Header */}
       <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-md pb-2 pt-1 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border-b border-border/60 transform-gpu">
         <div className="flex items-center gap-3 px-4 h-14">
-          <button
-            onClick={() => navigate('/')}
+          <button 
+            onClick={() => navigate(-1)} 
             className="w-10 h-10 flex items-center justify-center rounded-full transition-all text-foreground outline-none"
             aria-label="Back"
           >
             <ArrowLeft size={22} />
           </button>
           <h1 className="font-display text-xl font-semibold text-foreground flex-1">
-            Manage {activeTab === 'explanations' ? 'Explanations' : 'Tafsirs'}
+            Manage
           </h1>
         </div>
       </div>
@@ -152,10 +163,11 @@ export default function ManageExplanationsPage() {
       <div className="px-4 mt-6 max-w-md mx-auto space-y-6">
         {/* Tabs */}
         <div className="mb-4 rounded-full border border-border bg-secondary/40 p-1 backdrop-blur-sm relative">
-          <div className="grid grid-cols-2 gap-1 relative">
+          <div className="grid grid-cols-3 gap-1 relative">
             {[
               { id: 'explanations', label: 'Explanations' },
               { id: 'tafsirs', label: 'Tafsirs' },
+              { id: 'notes', label: 'Notes' },
             ].map((tab) => {
               const active = activeTab === tab.id;
               return (
@@ -217,7 +229,13 @@ export default function ManageExplanationsPage() {
             </DropdownMenuContent>
           </DropdownMenu>
           <button
-            onClick={() => navigate(activeTab === 'explanations' ? '/explanation-builder' : '/tafsir-builder')}
+            onClick={() => {
+              if (activeTab === 'notes') {
+                navigate('/note-builder');
+              } else {
+                navigate(activeTab === 'explanations' ? '/explanation-builder' : '/tafsir-builder');
+              }
+            }}
             className="bg-primary text-primary-foreground px-4 rounded-2xl flex items-center justify-center shadow-sm whitespace-nowrap gap-2 font-medium text-[14px]"
           >
             <Plus size={18} /> Add New
@@ -236,42 +254,39 @@ export default function ManageExplanationsPage() {
                 transition={{ duration: 0.2 }}
                 className="space-y-8 w-full"
               >
-                {(filteredSurahNumbers.length > 0 ? filteredSurahNumbers : [1, 2, 3]).map((surahNum, i) => {
-                  const subItems = filteredSurahNumbers.length > 0 ? sortItems(groupedItems[surahNum]) : Array.from({ length: i === 1 ? 3 : 1 });
-                  return (
-                    <div key={surahNum} className="space-y-3">
-                      <div className="flex items-center justify-between pb-1 border-b border-border/40">
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 rounded-full bg-primary/5 animate-pulse" />
-                          <div className="h-4 w-24 bg-muted/50 animate-pulse rounded" />
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <div className="h-6 w-16 bg-muted/40 animate-pulse rounded" />
-                          <div className="w-6 h-6 bg-muted/40 animate-pulse rounded-md" />
-                        </div>
+                {[1, 2, 3].map((num) => (
+                  <div key={num} className="space-y-3">
+                    <div className="flex items-center justify-between pb-1 border-b border-border/40">
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-full bg-primary/5 animate-pulse" />
+                        <div className="h-4 w-24 bg-muted/50 animate-pulse rounded" />
                       </div>
-                      <div className="space-y-3 pt-3 pb-1">
-                        {subItems.map((_, j) => (
-                          <div key={filteredSurahNumbers.length > 0 ? (subItems[j] as {id: string}).id : j} className="bg-muted/10 border border-border/50 rounded-[1.2rem] p-4 flex items-center justify-between gap-4">
-                            <div className="flex-1 flex items-center min-w-0 pr-4">
-                              <div className="h-[34px] w-[100px] rounded-full bg-primary/[0.03] animate-pulse border border-primary/5" />
-                            </div>
-                            <div className="flex items-center">
-                              <div className="w-10 h-10 rounded-full bg-secondary/40 animate-pulse" />
-                            </div>
-                          </div>
-                        ))}
+                      <div className="flex items-center gap-3">
+                        <div className="h-6 w-16 bg-muted/40 animate-pulse rounded" />
+                        <div className="w-6 h-6 bg-muted/40 animate-pulse rounded-md" />
                       </div>
                     </div>
-                  );
-                })}
+                    <div className="space-y-3 pt-3 pb-1">
+                      {[1].map((_, j) => (
+                        <div key={j} className="bg-muted/10 border border-border/50 rounded-[1.2rem] p-4 flex items-center justify-between gap-4">
+                          <div className="flex-1 flex items-center min-w-0 pr-4">
+                            <div className="h-[34px] w-[100px] rounded-full bg-primary/[0.03] animate-pulse border border-primary/5" />
+                          </div>
+                          <div className="flex items-center">
+                            <div className="w-10 h-10 rounded-full bg-secondary/40 animate-pulse" />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </motion.div>
             ) : (
               <motion.div
                 key="content"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.25 }}
                 className="w-full"
               >
@@ -344,7 +359,11 @@ export default function ManageExplanationsPage() {
                                           exit={{ opacity: 0, scale: 0.95 }}
                                           transition={{ duration: 0.25, ease: "easeOut" }}
                                           key={item.id}
-                                          onClick={() => navigate(activeTab === 'explanations' ? `/explanation-view?id=${item.id}` : `/tafsir-view?surah=${item.surahNumber}&verse=${(item as typeof tafsirRecords[0]).verseNumber}`)}
+                                          onClick={() => {
+                                            if (activeTab === 'explanations') navigate(`/explanation-view?id=${item.id}`);
+                                            else if (activeTab === 'tafsirs') navigate(`/tafsir-view?surah=${item.surahNumber}&verse=${(item as typeof tafsirRecords[0]).verseNumber}`);
+                                            else navigate(`/note-view?id=${item.id}`);
+                                          }}
                                           className="bg-card border border-border rounded-[1.2rem] p-4 shadow-[0_2px_10px_rgba(0,0,0,0.02)] flex items-center justify-between gap-4 cursor-pointer transition-all"
                                         >
                                           <div className="flex-1 flex items-center min-w-0 pr-4">
@@ -362,7 +381,7 @@ export default function ManageExplanationsPage() {
                                               }}
                                             >
                                               <Bookmark size={14} className="opacity-70" />
-                                              {activeTab === 'explanations' ? (isMultiple ? 'Verses' : 'Verse') : ''} {verseText}
+                                              {activeTab === 'explanations' ? (isMultiple ? 'Verses' : 'Verse') : 'Verse'} {verseText.replace('Verse ', '')}
                                             </button>
                                           </div>
                                           <div className="flex items-center" onClick={e => e.stopPropagation()}>
@@ -388,7 +407,11 @@ export default function ManageExplanationsPage() {
                                                 <DropdownMenuItem 
                                                   onClick={(e) => {
                                                     e.stopPropagation();
-                                                    navigate(activeTab === 'explanations' ? `/explanation-builder?id=${item.id}` : `/tafsir-builder?surah=${item.surahNumber}&verse=${(item as typeof tafsirRecords[0]).verseNumber}`);
+                                                    if (activeTab === 'notes') {
+                                                      navigate(`/note-builder?id=${item.id}`);
+                                                    } else {
+                                                      navigate(activeTab === 'explanations' ? `/explanation-builder?id=${item.id}` : `/tafsir-builder?surah=${item.surahNumber}&verse=${(item as typeof tafsirRecords[0]).verseNumber}`);
+                                                    }
                                                   }}
                                                   className="flex items-center gap-2.5 px-3 py-2.5 outline-none rounded-xl cursor-pointer transition-colors text-[14px] font-medium"
                                                 >

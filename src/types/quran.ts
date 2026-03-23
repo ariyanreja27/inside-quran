@@ -90,3 +90,12 @@ export interface Collection {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface Note {
+  id: string;
+  surahNumber: number;
+  verseNumber: number;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+}

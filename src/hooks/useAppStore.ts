@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from 'react';
 import { useLocalStorage } from './useLocalStorage';
-import type { Explanation, Bookmark, LastPosition, LastReadItem, Collection, CollectionItem } from '@/types/quran';
+import type { Explanation, Bookmark, LastPosition, LastReadItem, Collection, CollectionItem, Note } from '@/types/quran';
 
 export interface TafsirSource {
   id: string;
@@ -297,4 +297,86 @@ export function useCollections() {
   };
 
   return { collections, addCollection, deleteCollection, renameCollection, addItemToCollection, removeItemFromCollection };
+}
+
+export function useNotes() {
+  const [notes, setNotes] = useLocalStorage<Note[]>('iq-notes', []);
+
+  const addNote = (surahNumber: number, verseNumber: number, content: string) => {
+    const newNote: Note = {
+      id: Date.now().toString(),
+      surahNumber,
+      verseNumber,
+      content,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    setNotes(prev => [newNote, ...prev]);
+  };
+
+  const updateNote = (id: string, content: string) => {
+    setNotes(prev => prev.map(n => 
+      n.id === id ? { ...n, content, updatedAt: new Date().toISOString() } : n
+    ));
+  };
+
+  const deleteNote = (id: string) => {
+    setNotes(prev => prev.filter(n => n.id !== id));
+  };
+
+  const getNote = (id: string) => notes.find(n => n.id === id);
+
+  return { notes, addNote, updateNote, deleteNote, getNote };
+}
+
+export function useImportExport() {
+  const exportData = () => {
+    const data: Record<string, unknown> = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key?.startsWith('iq-')) {
+        const val = localStorage.getItem(key);
+        if (val) {
+          try {
+            data[key] = JSON.parse(val);
+          } catch (e) {
+            data[key] = val;
+          }
+        }
+      }
+    }
+    
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `inside-quran-backup-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const importData = (file: File): Promise<boolean> => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = JSON.parse(e.target?.result as string);
+          Object.keys(data).forEach(key => {
+            if (key.startsWith('iq-')) {
+              localStorage.setItem(key, JSON.stringify(data[key]));
+            }
+          });
+          resolve(true);
+        } catch (err) {
+          console.error('Import failed', err);
+          resolve(false);
+        }
+      };
+      reader.readAsText(file);
+    });
+  };
+
+  return { exportData, importData };
 }

@@ -5,7 +5,7 @@ export default function BottomNav() {
   const location = useLocation();
 
   // Hide BottomNav on detail screens
-  const hiddenOn = ['/surah', '/explanation-builder', '/explanation-view', '/tafsir-builder', '/tafsir-view'];
+  const hiddenOn = ['/surah', '/explanation-builder', '/tafsir-builder', '/note-builder'];
   if (hiddenOn.some(path => location.pathname.startsWith(path))) {
     return null;
   }
@@ -13,7 +13,7 @@ export default function BottomNav() {
   const links = [
     { to: '/', icon: Home, label: 'Home' },
     { to: '/saved', icon: Bookmark, label: 'Saved' },
-    { to: '/manage-explanations', icon: FileText, label: 'Manage' },
+    { to: '/manage', icon: FileText, label: 'Manage' },
     { to: '/library', icon: Library, label: 'Library' },
     { to: '/settings', icon: Settings, label: 'Settings' },
   ];
