@@ -230,7 +230,7 @@ export default function TafsirBuilderPage() {
       >
       <div className="sticky top-0 z-40 bg-background border-b border-border/60 pb-2">
         <div className="flex items-center gap-3 px-4 h-16 pt-2">
-          <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-xl transition hover:bg-accent text-foreground">
+          <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-xl transition text-foreground">
             <ArrowLeft size={22} />
           </button>
           <h1 className="font-display text-[20px] font-semibold text-foreground flex-1">Add Tafsir</h1>
@@ -248,7 +248,7 @@ export default function TafsirBuilderPage() {
               </SelectTrigger>
               <SelectContent className="bg-popover border-border rounded-xl shadow-lg p-2 max-h-[300px]">
                 {surahs?.map(s => (
-                  <SelectItem key={s.number} value={s.number.toString()} className="rounded-lg mb-1 focus:bg-accent focus:text-accent-foreground py-3 cursor-pointer">
+                  <SelectItem key={s.number} value={s.number.toString()} className="rounded-lg mb-1 py-3 cursor-pointer">
                     <div className="flex justify-between items-center w-full min-w-[200px]">
                       <span className="text-[15px] font-medium">{s.number}. {s.name}</span>
                       <span className="font-arabic text-primary text-lg pr-3">{s.nameArabic}</span>
@@ -297,7 +297,7 @@ export default function TafsirBuilderPage() {
             <label className="block text-[11px] font-medium text-muted-foreground uppercase tracking-widest leading-none">TAFSIR SOURCE</label>
             <button
                onClick={() => handleDrawerOpenChange(true)}
-               className="p-1.5 rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground transition-colors outline-none"
+               className="p-1.5 rounded-lg text-muted-foreground transition-colors outline-none"
                aria-label="Manage Sources"
             >
                <Settings2 size={18} />
@@ -312,7 +312,7 @@ export default function TafsirBuilderPage() {
                   <button
                     key={s.id}
                     onClick={() => setActiveSourceId(s.id)}
-                    className={`relative whitespace-nowrap px-6 py-2 text-[14px] font-semibold rounded-full transition-all z-10 outline-none active:scale-[0.98] flex-1 min-w-fit ${active ? 'text-primary-foreground' : 'text-muted-foreground hover:text-primary'}`}
+                    className={`relative whitespace-nowrap px-6 py-2 text-[14px] font-semibold rounded-full transition-all z-10 outline-none flex-1 min-w-fit ${active ? 'text-primary-foreground' : 'text-muted-foreground'}`}
                   >
                     {active && (
                       <motion.div 
@@ -336,7 +336,7 @@ export default function TafsirBuilderPage() {
               <span className="text-[12px] font-semibold text-muted-foreground uppercase tracking-widest pl-1">TAFSIR: {sources.find(s => s.id === activeSourceId)?.name.toUpperCase()}</span>
               <Popover>
                 <PopoverTrigger asChild>
-                  <button className="text-muted-foreground hover:text-primary transition-colors p-1 outline-none">
+                  <button className="text-muted-foreground transition-colors p-1 outline-none">
                     <Info size={18} />
                   </button>
                 </PopoverTrigger>
@@ -364,10 +364,10 @@ export default function TafsirBuilderPage() {
                           { s: "~~strike~~", d: "Strikethrough" },
                         ].map((item, i) => (
                           <div key={i} className="grid grid-cols-[90px,1fr] gap-x-3 items-center text-[12px] group py-2 border-b border-border/30 last:border-0 px-0.5">
-                            <code className="bg-primary/5 text-primary px-1.5 py-0.5 rounded font-mono text-[11px] whitespace-nowrap flex-shrink-0 group-hover:bg-primary/10 transition-colors justify-self-start">
+                            <code className="bg-primary/5 text-primary px-1.5 py-0.5 rounded font-mono text-[11px] whitespace-nowrap flex-shrink-0 transition-colors justify-self-start">
                               {item.s}
                             </code>
-                            <span className="text-muted-foreground text-right truncate group-hover:text-foreground transition-colors">{item.d}</span>
+                            <span className="text-muted-foreground text-right truncate transition-colors">{item.d}</span>
                           </div>
                         ))}
                       </div>
@@ -381,7 +381,7 @@ export default function TafsirBuilderPage() {
               value={notes[activeSourceId] || ''}
               onChange={e => handleNoteChange(e.target.value)}
               dir={settings.language === 'ur' ? 'rtl' : 'ltr'}
-              className="w-full bg-background/50 border border-border hover:border-primary/50 focus:border-primary rounded-xl p-4 text-[15px] font-display text-foreground placeholder:text-muted-foreground min-h-[220px] resize-y outline-none transition-colors"
+              className="w-full bg-background/50 border border-border focus:border-primary rounded-xl p-4 text-[15px] font-display text-foreground placeholder:text-muted-foreground min-h-[220px] resize-y outline-none transition-colors"
               placeholder={`Write your tafsir notes from ${sources.find(s => s.id === activeSourceId)?.name} here...`}
             />
           </motion.div>
@@ -394,7 +394,7 @@ export default function TafsirBuilderPage() {
           disabled={isSaveDisabled}
           className={`w-full max-w-md mx-auto py-[14px] rounded-full font-medium text-[16px] transition-all flex justify-center items-center ${isSaveDisabled
               ? 'bg-secondary text-muted-foreground/80 cursor-not-allowed'
-              : 'bg-primary text-primary-foreground shadow-[0_8px_20px_rgba(var(--primary),0.25)] hover:bg-primary/90 active:scale-[0.98]'
+              : 'bg-primary text-primary-foreground shadow-[0_8px_20px_rgba(var(--primary),0.25)]'
             }`}
         >
           Save Tafsirs
@@ -438,7 +438,7 @@ export default function TafsirBuilderPage() {
                       setEditingSourceId(source.id);
                       setSourceEditText(source.name);
                     }}
-                    className="p-2 text-primary/80 hover:bg-secondary hover:text-primary rounded-lg transition-colors outline-none"
+                    className="p-2 text-primary/80 rounded-lg transition-colors outline-none"
                   >
                     <Edit2 size={16} />
                   </button>
@@ -446,7 +446,7 @@ export default function TafsirBuilderPage() {
                   <Dialog>
                     <DialogTrigger asChild>
                       <button
-                        className="p-2 text-destructive/80 hover:bg-destructive/10 hover:text-destructive rounded-lg transition-colors outline-none"
+                        className="p-2 text-destructive/80 rounded-lg transition-colors outline-none"
                       >
                         <Trash2 size={16} />
                       </button>
@@ -464,13 +464,13 @@ export default function TafsirBuilderPage() {
                         <DialogClose asChild>
                           <button
                             onClick={() => deleteSource(source.id)}
-                            className="w-full h-11 rounded-xl bg-destructive text-destructive-foreground font-semibold text-[15px] transition-all active:scale-95 hover:bg-destructive/90"
+                            className="w-full h-11 rounded-xl bg-destructive text-destructive-foreground font-semibold text-[15px] transition-all"
                           >
                             Delete
                           </button>
                         </DialogClose>
                         <DialogClose asChild>
-                          <button className="w-full h-11 rounded-xl bg-background text-foreground font-medium text-[15px] transition-all active:scale-95 hover:bg-secondary/50 border border-border">
+                          <button className="w-full h-11 rounded-xl bg-background text-foreground font-medium text-[15px] transition-all border border-border">
                             Cancel
                           </button>
                         </DialogClose>

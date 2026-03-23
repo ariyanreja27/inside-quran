@@ -345,7 +345,7 @@ export default function ExplanationBuilderPage() {
       >
       <div className="sticky top-0 z-40 bg-background border-b border-border/60 pb-2">
         <div className="flex items-center gap-3 px-4 h-16 pt-2">
-          <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-xl transition hover:bg-accent text-foreground">
+          <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-xl transition text-foreground">
             <ArrowLeft size={22} />
           </button>
           <h1 className="font-display text-[20px] font-semibold text-foreground flex-1">Add Explanation</h1>
@@ -363,7 +363,7 @@ export default function ExplanationBuilderPage() {
             </SelectTrigger>
             <SelectContent className="bg-popover border-border rounded-xl shadow-lg p-2 max-h-[300px]">
               {surahs?.map(s => (
-                <SelectItem key={s.number} value={s.number.toString()} className="rounded-lg mb-1 focus:bg-accent focus:text-accent-foreground data-[state=checked]:bg-primary/10 data-[state=checked]:text-primary py-3 cursor-pointer">
+                <SelectItem key={s.number} value={s.number.toString()} className="rounded-lg mb-1 data-[state=checked]:bg-muted py-3 cursor-pointer">
                   <div className="flex justify-between items-center w-full min-w-[200px]">
                     <span className="text-[15px] font-medium">{s.number}. {s.name}</span>
                     <span className="font-arabic text-primary text-lg pr-3">{s.nameArabic}</span>
@@ -385,7 +385,7 @@ export default function ExplanationBuilderPage() {
                   key={m}
                   onClick={() => setMode(m)}
                   whileTap={{ scale: 0.98 }}
-                  className={`relative flex-1 py-2 text-[14px] font-semibold rounded-full transition-colors tracking-wide z-10 ${active ? 'text-primary-foreground' : 'text-muted-foreground hover:text-primary'
+                  className={`relative flex-1 py-2 text-[14px] font-semibold rounded-full transition-colors tracking-wide z-10 ${active ? 'text-primary-foreground' : 'text-muted-foreground'
                     }`}
                 >
                   {active && (
@@ -419,7 +419,7 @@ export default function ExplanationBuilderPage() {
                     <h3 className="font-semibold text-[13px] text-muted-foreground uppercase tracking-widest">VERSE BLOCK</h3>
                     <Dialog>
                       <DialogTrigger asChild>
-                        <button className="text-destructive p-1.5 hover:bg-destructive/10 rounded-lg transition-colors outline-none">
+                        <button className="text-destructive p-1.5 rounded-lg transition-colors outline-none">
                           <Trash2 size={18} />
                         </button>
                       </DialogTrigger>
@@ -434,13 +434,13 @@ export default function ExplanationBuilderPage() {
                           <DialogClose asChild>
                             <button
                               onClick={() => removeVerseBlock(bIndex)}
-                              className="w-full h-11 rounded-xl bg-destructive text-destructive-foreground font-semibold text-[15px] transition-all active:scale-95 hover:bg-destructive/90"
+                              className="w-full h-11 rounded-xl bg-destructive text-destructive-foreground font-semibold text-[15px] transition-all"
                             >
                               Delete
                             </button>
                           </DialogClose>
                           <DialogClose asChild>
-                            <button className="w-full h-11 rounded-xl bg-background text-foreground font-medium text-[15px] transition-all active:scale-95 hover:bg-secondary/50 border border-border">
+                            <button className="w-full h-11 rounded-xl bg-background text-foreground font-medium text-[15px] transition-all border border-border">
                               Cancel
                             </button>
                           </DialogClose>
@@ -506,7 +506,7 @@ export default function ExplanationBuilderPage() {
                             <span className="text-[12px] font-semibold text-muted-foreground uppercase tracking-widest pl-1">EXPLANATION</span>
                             <Popover>
                               <PopoverTrigger asChild>
-                                <button className="text-muted-foreground hover:text-primary transition-colors p-1 outline-none">
+                                <button className="text-muted-foreground transition-colors p-1 outline-none">
                                   <Info size={18} />
                                 </button>
                               </PopoverTrigger>
@@ -534,10 +534,10 @@ export default function ExplanationBuilderPage() {
                                         { s: "~~strike~~", d: "Strikethrough" },
                                       ].map((item, i) => (
                                         <div key={i} className="grid grid-cols-[90px,1fr] gap-x-3 items-center text-[12px] group py-2 border-b border-border/30 last:border-0 px-0.5">
-                                          <code className="bg-primary/5 text-primary px-1.5 py-0.5 rounded font-mono text-[11px] whitespace-nowrap flex-shrink-0 group-hover:bg-primary/10 transition-colors justify-self-start">
+                                          <code className="bg-primary/5 text-primary px-1.5 py-0.5 rounded font-mono text-[11px] whitespace-nowrap flex-shrink-0 transition-colors justify-self-start">
                                             {item.s}
                                           </code>
-                                          <span className="text-muted-foreground text-right truncate group-hover:text-foreground transition-colors">{item.d}</span>
+                                          <span className="text-muted-foreground text-right truncate transition-colors">{item.d}</span>
                                         </div>
                                       ))}
                                     </div>
@@ -553,7 +553,7 @@ export default function ExplanationBuilderPage() {
                                 placeholder={block.verseNumber <= 0 ? "Select a Verse first to write an explanation..." : "Write your explanation..."}
                                 value={exp.text}
                                 onChange={e => updateExplanationText(bIndex, eIndex, e.target.value)}
-                                className="w-full bg-card border border-border hover:border-primary/50 focus:border-primary rounded-xl p-3.5 text-[15px] text-foreground placeholder:text-muted-foreground min-h-[120px] resize-y outline-none transition-colors disabled:opacity-50 disabled:bg-muted/50 disabled:cursor-not-allowed"
+                                className="w-full bg-card border border-border focus:border-primary rounded-xl p-3.5 text-[15px] text-foreground placeholder:text-muted-foreground min-h-[120px] resize-y outline-none transition-colors disabled:opacity-50 disabled:bg-muted/50 disabled:cursor-not-allowed"
                               />
                               {block.verseNumber <= 0 && (
                                 <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-destructive text-[12px] font-medium mt-1.5 ml-1">
@@ -569,7 +569,7 @@ export default function ExplanationBuilderPage() {
                 </div>
               ))}
 
-              <button onClick={addVerseBlock} className="w-full border border-dashed border-border rounded-2xl py-[16px] text-muted-foreground font-medium flex justify-center items-center gap-2 bg-card hover:bg-accent transition-all">
+              <button onClick={addVerseBlock} className="w-full border border-dashed border-border rounded-2xl py-[16px] text-muted-foreground font-medium flex justify-center items-center gap-2 bg-card transition-all">
                 <Plus size={18} /> Add Verse Block
               </button>
             </motion.div>
@@ -595,7 +595,7 @@ export default function ExplanationBuilderPage() {
                     </p>
                     <button
                       onClick={() => setMode('concise')}
-                      className="mt-6 text-primary font-medium text-sm hover:underline mx-auto"
+                      className="mt-6 text-primary font-medium text-sm mx-auto"
                     >
                       Go to Concise Tab
                     </button>
@@ -610,7 +610,7 @@ export default function ExplanationBuilderPage() {
                     <label className="block text-[11px] font-medium text-[#A69B9B] uppercase tracking-widest ml-1">VERSE(S)</label>
                     <Popover>
                       <PopoverTrigger asChild>
-                        <button className="text-muted-foreground hover:text-primary transition-colors outline-none mr-1 p-1">
+                        <button className="text-muted-foreground transition-colors outline-none mr-1 p-1">
                           <Info size={16} />
                         </button>
                       </PopoverTrigger>
@@ -659,7 +659,7 @@ export default function ExplanationBuilderPage() {
                             <Dialog>
                               <DialogTrigger asChild>
                                 <button className="outline-none">
-                                  <Trash2 size={16} className="text-[#E05252] hover:text-red-700 transition-colors" />
+                                  <Trash2 size={16} className="text-[#E05252] transition-colors" />
                                 </button>
                               </DialogTrigger>
                               <DialogContent className="w-[92vw] max-w-[360px] rounded-[1.5rem] z-[100] border-none shadow-2xl p-6 [&>button]:hidden">
@@ -673,13 +673,13 @@ export default function ExplanationBuilderPage() {
                                   <DialogClose asChild>
                                     <button
                                       onClick={() => { const nr = [...rootWords]; nr.splice(rIndex, 1); setRootWords(nr); }}
-                                      className="w-full h-11 rounded-xl bg-destructive text-destructive-foreground font-semibold text-[15px] transition-all active:scale-95 hover:bg-destructive/90"
+                                      className="w-full h-11 rounded-xl bg-destructive text-destructive-foreground font-semibold text-[15px] transition-all"
                                     >
                                       Delete
                                     </button>
                                   </DialogClose>
                                   <DialogClose asChild>
-                                    <button className="w-full h-11 rounded-xl bg-background text-foreground font-medium text-[15px] transition-all active:scale-95 hover:bg-secondary/50 border border-border">
+                                    <button className="w-full h-11 rounded-xl bg-background text-foreground font-medium text-[15px] transition-all border border-border">
                                       Cancel
                                     </button>
                                   </DialogClose>
@@ -709,7 +709,7 @@ export default function ExplanationBuilderPage() {
                               <span className="text-[12px] font-semibold text-muted-foreground uppercase tracking-widest">EXPLANATION</span>
                               <Popover>
                                 <PopoverTrigger asChild>
-                                  <button className="text-muted-foreground hover:text-primary transition-colors p-1 outline-none">
+                                  <button className="text-muted-foreground transition-colors p-1 outline-none">
                                     <Info size={18} />
                                   </button>
                                 </PopoverTrigger>
@@ -737,10 +737,10 @@ export default function ExplanationBuilderPage() {
                                             { s: "~~strike~~", d: "Strikethrough" },
                                           ].map((item, i) => (
                                             <div key={i} className="grid grid-cols-[90px,1fr] gap-x-3 items-center text-[12px] group py-2 border-b border-border/30 last:border-0 px-0.5">
-                                              <code className="bg-primary/5 text-primary px-1.5 py-0.5 rounded font-mono text-[11px] whitespace-nowrap flex-shrink-0 group-hover:bg-primary/10 transition-colors justify-self-start">
+                                              <code className="bg-primary/5 text-primary px-1.5 py-0.5 rounded font-mono text-[11px] whitespace-nowrap flex-shrink-0 transition-colors justify-self-start">
                                                 {item.s}
                                               </code>
-                                              <span className="text-muted-foreground text-right truncate group-hover:text-foreground transition-colors">{item.d}</span>
+                                              <span className="text-muted-foreground text-right truncate transition-colors">{item.d}</span>
                                             </div>
                                           ))}
                                         </div>
@@ -772,7 +772,7 @@ export default function ExplanationBuilderPage() {
                           onClick={() => {
                             setRootWords([...rootWords, { id: generateId(), arabic: '', transliteration: '', rootLetters: '', explanation: '' }]);
                           }}
-                          className={`w-full border border-dashed border-[#D2C8C8] rounded-full py-3.5 text-[#8C7D7D] font-medium flex justify-center items-center gap-2 transition-all ${!verseRange.trim() || !!rangeError ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#F8F6F4]'}`}
+                          className={`w-full border border-dashed border-[#D2C8C8] rounded-full py-3.5 text-[#8C7D7D] font-medium flex justify-center items-center gap-2 transition-all ${!verseRange.trim() || !!rangeError ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                           <Plus size={18} /> Add Root Word
                         </button>
@@ -797,7 +797,7 @@ export default function ExplanationBuilderPage() {
                         <Dialog>
                           <DialogTrigger asChild>
                             <button className="outline-none">
-                              <Trash2 size={16} className="text-[#E05252] hover:text-red-700 transition-colors" />
+                              <Trash2 size={16} className="text-[#E05252] transition-colors" />
                             </button>
                           </DialogTrigger>
                           <DialogContent className="w-[92vw] max-w-[360px] rounded-[1.5rem] z-[100] border-none shadow-2xl p-6 [&>button]:hidden">
@@ -811,13 +811,13 @@ export default function ExplanationBuilderPage() {
                               <DialogClose asChild>
                                 <button
                                   onClick={() => { const nc = [...categories]; nc.splice(cIndex, 1); setCategories(nc); }}
-                                  className="w-full h-11 rounded-xl bg-destructive text-destructive-foreground font-semibold text-[15px] transition-all active:scale-95 hover:bg-destructive/90"
+                                  className="w-full h-11 rounded-xl bg-destructive text-destructive-foreground font-semibold text-[15px] transition-all"
                                 >
                                   Delete
                                 </button>
                               </DialogClose>
                               <DialogClose asChild>
-                                <button className="w-full h-11 rounded-xl bg-background text-foreground font-medium text-[15px] transition-all active:scale-95 hover:bg-secondary/50 border border-border">
+                                <button className="w-full h-11 rounded-xl bg-background text-foreground font-medium text-[15px] transition-all border border-border">
                                   Cancel
                                 </button>
                               </DialogClose>
@@ -831,7 +831,7 @@ export default function ExplanationBuilderPage() {
                         <span className="text-[12px] font-semibold text-[#8C7D7D] uppercase tracking-widest">CONTENT</span>
                         <Popover>
                           <PopoverTrigger asChild>
-                            <button className="text-muted-foreground hover:text-primary transition-colors p-1 outline-none">
+                            <button className="text-muted-foreground transition-colors p-1 outline-none">
                               <Info size={18} />
                             </button>
                           </PopoverTrigger>
@@ -859,10 +859,10 @@ export default function ExplanationBuilderPage() {
                                       { s: "~~strike~~", d: "Strikethrough" },
                                     ].map((item, i) => (
                                       <div key={i} className="grid grid-cols-[90px,1fr] gap-x-3 items-center text-[12px] group py-2 border-b border-border/30 last:border-0 px-0.5">
-                                        <code className="bg-primary/5 text-primary px-1.5 py-0.5 rounded font-mono text-[11px] whitespace-nowrap flex-shrink-0 group-hover:bg-primary/10 transition-colors justify-self-start">
+                                        <code className="bg-primary/5 text-primary px-1.5 py-0.5 rounded font-mono text-[11px] whitespace-nowrap flex-shrink-0 transition-colors justify-self-start">
                                           {item.s}
                                         </code>
-                                        <span className="text-muted-foreground text-right truncate group-hover:text-foreground transition-colors">{item.d}</span>
+                                        <span className="text-muted-foreground text-right truncate transition-colors">{item.d}</span>
                                       </div>
                                     ))}
                                   </div>
@@ -895,7 +895,7 @@ export default function ExplanationBuilderPage() {
                       onClick={() => {
                         setCategories([...categories, { id: generateId(), title: '', content: '', order: categories.length }]);
                       }}
-                      className={`w-full border border-dashed border-[#D2C8C8] rounded-2xl py-[16px] text-[#8C7D7D] font-medium flex justify-center items-center gap-2 bg-white transition-all ${!verseRange.trim() || !!rangeError ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#F8F6F4]'}`}
+                      className={`w-full border border-dashed border-[#D2C8C8] rounded-2xl py-[16px] text-[#8C7D7D] font-medium flex justify-center items-center gap-2 bg-white transition-all ${!verseRange.trim() || !!rangeError ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
                       <Plus size={18} /> Add Category
                     </button>
@@ -970,7 +970,7 @@ export default function ExplanationBuilderPage() {
           }}
           className={`w-full max-w-md mx-auto py-[14px] rounded-full font-medium text-[16px] transition-all flex justify-center items-center ${isSaveDisabled
               ? 'bg-secondary text-muted-foreground/80'
-              : 'bg-primary text-primary-foreground shadow-[0_8px_20px_rgba(var(--primary),0.25)] hover:bg-primary/90 active:scale-[0.98]'
+              : 'bg-primary text-primary-foreground shadow-[0_8px_20px_rgba(var(--primary),0.25)]'
             }`}
         >
           Save Explanation

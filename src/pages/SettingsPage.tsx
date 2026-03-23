@@ -125,7 +125,7 @@ export default function SettingsPage() {
     return (
       <div className="flex items-center justify-between group">
         <div className="flex-1 pr-4 text-left">
-          <p className="text-sm font-semibold text-foreground/90 tracking-tight group-hover:text-foreground transition-colors">{label}</p>
+          <p className="text-sm font-semibold text-foreground/90 tracking-tight transition-colors">{label}</p>
           <p className="text-[11px] text-muted-foreground leading-tight mt-1 opacity-80">{description || `${value}${unit}`}</p>
         </div>
         <div className="flex items-center bg-secondary/20 rounded-full p-1 border border-border/40 shadow-inner">
@@ -134,7 +134,7 @@ export default function SettingsPage() {
             transition={{ type: "spring", stiffness: 400, damping: 25 }}
             disabled={value <= min}
             onClick={() => onChange(Math.max(min, Number((value - step).toFixed(1))))} 
-            className="w-8 h-8 flex items-center justify-center rounded-full bg-background/90 text-foreground shadow-[0_2px_10px_rgba(0,0,0,0.05)] hover:bg-background hover:shadow-md disabled:opacity-20 disabled:cursor-not-allowed border border-border/50"
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-background/90 text-foreground shadow-[0_2px_10px_rgba(0,0,0,0.05)] disabled:opacity-20 disabled:cursor-not-allowed border border-border/50"
             aria-label="Decrease"
           >
             <Minus size={14} strokeWidth={2.5} />
@@ -150,7 +150,7 @@ export default function SettingsPage() {
             transition={{ type: "spring", stiffness: 400, damping: 25 }}
             disabled={value >= max}
             onClick={() => onChange(Math.min(max, Number((value + step).toFixed(1))))} 
-            className="w-8 h-8 flex items-center justify-center rounded-full bg-background/90 text-foreground shadow-[0_2px_10px_rgba(0,0,0,0.05)] hover:bg-background hover:shadow-md disabled:opacity-20 disabled:cursor-not-allowed border border-border/50"
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-background/90 text-foreground shadow-[0_2px_10px_rgba(0,0,0,0.05)] disabled:opacity-20 disabled:cursor-not-allowed border border-border/50"
             aria-label="Increase"
           >
             <Plus size={14} strokeWidth={2.5} />
@@ -167,7 +167,7 @@ export default function SettingsPage() {
         <div className="flex items-center gap-3 px-4 h-14">
           <button 
             onClick={() => navigate('/')} 
-            className="w-10 h-10 flex items-center justify-center rounded-full transition-all hover:bg-accent active:scale-95 text-foreground outline-none"
+            className="w-10 h-10 flex items-center justify-center rounded-full transition-all text-foreground outline-none"
             aria-label="Back"
           >
             <ArrowLeft size={22} />
@@ -205,7 +205,7 @@ export default function SettingsPage() {
               const labels = { en: 'English', bn: 'Bengali (বাংলা)', hi: 'Hindi (हिंदी)' };
               return (
                 <label key={lang} className="flex items-center justify-between cursor-pointer group">
-                  <span className="text-sm font-medium group-hover:text-primary transition-colors">{labels[lang]}</span>
+                  <span className="text-sm font-medium transition-colors">{labels[lang]}</span>
                   <input 
                     type="radio" 
                     name="language" 
@@ -237,7 +237,7 @@ export default function SettingsPage() {
                 lineSpacing: defaultSettings.lineSpacing,
               })}
               disabled={!isModified}
-              className="w-8 h-8 flex items-center justify-center rounded-full text-red-600 hover:text-red-700 transition-colors active:scale-90 disabled:cursor-default"
+              className="w-8 h-8 flex items-center justify-center rounded-full text-red-600 transition-colors disabled:cursor-default"
               title="Reset Reading Preferences"
             >
               <RotateCcw size={16} strokeWidth={2.5} />
@@ -303,7 +303,7 @@ export default function SettingsPage() {
               </div>
               <button 
                 onClick={handleExportBackup}
-                className="h-9 px-3.5 bg-primary/10 text-primary hover:bg-primary/20 rounded-xl flex items-center gap-2 font-medium text-sm transition-colors"
+                className="h-9 px-3.5 bg-primary/10 text-primary rounded-xl flex items-center gap-2 font-medium text-sm transition-colors"
                 aria-label="Export Backup"
               >
                 <Download size={15} />
@@ -320,7 +320,7 @@ export default function SettingsPage() {
               </div>
               <button 
                 onClick={() => fileInputRef.current?.click()}
-                className="h-9 px-3.5 bg-secondary text-foreground hover:bg-secondary/80 rounded-xl flex items-center gap-2 font-medium text-sm transition-colors"
+                className="h-9 px-3.5 bg-secondary text-foreground rounded-xl flex items-center gap-2 font-medium text-sm transition-colors"
                 aria-label="Restore Backup"
               >
                 <Upload size={15} />

@@ -49,7 +49,7 @@ export default function SurahListPage() {
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <button 
-                className="w-10 h-10 flex items-center justify-center rounded-full text-foreground hover:bg-accent active:scale-95 transition-all outline-none"
+                className="w-10 h-10 flex items-center justify-center rounded-full text-foreground active:scale-95 transition-all outline-none"
                 aria-label="Menu"
               >
                 <Menu size={22} />
@@ -77,8 +77,8 @@ export default function SurahListPage() {
             onClick={() => setIsSearchOpen(true)}
             className="relative cursor-pointer group"
           >
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-hover:text-primary transition-colors" size={18} />
-            <div className="w-full pl-10 pr-4 py-3 rounded-2xl bg-card border border-border text-sm text-muted-foreground font-body group-hover:border-primary/30 transition-all">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors" size={18} />
+            <div className="w-full pl-10 pr-4 py-3 rounded-2xl bg-card border border-border text-sm text-muted-foreground font-body transition-all">
               Search Surahs, Verses, or Keywords
             </div>
           </div>
@@ -93,7 +93,7 @@ export default function SurahListPage() {
                 key={f.value}
                 onClick={() => setFilter(f.value)}
                 className={`relative px-4 py-1.5 rounded-full text-[13px] font-medium transition-colors outline-none z-10 ${
-                  isActive ? 'text-primary-foreground' : 'text-foreground/70 hover:text-foreground bg-muted/40'
+                  isActive ? 'text-primary-foreground' : 'text-foreground/70 bg-muted/40'
                 }`}
               >
                 {/* Sliding active background */}

@@ -78,7 +78,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
             {query && (
               <button 
                 onClick={() => setQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-muted"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full"
               >
                 <X size={16} />
               </button>
@@ -86,7 +86,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
           </div>
           <button 
             onClick={onClose}
-            className="text-sm font-medium text-muted-foreground hover:text-foreground px-2"
+            className="text-sm font-medium text-muted-foreground px-2"
           >
             Cancel
           </button>
@@ -111,7 +111,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                   Go to {queryInfo.type === 'coordinate' ? `Surah ${queryInfo.surah}, Verse ${queryInfo.verse}` : `Surah ${queryInfo.number}`}
                 </p>
               </div>
-              <ArrowRight className="text-primary group-hover:translate-x-1 transition-transform" size={20} />
+              <ArrowRight className="text-primary transition-transform" size={20} />
             </motion.div>
           )}
 
@@ -122,7 +122,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                 <h3 className="text-[12px] font-bold text-muted-foreground uppercase tracking-wider">Recent Searches</h3>
                 <button 
                   onClick={clearSearchHistory} 
-                  className="text-[11px] font-medium text-muted-foreground hover:text-destructive transition-colors"
+                  className="text-[11px] font-medium text-muted-foreground transition-colors"
                 >
                   Clear All
                 </button>
@@ -132,7 +132,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                   <button
                     key={i}
                     onClick={() => handleSearchSelect(s)}
-                    className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-card border border-border text-sm hover:border-primary/30 hover:bg-primary/5 transition-all text-muted-foreground hover:text-primary"
+                    className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-card border border-border text-sm transition-all text-muted-foreground"
                   >
                     <History size={14} />
                     {s}
@@ -160,7 +160,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                   transition={{ delay: i * 0.05 }}
                   key={`${res.surahNumber}-${res.verseNumber}`}
                   onClick={() => handleResultClick(res)}
-                  className="p-4 rounded-2xl bg-card border border-border hover:border-primary/30 hover:shadow-md transition-all cursor-pointer group"
+                  className="p-4 rounded-2xl bg-card border border-border transition-all cursor-pointer group"
                 >
                   <div className="flex justify-between items-start mb-2">
                     <div className="flex items-center gap-2">
@@ -171,7 +171,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                         {res.surahName}
                       </span>
                     </div>
-                    <ArrowRight className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-all" size={16} />
+                    <ArrowRight className="text-muted-foreground opacity-0 transition-all" size={16} />
                   </div>
                   
                   {res.text && (

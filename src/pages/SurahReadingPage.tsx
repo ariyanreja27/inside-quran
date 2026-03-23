@@ -187,14 +187,11 @@ export default function SurahReadingPage() {
             } else {
               navigate('/');
             }
-          }} className="p-2 -ml-2 rounded-xl hover:bg-secondary transition">
+          }} className="p-2 -ml-2 rounded-xl transition">
             <ArrowLeft size={20} />
           </button>
           {isLoading ? (
-            <div className="flex-1 space-y-2 animate-pulse mt-1 ml-2">
-              <div className="h-4 bg-foreground/10 rounded block w-24" />
-              <div className="h-2 bg-foreground/10 rounded block w-16" />
-            </div>
+            null
           ) : (
             <>
               <div className="flex-1 min-w-0">
@@ -285,7 +282,7 @@ export default function SurahReadingPage() {
                           e.stopPropagation();
                           setMenuVerse(menuVerse === verse.numberInSurah ? null : verse.numberInSurah);
                         }}
-                        className="p-1.5 rounded-lg hover:bg-secondary transition"
+                        className="p-1.5 rounded-lg transition"
                       >
                         <MoreVertical size={16} className="text-muted-foreground" />
                       </button>
@@ -297,7 +294,7 @@ export default function SurahReadingPage() {
                               toggleBookmark(surahNumber, verse.numberInSurah);
                               setMenuVerse(null);
                             }}
-                            className="flex items-center gap-2 w-full px-3 py-2 text-[15px] font-medium hover:bg-secondary transition text-foreground/90"
+                            className="flex items-center gap-2 w-full px-3 py-2 text-[15px] font-medium transition text-foreground/90"
                           >
                             <BookmarkIcon size={16} className="text-muted-foreground mr-1" />
                             {bookmarked ? 'Remove Bookmark' : 'Bookmark'}
@@ -312,7 +309,7 @@ export default function SurahReadingPage() {
                                 navigate(`/tafsir-builder?surah=${surahNumber}&verse=${verse.numberInSurah}`);
                               }
                             }}
-                            className="flex items-center gap-2 w-full px-3 py-2 text-[15px] font-medium hover:bg-secondary transition text-foreground/90"
+                            className="flex items-center gap-2 w-full px-3 py-2 text-[15px] font-medium transition text-foreground/90"
                           >
                             <FileText size={16} className="text-muted-foreground mr-1" />
                             {tafsirExists ? 'View Tafsirs' : 'Add Tafsirs'}
@@ -327,7 +324,7 @@ export default function SurahReadingPage() {
                                 navigate(`/explanation-builder?surah=${surahNumber}&verse=${verse.numberInSurah}`);
                               }
                             }}
-                            className="flex items-center gap-2 w-full px-3 py-2 text-[15px] font-medium hover:bg-secondary transition text-foreground/90"
+                            className="flex items-center gap-2 w-full px-3 py-2 text-[15px] font-medium transition text-foreground/90"
                           >
                             <BookOpen size={16} className="text-muted-foreground mr-1" />
                             {explained ? 'View Explanation' : 'Add Explanation'}
@@ -339,7 +336,7 @@ export default function SurahReadingPage() {
                               setEditingVerse(verse.numberInSurah);
                               setMenuVerse(null);
                             }}
-                            className="flex items-center gap-2 w-full px-3 py-2 text-[15px] font-medium hover:bg-secondary transition text-foreground/90"
+                            className="flex items-center gap-2 w-full px-3 py-2 text-[15px] font-medium transition text-foreground/90"
                           >
                             <Pencil size={16} className="text-muted-foreground mr-1" />
                             Edit Translation
@@ -411,7 +408,7 @@ export default function SurahReadingPage() {
                            resetCustomTranslation(surahNumber, editingVerse, settings.language);
                            setEditingVerse(null);
                         }} 
-                        className={`flex-1 font-medium py-[14px] rounded-full transition-colors text-[15px] ${isResetDisabled ? 'bg-secondary text-muted-foreground/80 cursor-not-allowed' : 'bg-destructive/10 hover:bg-destructive/20 text-destructive'}`}
+                        className={`flex-1 font-medium py-[14px] rounded-full transition-colors text-[15px] ${isResetDisabled ? 'bg-secondary text-muted-foreground/80 cursor-not-allowed' : 'bg-destructive/10 text-destructive'}`}
                      >
                         Reset
                      </button>
@@ -423,7 +420,7 @@ export default function SurahReadingPage() {
                            }
                            setEditingVerse(null);
                         }} 
-                        className={`flex-[2] font-medium py-[14px] rounded-full transition-colors text-[15px] ${isSaveDisabled ? 'bg-secondary text-muted-foreground/80 cursor-not-allowed' : 'bg-primary hover:bg-primary/90 text-primary-foreground'}`}
+                        className={`flex-[2] font-medium py-[14px] rounded-full transition-colors text-[15px] ${isSaveDisabled ? 'bg-secondary text-muted-foreground/80 cursor-not-allowed' : 'bg-primary text-primary-foreground'}`}
                      >
                         Save Translation
                      </button>

@@ -28,7 +28,7 @@ function BookmarkedVerseCard({ surahNumber, verseNumber, onRemove }: { surahNumb
     <div className="relative group">
       <div 
         onClick={() => navigate(`/surah/${surahNumber}?verse=${verseNumber}`)}
-        className="surah-card block cursor-pointer pr-12 active:scale-[0.98] transition-transform origin-left"
+        className="surah-card block cursor-pointer pr-12 transition-transform origin-left"
       >
         <div className="mb-2 flex items-center gap-2">
           <BookmarkCheck size={14} className="gold-accent" />
@@ -43,7 +43,7 @@ function BookmarkedVerseCard({ surahNumber, verseNumber, onRemove }: { surahNumb
           <DropdownMenuTrigger asChild>
             <button
               onClick={(e) => e.stopPropagation()}
-              className="p-2 -mr-2 rounded-lg hover:bg-secondary transition-colors text-muted-foreground outline-none"
+              className="p-2 -mr-2 rounded-lg transition-colors text-muted-foreground outline-none"
             >
               <MoreHorizontal size={20} />
             </button>
@@ -54,7 +54,7 @@ function BookmarkedVerseCard({ surahNumber, verseNumber, onRemove }: { surahNumb
                 e.stopPropagation();
                 onRemove(surahNumber, verseNumber);
               }}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive transition-colors outline-none"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-destructive bg-destructive/10 transition-colors outline-none"
             >
               <Trash2 size={16} />
               <span className="font-medium text-[13.5px]">Remove</span>
@@ -114,7 +114,7 @@ export default function SavedPage() {
         <div className="flex items-center gap-3 px-4 h-14">
           <button 
             onClick={() => navigate('/')} 
-            className="w-10 h-10 flex items-center justify-center rounded-full transition-all hover:bg-accent active:scale-95 text-foreground outline-none"
+            className="w-10 h-10 flex items-center justify-center rounded-full transition-all text-foreground outline-none"
             aria-label="Back"
           >
             <ArrowLeft size={22} />
@@ -134,7 +134,7 @@ export default function SavedPage() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveView(tab.id)}
-                  className={`relative rounded-full px-4 py-2.5 text-xs font-semibold transition-colors z-10 ${active ? 'text-primary-foreground' : 'text-muted-foreground hover:text-primary'
+                  className={`relative rounded-full px-4 py-2.5 text-xs font-semibold transition-colors z-10 ${active ? 'text-primary-foreground' : 'text-muted-foreground'
                     }`}
                 >
                   {active && (
@@ -199,7 +199,7 @@ export default function SavedPage() {
                                   e.stopPropagation();
                                   toggleFavorite(surah.number);
                                 }}
-                                className="p-2 -mr-2 text-primary hover:bg-accent rounded-full transition-colors outline-none"
+                                className="p-2 -mr-2 text-primary rounded-full transition-colors outline-none"
                               >
                                 <Star size={16} className="fill-primary" />
                               </button>

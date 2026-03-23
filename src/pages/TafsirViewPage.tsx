@@ -88,7 +88,7 @@ export default function TafsirViewPage() {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6 text-center">
          <p className="text-muted-foreground mb-4">Tafsir not found, or there are no notes here yet.</p>
-         <button onClick={() => navigate(`/tafsir-builder${surahNumber && verseNumber ? `?surah=${surahNumber}&verse=${verseNumber}` : ''}`)} className="bg-primary hover:bg-primary/90 transition text-primary-foreground rounded-full px-6 py-3 font-medium shadow-sm">Add Tafsir</button>
+         <button onClick={() => navigate(`/tafsir-builder${surahNumber && verseNumber ? `?surah=${surahNumber}&verse=${verseNumber}` : ''}`)} className="bg-primary transition text-primary-foreground rounded-full px-6 py-3 font-medium shadow-sm">Add Tafsir</button>
       </div>
     );
   }
@@ -102,14 +102,14 @@ export default function TafsirViewPage() {
       <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-md pt-5 pb-4 mb-6 border-b border-border/50 shadow-sm transform-gpu">
         {/* Top Floating Buttons */}
         <div className="flex items-center justify-between px-5 mb-5">
-          <button onClick={() => navigate(-1)} className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent transition shadow-sm outline-none">
+          <button onClick={() => navigate(-1)} className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-muted-foreground transition shadow-sm outline-none">
             <X size={16} />
           </button>
           
           <div className="flex items-center gap-2">
             <button 
                onClick={() => navigate(`/tafsir-builder?id=${tafsir.id}`)} 
-               className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent transition active:scale-95 shadow-sm outline-none"
+               className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-muted-foreground transition shadow-sm outline-none"
                aria-label="Edit Tafsir"
             >
               <SquarePen size={14} />
@@ -118,7 +118,7 @@ export default function TafsirViewPage() {
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <button 
-                  className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-destructive/80 hover:text-destructive hover:bg-destructive/10 transition active:scale-95 shadow-sm outline-none"
+                  className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-destructive/80 transition shadow-sm outline-none"
                   aria-label="Delete Tafsir"
                 >
                   <Trash2 size={14} />
@@ -135,7 +135,7 @@ export default function TafsirViewPage() {
                   <AlertDialogCancel className="rounded-xl border-border h-11">Cancel</AlertDialogCancel>
                   <AlertDialogAction 
                     onClick={handleDelete}
-                    className="rounded-xl bg-destructive hover:bg-destructive/90 text-destructive-foreground h-11"
+                    className="rounded-xl bg-destructive text-destructive-foreground h-11"
                   >
                     Delete
                   </AlertDialogAction>
@@ -158,7 +158,7 @@ export default function TafsirViewPage() {
                   className={`relative whitespace-nowrap px-4 py-2 text-[14px] font-semibold rounded-full transition-colors tracking-wide z-10 outline-none ${
                     isActive 
                       ? 'text-primary-foreground' 
-                      : 'bg-card text-muted-foreground border border-border hover:text-foreground'
+                      : 'bg-card text-muted-foreground border border-border'
                   }`}
                 >
                   {isActive && (

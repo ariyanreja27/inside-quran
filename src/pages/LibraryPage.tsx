@@ -72,7 +72,7 @@ export default function LibraryPage() {
         <div className="flex items-center gap-3 px-4 h-14">
           <button
             onClick={() => navigate('/')}
-            className="w-10 h-10 flex items-center justify-center rounded-full transition-all hover:bg-accent active:scale-95 text-foreground outline-none"
+            className="w-10 h-10 flex items-center justify-center rounded-full transition-all text-foreground outline-none"
             aria-label="Back"
           >
             <ArrowLeft size={22} />
@@ -95,7 +95,7 @@ export default function LibraryPage() {
                   className={`relative rounded-full px-4 py-2.5 text-xs font-semibold transition-colors z-10 ${
                     isActive 
                       ? 'text-primary-foreground'
-                      : 'text-muted-foreground hover:text-primary'
+                      : 'text-muted-foreground'
                     }`}
                 >
                   {isActive && (
@@ -137,7 +137,7 @@ export default function LibraryPage() {
                     </p>
                     <button
                       onClick={() => navigate('/')}
-                      className="mt-6 bg-primary text-primary-foreground px-6 py-2.5 rounded-full text-sm font-medium hover:bg-primary/90 transition-colors cursor-pointer"
+                      className="mt-6 bg-primary text-primary-foreground px-6 py-2.5 rounded-full text-sm font-medium transition-colors cursor-pointer"
                     >
                       Go to Home
                     </button>
@@ -161,12 +161,12 @@ export default function LibraryPage() {
                             key={`${item.surahNumber}-${item.verseNumber}`}
                           className="overflow-hidden"
                           >
-                          <div className="flex items-stretch bg-card border border-border rounded-[1.25rem] shadow-[0_4px_20px_rgba(0,0,0,0.02)] transition-all hover:border-primary/20">
+                          <div className="flex items-stretch bg-card border border-border rounded-[1.25rem] shadow-[0_4px_20px_rgba(0,0,0,0.02)] transition-all">
                             <div
                               onClick={() => navigate(`/surah/${item.surahNumber}?verse=${item.verseNumber}`)}
-                              className="flex-1 flex items-center p-4 cursor-pointer active:scale-[0.98] active:bg-secondary/60 transition-transform origin-left rounded-[1.25rem] group"
+                              className="flex-1 flex items-center p-4 cursor-pointer transition-transform origin-left rounded-[1.25rem] group"
                             >
-                              <div className="flex-shrink-0 w-10 h-10 rounded-full border border-border flex items-center justify-center bg-muted/30 transition-transform group-hover:scale-105">
+                              <div className="flex-shrink-0 w-10 h-10 rounded-full border border-border flex items-center justify-center bg-muted/30 transition-transform">
                                 <span className="text-xs font-mono text-muted-foreground tabular-nums">
                                   {surah.number}
                                 </span>
@@ -194,7 +194,7 @@ export default function LibraryPage() {
                               <DropdownMenu modal={false}>
                                 <DropdownMenuTrigger asChild>
                                   <button
-                                    className="p-2 -mr-2 rounded-lg hover:bg-secondary transition-colors text-muted-foreground outline-none"
+                                    className="p-2 -mr-2 rounded-lg transition-colors text-muted-foreground outline-none"
                                   >
                                     <MoreHorizontal size={20} />
                                   </button>
@@ -205,7 +205,7 @@ export default function LibraryPage() {
                                       e.stopPropagation();
                                       removeLastRead(item.surahNumber);
                                     }}
-                                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive transition-colors outline-none"
+                                     className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-destructive bg-destructive/10 transition-colors outline-none"
                                   >
                                     <Trash2 size={16} />
                                     <span className="font-medium text-[13.5px]">Clear History</span>

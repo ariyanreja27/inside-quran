@@ -20,7 +20,7 @@ export default function SurahCard({ surah, isFavorite, onToggleFavorite }: Surah
     >
       <Link 
         to={`/surah/${surah.number}`} 
-        className="block group rounded-lg bg-card shadow-sm border border-border transition-all duration-200 hover:bg-accent/40 active:bg-accent/60 outline-none focus-visible:ring-2 focus-visible:ring-primary/20"
+        className="block group rounded-lg bg-card shadow-sm border border-border transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-primary/20"
       >
         <div className="flex items-center gap-4 p-4 pr-14">
           {/* Surah number circle */}
@@ -50,7 +50,7 @@ export default function SurahCard({ surah, isFavorite, onToggleFavorite }: Surah
         }}
         onPointerDown={(e) => e.stopPropagation()}
         onMouseDown={(e) => e.stopPropagation()}
-        className="absolute right-3.5 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full active:scale-90 transition-all focus:outline-none [-webkit-tap-highlight-color:transparent]"
+        className="absolute right-3.5 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full transition-all focus:outline-none [-webkit-tap-highlight-color:transparent]"
         aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
       >
         <Star

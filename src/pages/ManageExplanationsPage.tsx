@@ -138,7 +138,7 @@ export default function ManageExplanationsPage() {
         <div className="flex items-center gap-3 px-4 h-14">
           <button
             onClick={() => navigate('/')}
-            className="w-10 h-10 flex items-center justify-center rounded-full transition-all hover:bg-accent active:scale-95 text-foreground outline-none"
+            className="w-10 h-10 flex items-center justify-center rounded-full transition-all text-foreground outline-none"
             aria-label="Back"
           >
             <ArrowLeft size={22} />
@@ -164,7 +164,7 @@ export default function ManageExplanationsPage() {
                   onClick={() => setActiveTab(tab.id as 'explanations' | 'tafsirs')}
                   className={cn(
                     "relative rounded-full px-4 py-2.5 text-xs font-semibold transition-colors z-10",
-                    active ? 'text-primary-foreground' : 'text-muted-foreground hover:text-primary'
+                    active ? 'text-primary-foreground' : 'text-muted-foreground'
                   )}
                 >
                   {active && (
@@ -184,7 +184,7 @@ export default function ManageExplanationsPage() {
         {/* Search, Filter & Add New */}
         <div className="flex gap-3">
           <div className="relative flex-1 group">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-hover:text-primary transition-colors" size={18} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors" size={18} />
             <input
               type="text"
               placeholder="Search by Surah"
@@ -195,7 +195,7 @@ export default function ManageExplanationsPage() {
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="h-[46px] w-[46px] sm:w-auto sm:px-4 flex items-center justify-center gap-1.5 rounded-full bg-card border border-border text-muted-foreground hover:text-primary hover:border-primary/30 transition-colors font-medium text-[13px] whitespace-nowrap">
+              <button className="h-[46px] w-[46px] sm:w-auto sm:px-4 flex items-center justify-center gap-1.5 rounded-full bg-card border border-border text-muted-foreground transition-colors font-medium text-[13px] whitespace-nowrap">
                 <ArrowUpDown size={15} />
                 <span className="hidden sm:inline">{sortLabels[sortOrder]}</span>
               </button>
@@ -218,7 +218,7 @@ export default function ManageExplanationsPage() {
           </DropdownMenu>
           <button
             onClick={() => navigate(activeTab === 'explanations' ? '/explanation-builder' : '/tafsir-builder')}
-            className="bg-primary text-primary-foreground px-4 rounded-2xl flex items-center justify-center shadow-sm hover:opacity-90 transition-opacity whitespace-nowrap gap-2 font-medium text-[14px]"
+            className="bg-primary text-primary-foreground px-4 rounded-2xl flex items-center justify-center shadow-sm whitespace-nowrap gap-2 font-medium text-[14px]"
           >
             <Plus size={18} /> Add New
           </button>
@@ -303,7 +303,7 @@ export default function ManageExplanationsPage() {
                             onClick={() => toggleSurah(surahNum)}
                             className="flex items-center justify-between pb-1 border-b border-border/40 cursor-pointer group"
                           >
-                            <h3 className="font-semibold text-[14px] text-muted-foreground flex items-center gap-2 group-hover:text-foreground transition-colors">
+                            <h3 className="font-semibold text-[14px] text-muted-foreground flex items-center gap-2 transition-colors">
                               <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[11px] font-bold tabular-nums">
                                 {surahNum}
                               </span>
@@ -313,7 +313,7 @@ export default function ManageExplanationsPage() {
                               <span className="font-arabic text-primary/70 text-lg">
                                 {getSurahArabic(surahNum)}
                               </span>
-                              <button className="text-muted-foreground group-hover:text-foreground transition-colors p-1 -mr-1 rounded-md hover:bg-accent flex items-center justify-center">
+                              <button className="text-muted-foreground transition-colors p-1 -mr-1 rounded-md flex items-center justify-center">
                                 {collapsedSurahs.has(surahNum) ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
                               </button>
                             </div>
@@ -345,7 +345,7 @@ export default function ManageExplanationsPage() {
                                           transition={{ duration: 0.25, ease: "easeOut" }}
                                           key={item.id}
                                           onClick={() => navigate(activeTab === 'explanations' ? `/explanation-view?id=${item.id}` : `/tafsir-view?surah=${item.surahNumber}&verse=${(item as typeof tafsirRecords[0]).verseNumber}`)}
-                                          className="bg-card border border-border rounded-[1.2rem] p-4 shadow-[0_2px_10px_rgba(0,0,0,0.02)] flex items-center justify-between gap-4 group hover:border-primary/40 cursor-pointer active:scale-[0.98] transition-all"
+                                          className="bg-card border border-border rounded-[1.2rem] p-4 shadow-[0_2px_10px_rgba(0,0,0,0.02)] flex items-center justify-between gap-4 cursor-pointer transition-all"
                                         >
                                           <div className="flex-1 flex items-center min-w-0 pr-4">
                                             <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-primary font-medium text-[13px] border border-primary/10 shadow-sm">
@@ -356,7 +356,7 @@ export default function ManageExplanationsPage() {
                                           <div className="flex items-center" onClick={e => e.stopPropagation()}>
                                             <DropdownMenu>
                                               <DropdownMenuTrigger asChild>
-                                                <button className="w-10 h-10 flex items-center justify-center rounded-full text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors outline-none cursor-pointer">
+                                                <button className="w-10 h-10 flex items-center justify-center rounded-full text-muted-foreground transition-colors outline-none cursor-pointer">
                                                   <MoreVertical size={20} />
                                                 </button>
                                               </DropdownMenuTrigger>
@@ -369,7 +369,7 @@ export default function ManageExplanationsPage() {
                                                       : (item as typeof tafsirRecords[0]).verseNumber;
                                                     navigate(v ? `/surah/${surahNum}?verse=${v}` : `/surah/${surahNum}`);
                                                   }}
-                                                  className="flex items-center gap-2.5 px-3 py-2.5 outline-none rounded-xl cursor-pointer hover:bg-secondary transition-colors text-[14px] font-medium"
+                                                  className="flex items-center gap-2.5 px-3 py-2.5 outline-none rounded-xl cursor-pointer transition-colors text-[14px] font-medium"
                                                 >
                                                   <Eye size={16} /> Show Verse
                                                 </DropdownMenuItem>
@@ -378,7 +378,7 @@ export default function ManageExplanationsPage() {
                                                     e.stopPropagation();
                                                     navigate(activeTab === 'explanations' ? `/explanation-builder?id=${item.id}` : `/tafsir-builder?surah=${item.surahNumber}&verse=${(item as typeof tafsirRecords[0]).verseNumber}`);
                                                   }}
-                                                  className="flex items-center gap-2.5 px-3 py-2.5 outline-none rounded-xl cursor-pointer hover:bg-secondary transition-colors text-[14px] font-medium"
+                                                  className="flex items-center gap-2.5 px-3 py-2.5 outline-none rounded-xl cursor-pointer transition-colors text-[14px] font-medium"
                                                 >
                                                   <Edit2 size={16} /> Edit
                                                 </DropdownMenuItem>
@@ -387,7 +387,7 @@ export default function ManageExplanationsPage() {
                                                   <AlertDialogTrigger asChild>
                                                     <DropdownMenuItem 
                                                       onSelect={e => e.preventDefault()}
-                                                      className="flex items-center gap-2.5 px-3 py-2.5 outline-none bg-destructive/5 rounded-xl cursor-pointer hover:bg-destructive/10 text-destructive transition-colors text-[14px] font-medium"
+                                                      className="flex items-center gap-2.5 px-3 py-2.5 outline-none rounded-xl cursor-pointer text-destructive bg-destructive/10 transition-colors text-[14px] font-medium"
                                                     >
                                                       <Trash2 size={16} /> Delete
                                                     </DropdownMenuItem>
@@ -403,7 +403,7 @@ export default function ManageExplanationsPage() {
                                                       <AlertDialogCancel className="rounded-xl border-border h-11">Cancel</AlertDialogCancel>
                                                       <AlertDialogAction
                                                         onClick={() => handleDelete(item.id)}
-                                                        className="rounded-xl bg-destructive hover:bg-destructive/90 text-destructive-foreground h-11"
+                                                        className="rounded-xl bg-destructive text-destructive-foreground h-11"
                                                       >
                                                         Delete
                                                       </AlertDialogAction>

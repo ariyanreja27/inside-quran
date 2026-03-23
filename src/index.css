@@ -163,12 +163,7 @@
     @apply bg-card rounded-2xl border border-border p-4 transition-all duration-200;
   }
 
-  @media (hover: hover) {
-    .surah-card:hover {
-      box-shadow: 0 4px 20px -4px hsl(var(--primary) / 0.1);
-      border-color: hsl(var(--primary) / 0.2);
-    }
-  }
+
 
   .verse-card {
     @apply bg-card rounded-2xl border border-border p-5 transition-all duration-200;
@@ -215,11 +210,7 @@
     border: 2px solid hsl(var(--background));
   }
 
-  @media (hover: hover) {
-    ::-webkit-scrollbar-thumb:hover {
-      background: hsl(var(--muted-foreground) / 0.4);
-    }
-  }
+
 
   /* Utility to hide scrollbar while keeping it draggable if needed (for specific elements) */
   .scrollbar-hide {
@@ -227,6 +218,8 @@
     scrollbar-width: none;  /* Firefox */
   }
 }
+
+
 
 @media print {
   html, body {

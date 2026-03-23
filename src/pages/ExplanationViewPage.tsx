@@ -147,14 +147,14 @@ export default function ExplanationViewPage() {
       <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-md pt-5 pb-4 mb-6 border-b border-border/50 shadow-sm transform-gpu">
         {/* Top Floating Buttons */}
         <div className="flex items-center justify-between px-5 mb-5">
-          <button onClick={() => navigate(-1)} className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent transition shadow-sm">
+          <button onClick={() => navigate(-1)} className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-muted-foreground transition shadow-sm">
             <X size={16} />
           </button>
           
           <div className="flex items-center gap-2">
             <button 
                onClick={() => navigate(`/explanation-builder?id=${explanation.id}`)} 
-               className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent transition active:scale-95 shadow-sm"
+               className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-muted-foreground transition shadow-sm"
                aria-label="Edit Explanation"
             >
               <SquarePen size={14} />
@@ -163,7 +163,7 @@ export default function ExplanationViewPage() {
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <button 
-                  className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-destructive/80 hover:text-destructive hover:bg-destructive/10 transition active:scale-95 shadow-sm"
+                  className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-destructive/80 transition shadow-sm"
                   aria-label="Delete Explanation"
                 >
                   <Trash2 size={14} />
@@ -180,7 +180,7 @@ export default function ExplanationViewPage() {
                   <AlertDialogCancel className="rounded-xl border-border h-11">Cancel</AlertDialogCancel>
                   <AlertDialogAction 
                     onClick={handleDelete}
-                    className="rounded-xl bg-destructive hover:bg-destructive/90 text-destructive-foreground h-11"
+                    className="rounded-xl bg-destructive text-destructive-foreground h-11"
                   >
                     Delete
                   </AlertDialogAction>
@@ -204,7 +204,7 @@ export default function ExplanationViewPage() {
                   className={`relative flex-1 py-1.5 text-[13.5px] font-[500] rounded-full transition-colors tracking-wide z-10 ${
                     isActive 
                       ? 'text-primary-foreground' 
-                      : 'text-muted-foreground hover:text-primary'
+                      : 'text-muted-foreground'
                   }`}
                 >
                   {isActive && (
@@ -327,7 +327,7 @@ export default function ExplanationViewPage() {
                                  className={`font-arabic text-[14px] px-[18px] py-1.5 rounded-full border transition-all ${
                                    isActive 
                                      ? 'bg-primary/20 border-primary/20 text-primary font-bold shadow-sm' 
-                                     : 'bg-card border-border text-foreground hover:bg-accent'
+                                     : 'bg-card border-border text-foreground'
                                  }`}
                               >
                                  {rw.arabic}
@@ -342,8 +342,8 @@ export default function ExplanationViewPage() {
                    <div className="space-y-4">
                       <Accordion type="multiple" className="space-y-4 w-full">
                          {explanation.deeperLook.categories.map((cat) => (
-                            <AccordionItem key={cat.id} value={cat.id} className="bg-card border-none rounded-[1.25rem] px-5 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.04)] transition-shadow hover:shadow-[0_4px_25px_rgba(0,0,0,0.06)] data-[state=open]:shadow-[0_4px_25px_rgba(0,0,0,0.08)] mb-4">
-                               <AccordionTrigger className="hover:no-underline py-5 font-display font-medium text-[15.5px] text-foreground flex items-center justify-between">
+                            <AccordionItem key={cat.id} value={cat.id} className="bg-card border-none rounded-[1.25rem] px-5 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.04)] transition-shadow data-[state=open]:shadow-[0_4px_25px_rgba(0,0,0,0.08)] mb-4">
+                               <AccordionTrigger className="no-underline py-5 font-display font-medium text-[15.5px] text-foreground flex items-center justify-between">
                                   <span className="flex items-center gap-3">
                                      <BookOpen size={18} className="text-primary" />
                                      {cat.title}
@@ -436,8 +436,7 @@ export default function ExplanationViewPage() {
                         onClick={() => {
                           setIsDrawerOpen(false);
                           setTimeout(() => setSelectedRootWord(null), 350);
-                        }} 
-                        className="w-full bg-muted hover:bg-muted/80 text-muted-foreground font-medium py-[14px] rounded-full transition-colors text-[15px]"
+                        }}                         className="w-full bg-muted text-muted-foreground font-medium py-[14px] rounded-full transition-colors text-[15px]"
                      >
                         Close
                      </button>
