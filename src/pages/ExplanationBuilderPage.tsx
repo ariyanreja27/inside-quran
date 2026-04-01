@@ -65,7 +65,7 @@ export default function ExplanationBuilderPage() {
   // Scroll ref
   const blockRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
   const hasSelectedVerse = conciseBlocks.some(b => b.verseNumber > 0);
-  const hasConciseContent = conciseBlocks.some(b => b.verseNumber > 0 && b.explanations.some(e => e.title.trim() || e.text.trim()));
+  const hasConciseContent = conciseBlocks.some(b => b.verseNumber > 0 && b.explanations.some(e => e.text.trim().length >= 10));
   const hasAtLeastOneExplanation = hasConciseContent;
 
   // Verses already used in OTHER saved explanations for the same Surah
@@ -226,9 +226,9 @@ export default function ExplanationBuilderPage() {
 
     const allVerses = new Set<number>();
 
-    // Only save blocks that have a verse selected and some text
+    // Only save blocks that have a verse selected and at least 10 characters of text
     const validConcise = conciseBlocks.filter(b =>
-      b.verseNumber > 0 && b.explanations.some(e => e.text.trim().length > 0 || String(e.title).trim().length > 0)
+      b.verseNumber > 0 && b.explanations.some(e => e.text.trim().length >= 10)
     );
 
     // Block save if any verse is already used in another explanation for this Surah
@@ -259,9 +259,9 @@ export default function ExplanationBuilderPage() {
       }
     });
 
-    // Clean up empty root words and categories so view page isn't polluted
-    const validRootWords = rootWords.filter(rw => rw.arabic.trim() || rw.rootLetters.trim() || rw.explanation.trim());
-    const validCategories = categories.filter(c => c.title.trim() || c.content.trim());
+    // Clean up empty or too short root words and categories so view page isn't polluted
+    const validRootWords = rootWords.filter(rw => rw.arabic.trim() && rw.explanation.trim().length >= 10);
+    const validCategories = categories.filter(c => c.title.trim() && c.content.trim().length >= 10);
 
     const newExplanation: Explanation = {
       id: currentId,
@@ -372,6 +372,11 @@ export default function ExplanationBuilderPage() {
               ))}
             </SelectContent>
           </Select>
+          {!selectedSurah && (
+            <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
+              Please select a Surah first.
+            </p>
+          )}
         </div>
 
         {/* MODE TOGGLE */}
@@ -407,11 +412,11 @@ export default function ExplanationBuilderPage() {
             /* CONCISE MODE */
             <motion.div
               key="concise"
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              className="space-y-6"
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="space-y-4"
             >
               {conciseBlocks.map((block, bIndex) => (
                 <div key={bIndex} className="bg-card border border-border rounded-[1.5rem] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] relative" ref={(el) => (blockRefs.current[block.verseNumber] = el)}>
@@ -423,28 +428,28 @@ export default function ExplanationBuilderPage() {
                           <Trash2 size={18} />
                         </button>
                       </DialogTrigger>
-                      <DialogContent className="w-[92vw] max-w-[360px] rounded-[1.5rem] z-[100] border-none shadow-2xl p-6 [&>button]:hidden">
+                      <DialogContent className="w-[92vw] max-w-[360px] rounded-[2rem] border-none bg-white dark:bg-background shadow-2xl p-6 [&>button]:hidden">
                         <DialogHeader className="space-y-2">
-                          <DialogTitle className="text-center text-lg font-bold">Delete Verse Block?</DialogTitle>
-                          <DialogDescription className="text-center text-sm leading-relaxed">
-                            Are you sure you want to delete this verse block? All concise notes written for this verse will be removed.
+                          <DialogTitle className="text-left text-lg font-bold">Delete Verse Block?</DialogTitle>
+                          <DialogDescription className="text-left text-sm leading-relaxed text-muted-foreground">
+                            Are you sure you want to delete the verse block for <strong>Surah {surahs?.find(s => s.number === selectedSurah)?.name} {block.verseNumber}</strong>? All concise notes written for this specific verse will be removed.
                           </DialogDescription>
                         </DialogHeader>
-                        <DialogFooter className="flex flex-col gap-2 mt-4">
+                        <div className="flex flex-row justify-end gap-2 mt-4">
                           <DialogClose asChild>
-                            <button
+                            <button className="h-10 px-6 rounded-full border border-border bg-secondary/10 text-foreground text-[13px] font-medium hover:bg-secondary/20 transition-all">
+                              Cancel
+                            </button>
+                          </DialogClose>
+                          <DialogClose asChild>
+                            <button 
                               onClick={() => removeVerseBlock(bIndex)}
-                              className="w-full h-11 rounded-xl bg-destructive text-destructive-foreground font-semibold text-[15px] transition-all"
+                              className="h-10 px-6 rounded-full bg-destructive text-destructive-foreground text-[13px] font-bold hover:bg-destructive/90 transition-all"
                             >
                               Delete
                             </button>
                           </DialogClose>
-                          <DialogClose asChild>
-                            <button className="w-full h-11 rounded-xl bg-background text-foreground font-medium text-[15px] transition-all border border-border">
-                              Cancel
-                            </button>
-                          </DialogClose>
-                        </DialogFooter>
+                        </div>
                       </DialogContent>
                     </Dialog>
                   </div>
@@ -481,10 +486,14 @@ export default function ExplanationBuilderPage() {
                             );
                           })()}
                         </Select>
-                        {!selectedSurah && (
-                          <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-destructive text-[12px] font-medium mt-1.5 ml-1">
+                        {!selectedSurah ? (
+                          <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
                             Please select a Surah first.
-                          </motion.p>
+                          </p>
+                        ) : !block.verseNumber && (
+                          <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
+                            Select a verse number first to write an explanation.
+                          </p>
                         )}
                       </div>
                     </div>
@@ -555,10 +564,14 @@ export default function ExplanationBuilderPage() {
                                 onChange={e => updateExplanationText(bIndex, eIndex, e.target.value)}
                                 className="w-full bg-card border border-border focus:border-primary rounded-xl p-3.5 text-[15px] text-foreground placeholder:text-muted-foreground min-h-[120px] resize-y outline-none transition-colors disabled:opacity-50 disabled:bg-muted/50 disabled:cursor-not-allowed"
                               />
-                              {block.verseNumber <= 0 && (
-                                <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-destructive text-[12px] font-medium mt-1.5 ml-1">
+                              {block.verseNumber <= 0 ? (
+                                <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
                                   Select a verse number first to write an explanation.
-                                </motion.p>
+                                </p>
+                              ) : exp.text.trim().length > 0 && exp.text.trim().length < 10 && (
+                                <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
+                                  Need {10 - exp.text.trim().length} more characters.
+                                </p>
                               )}
                             </div>
                           </div>
@@ -577,10 +590,10 @@ export default function ExplanationBuilderPage() {
             /* DEEPER LOOK MODE */
             <motion.div
               key="deeper"
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="space-y-6 pb-20 relative"
             >
               {!hasSelectedVerse && (
@@ -637,7 +650,9 @@ export default function ExplanationBuilderPage() {
                     className={`w-full bg-background border ${rangeError ? 'border-destructive focus:border-destructive' : 'border-[#E8E2E2] focus:border-[#5A2A31]'} rounded-2xl p-4 text-[15px] focus:outline-none transition-colors placeholder:text-[#A69B9B]`}
                   />
                   {rangeError ? (
-                    <p className="text-[12px] text-destructive mt-2 ml-1 font-medium">{rangeError}</p>
+                    <p className="text-destructive text-[12px] font-medium mt-2 ml-1">{rangeError}</p>
+                  ) : !verseRange.trim() ? (
+                    <p className="text-destructive text-[12px] font-medium mt-2 ml-1">Enter a Verse Range first.</p>
                   ) : (
                     <p className="text-[12px] text-[#A69B9B] mt-2 ml-1">Supports ranges, individual, or mixed</p>
                   )}
@@ -662,51 +677,78 @@ export default function ExplanationBuilderPage() {
                                   <Trash2 size={16} className="text-[#E05252] transition-colors" />
                                 </button>
                               </DialogTrigger>
-                              <DialogContent className="w-[92vw] max-w-[360px] rounded-[1.5rem] z-[100] border-none shadow-2xl p-6 [&>button]:hidden">
+                              <DialogContent className="w-[92vw] max-w-[360px] rounded-[2rem] border-none bg-white dark:bg-background shadow-2xl p-6 [&>button]:hidden">
                                 <DialogHeader className="space-y-2">
-                                  <DialogTitle className="text-center text-lg font-bold">Delete Root Word?</DialogTitle>
-                                  <DialogDescription className="text-center text-sm leading-relaxed">
-                                    Are you sure you want to delete this root word analysis? All content inside this block will be lost.
+                                  <DialogTitle className="text-left text-lg font-bold">Delete Root Word?</DialogTitle>
+                                  <DialogDescription className="text-left text-sm leading-relaxed text-muted-foreground">
+                                    Are you sure you want to delete the root word analysis for <strong>"{rootWords[rIndex].arabic}"</strong>? All analysis content inside this block will be lost.
                                   </DialogDescription>
                                 </DialogHeader>
-                                <DialogFooter className="flex flex-col gap-2 mt-4">
+                                <div className="flex flex-row justify-end gap-2 mt-4">
                                   <DialogClose asChild>
-                                    <button
+                                    <button className="h-10 px-6 rounded-full border border-border bg-secondary/10 text-foreground text-[13px] font-medium hover:bg-secondary/20 transition-all">
+                                      Cancel
+                                    </button>
+                                  </DialogClose>
+                                  <DialogClose asChild>
+                                    <button 
                                       onClick={() => { const nr = [...rootWords]; nr.splice(rIndex, 1); setRootWords(nr); }}
-                                      className="w-full h-11 rounded-xl bg-destructive text-destructive-foreground font-semibold text-[15px] transition-all"
+                                      className="h-10 px-6 rounded-full bg-destructive text-destructive-foreground text-[13px] font-bold hover:bg-destructive/90 transition-all shadow-md active:scale-95"
                                     >
                                       Delete
                                     </button>
                                   </DialogClose>
-                                  <DialogClose asChild>
-                                    <button className="w-full h-11 rounded-xl bg-background text-foreground font-medium text-[15px] transition-all border border-border">
-                                      Cancel
-                                    </button>
-                                  </DialogClose>
-                                </DialogFooter>
+                                </div>
                               </DialogContent>
                             </Dialog>
                           </div>
                           <div className="space-y-3">
-                            <input type="text" value={rw.arabic} onChange={e => { const nr = [...rootWords]; nr[rIndex].arabic = e.target.value; setRootWords(nr); }} className="w-full bg-white border border-[#E8E2E2] rounded-full px-4 py-3 text-[14px] font-arabic focus:outline-none focus:border-[#5A2A31] transition-colors placeholder:text-[#D2C8C8] placeholder:font-body placeholder:text-[14px]" dir="rtl" placeholder="(e.g., يؤمنون) Arabic word" />
                             <div>
-                              <input disabled={!rw.arabic.trim()} type="text" value={rw.transliteration} onChange={e => { const nr = [...rootWords]; nr[rIndex].transliteration = e.target.value; setRootWords(nr); }} className="w-full bg-white border border-[#E8E2E2] rounded-full px-4 py-3 text-[14px] focus:outline-none focus:border-[#5A2A31] transition-colors placeholder:text-[#A69B9B] disabled:opacity-50 disabled:bg-[#FCFAFA] disabled:cursor-not-allowed" placeholder={rw.arabic.trim() ? "Transliteration" : "Arabic word required first"} />
-                              {!rw.arabic.trim() && (
-                                <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-destructive text-[12px] font-medium mt-1.5 ml-1">
+                              <input 
+                                disabled={!verseRange.trim() || !!rangeError}
+                                type="text" 
+                                value={rw.arabic} 
+                                onChange={e => { const nr = [...rootWords]; nr[rIndex].arabic = e.target.value; setRootWords(nr); }} 
+                                className="w-full bg-white border border-[#E8E2E2] rounded-full px-4 py-3 text-[14px] font-arabic focus:outline-none focus:border-[#5A2A31] transition-colors placeholder:text-[#D2C8C8] placeholder:font-body placeholder:text-[14px] disabled:opacity-50 disabled:bg-[#FCFAFA] disabled:cursor-not-allowed" 
+                                dir="rtl" 
+                                placeholder={!verseRange.trim() || !!rangeError ? "Enter a Verse Range first" : "(e.g., يؤمنون) Arabic word"} 
+                              />
+                              {!verseRange.trim() || !!rangeError ? (
+                                <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
+                                  Enter a Verse Range first.
+                                </p>
+                              ) : !rw.arabic.trim() && (
+                                <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
                                   Enter the Arabic word first.
-                                </motion.p>
+                                </p>
                               )}
                             </div>
                             <div>
-                              <input disabled={!rw.arabic.trim()} type="text" value={rw.rootLetters} onChange={e => { const nr = [...rootWords]; nr[rIndex].rootLetters = e.target.value; setRootWords(nr); }} className="w-full bg-white border border-[#E8E2E2] rounded-full px-4 py-3 text-[14px] font-arabic focus:outline-none focus:border-[#5A2A31] transition-colors placeholder:text-[#D2C8C8] placeholder:font-body placeholder:text-[14px] disabled:opacity-50 disabled:bg-[#FCFAFA] disabled:cursor-not-allowed" dir="rtl" placeholder={rw.arabic.trim() ? "(e.g., أ-م-ن) Root letters" : "Arabic word required first"} />
-                              {!rw.arabic.trim() && (
-                                <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-destructive text-[12px] font-medium mt-1.5 ml-1">
+                              <input disabled={!rw.arabic.trim() || !verseRange.trim() || !!rangeError} type="text" value={rw.transliteration} onChange={e => { const nr = [...rootWords]; nr[rIndex].transliteration = e.target.value; setRootWords(nr); }} className="w-full bg-white border border-[#E8E2E2] rounded-full px-4 py-3 text-[14px] focus:outline-none focus:border-[#5A2A31] transition-colors placeholder:text-[#A69B9B] disabled:opacity-50 disabled:bg-[#FCFAFA] disabled:cursor-not-allowed" placeholder={!verseRange.trim() || !!rangeError ? "Enter a Verse Range first" : rw.arabic.trim() ? "Transliteration" : "Arabic word required first"} />
+                              {!verseRange.trim() || !!rangeError ? (
+                                <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
+                                  Enter a Verse Range first.
+                                </p>
+                              ) : !rw.arabic.trim() && (
+                                <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
                                   Enter the Arabic word first.
-                                </motion.p>
+                                </p>
+                              )}
+                            </div>
+                            <div>
+                              <input disabled={!rw.arabic.trim() || !verseRange.trim() || !!rangeError} type="text" value={rw.rootLetters} onChange={e => { const nr = [...rootWords]; nr[rIndex].rootLetters = e.target.value; setRootWords(nr); }} className="w-full bg-white border border-[#E8E2E2] rounded-full px-4 py-3 text-[14px] font-arabic focus:outline-none focus:border-[#5A2A31] transition-colors placeholder:text-[#D2C8C8] placeholder:font-body placeholder:text-[14px] disabled:opacity-50 disabled:bg-[#FCFAFA] disabled:cursor-not-allowed" dir="rtl" placeholder={!verseRange.trim() || !!rangeError ? "Enter a Verse Range first" : rw.arabic.trim() ? "(e.g., أ-م-ن) Root letters" : "Arabic word required first"} />
+                              {!verseRange.trim() || !!rangeError ? (
+                                <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
+                                  Enter a Verse Range first.
+                                </p>
+                              ) : !rw.arabic.trim() && (
+                                <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
+                                  Enter the Arabic word first.
+                                </p>
                               )}
                             </div>
                             <div className="flex items-center justify-between mt-2 mb-1 px-1">
-                              <span className="text-[12px] font-semibold text-muted-foreground uppercase tracking-widest">EXPLANATION</span>
+                              <span className="text-[12px] font-semibold text-muted-foreground uppercase tracking-widest pl-1">EXPLANATION</span>
                               <Popover>
                                 <PopoverTrigger asChild>
                                   <button className="text-muted-foreground transition-colors p-1 outline-none">
@@ -751,16 +793,24 @@ export default function ExplanationBuilderPage() {
                             </div>
                             <div className="relative">
                               <textarea
-                                disabled={!rw.arabic.trim()}
+                                disabled={!rw.arabic.trim() || !verseRange.trim() || !!rangeError}
                                 value={rw.explanation}
                                 onChange={e => { const nr = [...rootWords]; nr[rIndex].explanation = e.target.value; setRootWords(nr); }}
                                 className="w-full bg-white border border-[#E8E2E2] rounded-2xl p-4 text-[14px] min-h-[80px] focus:outline-none focus:border-[#5A2A31] transition-colors placeholder:text-[#A69B9B] disabled:opacity-50 disabled:bg-[#FCFAFA] disabled:cursor-not-allowed"
-                                placeholder={rw.arabic.trim() ? "Explanation..." : "Arabic word required first..."}
+                                placeholder={!verseRange.trim() || !!rangeError ? "Enter a Verse Range first" : rw.arabic.trim() ? "Explanation..." : "Arabic word required first..."}
                               />
-                              {!rw.arabic.trim() && (
-                                <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-destructive text-[12px] font-medium mt-1.5 ml-1">
+                              {!verseRange.trim() || !!rangeError ? (
+                                <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
+                                  Enter a Verse Range first.
+                                </p>
+                              ) : !rw.arabic.trim() ? (
+                                <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
                                    Enter the Arabic word first to write an explanation.
-                                </motion.p>
+                                </p>
+                              ) : rw.explanation.trim().length > 0 && rw.explanation.trim().length < 10 && (
+                                <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
+                                  Need {10 - rw.explanation.trim().length} more characters.
+                                </p>
                               )}
                             </div>
                           </div>
@@ -777,9 +827,9 @@ export default function ExplanationBuilderPage() {
                           <Plus size={18} /> Add Root Word
                         </button>
                         {(!verseRange.trim() || !!rangeError) && (
-                          <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-destructive text-[12px] font-medium mt-2 text-center w-full">
+                          <p className="text-destructive text-[12px] font-medium mt-2 text-center w-full">
                             {rangeError ? "Fix the verse range error first." : "Enter a Verse Range first."}
-                          </motion.p>
+                          </p>
                         )}
                       </div>
                     </div>
@@ -793,42 +843,60 @@ export default function ExplanationBuilderPage() {
                   {categories.map((cat, cIndex) => (
                     <div key={cat.id} className="bg-white border border-[#E8E2E2] rounded-[1.5rem] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] mb-4">
                       <div className="flex justify-between items-center mb-4">
-                        <span className="text-[13px] text-[#8C7D7D]">Category</span>
+                        <span className="text-[12px] font-semibold text-muted-foreground uppercase tracking-widest pl-1">Category</span>
                         <Dialog>
                           <DialogTrigger asChild>
                             <button className="outline-none">
                               <Trash2 size={16} className="text-[#E05252] transition-colors" />
                             </button>
                           </DialogTrigger>
-                          <DialogContent className="w-[92vw] max-w-[360px] rounded-[1.5rem] z-[100] border-none shadow-2xl p-6 [&>button]:hidden">
+                          <DialogContent className="w-[92vw] max-w-[360px] rounded-[2rem] border-none bg-white dark:bg-background shadow-2xl p-6 [&>button]:hidden">
                             <DialogHeader className="space-y-2">
-                              <DialogTitle className="text-center text-lg font-bold">Delete Category?</DialogTitle>
-                              <DialogDescription className="text-center text-sm leading-relaxed">
-                                Are you sure you want to delete this category? All content written inside will be lost.
+                              <DialogTitle className="text-left text-lg font-bold">Delete Category?</DialogTitle>
+                              <DialogDescription className="text-left text-sm leading-relaxed text-muted-foreground">
+                                Are you sure you want to delete the category <strong>"{categories[cIndex].title || 'Untitled'}"</strong>? All sub-items and content written inside will be lost.
                               </DialogDescription>
                             </DialogHeader>
-                            <DialogFooter className="flex flex-col gap-2 mt-4">
+                            <div className="flex flex-row justify-end gap-2 mt-4">
                               <DialogClose asChild>
-                                <button
+                                <button className="h-10 px-6 rounded-full border border-border bg-secondary/10 text-foreground text-[13px] font-medium hover:bg-secondary/20 transition-all">
+                                  Cancel
+                                </button>
+                              </DialogClose>
+                              <DialogClose asChild>
+                                <button 
                                   onClick={() => { const nc = [...categories]; nc.splice(cIndex, 1); setCategories(nc); }}
-                                  className="w-full h-11 rounded-xl bg-destructive text-destructive-foreground font-semibold text-[15px] transition-all"
+                                  className="h-10 px-6 rounded-full bg-destructive text-destructive-foreground text-[13px] font-bold hover:bg-destructive/90 transition-all shadow-md active:scale-95"
                                 >
                                   Delete
                                 </button>
                               </DialogClose>
-                              <DialogClose asChild>
-                                <button className="w-full h-11 rounded-xl bg-background text-foreground font-medium text-[15px] transition-all border border-border">
-                                  Cancel
-                                </button>
-                              </DialogClose>
-                            </DialogFooter>
+                            </div>
                           </DialogContent>
                         </Dialog>
                       </div>
-                      <input type="text" value={cat.title} onChange={e => { const nc = [...categories]; nc[cIndex].title = e.target.value; setCategories(nc); }} className="w-full bg-white border border-[#E8E2E2] rounded-full px-4 py-3.5 text-[14px] mb-4 focus:outline-none focus:border-[#5A2A31]" placeholder="Category Title" />
+                      <div>
+                        <input 
+                          disabled={!verseRange.trim() || !!rangeError}
+                          type="text" 
+                          value={cat.title} 
+                          onChange={e => { const nc = [...categories]; nc[cIndex].title = e.target.value; setCategories(nc); }} 
+                          className="w-full bg-white border border-[#E8E2E2] rounded-full px-4 py-3.5 text-[14px] focus:outline-none focus:border-[#5A2A31] disabled:opacity-50 disabled:bg-[#FCFAFA] disabled:cursor-not-allowed" 
+                          placeholder={!verseRange.trim() || !!rangeError ? "Enter a Verse Range first" : "Category Title"} 
+                        />
+                        {!verseRange.trim() || !!rangeError ? (
+                          <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
+                            Enter a Verse Range first.
+                          </p>
+                        ) : !cat.title.trim() && (
+                          <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
+                            Enter the Category Title first to write content.
+                          </p>
+                        )}
+                      </div>
 
                       <div className="flex items-center justify-between mb-3 px-1">
-                        <span className="text-[12px] font-semibold text-[#8C7D7D] uppercase tracking-widest">CONTENT</span>
+                        <span className="text-[12px] font-semibold text-muted-foreground uppercase tracking-widest pl-1">CONTENT</span>
                         <Popover>
                           <PopoverTrigger asChild>
                             <button className="text-muted-foreground transition-colors p-1 outline-none">
@@ -874,16 +942,24 @@ export default function ExplanationBuilderPage() {
 
                       <div>
                         <textarea
-                          disabled={!cat.title.trim()}
+                          disabled={!cat.title.trim() || !verseRange.trim() || !!rangeError}
                           value={cat.content}
                           onChange={e => { const nc = [...categories]; nc[cIndex].content = e.target.value; setCategories(nc); }}
                           className="w-full bg-white border border-[#E8E2E2] rounded-2xl p-4 text-[14px] min-h-[140px] focus:outline-none focus:border-[#5A2A31] disabled:opacity-50 disabled:bg-[#FCFAFA] disabled:cursor-not-allowed"
-                          placeholder={cat.title.trim() ? "## Heading\n\nYour content here...\n\nUse **bold** for emphasis" : "Category Title required first..."}
+                          placeholder={!verseRange.trim() || !!rangeError ? "Enter a Verse Range first" : cat.title.trim() ? "## Heading\n\nYour content here...\n\nUse **bold** for emphasis" : "Category Title required first..."}
                         />
-                        {!cat.title.trim() && (
-                          <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-destructive text-[12px] font-medium mt-1.5 ml-1">
+                        {!verseRange.trim() || !!rangeError ? (
+                          <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
+                            Enter a Verse Range first.
+                          </p>
+                        ) : !cat.title.trim() ? (
+                          <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
                             Enter the Category Title first to write content.
-                          </motion.p>
+                          </p>
+                        ) : cat.content.trim().length > 0 && cat.content.trim().length < 10 && (
+                          <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
+                            Need {10 - cat.content.trim().length} more characters.
+                          </p>
                         )}
                       </div>
                     </div>
@@ -900,9 +976,9 @@ export default function ExplanationBuilderPage() {
                       <Plus size={18} /> Add Category
                     </button>
                     {(!verseRange.trim() || !!rangeError) && (
-                      <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-destructive text-[12px] font-medium mt-2 text-center w-full">
+                      <p className="text-destructive text-[12px] font-medium mt-2 text-center w-full">
                         {rangeError ? "Fix the verse range error first." : "Enter a Verse Range first."}
-                      </motion.p>
+                      </p>
                     )}
                   </div>
                 </div>
@@ -912,7 +988,8 @@ export default function ExplanationBuilderPage() {
         </AnimatePresence>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 p-5 pb-8 bg-gradient-to-t from-background via-background/90 to-transparent z-40">
+      {/* Save Button (Fixed at bottom) */}
+      <div className="fixed bottom-0 inset-x-0 p-4 pb-[max(1.25rem,env(safe-area-inset-bottom,1.25rem))] bg-background/80 backdrop-blur-md border-t border-border/50 z-[70]">
         <button
           onClick={() => {
             if (isSaveDisabled) {
@@ -951,7 +1028,7 @@ export default function ExplanationBuilderPage() {
               else if (!hasConciseContent) {
                 toast({
                   title: "Content Missing",
-                  description: "Add at least one concise note in the Verse Block section.",
+                  description: "Add at least one concise note (min. 10 characters) in the Verse Block section.",
                   variant: "destructive",
                   icon: <AlertCircle size={18} />
                 });

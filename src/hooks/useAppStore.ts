@@ -12,6 +12,7 @@ export interface TafsirRecord {
   surahNumber: number;
   verseNumber: number;
   tafsirs: Record<string, string>;
+  sources?: TafsirSource[];
   createdAt: string;
   updatedAt: string;
 }

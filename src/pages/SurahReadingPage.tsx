@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, MoreVertical, BookmarkCheck, Bookmark as BookmarkIcon, FileText, Pencil, BookOpen } from 'lucide-react';
+import { ArrowLeft, MoreVertical, BookmarkCheck, Bookmark as BookmarkIcon, FileText, Pencil, BookOpen, PenLine } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSurahVerses, useSurahs } from '@/hooks/useQuranData';
-import { useBookmarks, useExplanations, useLastPosition, useLastRead, useSettings, useCustomTranslations, useCustomTafsirs } from '@/hooks/useAppStore';
+import { useBookmarks, useExplanations, useLastPosition, useLastRead, useSettings, useCustomTranslations, useCustomTafsirs, useNotes } from '@/hooks/useAppStore';
 import {
   Drawer,
   DrawerContent,
@@ -28,6 +28,7 @@ export default function SurahReadingPage() {
   const { settings } = useSettings();
   const { getCustomTranslation, saveCustomTranslation, resetCustomTranslation } = useCustomTranslations();
   const { saveLastRead } = useLastRead();
+  const { notes } = useNotes();
   
   const [isRendered, setIsRendered] = useState(false);
   const [menuVerse, setMenuVerse] = useState<number | null>(null);
@@ -215,9 +216,9 @@ export default function SurahReadingPage() {
         ) : (
           <motion.div
             key="content"
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
             {/* Bismillah & Surah Calligraphy */}
             <div className="text-center py-5 px-4 flex flex-col items-center gap-1">
@@ -245,6 +246,7 @@ export default function SurahReadingPage() {
             const explained = hasExplanation(surahNumber, verse.numberInSurah);
             const tafsirExists = hasTafsir(surahNumber, verse.numberInSurah);
             const bookmarked = isBookmarked(surahNumber, verse.numberInSurah);
+            const note = notes.find(n => n.surahNumber === surahNumber && n.verseNumber === verse.numberInSurah);
             const customTrans = getCustomTranslation(surahNumber, verse.numberInSurah, settings.language);
             const displayTranslation = customTrans || verse.translation;
 
@@ -332,6 +334,21 @@ export default function SurahReadingPage() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
+                              setMenuVerse(null);
+                              if (note) {
+                                navigate(`/note-view?id=${note.id}`);
+                              } else {
+                                navigate(`/note-builder?surah=${surahNumber}&verse=${verse.numberInSurah}`);
+                              }
+                            }}
+                            className="flex items-center gap-2 w-full px-3 py-2 text-[15px] font-medium transition text-foreground/90"
+                          >
+                            <PenLine size={16} className="text-muted-foreground mr-1" />
+                            {note ? 'View Note' : 'Add Note'}
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
                               setEditText(customTrans || verse.translation);
                               setEditingVerse(verse.numberInSurah);
                               setMenuVerse(null);
@@ -359,7 +376,7 @@ export default function SurahReadingPage() {
 
                   {/* Translation */}
                   <p
-                    className="font-display text-muted-foreground"
+                    className="font-display text-muted-foreground text-center"
                     style={{
                       fontSize: `${settings.translationFontSize}px`,
                       lineHeight: 1.6,
@@ -401,7 +418,7 @@ export default function SurahReadingPage() {
                      </div>
                   </div>
                   
-                  <div className="px-7 pb-10 pt-4 bg-background border-t border-border shrink-0 flex gap-3">
+                  <div className="px-7 pb-[max(1.25rem,env(safe-area-inset-bottom,1.25rem))] pt-4 bg-background border-t border-border shrink-0 flex gap-3">
                      <button 
                         disabled={isResetDisabled}
                         onClick={() => {

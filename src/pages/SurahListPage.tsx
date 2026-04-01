@@ -92,18 +92,10 @@ export default function SurahListPage() {
               <button
                 key={f.value}
                 onClick={() => setFilter(f.value)}
-                className={`relative px-4 py-1.5 rounded-full text-[13px] font-medium transition-colors outline-none z-10 ${
-                  isActive ? 'text-primary-foreground' : 'text-foreground/70 bg-muted/40'
+                className={`relative px-4 py-1.5 rounded-full text-[13px] font-medium transition-colors outline-none ${
+                  isActive ? 'bg-primary text-primary-foreground' : 'bg-muted/40 text-foreground/70'
                 }`}
               >
-                {/* Sliding active background */}
-                {isActive && (
-                  <motion.div
-                    layoutId="surahFilterIndicator"
-                    className="absolute inset-0 bg-primary rounded-full -z-10 shadow-sm"
-                    transition={{ type: "spring", bounce: 0, duration: 0.4 }}
-                  />
-                )}
                 <span className="relative z-10">{f.label}</span>
               </button>
             );
@@ -114,30 +106,31 @@ export default function SurahListPage() {
       <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
 
       {/* Surah List */}
-      <motion.div layout className="px-4 mt-4 space-y-3">
-        <AnimatePresence mode="popLayout" initial={false}>
-          {isLoading ? (
-            null
-          ) : (
-            filtered.map(surah => (
-              <motion.div
-                key={surah.number}
-                layout
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
-              >
+      <div className="px-4 mt-4 space-y-3">
+        <AnimatePresence mode="wait">
+          {!isLoading && (
+            <motion.div
+              key={filter}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ 
+                duration: 0.5, 
+                ease: [0.16, 1, 0.3, 1] // Custom quintic ease-out for ultra smoothness
+              }}
+              className="space-y-3"
+            >
+              {filtered.map(surah => (
                 <SurahCard
+                  key={surah.number}
                   surah={surah}
                   isFavorite={isFavorite(surah.number)}
                   onToggleFavorite={toggleFavorite}
                 />
-              </motion.div>
-            ))
+              ))}
+            </motion.div>
           )}
         </AnimatePresence>
-      </motion.div>
+      </div>
     </div>
   );
 }

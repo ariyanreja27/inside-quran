@@ -6,8 +6,6 @@ import { useSurahs, useSurahVerses } from '@/hooks/useQuranData';
 import { useNotes, useSettings } from '@/hooks/useAppStore';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import LoadingScreen from '@/components/LoadingScreen';
 import { cn } from '@/lib/utils';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -55,10 +53,9 @@ export default function NoteBuilderPage() {
     setIsLoaded(true);
   }, [editId, notes, isLoaded]);
 
-  const wordCount = content.trim() ? content.trim().split(/\s+/).length : 0;
-  const isMinWordsMet = wordCount >= 50;
+  const isMinLengthMet = content.trim().length >= 10;
   const hasMeaningfulChange = editId ? content.trim() !== originalContent.trim() : true;
-  const canSave = selectedSurah && selectedVerse && isMinWordsMet && hasMeaningfulChange;
+  const canSave = selectedSurah && selectedVerse && isMinLengthMet && hasMeaningfulChange;
 
   const handleSave = () => {
     if (!canSave) return;
@@ -84,10 +81,12 @@ export default function NoteBuilderPage() {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="min-h-screen bg-background pb-32"
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.96, y: 20 }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      className="min-h-screen bg-background pb-24"
     >
       {/* Header */}
       <div className="sticky top-0 z-40 bg-background border-b border-border/60 pb-2">
@@ -144,11 +143,19 @@ export default function NoteBuilderPage() {
               {isVersesLoading ? (
                  <div className="p-4 text-center text-sm text-muted-foreground animate-pulse">Loading...</div>
               ) : (
-                verses?.map(v => (
-                  <SelectItem key={v.numberInSurah} value={v.numberInSurah.toString()} className="rounded-xl py-3 cursor-pointer">
-                    Verse {v.numberInSurah}
-                  </SelectItem>
-                ))
+                verses?.map(v => {
+                  const isUsed = notes.some(n => n.surahNumber === selectedSurah && n.verseNumber === v.numberInSurah && n.id !== editId);
+                  return (
+                    <SelectItem 
+                      key={v.numberInSurah} 
+                      value={v.numberInSurah.toString()} 
+                      disabled={isUsed}
+                      className="rounded-xl py-3 data-[disabled]:opacity-40 data-[disabled]:cursor-not-allowed"
+                    >
+                      Verse {v.numberInSurah}
+                    </SelectItem>
+                  );
+                })
               )}
             </SelectContent>
           </Select>
@@ -164,107 +171,99 @@ export default function NoteBuilderPage() {
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="bg-card/50 dark:bg-card/30 rounded-[2rem] p-6 pb-8 flex flex-col items-center justify-center min-h-[100px] shadow-[0_2px_15px_rgba(0,0,0,0.02)] border border-border/80 relative overflow-hidden"
+              className="bg-muted/30 border border-border/60 rounded-2xl p-4 flex flex-col items-center justify-center min-h-[80px] relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-[100px] -z-10 blur-xl" />
               <p 
-                className="font-arabic text-3xl leading-loose text-center text-foreground mb-4" 
-                style={{ fontSize: `${settings.arabicFontSize + 4}px` }}
-                dangerouslySetInnerHTML={{ __html: (verseData.text || '').replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ', '<span class="bismillah-text text-2xl block -mb-4">﷽</span>') }}
+                className="arabic-text text-2xl leading-[2.5] text-center text-foreground font-arabic" 
+                dangerouslySetInnerHTML={{ __html: (verseData.text || '').replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ', '<span class="bismillah-text text-xl block -mb-2">﷽</span>') }}
               />
-              <p className="italic font-display text-muted-foreground text-center text-[14px] leading-relaxed max-w-[90%]">
-                "{verseData.translation}"
-              </p>
             </motion.div>
           )}
         </AnimatePresence>
 
         {/* Editor Section */}
-        <div className="space-y-4">
-          <div className="flex justify-between items-center ml-1">
-            <div className="flex items-center gap-2">
-              <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">Your Note (Markdown)</label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <button className="text-muted-foreground/40 hover:text-muted-foreground transition-colors outline-none">
-                    <Info size={14} />
-                  </button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[280px] p-4 text-sm bg-popover border-border shadow-2xl rounded-2xl z-[100] outline-none" align="start">
-                  <div className="space-y-3">
-                    <h4 className="font-semibold text-foreground text-[14px]">Markdown Guide</h4>
-                    <div className="grid grid-cols-2 gap-y-2 text-[12px]">
-                      <code>**bold**</code> <code>*italic*</code>
-                      <code># Heading 1</code> <code>## Heading 2</code>
-                      <code>- bullet list</code> <code>1. list</code>
-                      <code>{'>'} quote</code> <code>--- divider</code>
+        <div className="bg-card border border-border rounded-[1.5rem] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] relative">
+          <div className="flex items-center justify-between mb-4 border-b border-border/60 pb-3">
+            <label className="text-[12px] font-semibold text-muted-foreground uppercase tracking-widest pl-1">YOUR NOTE</label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <button className="text-muted-foreground transition-colors outline-none p-1">
+                  <Info size={18} />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[280px] p-4 text-sm bg-popover border-border shadow-2xl rounded-[1.5rem] z-[100] outline-none" align="end">
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-foreground text-[14px] px-0.5">Markdown Guide</h4>
+                  <div className="max-h-[260px] overflow-auto pr-1 custom-scrollbar">
+                    <div className="grid grid-cols-1 gap-y-1 pb-2">
+                      {[
+                        { s: "# H1", d: "Heading 1" },
+                        { s: "## H2", d: "Heading 2" },
+                        { s: "### H3", d: "Heading 3" },
+                        { s: "**bold**", d: "Bold text" },
+                        { s: "*italic*", d: "Italic text" },
+                        { s: "***text***", d: "Bold & Italic" },
+                        { s: "- item", d: "Bullet List" },
+                        { s: "1. item", d: "Numbered List" },
+                        { s: "- [ ] task", d: "Task List" },
+                        { s: "> quote", d: "Blockquote" },
+                        { s: "`code`", d: "Inline Code" },
+                        { s: "```code```", d: "Code Block" },
+                        { s: "[link](url)", d: "Hyperlink" },
+                        { s: "---", d: "Divider Line" },
+                        { s: "| a | b |", d: "Table Row" },
+                        { s: "~~strike~~", d: "Strikethrough" },
+                      ].map((item, i) => (
+                        <div key={i} className="grid grid-cols-[90px,1fr] gap-x-3 items-center text-[12px] group py-2 border-b border-border/30 last:border-0 px-0.5">
+                          <code className="bg-primary/5 text-primary px-1.5 py-0.5 rounded font-mono text-[11px] whitespace-nowrap flex-shrink-0 transition-colors justify-self-start">
+                            {item.s}
+                          </code>
+                          <span className="text-muted-foreground text-right truncate transition-colors">{item.d}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                </PopoverContent>
-              </Popover>
-            </div>
-            <div className="flex items-center gap-2">
-              {!isMinWordsMet && content.trim() && (
-                <span className="text-[10px] text-orange-500 font-bold animate-pulse">
-                  Need 50 words
-                </span>
-              )}
-              <span className={cn(
-                "text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-tighter transition-all",
-                isMinWordsMet ? "bg-emerald-500/10 text-emerald-600" : "bg-orange-500/10 text-orange-600"
-              )}>
-                {wordCount} Words
-              </span>
-            </div>
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
           
           <div className="relative">
             <textarea
               disabled={!selectedSurah || !selectedVerse}
-              className="w-full h-80 bg-card border border-border rounded-[1.5rem] p-5 text-[15px] leading-relaxed focus:outline-none focus:ring-2 focus:ring-primary/5 transition-all resize-none placeholder:text-muted-foreground/30 shadow-sm disabled:opacity-50 disabled:bg-muted/10 grayscale-[0.5]"
+              className="w-full bg-background/50 border border-border focus:border-primary rounded-xl p-4 text-[15px] leading-relaxed text-foreground placeholder:text-muted-foreground min-h-[280px] resize-y outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               placeholder={selectedVerse ? "Share your reflections here..." : "Select a Surah and Verse first to start writing..."}
               value={content}
               onChange={(e) => setContent(e.target.value)}
             />
-            {(!selectedSurah || !selectedVerse) && (
+            {(!selectedSurah || !selectedVerse) ? (
               <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
                 {!selectedSurah ? "Please select a Surah first." : "Select a verse number first to write a note."}
+              </p>
+            ) : content.trim() && content.trim().length < 10 && (
+              <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
+                Need {10 - content.trim().length} more characters.
               </p>
             )}
           </div>
         </div>
 
-        {/* Live Preview */}
-        <AnimatePresence>
-          {content.trim() && (
-            <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="space-y-3 pb-10"
-            >
-              <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest ml-1">Live Preview</label>
-              <div 
-                className="bg-card/30 border border-border/50 rounded-[1.5rem] p-6 prose prose-sm max-w-none text-muted-foreground leading-[1.8]
-                  prose-headings:font-display prose-headings:font-bold prose-headings:text-foreground 
-                  prose-headings:mt-6 prose-headings:mb-3
-                  prose-strong:font-bold prose-strong:text-foreground"
-              >
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
 
       {/* Sticky Bottom Save Button */}
-      <div className="fixed bottom-0 inset-x-0 p-4 bg-background/80 backdrop-blur-md border-t border-border/50 z-50">
+      <div className="fixed bottom-0 inset-x-0 p-4 pb-[max(1.25rem,env(safe-area-inset-bottom,1.25rem))] bg-background/80 backdrop-blur-md border-t border-border/50 z-[70]">
         <div className="max-w-lg mx-auto">
           <button
             onClick={handleSave}
             disabled={!canSave}
-            className="w-full h-14 bg-primary text-primary-foreground rounded-2xl font-bold text-[16px] shadow-lg shadow-primary/20 transition-all disabled:opacity-50 disabled:grayscale disabled:scale-[0.98] active:scale-95 flex items-center justify-center gap-2"
+            className={`w-full py-[14px] rounded-full font-medium text-[16px] transition-all flex justify-center items-center ${
+              canSave
+                ? 'bg-primary text-primary-foreground shadow-[0_8px_20px_rgba(var(--primary),0.25)]'
+                : 'bg-secondary text-muted-foreground/80 cursor-not-allowed'
+            }`}
           >
-            {editId ? 'Update Note' : 'Save Note'}
+            Save Note
           </button>
         </div>
       </div>

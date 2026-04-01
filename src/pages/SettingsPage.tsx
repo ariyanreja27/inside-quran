@@ -1,13 +1,13 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Moon, Globe, Type, BookmarkX, Bell, Cloud, CloudUpload, Eye, Info, RotateCcw, LucideIcon, Minus, Plus, Download, Upload, ArrowLeft, Settings, Star, Book, PenLine, Database, HardDrive, Trash2 } from 'lucide-react';
-import { 
-  useSettings, useDarkMode, useBookmarks, useFavorites, 
-  useExplanations, useTafsirSources, useCustomTafsirs, 
-  useCollections, useNotes, useLastPosition, 
+import {
+  useSettings, useDarkMode, useBookmarks, useFavorites,
+  useExplanations, useTafsirSources, useCustomTafsirs,
+  useCollections, useNotes, useLastPosition,
   useLastRead, useCustomTranslations,
-  defaultSettings 
+  defaultSettings
 } from '@/hooks/useAppStore';
 import { Slider } from '@/components/ui/slider';
 import {
@@ -20,6 +20,17 @@ import {
 } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function SettingsPage() {
   const navigate = useNavigate();
@@ -36,28 +47,28 @@ export default function SettingsPage() {
   const { lastRead } = useLastRead();
   const { customTranslations } = useCustomTranslations();
 
-  const isModified = 
+  const isModified =
     settings.arabicFontSize !== defaultSettings.arabicFontSize ||
     settings.translationFontSize !== defaultSettings.translationFontSize ||
     settings.lineSpacing !== defaultSettings.lineSpacing;
 
+  const [isClearBookmarksOpen, setIsClearBookmarksOpen] = useState(false);
+  const [isClearFavoritesOpen, setIsClearFavoritesOpen] = useState(false);
+
   const handleClearBookmarks = () => {
-    if (bookmarks.length === 0) return alert('No bookmarks to clear.');
-    if (window.confirm('Are you sure you want to completely clear all saved bookmarks?')) {
-      clearBookmarks();
-    }
+    if (bookmarks.length === 0) return;
+    setIsClearBookmarksOpen(true);
   };
 
   const handleClearFavorites = () => {
-    if (favorites.length === 0) return alert('No favorites to clear.');
-    if (window.confirm('Are you sure you want to completely clear all favorite Surahs?')) {
-      clearFavorites();
-    }
+    if (favorites.length === 0) return;
+    setIsClearFavoritesOpen(true);
   };
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isExportDialogOpen, setIsExportDialogOpen] = useState(false);
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
+  const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
   const [selectedResetTypes, setSelectedResetTypes] = useState<string[]>([]);
   const [storageUsage, setStorageUsage] = useState<Record<string, number>>({});
   const [selectedTypes, setSelectedTypes] = useState<string[]>([
@@ -91,9 +102,9 @@ export default function SettingsPage() {
     calculateStorage();
   }, [
     calculateStorage,
-    isExportDialogOpen, 
-    bookmarks, favorites, explanations, 
-    sources, tafsirRecords, collections, 
+    isExportDialogOpen,
+    bookmarks, favorites, explanations,
+    sources, tafsirRecords, collections,
     notes, position, lastRead, customTranslations
   ]);
 
@@ -107,25 +118,26 @@ export default function SettingsPage() {
   const totalUsage = Object.values(storageUsage).reduce((a, b) => a + b, 0);
 
   const toggleType = (type: string) => {
-    setSelectedTypes(prev => 
+    setSelectedTypes(prev =>
       prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
     );
   };
 
   const toggleResetType = (type: string) => {
-    setSelectedResetTypes(prev => 
+    if ((storageUsage[type] || 0) === 0) return;
+    setSelectedResetTypes(prev =>
       prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
     );
   };
 
   const handleResetSelected = () => {
     if (selectedResetTypes.length === 0) return;
-    
+
     selectedResetTypes.forEach(type => {
       const keys = backupMapping[type];
       keys.forEach(key => localStorage.removeItem(key));
     });
-    
+
     setIsResetDialogOpen(false);
     window.location.reload();
   };
@@ -139,7 +151,7 @@ export default function SettingsPage() {
 
       const keysToBackup = selectedTypes.flatMap(type => backupMapping[type]);
       const backupData: Record<string, unknown> = {};
-      
+
       keysToBackup.forEach(key => {
         const item = localStorage.getItem(key);
         if (item) {
@@ -155,7 +167,7 @@ export default function SettingsPage() {
         alert("No data found for the selected categories.");
         return;
       }
-      
+
       const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -184,11 +196,11 @@ export default function SettingsPage() {
       try {
         const content = e.target?.result as string;
         const data = JSON.parse(content);
-        
+
         if (!data || typeof data !== 'object') throw new Error("Invalid backup file.");
-        
+
         const allPossibleKeys = Object.values(backupMapping).flat();
-        
+
         let restoredCount = 0;
         Object.keys(data).forEach(key => {
           if (key.startsWith('iq-')) {
@@ -235,11 +247,11 @@ export default function SettingsPage() {
           <p className="text-[11px] text-muted-foreground leading-tight mt-1 opacity-80">{description || `${value}${unit}`}</p>
         </div>
         <div className="flex items-center bg-secondary/20 rounded-full p-1 border border-border/40 shadow-inner">
-          <motion.button 
+          <motion.button
             whileTap={{ scale: 0.85 }}
             transition={{ type: "spring", stiffness: 400, damping: 25 }}
             disabled={value <= min}
-            onClick={() => onChange(Math.max(min, Number((value - step).toFixed(1))))} 
+            onClick={() => onChange(Math.max(min, Number((value - step).toFixed(1))))}
             className="w-8 h-8 flex items-center justify-center rounded-full bg-background/90 text-foreground shadow-[0_2px_10px_rgba(0,0,0,0.05)] disabled:opacity-20 disabled:cursor-not-allowed border border-border/50"
             aria-label="Decrease"
           >
@@ -251,11 +263,11 @@ export default function SettingsPage() {
               <span className="text-[10px] ml-1 opacity-50 font-medium">{unit}</span>
             </span>
           </div>
-          <motion.button 
+          <motion.button
             whileTap={{ scale: 0.85 }}
             transition={{ type: "spring", stiffness: 400, damping: 25 }}
             disabled={value >= max}
-            onClick={() => onChange(Math.min(max, Number((value + step).toFixed(1))))} 
+            onClick={() => onChange(Math.min(max, Number((value + step).toFixed(1))))}
             className="w-8 h-8 flex items-center justify-center rounded-full bg-background/90 text-foreground shadow-[0_2px_10px_rgba(0,0,0,0.05)] disabled:opacity-20 disabled:cursor-not-allowed border border-border/50"
             aria-label="Increase"
           >
@@ -271,8 +283,8 @@ export default function SettingsPage() {
       {/* Header */}
       <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-md pb-2 pt-1 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border-b border-border/60 transform-gpu">
         <div className="flex items-center gap-3 px-4 h-14">
-          <button 
-            onClick={() => navigate('/')} 
+          <button
+            onClick={() => navigate('/')}
             className="w-10 h-10 flex items-center justify-center rounded-full transition-all text-foreground outline-none"
             aria-label="Back"
           >
@@ -284,27 +296,32 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      <div className="px-4 py-6 space-y-8 max-w-lg mx-auto">
-        
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="px-4 py-6 space-y-8 max-w-lg mx-auto"
+      >
+
         {/* SECTION 1: THEME */}
-        <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.0 }}>
+        <section>
           <SectionTitle icon={Moon} title="Appearance" />
           <div className="bg-card border border-border rounded-2xl p-4 flex items-center justify-between shadow-sm">
             <div>
               <p className="text-sm font-medium">Dark Mode</p>
               <p className="text-xs text-muted-foreground">Toggle dark theme</p>
             </div>
-            <button 
+            <button
               onClick={toggleDark}
               className={`w-12 h-6 rounded-full transition-colors relative ${isDark ? 'bg-primary' : 'bg-secondary'}`}
             >
               <span className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isDark ? 'translate-x-6' : 'translate-x-0'}`} />
             </button>
           </div>
-        </motion.section>
+        </section>
 
         {/* SECTION 2: LANGUAGE */}
-        <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}>
+        <section>
           <SectionTitle icon={Globe} title="Language" />
           <div className="bg-card border border-border rounded-2xl p-4 space-y-3 shadow-sm">
             {(['en', 'bn', 'hi'] as const).map(lang => {
@@ -312,10 +329,10 @@ export default function SettingsPage() {
               return (
                 <label key={lang} className="flex items-center justify-between cursor-pointer group">
                   <span className="text-sm font-medium transition-colors">{labels[lang]}</span>
-                  <input 
-                    type="radio" 
-                    name="language" 
-                    value={lang} 
+                  <input
+                    type="radio"
+                    name="language"
+                    value={lang}
                     checked={settings.language === lang}
                     onChange={() => updateSettings({ language: lang })}
                     className="w-4 h-4 accent-primary"
@@ -324,15 +341,15 @@ export default function SettingsPage() {
               )
             })}
           </div>
-        </motion.section>
+        </section>
 
         {/* SECTION 3: READING */}
-        <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+        <section>
           <div className="flex items-center justify-between">
             <SectionTitle icon={Type} title="Reading Preferences" />
             <motion.button
               initial={false}
-              animate={{ 
+              animate={{
                 opacity: isModified ? 1 : 0,
                 scale: isModified ? 1 : 0.8,
                 rotate: isModified ? 0 : -90
@@ -350,56 +367,56 @@ export default function SettingsPage() {
             </motion.button>
           </div>
           <div className="bg-card border border-border rounded-2xl p-4 space-y-6 shadow-sm">
-            <Stepper 
-              label="Arabic Size" 
+            <Stepper
+              label="Arabic Size"
               description="Font size for Quranic text"
-              value={settings.arabicFontSize} 
-              unit="px" 
-              min={16} max={48} step={2} 
-              onChange={(val: number) => updateSettings({ arabicFontSize: val })} 
-            />
-            
-            <Stepper 
-              label="Translation Size" 
-              description="Font size for English/Urdu"
-              value={settings.translationFontSize} 
-              unit="px" 
-              min={10} max={24} step={1} 
-              onChange={(val: number) => updateSettings({ translationFontSize: val })} 
+              value={settings.arabicFontSize}
+              unit="px"
+              min={16} max={48} step={2}
+              onChange={(val: number) => updateSettings({ arabicFontSize: val })}
             />
 
-            <Stepper 
-              label="Line Spacing" 
+            <Stepper
+              label="Translation Size"
+              description="Font size for English/Urdu"
+              value={settings.translationFontSize}
+              unit="px"
+              min={10} max={24} step={1}
+              onChange={(val: number) => updateSettings({ translationFontSize: val })}
+            />
+
+            <Stepper
+              label="Line Spacing"
               description="Vertical space between lines"
-              value={settings.lineSpacing} 
-              unit="x" 
-              min={1.5} max={4.0} step={0.1} 
-              onChange={(val: number) => updateSettings({ lineSpacing: val })} 
+              value={settings.lineSpacing}
+              unit="x"
+              min={1.5} max={4.0} step={0.1}
+              onChange={(val: number) => updateSettings({ lineSpacing: val })}
             />
           </div>
-        </motion.section>
+        </section>
 
         {/* SECTION 7: APPEARANCE (Moved up for logical flow) */}
-        <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
+        <section>
           <SectionTitle icon={Eye} title="Filter" />
           <div className="bg-card border border-border rounded-2xl p-4 flex items-center justify-between shadow-sm">
             <div>
               <p className="text-sm font-medium">Explained Verses Only</p>
               <p className="text-xs text-muted-foreground">Hide verses without tafsir</p>
             </div>
-            <button 
+            <button
               onClick={() => updateSettings({ showOnlyExplained: !settings.showOnlyExplained })}
               className={`w-12 h-6 rounded-full transition-colors relative ${settings.showOnlyExplained ? 'bg-primary' : 'bg-secondary'}`}
             >
               <span className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${settings.showOnlyExplained ? 'translate-x-6' : 'translate-x-0'}`} />
             </button>
           </div>
-        </motion.section>
+        </section>
 
 
 
         {/* SECTION 5 & 6: BACKUP & RESTORE */}
-        <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
+        <section>
           <SectionTitle icon={Cloud} title="Data Backup & Restore" />
           <div className="bg-card border border-border rounded-2xl p-5 space-y-5 shadow-sm">
             <div className="flex items-center justify-between">
@@ -407,7 +424,7 @@ export default function SettingsPage() {
                 <p className="text-sm font-semibold text-foreground">Export Backup</p>
                 <p className="text-[11px] text-muted-foreground mt-0.5 opacity-70">Save your data to a .json file</p>
               </div>
-              <button 
+              <button
                 onClick={() => setIsExportDialogOpen(true)}
                 className="h-9 px-4 bg-primary text-primary-foreground rounded-xl flex items-center gap-2 font-bold text-xs shadow-sm shadow-primary/10 transition-all active:scale-95"
               >
@@ -415,15 +432,15 @@ export default function SettingsPage() {
                 Export
               </button>
             </div>
-            
+
             <div className="h-px bg-border/50" />
-            
+
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-semibold text-foreground">Import Backup</p>
                 <p className="text-[11px] text-muted-foreground mt-0.5 opacity-70">Load from a .json file</p>
               </div>
-              <button 
+              <button
                 onClick={() => fileInputRef.current?.click()}
                 className="h-9 px-4 bg-secondary text-foreground rounded-xl flex items-center gap-2 font-bold text-xs border border-border/50 transition-all active:scale-95"
               >
@@ -433,10 +450,10 @@ export default function SettingsPage() {
               <input type="file" accept=".json" ref={fileInputRef} onChange={handleImportBackup} className="hidden" />
             </div>
           </div>
-        </motion.section>
+        </section>
 
         {/* SECTION: STORAGE & RESET */}
-        <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.28 }}>
+        <section>
           <SectionTitle icon={HardDrive} title="Data & Storage" />
           <div className="bg-card border border-border rounded-2xl p-5 space-y-6 shadow-sm">
             {/* Storage Usage Dashboard */}
@@ -448,48 +465,50 @@ export default function SettingsPage() {
                 </div>
                 <Database size={16} className="text-muted-foreground/40" />
               </div>
-              
-              <div className="space-y-2.5">
-                {[
-                  { id: 'bookmarks', label: 'Bookmarks', color: 'bg-blue-500' },
-                  { id: 'favorites', label: 'Favorites', color: 'bg-amber-500' },
-                  { id: 'explanations', label: 'Explanations', color: 'bg-emerald-500' },
-                  { id: 'tafsirs', label: 'Tafsirs', color: 'bg-violet-500' },
-                  { id: 'notes', label: 'Notes', color: 'bg-orange-500' },
-                  { id: 'collections', label: 'Collections', color: 'bg-pink-500' },
-                  { id: 'settings', label: 'App Settings', color: 'bg-slate-500' },
-                ].map(cat => {
-                  const usage = storageUsage[cat.id] || 0;
-                  const percent = totalUsage > 0 ? (usage / totalUsage) * 100 : 0;
-                  if (usage === 0) return null;
-                  return (
-                    <div key={cat.id} className="space-y-1">
-                      <div className="flex justify-between text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                        <span>{cat.label}</span>
-                        <span>{formatSize(usage)}</span>
+
+              {totalUsage > 0 && (
+                <div className="space-y-2.5">
+                  {[
+                    { id: 'bookmarks', label: 'Bookmarks', color: 'bg-blue-500' },
+                    { id: 'favorites', label: 'Favorites', color: 'bg-amber-500' },
+                    { id: 'explanations', label: 'Explanations', color: 'bg-emerald-500' },
+                    { id: 'tafsirs', label: 'Tafsirs', color: 'bg-violet-500' },
+                    { id: 'notes', label: 'Notes', color: 'bg-orange-500' },
+                    { id: 'collections', label: 'Collections', color: 'bg-pink-500' },
+                    { id: 'settings', label: 'App Settings', color: 'bg-slate-500' },
+                  ].map(cat => {
+                    const usage = storageUsage[cat.id] || 0;
+                    const percent = totalUsage > 0 ? (usage / totalUsage) * 100 : 0;
+                    return (
+                      <div key={cat.id} className="space-y-1">
+                        <div className="flex justify-between text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                          <span>{cat.label}</span>
+                          <span>{formatSize(usage)}</span>
+                        </div>
+                        <div className="h-1.5 w-full bg-secondary/50 rounded-full overflow-hidden">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${percent}%` }}
+                            className={`h-full ${cat.color} rounded-full`}
+                          />
+                        </div>
                       </div>
-                      <div className="h-1.5 w-full bg-secondary/50 rounded-full overflow-hidden">
-                        <motion.div 
-                          initial={{ width: 0 }}
-                          animate={{ width: `${percent}%` }}
-                          className={`h-full ${cat.color} rounded-full`}
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             <div className="h-px bg-border/50" />
 
             <div className="pt-2">
-              <button 
+              <button
+                disabled={totalUsage === 0}
                 onClick={() => {
                   setSelectedResetTypes([]);
                   setIsResetDialogOpen(true);
                 }}
-                className="w-full h-12 rounded-xl flex items-center justify-center gap-2 text-destructive font-bold text-sm bg-destructive/5 hover:bg-destructive/10 border border-destructive/10 transition-colors"
+                className="w-full h-12 rounded-xl flex items-center justify-center gap-2 text-destructive font-bold text-sm bg-destructive/5 hover:bg-destructive/10 border border-destructive/10 transition-colors disabled:opacity-30 disabled:grayscale disabled:cursor-not-allowed"
                 aria-label="Reset Data"
               >
                 <Trash2 size={16} />
@@ -497,10 +516,10 @@ export default function SettingsPage() {
               </button>
             </div>
           </div>
-        </motion.section>
+        </section>
 
         {/* SECTION 8: ABOUT */}
-        <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+        <section>
           <SectionTitle icon={Info} title="About" />
           <div className="bg-card border border-border rounded-2xl p-6 shadow-sm text-center">
             <h3 className="font-display font-bold text-xl text-primary mb-1">Inside Quran</h3>
@@ -509,9 +528,8 @@ export default function SettingsPage() {
               A personal Quran study and tafsir system designed for focused reading and reflection.
             </p>
           </div>
-        </motion.section>
-        
-      </div>
+        </section>
+      </motion.div>
 
       {/* Backup Selection Dialog */}
       <Dialog open={isExportDialogOpen} onOpenChange={setIsExportDialogOpen}>
@@ -522,7 +540,7 @@ export default function SettingsPage() {
               <p className="text-[11px] text-muted-foreground opacity-60">Select items to include in backup</p>
             </DialogHeader>
           </div>
-          
+
           <div className="px-4 py-2 space-y-1.5 max-h-[300px] overflow-y-auto scrollbar-hide [mask-image:linear-gradient(to_bottom,transparent,black_20px,black_calc(100%-20px),transparent)]">
             {[
               { id: 'bookmarks', label: 'Bookmarks', icon: BookmarkX, color: 'text-blue-500', bg: 'bg-blue-500/10' },
@@ -533,14 +551,13 @@ export default function SettingsPage() {
               { id: 'collections', label: 'Collections', icon: Bell, color: 'text-pink-500', bg: 'bg-pink-500/10' },
               { id: 'settings', label: 'Settings', icon: Settings, color: 'text-slate-500', bg: 'bg-slate-500/10' },
             ].map((type) => (
-              <motion.div 
-                key={type.id} 
+              <motion.div
+                key={type.id}
                 whileTap={{ scale: 0.97 }}
-                className={`flex items-center justify-between p-2.5 rounded-xl transition-all cursor-pointer border shadow-sm ${
-                  selectedTypes.includes(type.id) 
-                    ? 'bg-primary/5 border-primary/20' 
-                    : 'bg-secondary/10 border-border/40 hover:bg-secondary/20'
-                }`}
+                className={`flex items-center justify-between p-2.5 rounded-xl transition-all cursor-pointer border shadow-sm ${selectedTypes.includes(type.id)
+                  ? 'bg-primary/5 border-primary/20'
+                  : 'bg-secondary/10 border-border/40 hover:bg-secondary/20'
+                  }`}
                 onClick={() => toggleType(type.id)}
               >
                 <div className="flex items-center gap-2.5">
@@ -549,12 +566,11 @@ export default function SettingsPage() {
                   </div>
                   <span className="text-[13px] font-bold text-foreground/80">{type.label}</span>
                 </div>
-                <div 
-                  className={`w-5 h-5 rounded-full flex items-center justify-center transition-all border ${
-                    selectedTypes.includes(type.id)
-                      ? 'bg-primary border-primary shadow-sm'
-                      : 'bg-transparent border-muted-foreground/20'
-                  }`}
+                <div
+                  className={`w-5 h-5 rounded-full flex items-center justify-center transition-all border ${selectedTypes.includes(type.id)
+                    ? 'bg-primary border-primary shadow-sm'
+                    : 'bg-transparent border-muted-foreground/20'
+                    }`}
                 >
                   {selectedTypes.includes(type.id) && (
                     <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
@@ -595,7 +611,7 @@ export default function SettingsPage() {
               <p className="text-[11px] text-muted-foreground opacity-60">Select items to permanently delete</p>
             </DialogHeader>
           </div>
-          
+
           <div className="px-4 py-2 space-y-1.5 max-h-[300px] overflow-y-auto scrollbar-hide [mask-image:linear-gradient(to_bottom,transparent,black_20px,black_calc(100%-20px),transparent)]">
             {[
               { id: 'bookmarks', label: 'Bookmarks', icon: BookmarkX, color: 'text-blue-500', bg: 'bg-blue-500/10' },
@@ -605,51 +621,84 @@ export default function SettingsPage() {
               { id: 'notes', label: 'Notes', icon: PenLine, color: 'text-orange-500', bg: 'bg-orange-500/10' },
               { id: 'collections', label: 'Collections', icon: Bell, color: 'text-pink-500', bg: 'bg-pink-500/10' },
               { id: 'settings', label: 'Settings', icon: Settings, color: 'text-slate-500', bg: 'bg-slate-500/10' },
-            ].map((type) => (
-              <motion.div 
-                key={type.id} 
-                whileTap={{ scale: 0.97 }}
-                className={`flex items-center justify-between p-2.5 rounded-xl transition-all cursor-pointer border shadow-sm ${
-                  selectedResetTypes.includes(type.id) 
-                    ? 'bg-destructive/5 border-destructive/20' 
-                    : 'bg-secondary/10 border-border/40 hover:bg-secondary/20'
-                }`}
-                onClick={() => toggleResetType(type.id)}
-              >
-                <div className="flex items-center gap-2.5">
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${type.bg} ${type.color} shadow-sm border border-border/10`}>
-                    <type.icon size={15} strokeWidth={2} />
-                  </div>
-                  <span className="text-[13px] font-bold text-foreground/80">{type.label}</span>
+            ].map((type) => {
+              const usage = storageUsage[type.id] || 0;
+              const isEmpty = usage === 0;
+
+              return (
+                <div key={type.id} className="relative">
+                  <motion.div
+                    whileTap={isEmpty ? {} : { scale: 0.97 }}
+                    className={`flex items-center justify-between p-2.5 rounded-xl transition-all cursor-pointer border shadow-sm ${isEmpty
+                      ? 'opacity-40 grayscale-[0.5] cursor-default'
+                      : selectedResetTypes.includes(type.id)
+                        ? 'bg-destructive/5 border-destructive/20'
+                        : 'bg-secondary/10 border-border/40 hover:bg-secondary/20'
+                      }`}
+                    onClick={() => toggleResetType(type.id)}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${type.bg} ${type.color} shadow-sm border border-border/10`}>
+                        <type.icon size={15} strokeWidth={2} />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-[13px] font-bold text-foreground/80">{type.label}</span>
+                        {isEmpty && <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-tight">No data found</span>}
+                      </div>
+                    </div>
+                    <div
+                      className={`w-5 h-5 rounded-full flex items-center justify-center transition-all border ${isEmpty
+                        ? 'border-muted-foreground/10 bg-muted/5'
+                        : selectedResetTypes.includes(type.id)
+                          ? 'bg-destructive border-destructive shadow-sm'
+                          : 'bg-transparent border-muted-foreground/20'
+                        }`}
+                    >
+                      {selectedResetTypes.includes(type.id) && (
+                        <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                        </motion.div>
+                      )}
+                    </div>
+                  </motion.div>
                 </div>
-                <div 
-                  className={`w-5 h-5 rounded-full flex items-center justify-center transition-all border ${
-                    selectedResetTypes.includes(type.id)
-                      ? 'bg-destructive border-destructive shadow-sm'
-                      : 'bg-transparent border-muted-foreground/20'
-                  }`}
-                >
-                  {selectedResetTypes.includes(type.id) && (
-                    <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
-                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" className="text-white">
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
-                    </motion.div>
-                  )}
-                </div>
-              </motion.div>
-            ))}
+              );
+            })}
           </div>
 
           <DialogFooter className="p-5 pt-2 flex flex-col gap-2 sm:flex-col">
-            <button
-              onClick={handleResetSelected}
-              disabled={selectedResetTypes.length === 0}
-              className="w-full h-12 bg-destructive text-destructive-foreground rounded-2xl font-bold text-sm shadow-md shadow-destructive/10 hover:shadow-destructive/20 transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 disabled:opacity-50"
-            >
-              <Trash2 size={16} strokeWidth={2.5} />
-              Reset Selection
-            </button>
+            <AlertDialog open={isResetConfirmOpen} onOpenChange={setIsResetConfirmOpen}>
+              <AlertDialogTrigger asChild>
+                <button
+                  disabled={selectedResetTypes.length === 0}
+                  className="w-full h-12 bg-destructive text-destructive-foreground rounded-2xl font-bold text-sm shadow-md shadow-destructive/10 hover:shadow-destructive/20 transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 disabled:opacity-50"
+                >
+                  <Trash2 size={16} strokeWidth={2.5} />
+                  Reset Selection
+                </button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className="w-[92vw] max-w-[360px] rounded-[2rem] border-none bg-white dark:bg-background shadow-2xl p-6">
+                <AlertDialogHeader className="space-y-2">
+                  <AlertDialogTitle className="text-left text-lg font-bold text-foreground">Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription className="text-left text-sm leading-relaxed text-muted-foreground">
+                    Are you sure you want to permanently delete the selected {selectedResetTypes.length} {selectedResetTypes.length === 1 ? 'category' : 'categories'}? All your personal progress, notes, and records in these sections will be erased.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter className="flex flex-row justify-end gap-2 mt-4">
+                  <AlertDialogCancel className="h-10 px-6 rounded-full border-border bg-secondary/10 text-foreground text-[13px] font-medium hover:bg-secondary/20 transition-all">
+                    Cancel
+                  </AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleResetSelected}
+                    className="h-10 px-6 rounded-full bg-destructive text-destructive-foreground text-[13px] font-bold hover:bg-destructive/90 transition-all"
+                  >
+                    Reset
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
             <DialogClose asChild>
               <button className="w-full h-10 text-muted-foreground text-[12px] font-bold hover:text-foreground transition-colors">
                 Cancel
@@ -658,6 +707,51 @@ export default function SettingsPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Global Clear Confirmations */}
+      <AlertDialog open={isClearBookmarksOpen} onOpenChange={setIsClearBookmarksOpen}>
+        <AlertDialogContent className="w-[92vw] max-w-[360px] rounded-[2rem] border-none bg-white dark:bg-background shadow-2xl p-6">
+          <AlertDialogHeader className="space-y-2">
+            <AlertDialogTitle className="text-left text-lg font-bold text-foreground">Clear Bookmarks?</AlertDialogTitle>
+            <AlertDialogDescription className="text-left text-sm leading-relaxed text-muted-foreground">
+              Are you sure you want to completely clear all {bookmarks.length} saved bookmarks? This will permanently remove them from your saved list.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex flex-row justify-end gap-2 mt-4">
+            <AlertDialogCancel className="h-10 px-6 rounded-full border-border bg-secondary/10 text-foreground text-[13px] font-medium hover:bg-secondary/20 transition-all">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => { clearBookmarks(); setIsClearBookmarksOpen(false); }}
+              className="h-10 px-6 rounded-full bg-destructive text-destructive-foreground text-[13px] font-bold hover:bg-destructive/90 transition-all"
+            >
+              Clear
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={isClearFavoritesOpen} onOpenChange={setIsClearFavoritesOpen}>
+        <AlertDialogContent className="w-[92vw] max-w-[360px] rounded-[2rem] border-none bg-white dark:bg-background shadow-2xl p-6">
+          <AlertDialogHeader className="space-y-2">
+            <AlertDialogTitle className="text-left text-lg font-bold text-foreground">Clear Favorites?</AlertDialogTitle>
+            <AlertDialogDescription className="text-left text-sm leading-relaxed text-muted-foreground">
+              Are you sure you want to completely clear all {favorites.length} favorite Surahs? This will permanently remove them from your starred list.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex flex-row justify-end gap-2 mt-4">
+            <AlertDialogCancel className="h-10 px-6 rounded-full border-border bg-secondary/10 text-foreground text-[13px] font-medium hover:bg-secondary/20 transition-all">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => { clearFavorites(); setIsClearFavoritesOpen(false); }}
+              className="h-10 px-6 rounded-full bg-destructive text-destructive-foreground text-[13px] font-bold hover:bg-destructive/90 transition-all"
+            >
+              Clear
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

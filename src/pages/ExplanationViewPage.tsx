@@ -141,7 +141,7 @@ export default function ExplanationViewPage() {
   return (
     <AnimatePresence>
       {!isDeleting && (
-        <motion.div {...handlers} exit={{ opacity: 0, scale: 0.96, y: 15 }} transition={{ duration: 0.25, ease: 'easeOut' }} className="min-h-screen bg-background pb-24">
+        <motion.div {...handlers} exit={{ opacity: 0, scale: 0.96, y: 20 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="min-h-screen bg-background pb-24">
       
       {/* Sticky Header block */}
       <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-md pt-5 pb-4 mb-6 border-b border-border/50 shadow-sm transform-gpu">
@@ -163,24 +163,26 @@ export default function ExplanationViewPage() {
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <button 
-                  className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-destructive/80 transition shadow-sm"
+                  className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-destructive transition shadow-sm"
                   aria-label="Delete Explanation"
                 >
                   <Trash2 size={14} />
                 </button>
               </AlertDialogTrigger>
-              <AlertDialogContent className="w-[90vw] max-w-[400px] rounded-[1.5rem]">
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Delete Explanation?</AlertDialogTitle>
-                  <AlertDialogDescription>
+              <AlertDialogContent className="w-[92vw] max-w-[360px] rounded-[2rem] border-none bg-white dark:bg-background shadow-2xl p-6">
+                <AlertDialogHeader className="space-y-2">
+                  <AlertDialogTitle className="text-left text-lg font-bold">Delete Explanation?</AlertDialogTitle>
+                  <AlertDialogDescription className="text-left text-sm leading-relaxed text-muted-foreground">
                     Are you sure you want to delete this explanation? This action cannot be undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
-                <AlertDialogFooter className="flex gap-2 sm:gap-0 mt-2">
-                  <AlertDialogCancel className="rounded-xl border-border h-11">Cancel</AlertDialogCancel>
+                <AlertDialogFooter className="flex flex-row justify-end gap-2 mt-4">
+                  <AlertDialogCancel className="h-10 px-6 rounded-full border-border bg-secondary/10 text-foreground text-[13px] font-medium hover:bg-secondary/20 transition-all">
+                    Cancel
+                  </AlertDialogCancel>
                   <AlertDialogAction 
                     onClick={handleDelete}
-                    className="rounded-xl bg-destructive text-destructive-foreground h-11"
+                    className="h-10 px-6 rounded-full bg-destructive text-destructive-foreground text-[13px] font-bold hover:bg-destructive/90 transition-all"
                   >
                     Delete
                   </AlertDialogAction>
@@ -229,10 +231,10 @@ export default function ExplanationViewPage() {
           {activeTab === 'concise' && (
             <motion.div
               key="concise"
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="space-y-12"
             >
                 {explanation.concise?.length === 0 && (
@@ -261,7 +263,7 @@ export default function ExplanationViewPage() {
 
                         {/* Translation */}
                         {verseData && (
-                          <p className="italic text-muted-foreground text-[16px] leading-relaxed mb-8" style={{ fontSize: `${settings.translationFontSize}px` }}>
+                          <p className="italic text-muted-foreground text-center text-[16px] leading-relaxed mb-8" style={{ fontSize: `${settings.translationFontSize}px` }}>
                              "{getCustomTranslation(explanation.surahNumber, block.verseNumber, settings.language) || verseData.translation}"
                           </p>
                         )}
@@ -275,7 +277,9 @@ export default function ExplanationViewPage() {
                                   <div className="prose prose-sm max-w-none text-muted-foreground leading-[1.8] text-[16px]
                                     prose-headings:font-display prose-headings:font-bold prose-headings:text-foreground 
                                     prose-headings:mt-6 prose-headings:mb-3
-                                    prose-strong:font-bold prose-strong:text-foreground">
+                                    prose-strong:font-bold prose-strong:text-foreground
+                                    prose-a:text-primary prose-a:break-all
+                                    break-words overflow-x-hidden">
                                      <ReactMarkdown remarkPlugins={[remarkGfm]}>{exp.text}</ReactMarkdown>
                                   </div>
                                </div>
@@ -291,10 +295,10 @@ export default function ExplanationViewPage() {
           {activeTab === 'deeper' && (
             <motion.div
               key="deeper"
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="space-y-8 pb-10"
             >
                 {(!explanation.deeperLook?.rootWords?.length && !explanation.deeperLook?.categories?.length) && (
@@ -353,7 +357,9 @@ export default function ExplanationViewPage() {
                                   <div className="prose prose-sm max-w-none text-muted-foreground leading-[1.8] text-[15px]
                                     prose-headings:font-display prose-headings:font-bold prose-headings:text-foreground 
                                     prose-headings:mt-6 prose-headings:mb-3
-                                    prose-strong:font-bold prose-strong:text-foreground">
+                                    prose-strong:font-bold prose-strong:text-foreground
+                                    prose-a:text-primary prose-a:break-all
+                                    break-words overflow-x-hidden">
                                      <ReactMarkdown remarkPlugins={[remarkGfm]}>{cat.content}</ReactMarkdown>
                                   </div>
                                </AccordionContent>
@@ -368,10 +374,10 @@ export default function ExplanationViewPage() {
           {activeTab === 'ask' && (
             <motion.div
               key="ask"
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="py-16 flex flex-col items-center justify-center text-center space-y-5"
             >
                 <div className="w-20 h-20 bg-muted/50 text-primary rounded-full flex items-center justify-center mb-2">
@@ -423,7 +429,9 @@ export default function ExplanationViewPage() {
                            <div className="prose prose-sm max-w-none text-muted-foreground leading-[1.85] text-[15.5px] text-center
                              prose-headings:font-display prose-headings:font-bold prose-headings:text-foreground 
                              prose-headings:mt-6 prose-headings:mb-3
-                             prose-strong:font-bold prose-strong:text-foreground">
+                             prose-strong:font-bold prose-strong:text-foreground
+                             prose-a:text-primary prose-a:break-all
+                             break-words overflow-x-hidden">
                               <ReactMarkdown remarkPlugins={[remarkGfm]}>{selectedRootWord.explanation}</ReactMarkdown>
                            </div>
                         </div>

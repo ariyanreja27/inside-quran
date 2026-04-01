@@ -54,10 +54,10 @@ export default function NoteViewPage() {
   return (
     <AnimatePresence>
       <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0, scale: 0.96, y: 15 }}
-        transition={{ duration: 0.25, ease: 'easeOut' }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 20 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         className="min-h-screen bg-background pb-24"
       >
         {/* Sticky Header */}
@@ -72,7 +72,7 @@ export default function NoteViewPage() {
             
             <div className="flex items-center gap-2">
               <button 
-                onClick={() => navigate(`/manage?tab=notes&edit=${note.id}`)} 
+                onClick={() => navigate(`/note-builder?id=${note.id}`)} 
                 className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-muted-foreground transition shadow-sm outline-none"
                 aria-label="Edit Note"
               >
@@ -82,29 +82,31 @@ export default function NoteViewPage() {
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <button 
-                    className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-destructive/80 transition shadow-sm outline-none"
+                    className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-destructive transition shadow-sm outline-none"
                     aria-label="Delete Note"
                   >
                     <Trash2 size={14} />
                   </button>
                 </AlertDialogTrigger>
-                <AlertDialogContent className="w-[90vw] max-w-[400px] rounded-[1.5rem]">
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Delete Note?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Are you sure you want to delete this reflection? This action cannot be undone.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter className="flex gap-2 sm:gap-0 mt-2">
-                    <AlertDialogCancel className="rounded-xl border-border h-11">Cancel</AlertDialogCancel>
-                    <AlertDialogAction 
-                      onClick={handleDelete}
-                      className="rounded-xl bg-destructive text-destructive-foreground h-11"
-                    >
-                      Delete
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
+                <AlertDialogContent className="w-[92vw] max-w-[360px] rounded-[2rem] border-none bg-white dark:bg-background shadow-2xl p-6">
+                <AlertDialogHeader className="space-y-2">
+                  <AlertDialogTitle className="text-left text-lg font-bold">Delete Note?</AlertDialogTitle>
+                  <AlertDialogDescription className="text-left text-sm leading-relaxed text-muted-foreground">
+                    Are you sure you want to delete the personal note for <strong>Surah {surah?.name} {note.verseNumber}</strong>? This note will be permanently erased.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter className="flex flex-row justify-end gap-2 mt-4">
+                  <AlertDialogCancel className="h-10 px-6 rounded-full border-border bg-secondary/10 text-foreground text-[13px] font-medium hover:bg-secondary/20 transition-all">
+                    Cancel
+                  </AlertDialogCancel>
+                  <AlertDialogAction 
+                    onClick={handleDelete}
+                    className="h-10 px-6 rounded-full bg-destructive text-destructive-foreground text-[13px] font-bold hover:bg-destructive/90 transition-all"
+                  >
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
               </AlertDialog>
             </div>
           </div>
@@ -151,8 +153,9 @@ export default function NoteViewPage() {
                   prose-headings:font-display prose-headings:font-bold prose-headings:text-foreground 
                   prose-headings:mt-8 prose-headings:mb-4
                   prose-strong:font-bold prose-strong:text-foreground 
-                  prose-a:text-primary prose-a:underline-offset-4
-                  prose-li:marker:text-primary"
+                  prose-a:text-primary prose-a:underline-offset-4 prose-a:break-all
+                  prose-li:marker:text-primary
+                  break-words overflow-x-hidden"
                 dir={settings.language === 'ur' ? 'rtl' : 'ltr'}
               >
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>{note.content}</ReactMarkdown>

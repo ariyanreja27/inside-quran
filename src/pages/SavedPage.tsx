@@ -12,6 +12,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 type SavedView = 'favorites' | 'bookmarks' | 'highlights';
 
@@ -21,6 +31,7 @@ function BookmarkedVerseCard({ surahNumber, verseNumber, onRemove }: { surahNumb
   const surah = surahs?.find(s => s.number === surahNumber);
   const verse = verses?.find(a => a.numberInSurah === verseNumber);
   const navigate = useNavigate();
+  const [isRemoveOpen, setIsRemoveOpen] = useState(false);
 
   if (!surah || !verse) return null;
 
@@ -52,9 +63,9 @@ function BookmarkedVerseCard({ surahNumber, verseNumber, onRemove }: { surahNumb
             <DropdownMenuItem
               onClick={(e) => {
                 e.stopPropagation();
-                onRemove(surahNumber, verseNumber);
+                setIsRemoveOpen(true);
               }}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-destructive bg-destructive/10 transition-colors outline-none"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-destructive focus:bg-destructive/10 transition-colors outline-none"
             >
               <Trash2 size={16} />
               <span className="font-medium text-[13.5px]">Remove</span>
@@ -62,6 +73,28 @@ function BookmarkedVerseCard({ surahNumber, verseNumber, onRemove }: { surahNumb
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      <AlertDialog open={isRemoveOpen} onOpenChange={setIsRemoveOpen}>
+        <AlertDialogContent className="w-[92vw] max-w-[360px] rounded-[2rem] border-none bg-white dark:bg-background shadow-2xl p-6">
+          <AlertDialogHeader className="space-y-2">
+            <AlertDialogTitle className="text-left text-lg font-bold">Remove Bookmark?</AlertDialogTitle>
+            <AlertDialogDescription className="text-left text-sm leading-relaxed text-muted-foreground">
+              Are you sure you want to remove the bookmark for <strong>{surah.name} : {verseNumber}</strong>? It will no longer appear in your saved list.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex flex-row justify-end gap-2 mt-4">
+            <AlertDialogCancel className="h-10 px-6 rounded-full border-border bg-secondary/10 text-foreground text-[13px] font-medium hover:bg-secondary/20 transition-all">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={() => { onRemove(surahNumber, verseNumber); setIsRemoveOpen(false); }}
+              className="h-10 px-6 rounded-full bg-destructive text-destructive-foreground text-[13px] font-bold hover:bg-destructive/90 transition-all"
+            >
+              Remove
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
@@ -75,6 +108,8 @@ export default function SavedPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const tabParam = searchParams.get('tab') as SavedView | null;
   const activeView = tabParam === 'favorites' || tabParam === 'bookmarks' || tabParam === 'highlights' ? tabParam : 'favorites';
+
+  const [favoriteToRemove, setFavoriteToRemove] = useState<number | null>(null);
 
   const setActiveView = (view: SavedView) => {
     setSearchParams({ tab: view }, { replace: true });
@@ -157,10 +192,10 @@ export default function SavedPage() {
           ) : activeView === 'favorites' && (
             <motion.div
               key="favorites"
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             >
               <h2 className="mb-3 flex items-center gap-2 font-display text-sm font-semibold text-muted-foreground/80">
                 <Star size={14} className="gold-accent" /> Favorite Surahs
@@ -197,7 +232,7 @@ export default function SavedPage() {
                                 onClick={(e) => {
                                   e.preventDefault();
                                   e.stopPropagation();
-                                  toggleFavorite(surah.number);
+                                  setFavoriteToRemove(surah.number);
                                 }}
                                 className="p-2 -mr-2 text-primary rounded-full transition-colors outline-none"
                               >
@@ -214,13 +249,35 @@ export default function SavedPage() {
             </motion.div>
           )}
 
+          <AlertDialog open={!!favoriteToRemove} onOpenChange={(open) => !open && setFavoriteToRemove(null)}>
+            <AlertDialogContent className="w-[92vw] max-w-[360px] rounded-[2rem] border-none bg-white dark:bg-background shadow-2xl p-6">
+              <AlertDialogHeader className="space-y-2">
+                <AlertDialogTitle className="text-left text-lg font-bold">Remove Favorite?</AlertDialogTitle>
+                <AlertDialogDescription className="text-left text-sm leading-relaxed text-muted-foreground">
+                  Are you sure you want to remove <strong>{surahs?.find(s => s.number === favoriteToRemove)?.name}</strong> from your favorite Surahs?
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter className="flex flex-row justify-end gap-2 mt-4">
+                <AlertDialogCancel className="h-10 px-6 rounded-full border-border bg-secondary/10 text-foreground text-[13px] font-medium hover:bg-secondary/20 transition-all">
+                  Cancel
+                </AlertDialogCancel>
+                <AlertDialogAction 
+                  onClick={() => { if (favoriteToRemove) toggleFavorite(favoriteToRemove); setFavoriteToRemove(null); }}
+                  className="h-10 px-6 rounded-full bg-destructive text-destructive-foreground text-[13px] font-bold hover:bg-destructive/90 transition-all"
+                >
+                  Remove
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+
           {!loading && activeView === 'bookmarks' && (
             <motion.div
               key="bookmarks"
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             >
               <h2 className="mb-3 flex items-center gap-2 font-display text-sm font-semibold text-muted-foreground/80">
                 <BookmarkCheck size={14} className="gold-accent" /> Bookmarked Verses
@@ -259,10 +316,10 @@ export default function SavedPage() {
           {!loading && activeView === 'highlights' && (
             <motion.div
               key="highlights"
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             >
               <h2 className="mb-3 flex items-center gap-2 font-display text-sm font-semibold text-muted-foreground/80">
                 <Highlighter size={14} className="gold-accent" /> Highlights

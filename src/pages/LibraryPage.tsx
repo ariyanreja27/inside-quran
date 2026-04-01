@@ -23,6 +23,17 @@ import {
   DrawerClose
 } from "@/components/ui/drawer";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 function formatRelativeTime(timestamp: string): string {
   if (!timestamp) return '';
@@ -99,6 +110,10 @@ export default function LibraryPage() {
   const [isAddVerseOpen, setIsAddVerseOpen] = useState(false);
   const [selectorSurah, setSelectorSurah] = useState<number | ''>('');
   const [selectorVerse, setSelectorVerse] = useState<number | ''>('');
+  
+  // Deletion Confirmation logic
+  const [folderToDeleteId, setFolderToDeleteId] = useState<string | null>(null);
+  const [verseToRemove, setVerseToRemove] = useState<{ folderId: string, surahNumber: number, verseNumber: number } | null>(null);
   
   const { data: verses } = useSurahVerses(selectorSurah || 1);
   const selectedFolder = collections.find(c => c.id === selectedFolderId);
@@ -181,10 +196,10 @@ export default function LibraryPage() {
             ) : activeTab === 'last-read' && (
               <motion.div
                 key="last-read"
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 className=""
               >
                 {lastRead.length === 0 ? (
@@ -266,7 +281,7 @@ export default function LibraryPage() {
                                       e.stopPropagation();
                                       removeLastRead(item.surahNumber);
                                     }}
-                                     className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-destructive bg-destructive/10 transition-colors outline-none"
+                                     className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-destructive focus:bg-destructive/10 transition-colors outline-none"
                                   >
                                     <Trash2 size={16} />
                                     <span className="font-medium text-[13.5px]">Clear History</span>
@@ -287,10 +302,10 @@ export default function LibraryPage() {
             {!loading && activeTab === 'collections' && (
               <motion.div
                 key="collections"
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 className="w-full"
               >
                 <AnimatePresence mode="wait">
@@ -298,10 +313,10 @@ export default function LibraryPage() {
                     /* FOLDER LIST VIEW */
                     <motion.div 
                       key="folder-list"
-                      initial={{ opacity: 0, y: 10 }}
+                      initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                       className="space-y-4"
                     >
                       <div className="flex items-center justify-between mb-4">
@@ -362,8 +377,8 @@ export default function LibraryPage() {
                                   </DropdownMenuItem>
                                   <DropdownMenuSeparator className="bg-border/50" />
                                   <DropdownMenuItem 
-                                    onClick={() => deleteCollection(folder.id)}
-                                    className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-destructive focus:bg-destructive/5"
+                                    onClick={() => setFolderToDeleteId(folder.id)}
+                                    className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive transition-colors outline-none"
                                   >
                                     <Trash2 size={14} />
                                     <span className="text-sm font-medium">Delete</span>
@@ -379,10 +394,10 @@ export default function LibraryPage() {
                     /* FOLDER DETAIL VIEW */
                     <motion.div 
                       key="folder-detail"
-                      initial={{ opacity: 0, y: 10 }}
+                      initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                       className="space-y-4"
                     >
                       <div className="flex items-center justify-between mb-4">
@@ -432,8 +447,8 @@ export default function LibraryPage() {
                                 </div>
                                 
                                 <button 
-                                  onClick={() => removeItemFromCollection(selectedFolder.id, item.surahNumber, item.verseNumber)}
-                                  className="p-2 text-muted-foreground/40 hover:text-destructive transition-colors"
+                                  onClick={() => setVerseToRemove({ folderId: selectedFolder.id, surahNumber: item.surahNumber, verseNumber: item.verseNumber })}
+                                  className="p-2 text-destructive transition-colors"
                                   aria-label="Remove from collection"
                                 >
                                   <Trash2 size={16} />
@@ -604,6 +619,51 @@ export default function LibraryPage() {
             </div>
           </DrawerContent>
         </Drawer>
+        
+        {/* Deletion Confirmations */}
+        <AlertDialog open={!!folderToDeleteId} onOpenChange={(open) => !open && setFolderToDeleteId(null)}>
+          <AlertDialogContent className="w-[92vw] max-w-[360px] rounded-[2rem] border-none bg-white dark:bg-background shadow-2xl p-6">
+            <AlertDialogHeader className="space-y-2">
+              <AlertDialogTitle className="text-left text-lg font-bold text-foreground">Delete Folder?</AlertDialogTitle>
+              <AlertDialogDescription className="text-left text-sm leading-relaxed text-muted-foreground">
+                Are you sure you want to delete the folder <strong>{collections.find(c => c.id === folderToDeleteId)?.name}</strong>? All verses and items saved inside this folder will be permanently lost.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter className="flex flex-row justify-end gap-2 mt-4">
+              <AlertDialogCancel className="h-10 px-6 rounded-full border-border bg-secondary/10 text-foreground text-[13px] font-medium hover:bg-secondary/20 transition-all">
+                Cancel
+              </AlertDialogCancel>
+              <AlertDialogAction 
+                onClick={() => { if (folderToDeleteId) { deleteCollection(folderToDeleteId); setFolderToDeleteId(null); } }}
+                className="h-10 px-6 rounded-full bg-destructive text-destructive-foreground text-[13px] font-bold hover:bg-destructive/90 transition-all"
+              >
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+        <AlertDialog open={!!verseToRemove} onOpenChange={(open) => !open && setVerseToRemove(null)}>
+          <AlertDialogContent className="w-[92vw] max-w-[360px] rounded-[2rem] border-none bg-white dark:bg-background shadow-2xl p-6">
+            <AlertDialogHeader className="space-y-2">
+              <AlertDialogTitle className="text-left text-lg font-bold text-foreground">Remove Verse?</AlertDialogTitle>
+              <AlertDialogDescription className="text-left text-sm leading-relaxed text-muted-foreground">
+                Are you sure you want to remove this verse from the folder? You can add it back later from the Quran.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter className="flex flex-row justify-end gap-2 mt-4">
+              <AlertDialogCancel className="h-10 px-6 rounded-full border-border bg-secondary/10 text-foreground text-[13px] font-medium hover:bg-secondary/20 transition-all">
+                Cancel
+              </AlertDialogCancel>
+              <AlertDialogAction 
+                onClick={() => { if (verseToRemove) { removeItemFromCollection(verseToRemove.folderId, verseToRemove.surahNumber, verseToRemove.verseNumber); setVerseToRemove(null); } }}
+                className="h-10 px-6 rounded-full bg-destructive text-destructive-foreground text-[13px] font-bold hover:bg-destructive/90 transition-all"
+              >
+                Remove
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </motion.div>
   );

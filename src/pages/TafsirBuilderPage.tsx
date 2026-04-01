@@ -5,7 +5,7 @@ import { ArrowLeft, Trash2, Edit2, Plus, AlertCircle, Info, Settings2 } from 'lu
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSurahs, useSurahVerses } from '@/hooks/useQuranData';
 import { useTafsirSources, useCustomTafsirs, useSettings } from '@/hooks/useAppStore';
-import type { TafsirRecord } from '@/hooks/useAppStore';
+import type { TafsirRecord, TafsirSource } from '@/hooks/useAppStore';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -61,6 +61,13 @@ export default function TafsirBuilderPage() {
   const [editingSourceId, setEditingSourceId] = useState<string | null>(null);
   const [sourceEditText, setSourceEditText] = useState('');
   const [newSourceName, setNewSourceName] = useState('');
+  const [localSources, setLocalSources] = useState<TafsirSource[]>(sources);
+  const [lastLoadedVerse, setLastLoadedVerse] = useState<string>('');
+  const [showManageError, setShowManageError] = useState(false);
+
+  useEffect(() => {
+    if (selectedSurah && selectedVerse) setShowManageError(false);
+  }, [selectedSurah, selectedVerse]);
 
   const { data: currentSurahVerses } = useSurahVerses(selectedSurah || 1);
 
@@ -89,14 +96,39 @@ export default function TafsirBuilderPage() {
 
   // Handle invalid or empty source selection
   useEffect(() => {
-    if (sources.length > 0) {
-      if (!activeSourceId || !sources.some(s => s.id === activeSourceId)) {
-        setActiveSourceId(sources[0].id);
+    if (localSources.length > 0) {
+      if (!activeSourceId || !localSources.some(s => s.id === activeSourceId)) {
+        setActiveSourceId(localSources[0].id);
       }
     } else {
       setActiveSourceId('');
     }
-  }, [sources, activeSourceId]);
+  }, [localSources, activeSourceId]);
+
+  // Sync localSources and notes with existing record when verse changes
+  useEffect(() => {
+    if (!isLoaded || !selectedSurah || !selectedVerse) return;
+    
+    const verseKey = `${selectedSurah}-${selectedVerse}`;
+    if (verseKey === lastLoadedVerse) return;
+    
+    const record = getTafsirRecord(selectedSurah, selectedVerse);
+    if (record) {
+      setCurrentId(record.id);
+      setNotes({ ...record.tafsirs });
+      if (record.sources && record.sources.length > 0) {
+        setLocalSources(record.sources);
+      } else {
+        setLocalSources(sources);
+      }
+    } else {
+      setCurrentId(generateId());
+      setNotes({});
+      // If no record or no source customization, use global defaults
+      setLocalSources(sources);
+    }
+    setLastLoadedVerse(verseKey);
+  }, [isLoaded, selectedSurah, selectedVerse, getTafsirRecord, sources, lastLoadedVerse]);
 
   useEffect(() => {
     if (isLoaded) return;
@@ -114,12 +146,16 @@ export default function TafsirBuilderPage() {
       setSelectedSurah(existing.surahNumber);
       setSelectedVerse(existing.verseNumber);
       setNotes({ ...existing.tafsirs });
+      if (existing.sources && existing.sources.length > 0) {
+        setLocalSources(existing.sources);
+      }
+      setLastLoadedVerse(`${existing.surahNumber}-${existing.verseNumber}`);
     }
 
     setIsLoaded(true);
   }, [editId, urlSurah, urlVerse, tafsirRecords, getTafsirRecord, isLoaded]);
 
-  const hasAnyContent = Object.values(notes).some(text => text.trim().length > 0);
+  const hasAnyContent = localSources.some(s => (notes[s.id] || '').trim().length > 0);
   const isSaveDisabled = !selectedSurah || !selectedVerse || !hasAnyContent;
 
   const handleSave = () => {
@@ -133,15 +169,14 @@ export default function TafsirBuilderPage() {
       return;
     }
     
-    // Clean empty notes and count words
+    // Clean empty notes, verify they belong to an active source, and count characters
     const cleanedNotes: Record<string, string> = {};
-    let totalWordCount = 0;
+    let totalTextLength = 0;
     
     for (const [sId, text] of Object.entries(notes)) {
-      if (text.trim()) {
-        cleanedNotes[sId] = text;
-        const words = text.trim().split(/\s+/).filter(w => w.length > 0);
-        totalWordCount += words.length;
+      if (text.trim() && localSources.some(s => s.id === sId)) {
+        cleanedNotes[sId] = text.trim();
+        totalTextLength += text.trim().length;
       }
     }
 
@@ -155,27 +190,46 @@ export default function TafsirBuilderPage() {
       return;
     }
 
-    if (totalWordCount < 50) {
+    if (totalTextLength < 10) {
       toast({
         title: "Too Short",
-        description: `Please write a minimum of 50 words. You currently have ${totalWordCount} words.`,
+        description: `Please write a minimum of 10 characters. You currently have ${totalTextLength} characters.`,
         variant: "destructive",
         icon: <AlertCircle size={18} />
       });
       return;
     }
 
-    const newRecord: TafsirRecord = {
+    const record: TafsirRecord = {
       id: currentId,
-      surahNumber: Number(selectedSurah),
-      verseNumber: Number(selectedVerse),
+      surahNumber: selectedSurah as number,
+      verseNumber: selectedVerse as number,
       tafsirs: cleanedNotes,
+      sources: localSources,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
 
-    saveTafsirRecord(newRecord);
+    saveTafsirRecord(record);
+    toast({
+      title: "Saved Successfully",
+      description: "Tafsir notes and sources have been saved for this verse.",
+      variant: "default",
+    });
     navigate(-1);
+  };
+
+  // Local Source Management Helpers
+  const handleAddLocalSource = (name: string) => {
+    setLocalSources(prev => [...prev, { id: Date.now().toString(), name }]);
+  };
+
+  const handleUpdateLocalSource = (id: string, name: string) => {
+    setLocalSources(prev => prev.map(s => s.id === id ? { ...s, name } : s));
+  };
+
+  const handleDeleteLocalSource = (id: string) => {
+    setLocalSources(prev => prev.filter(s => s.id !== id));
   };
 
   const insertMarkdown = (text: string) => {
@@ -195,17 +249,17 @@ export default function TafsirBuilderPage() {
     onSwipedLeft: (swipeEvent) => {
       const target = swipeEvent.event.target as HTMLElement;
       if (target && target.closest('.no-swipe')) return;
-      const currentIndex = sources.findIndex(s => s.id === activeSourceId);
-      if (currentIndex < sources.length - 1) {
-        setActiveSourceId(sources[currentIndex + 1].id);
+      const currentIndex = localSources.findIndex(s => s.id === activeSourceId);
+      if (currentIndex < localSources.length - 1) {
+        setActiveSourceId(localSources[currentIndex + 1].id);
       }
     },
     onSwipedRight: (swipeEvent) => {
       const target = swipeEvent.event.target as HTMLElement;
       if (target && target.closest('.no-swipe')) return;
-      const currentIndex = sources.findIndex(s => s.id === activeSourceId);
+      const currentIndex = localSources.findIndex(s => s.id === activeSourceId);
       if (currentIndex > 0) {
-        setActiveSourceId(sources[currentIndex - 1].id);
+        setActiveSourceId(localSources[currentIndex - 1].id);
       }
     },
     trackMouse: true,
@@ -213,7 +267,7 @@ export default function TafsirBuilderPage() {
     delta: 40,
   });
 
-  if (!isLoaded || !surahs || (sources.length > 0 && !activeSourceId)) {
+  if (!isLoaded || !surahs || (localSources.length > 0 && !activeSourceId)) {
     return <LoadingScreen message="Preparing Tafsir Builder..." />;
   }
 
@@ -269,11 +323,19 @@ export default function TafsirBuilderPage() {
               </SelectTrigger>
               {selectedSurah && (
                 <SelectContent className="bg-popover border-border rounded-xl shadow-lg max-h-[250px]">
-                  {currentSurahVerses?.map(a => (
-                    <SelectItem key={a.numberInSurah} value={a.numberInSurah.toString()} className="py-3">
-                      Verse {a.numberInSurah}
-                    </SelectItem>
-                  ))}
+                  {currentSurahVerses?.map(a => {
+                    const isUsed = tafsirRecords.some(t => t.surahNumber === selectedSurah && t.verseNumber === a.numberInSurah && t.id !== editId);
+                    return (
+                      <SelectItem 
+                        key={a.numberInSurah} 
+                        value={a.numberInSurah.toString()} 
+                        disabled={isUsed}
+                        className="py-3 data-[disabled]:opacity-40 data-[disabled]:cursor-not-allowed"
+                      >
+                        Verse {a.numberInSurah}
+                      </SelectItem>
+                    );
+                  })}
                 </SelectContent>
               )}
             </Select>
@@ -285,7 +347,12 @@ export default function TafsirBuilderPage() {
 
         {/* VERSE CONTEXT DISPLAY */}
         {selectedSurah && selectedVerse && (
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-muted/30 border border-border/60 rounded-2xl p-4 flex flex-col items-center justify-center min-h-[80px]">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            className="bg-muted/30 border border-border/60 rounded-2xl p-4 flex flex-col items-center justify-center min-h-[80px]"
+          >
              {(() => {
                const verseObj = currentSurahVerses?.find(v => v.numberInSurah === Number(selectedVerse));
                if (!verseObj) return null;
@@ -312,7 +379,7 @@ export default function TafsirBuilderPage() {
           
           <div className="bg-muted/40 rounded-full p-1 border border-border/40 relative">
             <div className="flex gap-1 overflow-x-auto scrollbar-hide no-swipe">
-              {sources.map(s => {
+              {localSources.map(s => {
                 const active = activeSourceId === s.id;
                 return (
                   <button
@@ -339,7 +406,7 @@ export default function TafsirBuilderPage() {
         <div className="bg-card border border-border rounded-[1.5rem] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] relative">
           <div className="flex items-center justify-between mb-4 border-b border-border/60 pb-3">
             <span className="text-[12px] font-semibold text-muted-foreground uppercase tracking-widest pl-1">
-              TAFSIR: {sources.find(s => s.id === activeSourceId)?.name.toUpperCase() || 'SELECT SOURCE'}
+              TAFSIR: {localSources.find(s => s.id === activeSourceId)?.name.toUpperCase() || 'SELECT SOURCE'}
             </span>
             <Popover>
               <PopoverTrigger asChild>
@@ -387,25 +454,33 @@ export default function TafsirBuilderPage() {
           <textarea
             value={notes[activeSourceId] || ''}
             onChange={e => handleNoteChange(e.target.value)}
-            disabled={!selectedSurah || !selectedVerse}
+            disabled={!selectedSurah || !selectedVerse || !activeSourceId}
             dir={settings.language === 'ur' ? 'rtl' : 'ltr'}
             className="w-full bg-background/50 border border-border focus:border-primary rounded-xl p-4 text-[15px] font-display text-foreground placeholder:text-muted-foreground min-h-[220px] resize-y outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            placeholder={!selectedSurah || !selectedVerse ? "Select a Surah and Verse first to start writing..." : `Write your tafsir notes from ${sources.find(s => s.id === activeSourceId)?.name} here...`}
+            placeholder={!selectedSurah || !selectedVerse ? "Select a Surah and Verse first to start writing..." : !activeSourceId ? "Add a source to start writing..." : `Write your tafsir notes from ${localSources.find(s => s.id === activeSourceId)?.name} here...`}
           />
+          {selectedSurah && selectedVerse && activeSourceId && (notes[activeSourceId]?.trim() || '').length > 0 && (notes[activeSourceId]?.trim() || '').length < 10 && (
+            <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
+              Need {10 - (notes[activeSourceId]?.trim() || '').length} more characters.
+            </p>
+          )}
         </div>
       </div>
 
-      <div className={`fixed bottom-0 left-0 right-0 p-5 pb-8 bg-gradient-to-t from-background via-background/90 to-transparent transition-all duration-300 ${isManageSourcesOpen ? 'z-30 opacity-0 pointer-events-none' : 'z-[45] opacity-100'}`}>
-        <button
-          onClick={handleSave}
-          disabled={isSaveDisabled}
-          className={`w-full max-w-md mx-auto py-[14px] rounded-full font-medium text-[16px] transition-all flex justify-center items-center ${isSaveDisabled
-              ? 'bg-secondary text-muted-foreground/80 cursor-not-allowed'
-              : 'bg-primary text-primary-foreground shadow-[0_8px_20px_rgba(var(--primary),0.25)]'
-            }`}
-        >
-          Save Tafsirs
-        </button>
+      {/* STICKY BOTTOM SAVE BUTTON */}
+      <div className={`fixed bottom-0 inset-x-0 p-4 pb-[max(1.25rem,env(safe-area-inset-bottom,1.25rem))] bg-background/80 backdrop-blur-md border-t border-border/50 transition-all duration-300 ${isManageSourcesOpen ? 'z-30 opacity-0 pointer-events-none' : 'z-[70] opacity-100'}`}>
+        <div className="max-w-md mx-auto">
+          <button
+            onClick={handleSave}
+            disabled={isSaveDisabled}
+            className={`w-full py-[14px] rounded-full font-medium text-[16px] transition-all flex justify-center items-center ${isSaveDisabled
+                ? 'bg-secondary text-muted-foreground/80 cursor-not-allowed'
+                : 'bg-primary text-primary-foreground shadow-[0_8px_20px_rgba(var(--primary),0.25)]'
+              }`}
+          >
+            Save Tafsirs
+          </button>
+        </div>
       </div>
 
       {/* MANAGE SOURCES DRAWER */}
@@ -415,70 +490,84 @@ export default function TafsirBuilderPage() {
             <DrawerTitle className="font-display text-xl mb-1 text-foreground">Manage Tafsir Sources</DrawerTitle>
             <DrawerDescription className="text-muted-foreground mb-6">Add, rename, or delete the Tafsir sources you want to use.</DrawerDescription>
             
-            <div className="space-y-4">
-              {sources.map(source => (
-                <div key={source.id} className="flex items-center gap-2 p-3 bg-muted/30 border border-border rounded-2xl">
-                  {editingSourceId === source.id ? (
-                    <input
-                      autoFocus
-                      type="text"
-                      className="flex-1 bg-transparent border-none text-[15px] font-medium focus:outline-none px-2 text-foreground"
-                      value={sourceEditText}
-                      onChange={e => setSourceEditText(e.target.value)}
-                      onBlur={() => {
-                        if (sourceEditText.trim()) updateSource(source.id, sourceEditText.trim());
-                        setEditingSourceId(null);
-                      }}
-                      onKeyDown={e => {
-                        if (e.key === 'Enter') {
-                          if (sourceEditText.trim()) updateSource(source.id, sourceEditText.trim());
+            {showManageError && (!selectedSurah || !selectedVerse) && (
+               <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-xl text-destructive text-[13px] font-medium flex items-center gap-2 animate-in fade-in slide-in-from-top-1">
+                   <AlertCircle size={16} />
+                   Please select both a Surah and Verse to manage sources.
+               </div>
+            )}
+            
+            <div className="relative">
+              {(!selectedSurah || !selectedVerse) && (
+                <div className="absolute inset-0 z-10" onClick={() => setShowManageError(true)} />
+              )}
+              <div className={`space-y-4 ${(!selectedSurah || !selectedVerse) ? 'opacity-50 pointer-events-none' : ''}`}>
+                {localSources.map(source => (
+                  <div key={source.id} className="flex items-center gap-2 p-3 bg-muted/30 border border-border rounded-2xl">
+                    {editingSourceId === source.id ? (
+                      <input
+                        autoFocus
+                        type="text"
+                        className="flex-1 bg-transparent border-none text-[15px] font-medium focus:outline-none px-2 text-foreground"
+                        value={sourceEditText}
+                        onChange={e => setSourceEditText(e.target.value)}
+                        onBlur={() => {
+                          if (sourceEditText.trim()) handleUpdateLocalSource(source.id, sourceEditText.trim());
                           setEditingSourceId(null);
-                        }
+                        }}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter') {
+                            if (sourceEditText.trim()) handleUpdateLocalSource(source.id, sourceEditText.trim());
+                            setEditingSourceId(null);
+                          }
+                        }}
+                      />
+                    ) : (
+                      <span className="flex-1 text-[15px] font-medium px-2 text-foreground">{source.name}</span>
+                    )}
+                    
+                    <button
+                      onClick={() => {
+                        setEditingSourceId(source.id);
+                        setSourceEditText(source.name);
                       }}
-                    />
-                  ) : (
-                    <span className="flex-1 text-[15px] font-medium px-2 text-foreground">{source.name}</span>
-                  )}
-                  
-                  <button
-                    onClick={() => {
-                      setEditingSourceId(source.id);
-                      setSourceEditText(source.name);
-                    }}
-                    className="p-2 text-primary/80 rounded-lg transition-colors outline-none"
-                  >
-                    <Edit2 size={16} />
-                  </button>
-                  
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <button
-                        className="p-2 text-destructive/80 rounded-lg transition-colors outline-none"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </DialogTrigger>
-                    <DialogContent className="w-[92vw] max-w-[360px] rounded-[1.5rem] z-[100] border-none shadow-2xl p-6 [&>button]:hidden">
-                      <DialogHeader className="space-y-2">
-                        <DialogTitle className="text-center text-lg font-bold">Delete "{source.name}"?</DialogTitle>
-                        <DialogDescription className="text-center text-sm leading-relaxed">
-                          Are you sure you want to delete this source?
+                      className="p-2 text-primary/80 rounded-lg transition-colors outline-none"
+                    >
+                      <Edit2 size={16} />
+                    </button>
+                    
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <button
+                          className="p-2 text-destructive/80 rounded-lg transition-colors outline-none"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </DialogTrigger>
+                    <DialogContent className="w-[92vw] max-w-[360px] rounded-[2rem] z-[100] border-none shadow-2xl p-6 [&>button]:hidden">
+                      <DialogHeader className="space-y-3">
+                        <div className="w-14 h-14 bg-destructive/10 text-destructive rounded-full flex items-center justify-center mx-auto mb-2">
+                           <Trash2 size={24} />
+                        </div>
+                        <DialogTitle className="text-center text-xl font-display font-bold">Remove Source?</DialogTitle>
+                        <DialogDescription className="text-center text-muted-foreground text-[15px] leading-relaxed">
+                          Are you sure you want to remove <span className="font-semibold text-foreground">"{source.name}"</span> for this specific verse? 
                           <br /><br />
-                          <span className="font-semibold text-destructive/90">WARNING:</span> This will permanently hide and delete all Tafsir notes you have ever written under this source across all verses. This action cannot be undone.
+                          This will only remove the notes written under this source for this verse. Other verses will not be affected.
                         </DialogDescription>
                       </DialogHeader>
-                      <DialogFooter className="flex flex-col gap-2 mt-4">
+                      <DialogFooter className="flex flex-col gap-2 mt-6">
                         <DialogClose asChild>
-                          <button
-                            onClick={() => deleteSource(source.id)}
-                            className="w-full h-11 rounded-xl bg-destructive text-destructive-foreground font-semibold text-[15px] transition-all"
-                          >
-                            Delete
-                          </button>
+                            <button
+                              onClick={() => handleDeleteLocalSource(source.id)}
+                            className="w-full h-12 rounded-xl bg-destructive text-destructive-foreground font-semibold text-[16px] transition-all active:scale-[0.98]"
+                            >
+                              Remove Source
+                            </button>
                         </DialogClose>
                         <DialogClose asChild>
-                          <button className="w-full h-11 rounded-xl bg-background text-foreground font-medium text-[15px] transition-all border border-border">
-                            Cancel
+                          <button className="w-full h-12 rounded-xl bg-muted/50 text-muted-foreground font-semibold text-[16px] transition-all border-none active:scale-[0.98]">
+                            Not Now
                           </button>
                         </DialogClose>
                       </DialogFooter>
@@ -486,38 +575,44 @@ export default function TafsirBuilderPage() {
                   </Dialog>
                 </div>
               ))}
+              </div>
             </div>
           </div>
 
           {/* STICKY ADD NEW SOURCE FOOTER */}
-          <div className="px-7 py-4 border-t border-border bg-white">
-            <label className="block text-[11px] font-semibold text-muted-foreground uppercase tracking-widest mb-3">Add New Source</label>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                placeholder="e.g. Tafsir As-Sa'di"
-                value={newSourceName}
-                onChange={e => setNewSourceName(e.target.value)}
-                className="flex-1 bg-muted/30 border border-border rounded-xl p-3 text-[15px] focus:outline-none focus:border-primary transition-colors text-foreground"
-                onKeyDown={e => {
-                  if (e.key === 'Enter' && newSourceName.trim()) {
-                    addSource(newSourceName.trim());
-                    setNewSourceName('');
-                  }
-                }}
-              />
-              <button
-                onClick={() => {
-                  if (newSourceName.trim()) {
-                    addSource(newSourceName.trim());
-                    setNewSourceName('');
-                  }
-                }}
-                disabled={!newSourceName.trim()}
-                className="px-4 bg-primary text-primary-foreground rounded-xl text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed outline-none"
-              >
-                <Plus size={18} />
-              </button>
+          <div className="px-7 py-4 border-t border-border bg-white rounded-b-[2rem] relative">
+            {(!selectedSurah || !selectedVerse) && (
+              <div className="absolute inset-0 z-10" onClick={() => setShowManageError(true)} />
+            )}
+            <div className={(!selectedSurah || !selectedVerse) ? 'opacity-50 pointer-events-none' : ''}>
+              <label className="block text-[11px] font-semibold text-muted-foreground uppercase tracking-widest mb-3">Add Source for this Verse</label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="e.g. Tafsir As-Sa'di"
+                  value={newSourceName}
+                  onChange={e => setNewSourceName(e.target.value)}
+                  className="flex-1 bg-muted/30 border border-border rounded-xl p-3 text-[15px] focus:outline-none focus:border-primary transition-colors text-foreground"
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' && newSourceName.trim()) {
+                      handleAddLocalSource(newSourceName.trim());
+                      setNewSourceName('');
+                    }
+                  }}
+                />
+                <button
+                  onClick={() => {
+                    if (newSourceName.trim()) {
+                      handleAddLocalSource(newSourceName.trim());
+                      setNewSourceName('');
+                    }
+                  }}
+                  disabled={!newSourceName.trim()}
+                  className="px-4 bg-primary text-primary-foreground rounded-xl text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed outline-none"
+                >
+                  <Plus size={18} />
+                </button>
+              </div>
             </div>
           </div>
         </DrawerContent>

@@ -31,11 +31,11 @@ export default function ManagePage() {
   const { tafsirRecords, deleteTafsirRecord } = useCustomTafsirs();
   const { notes, addNote, updateNote, deleteNote } = useNotes();
   const { data: surahs } = useSurahs();
-  
+
   const [searchParams, setSearchParams] = useSearchParams();
   const tabParam = searchParams.get('tab');
   const activeTab = (tabParam as 'explanations' | 'tafsirs' | 'notes') || 'explanations';
-  
+
   const setActiveTab = (tab: 'explanations' | 'tafsirs' | 'notes') => {
     setSearchParams({ tab }, { replace: true });
   };
@@ -55,13 +55,6 @@ export default function ManagePage() {
   });
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setLoading(true);
-    const timer = setTimeout(() => setLoading(false), 300);
-    return () => clearTimeout(timer);
-  }, [activeTab]);
 
   type SortOrder = 'asc' | 'desc' | 'lastEdited' | 'dateAdded';
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
@@ -92,8 +85,8 @@ export default function ManagePage() {
       if (activeTab === 'explanations') {
         const exp = a as typeof explanations[0];
         const nextExp = b as typeof explanations[0];
-        aVerse = (exp.concise?.length ? exp.concise.map((c: {verseNumber: number}) => c.verseNumber).filter((v: number) => v > 0) : exp.verses || []).sort((x: number, y: number) => x - y)[0] ?? 0;
-        bVerse = (nextExp.concise?.length ? nextExp.concise.map((c: {verseNumber: number}) => c.verseNumber).filter((v: number) => v > 0) : nextExp.verses || []).sort((x: number, y: number) => x - y)[0] ?? 0;
+        aVerse = (exp.concise?.length ? exp.concise.map((c: { verseNumber: number }) => c.verseNumber).filter((v: number) => v > 0) : exp.verses || []).sort((x: number, y: number) => x - y)[0] ?? 0;
+        bVerse = (nextExp.concise?.length ? nextExp.concise.map((c: { verseNumber: number }) => c.verseNumber).filter((v: number) => v > 0) : nextExp.verses || []).sort((x: number, y: number) => x - y)[0] ?? 0;
       } else if (activeTab === 'tafsirs') {
         aVerse = (a as typeof tafsirRecords[0]).verseNumber;
         bVerse = (b as typeof tafsirRecords[0]).verseNumber;
@@ -147,8 +140,8 @@ export default function ManagePage() {
       {/* Header */}
       <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-md pb-2 pt-1 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border-b border-border/60 transform-gpu">
         <div className="flex items-center gap-3 px-4 h-14">
-          <button 
-            onClick={() => navigate(-1)} 
+          <button
+            onClick={() => navigate(-1)}
             className="w-10 h-10 flex items-center justify-center rounded-full transition-all text-foreground outline-none"
             aria-label="Back"
           >
@@ -218,8 +211,8 @@ export default function ManagePage() {
                   key={opt}
                   onClick={() => setSortOrder(opt)}
                   className={`flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer transition-colors ${sortOrder === opt
-                      ? 'bg-primary/25 text-primary font-semibold'
-                      : 'text-foreground data-[highlighted]:bg-foreground/[0.05] data-[highlighted]:text-foreground font-medium'
+                    ? 'bg-primary/25 text-primary font-semibold'
+                    : 'text-foreground data-[highlighted]:bg-foreground/[0.05] data-[highlighted]:text-foreground font-medium'
                     }`}
                 >
                   <span className="text-[13.5px] font-medium">{sortLabels[opt]}</span>
@@ -245,224 +238,193 @@ export default function ManagePage() {
         {/* Explanations List */}
         <div className="relative min-h-[50vh]">
           <AnimatePresence mode="wait">
-            {loading ? (
-              <motion.div
-                key="loading-skeleton"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="space-y-8 w-full"
-              >
-                {[1, 2, 3].map((num) => (
-                  <div key={num} className="space-y-3">
-                    <div className="flex items-center justify-between pb-1 border-b border-border/40">
-                      <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-full bg-primary/5 animate-pulse" />
-                        <div className="h-4 w-24 bg-muted/50 animate-pulse rounded" />
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="h-6 w-16 bg-muted/40 animate-pulse rounded" />
-                        <div className="w-6 h-6 bg-muted/40 animate-pulse rounded-md" />
-                      </div>
-                    </div>
-                    <div className="space-y-3 pt-3 pb-1">
-                      {[1].map((_, j) => (
-                        <div key={j} className="bg-muted/10 border border-border/50 rounded-[1.2rem] p-4 flex items-center justify-between gap-4">
-                          <div className="flex-1 flex items-center min-w-0 pr-4">
-                            <div className="h-[34px] w-[100px] rounded-full bg-primary/[0.03] animate-pulse border border-primary/5" />
-                          </div>
-                          <div className="flex items-center">
-                            <div className="w-10 h-10 rounded-full bg-secondary/40 animate-pulse" />
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full"
+            >
+              {items.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-20 text-center opacity-60">
+                  <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
+                    <FileText size={32} className="text-muted-foreground" />
+                  </div>
+                  <p className="text-[15px] font-medium text-foreground mb-1">No {activeTab} yet</p>
+                  <p className="text-[13px] text-muted-foreground">Start deep-diving into the Quran by adding your first {activeTab === 'explanations' ? 'explanation' : 'tafsir'}.</p>
+                </div>
+              ) : filteredSurahNumbers.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-10 text-center">
+                  <p className="text-[15px] text-muted-foreground">No matching {activeTab} found.</p>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  <AnimatePresence>
+                    {filteredSurahNumbers.map(surahNum => (
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                        key={`group-${surahNum}`}
+                        className="space-y-3"
+                      >
+                        <div
+                          onClick={() => toggleSurah(surahNum)}
+                          className="flex items-center justify-between pb-1 border-b border-border/40 cursor-pointer group"
+                        >
+                          <h3 className="font-semibold text-[14px] text-muted-foreground flex items-center gap-2 transition-colors">
+                            <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[11px] font-bold tabular-nums">
+                              {surahNum}
+                            </span>
+                            {getSurahName(surahNum)}
+                          </h3>
+                          <div className="flex items-center gap-3">
+                            <span className="font-arabic text-primary/70 text-lg">
+                              {getSurahArabic(surahNum)}
+                            </span>
+                            <button className="text-muted-foreground transition-colors p-1 -mr-1 rounded-md flex items-center justify-center">
+                              {collapsedSurahs.has(surahNum) ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
+                            </button>
                           </div>
                         </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </motion.div>
-            ) : (
-              <motion.div
-                key="content"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.25 }}
-                className="w-full"
-              >
-                {items.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-20 text-center opacity-60">
-                    <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
-                      <FileText size={32} className="text-muted-foreground" />
-                    </div>
-                    <p className="text-[15px] font-medium text-foreground mb-1">No {activeTab} yet</p>
-                    <p className="text-[13px] text-muted-foreground">Start deep-diving into the Quran by adding your first {activeTab === 'explanations' ? 'explanation' : 'tafsir'}.</p>
-                  </div>
-                ) : filteredSurahNumbers.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-10 text-center">
-                    <p className="text-[15px] text-muted-foreground">No matching {activeTab} found.</p>
-                  </div>
-                ) : (
-                  <div className="space-y-6">
-                    <AnimatePresence>
-                      {filteredSurahNumbers.map(surahNum => (
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, scale: 0.95 }}
-                          transition={{ duration: 0.25, ease: "easeOut" }}
-                          key={`group-${surahNum}`}
-                          className="space-y-3"
-                        >
-                          <div
-                            onClick={() => toggleSurah(surahNum)}
-                            className="flex items-center justify-between pb-1 border-b border-border/40 cursor-pointer group"
-                          >
-                            <h3 className="font-semibold text-[14px] text-muted-foreground flex items-center gap-2 transition-colors">
-                              <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[11px] font-bold tabular-nums">
-                                {surahNum}
-                              </span>
-                              {getSurahName(surahNum)}
-                            </h3>
-                            <div className="flex items-center gap-3">
-                              <span className="font-arabic text-primary/70 text-lg">
-                                {getSurahArabic(surahNum)}
-                              </span>
-                              <button className="text-muted-foreground transition-colors p-1 -mr-1 rounded-md flex items-center justify-center">
-                                {collapsedSurahs.has(surahNum) ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
-                              </button>
-                            </div>
-                          </div>
 
-                          <AnimatePresence initial={false}>
-                            {!collapsedSurahs.has(surahNum) && (
-                              <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: 'auto', opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                transition={{ duration: 0.25, ease: "easeOut" }}
-                                className="overflow-hidden"
-                              >
-                                <div className="space-y-3 pt-3 pb-1">
-                                  <AnimatePresence>
-                                    {sortItems(groupedItems[surahNum]).map(item => {
-                                      const verseText = activeTab === 'explanations' 
-                                        ? (formatVerseRange((item as typeof explanations[0]).concise?.length ? (item as typeof explanations[0]).concise.map((b: {verseNumber: number}) => b.verseNumber).filter((v: number) => v > 0) : (item as typeof explanations[0]).verses || []) || (item as typeof explanations[0]).verseRange || '')
-                                        : `Verse ${(item as typeof tafsirRecords[0]).verseNumber}`;
-                                      
-                                      const isMultiple = activeTab === 'explanations' && (verseText.includes('-') || verseText.includes(','));
+                        <AnimatePresence initial={false}>
+                          {!collapsedSurahs.has(surahNum) && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.25, ease: "easeOut" }}
+                              className="overflow-hidden"
+                            >
+                              <div className="space-y-3 pt-3 pb-1">
+                                <AnimatePresence>
+                                  {sortItems(groupedItems[surahNum]).map(item => {
+                                    const verseText = activeTab === 'explanations'
+                                      ? (formatVerseRange((item as typeof explanations[0]).concise?.length ? (item as typeof explanations[0]).concise.map((b: { verseNumber: number }) => b.verseNumber).filter((v: number) => v > 0) : (item as typeof explanations[0]).verses || []) || (item as typeof explanations[0]).verseRange || '')
+                                      : `Verse ${(item as typeof tafsirRecords[0]).verseNumber}`;
 
-                                      return (
-                                        <motion.div
-                                          initial={{ opacity: 0, scale: 0.95 }}
-                                          animate={{ opacity: 1, scale: 1 }}
-                                          exit={{ opacity: 0, scale: 0.95 }}
-                                          transition={{ duration: 0.25, ease: "easeOut" }}
-                                          key={item.id}
-                                          onClick={() => {
-                                            if (activeTab === 'explanations') navigate(`/explanation-view?id=${item.id}`);
-                                            else if (activeTab === 'tafsirs') navigate(`/tafsir-view?surah=${item.surahNumber}&verse=${(item as typeof tafsirRecords[0]).verseNumber}`);
-                                            else navigate(`/note-view?id=${item.id}`);
-                                          }}
-                                          className="bg-card border border-border rounded-[1.2rem] p-4 shadow-[0_2px_10px_rgba(0,0,0,0.02)] flex items-center justify-between gap-4 cursor-pointer transition-all"
-                                        >
-                                          <div className="flex-1 flex items-center min-w-0 pr-4">
-                                            <button
-                                              type="button"
-                                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-primary font-medium text-[13px] border border-primary/10 shadow-sm hover:bg-primary/5 transition-colors"
-                                              onClick={(e) => {
-                                                e.stopPropagation();
-                                                const v = activeTab === 'explanations'
-                                                  ? ((item as typeof explanations[0]).concise?.length
-                                                    ? (item as typeof explanations[0]).concise.map((c: { verseNumber: number }) => c.verseNumber).filter((v: number) => v > 0).sort((x: number, y: number) => x - y)[0]
-                                                    : (item as typeof explanations[0]).verses || [])
-                                                  : (item as typeof tafsirRecords[0]).verseNumber;
-                                                navigate(v ? `/surah/${surahNum}?verse=${v}` : `/surah/${surahNum}`);
-                                              }}
-                                            >
-                                              <Bookmark size={14} className="opacity-70" />
-                                              {activeTab === 'explanations' ? (isMultiple ? 'Verses' : 'Verse') : 'Verse'} {verseText.replace('Verse ', '')}
-                                            </button>
-                                          </div>
-                                          <div className="flex items-center" onClick={e => e.stopPropagation()}>
-                                            <DropdownMenu>
-                                              <DropdownMenuTrigger asChild>
-                                                <button className="w-10 h-10 flex items-center justify-center rounded-full text-muted-foreground transition-colors outline-none cursor-pointer">
-                                                  <MoreVertical size={20} />
-                                                </button>
-                                              </DropdownMenuTrigger>
-                                              <DropdownMenuContent align="end" className="w-48 p-1.5 rounded-2xl bg-white/95 backdrop-blur-sm dark:bg-black/95 border-border shadow-[0_10px_30px_rgba(0,0,0,0.05)]">
-                                                <DropdownMenuItem 
-                                                  onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    const v = activeTab === 'explanations' 
-                                                      ? ((item as typeof explanations[0]).concise?.length ? (item as typeof explanations[0]).concise.map((c: {verseNumber: number}) => c.verseNumber).filter((v: number) => v > 0) : (item as typeof explanations[0]).verses || []).sort((x: number, y: number) => x - y)[0]
-                                                      : (item as typeof tafsirRecords[0]).verseNumber;
-                                                    navigate(v ? `/surah/${surahNum}?verse=${v}` : `/surah/${surahNum}`);
-                                                  }}
-                                                  className="flex items-center gap-2.5 px-3 py-2.5 outline-none rounded-xl cursor-pointer transition-colors text-[14px] font-medium"
+                                    const isMultiple = activeTab === 'explanations' && (verseText.includes('-') || verseText.includes(','));
+
+                                    return (
+                                      <motion.div
+                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.95 }}
+                                        transition={{ duration: 0.25, ease: "easeOut" }}
+                                        key={item.id}
+                                        onClick={() => {
+                                          if (activeTab === 'explanations') navigate(`/explanation-view?id=${item.id}`);
+                                          else if (activeTab === 'tafsirs') navigate(`/tafsir-view?surah=${item.surahNumber}&verse=${(item as typeof tafsirRecords[0]).verseNumber}`);
+                                          else navigate(`/note-view?id=${item.id}`);
+                                        }}
+                                        className="bg-card border border-border rounded-[1.2rem] p-4 shadow-[0_2px_10px_rgba(0,0,0,0.02)] flex items-center justify-between gap-4 cursor-pointer transition-all"
+                                      >
+                                        <div className="flex-1 flex items-center min-w-0 pr-4">
+                                          <button
+                                            type="button"
+                                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-primary font-medium text-[13px] border border-primary/10 shadow-sm hover:bg-primary/5 transition-colors"
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              const v = activeTab === 'explanations'
+                                                ? ((item as typeof explanations[0]).concise?.length
+                                                  ? (item as typeof explanations[0]).concise.map((c: { verseNumber: number }) => c.verseNumber).filter((v: number) => v > 0).sort((x: number, y: number) => x - y)[0]
+                                                  : (item as typeof explanations[0]).verses || [])
+                                                : (item as typeof tafsirRecords[0]).verseNumber;
+                                              navigate(v ? `/surah/${surahNum}?verse=${v}` : `/surah/${surahNum}`);
+                                            }}
+                                          >
+                                            <Bookmark size={14} className="opacity-70" />
+                                            {activeTab === 'explanations' ? (isMultiple ? 'Verses' : 'Verse') : 'Verse'} {verseText.replace('Verse ', '')}
+                                          </button>
+                                        </div>
+                                        <div className="flex items-center" onClick={e => e.stopPropagation()}>
+                                          <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                              <button className="w-10 h-10 flex items-center justify-center rounded-full text-muted-foreground transition-colors outline-none cursor-pointer">
+                                                <MoreVertical size={20} />
+                                              </button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end" className="w-48 p-1.5 rounded-2xl bg-white/95 backdrop-blur-sm dark:bg-black/95 border-border shadow-[0_10px_30px_rgba(0,0,0,0.05)]">
+                                              <DropdownMenuItem
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  const v = activeTab === 'explanations'
+                                                    ? ((item as typeof explanations[0]).concise?.length ? (item as typeof explanations[0]).concise.map((c: { verseNumber: number }) => c.verseNumber).filter((v: number) => v > 0) : (item as typeof explanations[0]).verses || []).sort((x: number, y: number) => x - y)[0]
+                                                    : (item as typeof tafsirRecords[0]).verseNumber;
+                                                  navigate(v ? `/surah/${surahNum}?verse=${v}` : `/surah/${surahNum}`);
+                                                }}
+                                                className="flex items-center gap-2.5 px-3 py-2.5 outline-none rounded-xl cursor-pointer transition-colors text-[14px] font-medium"
+                                              >
+                                                <Eye size={16} /> Show Verse
+                                              </DropdownMenuItem>
+                                              <DropdownMenuItem
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  if (activeTab === 'notes') {
+                                                    navigate(`/note-builder?id=${item.id}`);
+                                                  } else {
+                                                    navigate(activeTab === 'explanations' ? `/explanation-builder?id=${item.id}` : `/tafsir-builder?surah=${item.surahNumber}&verse=${(item as typeof tafsirRecords[0]).verseNumber}`);
+                                                  }
+                                                }}
+                                                className="flex items-center gap-2.5 px-3 py-2.5 outline-none rounded-xl cursor-pointer transition-colors text-[14px] font-medium"
+                                              >
+                                                <Edit2 size={16} /> Edit
+                                              </DropdownMenuItem>
+                                              <DropdownMenuSeparator className="bg-border/50 my-1 mx-1" />
+                                              <AlertDialog>
+                                                <AlertDialogTrigger asChild>
+                                                  <DropdownMenuItem
+                                                    onSelect={e => e.preventDefault()}
+                                                    className="flex items-center gap-2.5 px-3 py-2.5 outline-none rounded-xl cursor-pointer text-destructive focus:bg-destructive/10 transition-colors text-[14px] font-medium"
+                                                  >
+                                                    <Trash2 size={16} /> Delete
+                                                  </DropdownMenuItem>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent
+                                                  className="w-[92vw] max-w-[360px] border-none bg-white dark:bg-background shadow-2xl p-6 rounded-[2rem]"
+                                                  onClick={e => e.stopPropagation()}
                                                 >
-                                                  <Eye size={16} /> Show Verse
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem 
-                                                  onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    if (activeTab === 'notes') {
-                                                      navigate(`/note-builder?id=${item.id}`);
-                                                    } else {
-                                                      navigate(activeTab === 'explanations' ? `/explanation-builder?id=${item.id}` : `/tafsir-builder?surah=${item.surahNumber}&verse=${(item as typeof tafsirRecords[0]).verseNumber}`);
-                                                    }
-                                                  }}
-                                                  className="flex items-center gap-2.5 px-3 py-2.5 outline-none rounded-xl cursor-pointer transition-colors text-[14px] font-medium"
-                                                >
-                                                  <Edit2 size={16} /> Edit
-                                                </DropdownMenuItem>
-                                                <DropdownMenuSeparator className="bg-border/50 my-1 mx-1" />
-                                                <AlertDialog>
-                                                  <AlertDialogTrigger asChild>
-                                                    <DropdownMenuItem 
-                                                      onSelect={e => e.preventDefault()}
-                                                      className="flex items-center gap-2.5 px-3 py-2.5 outline-none rounded-xl cursor-pointer text-destructive bg-destructive/10 transition-colors text-[14px] font-medium"
+                                                  <AlertDialogHeader className="space-y-2">
+                                                    <AlertDialogTitle className="text-left text-lg font-bold text-foreground">
+                                                      Delete {activeTab === 'explanations' ? 'Explanation' : activeTab === 'tafsirs' ? 'Tafsir' : 'Note'}?
+                                                    </AlertDialogTitle>
+                                                    <AlertDialogDescription className="text-left text-sm leading-relaxed text-muted-foreground">
+                                                      Are you sure you want to delete this {activeTab.slice(0, -1)} for <strong>Surah {getSurahName(surahNum)} {verseText}</strong>? This will permanently remove your stored records for this verse.
+                                                    </AlertDialogDescription>
+                                                  </AlertDialogHeader>
+                                                  <AlertDialogFooter className="flex flex-row justify-end gap-2 mt-4">
+                                                    <AlertDialogCancel className="h-10 px-6 rounded-full border-border bg-secondary/10 text-foreground text-[13px] font-medium hover:bg-secondary/20 transition-all">
+                                                      Cancel
+                                                    </AlertDialogCancel>
+                                                    <AlertDialogAction
+                                                      onClick={() => handleDelete(item.id)}
+                                                      className="h-10 px-6 rounded-full bg-destructive text-destructive-foreground text-[13px] font-bold hover:bg-destructive/90 transition-all"
                                                     >
-                                                      <Trash2 size={16} /> Delete
-                                                    </DropdownMenuItem>
-                                                  </AlertDialogTrigger>
-                                                  <AlertDialogContent className="w-[90vw] max-w-[400px] rounded-[1.5rem]" onClick={e => e.stopPropagation()}>
-                                                    <AlertDialogHeader>
-                                                      <AlertDialogTitle>Delete {activeTab === 'explanations' ? 'Explanation' : 'Tafsir'}?</AlertDialogTitle>
-                                                      <AlertDialogDescription>
-                                                        Are you sure you want to delete this {activeTab === 'explanations' ? 'explanation' : 'tafsir'} for <strong>Surah {getSurahName(surahNum)} {verseText}</strong>? This action cannot be undone.
-                                                      </AlertDialogDescription>
-                                                    </AlertDialogHeader>
-                                                    <AlertDialogFooter className="flex gap-2 sm:gap-0 mt-2">
-                                                      <AlertDialogCancel className="rounded-xl border-border h-11">Cancel</AlertDialogCancel>
-                                                      <AlertDialogAction
-                                                        onClick={() => handleDelete(item.id)}
-                                                        className="rounded-xl bg-destructive text-destructive-foreground h-11"
-                                                      >
-                                                        Delete
-                                                      </AlertDialogAction>
-                                                    </AlertDialogFooter>
-                                                  </AlertDialogContent>
-                                                </AlertDialog>
-                                              </DropdownMenuContent>
-                                            </DropdownMenu>
-                                          </div>
-                                        </motion.div>
-                                      );
-                                    })}
-                                  </AnimatePresence>
-                                </div>
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
-                        </motion.div>
-                      ))}
-                    </AnimatePresence>
-                  </div>
-                )}
-              </motion.div>
-            )}
+                                                      Delete
+                                                    </AlertDialogAction>
+                                                  </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                              </AlertDialog>
+                                            </DropdownMenuContent>
+                                          </DropdownMenu>
+                                        </div>
+                                      </motion.div>
+                                    );
+                                  })}
+                                </AnimatePresence>
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </div>
+              )}
+            </motion.div>
           </AnimatePresence>
         </div>
       </div>

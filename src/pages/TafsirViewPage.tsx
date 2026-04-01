@@ -68,7 +68,7 @@ export default function TafsirViewPage() {
   const verseData = currentSurahVerses?.find(a => a.numberInSurah === tafsir?.verseNumber);
 
   // Available sources that actually contain notes for this verse
-  const activeSourcesList = sources.filter(s => tafsir?.tafsirs[s.id]?.trim());
+  const activeSourcesList = (tafsir?.sources || sources).filter(s => tafsir?.tafsirs[s.id]?.trim());
 
   const handlers = useSwipeable({
     onSwipedLeft: () => {
@@ -96,7 +96,7 @@ export default function TafsirViewPage() {
   return (
     <AnimatePresence>
       {!isDeleting && (
-        <motion.div {...handlers} exit={{ opacity: 0, scale: 0.96, y: 15 }} transition={{ duration: 0.25, ease: 'easeOut' }} className="min-h-screen bg-background pb-24">
+        <motion.div {...handlers} exit={{ opacity: 0, scale: 0.96, y: 20 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="min-h-screen bg-background pb-24">
       
       {/* Sticky Header */}
       <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-md pt-5 pb-4 mb-6 border-b border-border/50 shadow-sm transform-gpu">
@@ -118,24 +118,26 @@ export default function TafsirViewPage() {
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <button 
-                  className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-destructive/80 transition shadow-sm outline-none"
+                  className="w-9 h-9 bg-card border border-border rounded-full flex items-center justify-center text-destructive transition shadow-sm outline-none"
                   aria-label="Delete Tafsir"
                 >
                   <Trash2 size={14} />
                 </button>
               </AlertDialogTrigger>
-              <AlertDialogContent className="w-[90vw] max-w-[400px] rounded-[1.5rem]">
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Delete Tafsir?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Are you sure you want to delete this Tafsir? This action cannot be undone.
+              <AlertDialogContent className="w-[92vw] max-w-[360px] rounded-[2rem] border-none bg-white dark:bg-background shadow-2xl p-6">
+                <AlertDialogHeader className="space-y-2">
+                  <AlertDialogTitle className="text-left text-lg font-bold">Delete Tafsir?</AlertDialogTitle>
+                  <AlertDialogDescription className="text-left text-sm leading-relaxed text-muted-foreground">
+                    Are you sure you want to delete the Tafsir for <strong>Surah {surah?.name} {verseNumber}</strong>? Your written notes for this source will be permanently removed.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
-                <AlertDialogFooter className="flex gap-2 sm:gap-0 mt-2">
-                  <AlertDialogCancel className="rounded-xl border-border h-11">Cancel</AlertDialogCancel>
+                <AlertDialogFooter className="flex flex-row justify-end gap-2 mt-4">
+                  <AlertDialogCancel className="h-10 px-6 rounded-full border-border bg-secondary/10 text-foreground text-[13px] font-medium hover:bg-secondary/20 transition-all">
+                    Cancel
+                  </AlertDialogCancel>
                   <AlertDialogAction 
                     onClick={handleDelete}
-                    className="rounded-xl bg-destructive text-destructive-foreground h-11"
+                    className="h-10 px-6 rounded-full bg-destructive text-destructive-foreground text-[13px] font-bold hover:bg-destructive/90 transition-all"
                   >
                     Delete
                   </AlertDialogAction>
@@ -184,9 +186,9 @@ export default function TafsirViewPage() {
 
         <motion.div
           key={tafsir.id}
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           className="space-y-12"
         >
             <div className="space-y-6">
@@ -220,8 +222,9 @@ export default function TafsirViewPage() {
                               prose-headings:font-display prose-headings:font-bold prose-headings:text-foreground 
                               prose-headings:mt-8 prose-headings:mb-4
                               prose-strong:font-bold prose-strong:text-foreground 
-                              prose-a:text-primary prose-a:underline-offset-4
-                              prose-li:marker:text-primary"
+                              prose-a:text-primary prose-a:underline-offset-4 prose-a:break-all
+                              prose-li:marker:text-primary
+                              break-words overflow-x-hidden"
                              dir={settings.language === 'ur' ? 'rtl' : 'ltr'}
                           >
                              <ReactMarkdown remarkPlugins={[remarkGfm]}>{tafsir.tafsirs[activeSourceId]}</ReactMarkdown>
