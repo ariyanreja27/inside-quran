@@ -309,7 +309,13 @@ export function useCollections() {
     }));
   };
 
-  return { collections, addCollection, deleteCollection, renameCollection, addItemToCollection, removeItemFromCollection };
+  const updateCollectionIcon = (id: string, icon: string) => {
+    setCollections(prev => prev.map(c => 
+      c.id === id ? { ...c, icon, updatedAt: new Date().toISOString() } : c
+    ));
+  };
+
+  return { collections, addCollection, deleteCollection, renameCollection, updateCollectionIcon, addItemToCollection, removeItemFromCollection };
 }
 
 export function useNotes() {

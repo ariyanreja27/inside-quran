@@ -87,6 +87,7 @@ export interface CollectionItem {
 export interface Collection {
   id: string;
   name: string;
+  icon?: string;
   items: CollectionItem[];
   createdAt: string;
   updatedAt: string;

@@ -5,6 +5,7 @@ import { useNotes, useSettings } from '@/hooks/useAppStore';
 import { useSurahs, useSurahVerses } from '@/hooks/useQuranData';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { TajweedText } from '@/components/TajweedText';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -119,16 +120,17 @@ export default function NoteViewPage() {
 
           <div className="space-y-6">
             {/* Verse Text Box */}
-            <div className="bg-card/50 dark:bg-card/30 rounded-[2rem] p-6 pb-8 flex items-center justify-center min-h-[100px] shadow-[0_2px_15px_rgba(0,0,0,0.02)] mb-8 border border-border/80 relative overflow-hidden">
+            <div className="bg-card/50 dark:bg-card/30 rounded-[2rem] p-6 py-7 flex items-center justify-center shadow-[0_2px_15px_rgba(0,0,0,0.02)] mb-6 border border-border/80 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-[100px] -z-10 blur-xl" />
               {isVersesLoading ? (
                 <div className="w-full h-12 bg-muted/20 animate-pulse rounded-full" />
               ) : (
-                <p 
-                  className="font-arabic text-3xl leading-loose text-center text-foreground" 
-                  style={{ fontSize: `${settings.arabicFontSize + 6}px` }}
-                  dangerouslySetInnerHTML={{ __html: (verse?.text || '').replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ', '<span class="bismillah-text text-2xl block -mb-4">﷽</span>') }}
-                />
+                <div 
+                  className="arabic-text text-sm text-center text-foreground w-full" 
+                  style={{ fontSize: 26, lineHeight: 2.2, wordSpacing: '1px' }}
+                >
+                  <TajweedText text={verse?.text || ''} showColors={settings.showTajweed} />
+                </div>
               )}
             </div>
 

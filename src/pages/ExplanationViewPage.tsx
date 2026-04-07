@@ -257,10 +257,14 @@ export default function ExplanationViewPage() {
                         
                         {/* Verse Text Box */}
                         {verseData && (
-                          <div className="bg-card/50 dark:bg-card/30 rounded-3xl p-6 flex items-center justify-center min-h-[100px] shadow-[0_2px_10px_rgba(0,0,0,0.02)] mb-6 border border-border/50">
-                             <p className="font-arabic text-3xl leading-loose text-center text-foreground" style={{ fontSize: `${settings.arabicFontSize + 6}px` }}>
-                                <TajweedText text={verseData.text} showColors={settings.showTajweed} />
-                             </p>
+                          <div className="bg-card/50 dark:bg-card/30 rounded-[2rem] p-6 py-7 flex items-center justify-center shadow-[0_2px_15px_rgba(0,0,0,0.02)] mb-6 border border-border/80 relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-[100px] -z-10 blur-xl" />
+                            <div 
+                              className="arabic-text text-sm text-center text-foreground w-full" 
+                              style={{ fontSize: 26, lineHeight: 2.2, wordSpacing: '1px' }}
+                            >
+                              <TajweedText text={verseData.text} showColors={settings.showTajweed} />
+                            </div>
                           </div>
                         )}
 

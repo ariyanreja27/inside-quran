@@ -64,20 +64,17 @@ export default function SurahListPage() {
       {/* Sticky Header */}
       <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-md pb-2 pt-1 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border-b border-border/60 transform-gpu">
         {/* Header */}
-        <div className="flex items-center justify-between px-4 h-14">
-          <h1 className="font-display text-xl font-semibold text-foreground">
-            Inside Quran
-          </h1>
+        <div className="flex items-center justify-start gap-1 px-3 h-14">
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <button 
-                className="w-10 h-10 flex items-center justify-center rounded-full text-foreground active:scale-95 transition-all outline-none"
+                className="w-10 h-10 flex items-center justify-center rounded-full text-foreground transition-all outline-none"
                 aria-label="Menu"
               >
                 <Menu size={22} />
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56 p-1.5 rounded-2xl bg-white/95 backdrop-blur-sm dark:bg-black/95 border-border shadow-xl animate-in fade-in-0 zoom-in-95">
+            <DropdownMenuContent align="start" className="w-56 p-1.5 rounded-2xl bg-white/95 backdrop-blur-sm dark:bg-black/95 border-border shadow-xl duration-0">
 
               <DropdownMenuItem 
                 onClick={() => navigate('/last-read')}
@@ -98,6 +95,10 @@ export default function SurahListPage() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+
+          <h1 className="font-display text-xl font-semibold text-foreground pt-0.5">
+            Inside Quran
+          </h1>
         </div>
       </div>
 
@@ -147,7 +148,7 @@ export default function SurahListPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ 
                 duration: 0.5, 
-                ease: [0.16, 1, 0.3, 1] // Custom quintic ease-out for ultra smoothness
+                ease: [0.16, 1, 0.3, 1] 
               }}
               className="space-y-3"
             >
