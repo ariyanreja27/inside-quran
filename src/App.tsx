@@ -17,6 +17,9 @@ import TafsirViewPage from "@/pages/TafsirViewPage";
 import NoteViewPage from "@/pages/NoteViewPage";
 import NoteBuilderPage from "@/pages/NoteBuilderPage";
 import ExplorePage from "@/pages/ExplorePage";
+import TopicsPage from "@/pages/TopicsPage";
+import DuasPage from "@/pages/DuasPage";
+import ShaneNuzulPage from "@/pages/ShaneNuzulPage";
 import LastReadPage from "@/pages/LastReadPage";
 import HelpSupportPage from "@/pages/HelpSupportPage";
 import TajweedGuidePage from "@/pages/TajweedGuidePage";
@@ -44,6 +47,9 @@ const App = () => (
           <Route path="/note-view" element={<NoteViewPage />} />
           <Route path="/note-builder" element={<NoteBuilderPage />} />
           <Route path="/explore" element={<ExplorePage />} />
+          <Route path="/explore/topics" element={<TopicsPage />} />
+          <Route path="/explore/duas" element={<DuasPage />} />
+          <Route path="/explore/shane-nuzul" element={<ShaneNuzulPage />} />
           <Route path="/library" element={<LibraryPage />} />
           <Route path="/last-read" element={<LastReadPage />} />
           <Route path="/help" element={<HelpSupportPage />} />
