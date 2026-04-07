@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Bookmark, Home, Settings, FileText, Library } from 'lucide-react';
+import { Bookmark, Home, Settings, Compass, Library } from 'lucide-react';
 
 export default function BottomNav() {
   const location = useLocation();
@@ -13,13 +13,13 @@ export default function BottomNav() {
   const links = [
     { to: '/', icon: Home, label: 'Home' },
     { to: '/saved', icon: Bookmark, label: 'Saved' },
-    { to: '/manage', icon: FileText, label: 'Manage' },
+    { to: '/explore', icon: Compass, label: 'Explore' },
     { to: '/library', icon: Library, label: 'Library' },
     { to: '/settings', icon: Settings, label: 'Settings' },
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-card/95 backdrop-blur-md pb-[env(safe-area-inset-bottom,0)]">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-card/95 backdrop-blur-md">
       <div className="scrollbar-hide mx-auto flex h-16 max-w-lg items-center overflow-x-auto px-4">
         <div className="flex min-w-full items-center justify-between gap-1 sm:gap-2">
           {links.map(({ to, icon: Icon, label }) => {

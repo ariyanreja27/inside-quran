@@ -1,31 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
-import { Star, BookmarkCheck, Highlighter, ArrowLeft, MoreHorizontal, Trash2 } from 'lucide-react';
+import { Star, BookmarkCheck, ArrowLeft, MoreHorizontal, Trash2, Search, ArrowUpDown, Check, ChevronUp, ChevronDown, MoreVertical, FileText, Eye, Edit2, Book, FolderPlus, Plus, X, Bookmark } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useFavorites, useBookmarks } from '@/hooks/useAppStore';
+import { useFavorites, useBookmarks, useNotes, useCollections, useSettings } from '@/hooks/useAppStore';
 import { useSurahs, useSurahVerses } from '@/hooks/useQuranData';
-import { useEffect } from 'react';
 import { TajweedText } from '@/components/TajweedText';
-import { useSettings } from '@/hooks/useAppStore';
+import { cn, formatVerseRange } from '@/lib/utils';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerClose } from "@/components/ui/drawer";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-type SavedView = 'favorites' | 'bookmarks' | 'highlights';
+type SavedView = 'favorites' | 'bookmarks' | 'notes' | 'collections';
 
 function BookmarkedVerseCard({ surahNumber, verseNumber, onRemove }: { surahNumber: number; verseNumber: number; onRemove: (s: number, v: number) => void }) {
   const { data: surahs } = useSurahs();
@@ -108,13 +99,14 @@ export default function SavedPage() {
   const navigate = useNavigate();
   const { favorites, toggleFavorite } = useFavorites();
   const { bookmarks, toggleBookmark } = useBookmarks();
+  const { notes, deleteNote } = useNotes();
+  const { collections, addCollection, deleteCollection, renameCollection, addItemToCollection, removeItemFromCollection } = useCollections();
   const { data: surahs } = useSurahs();
   const [loading, setLoading] = useState(true);
+
   const [searchParams, setSearchParams] = useSearchParams();
   const tabParam = searchParams.get('tab') as SavedView | null;
-  const activeView = tabParam === 'favorites' || tabParam === 'bookmarks' || tabParam === 'highlights' ? tabParam : 'favorites';
-
-  const [favoriteToRemove, setFavoriteToRemove] = useState<number | null>(null);
+  const activeView = tabParam === 'favorites' || tabParam === 'bookmarks' || tabParam === 'notes' || tabParam === 'collections' ? tabParam : 'favorites';
 
   const setActiveView = (view: SavedView) => {
     setSearchParams({ tab: view }, { replace: true });
@@ -126,11 +118,11 @@ export default function SavedPage() {
     return () => clearTimeout(timer);
   }, [activeView]);
 
-  const favoriteSurahs = surahs?.filter(s => favorites.includes(s.number)) || [];
   const tabs: { id: SavedView; label: string }[] = [
     { id: 'favorites', label: 'Favorite' },
-    { id: 'bookmarks', label: 'Bookmarked' },
-    { id: 'highlights', label: 'Highlights' },
+    { id: 'bookmarks', label: 'Bookmark' },
+    { id: 'notes', label: 'Notes' },
+    { id: 'collections', label: 'Collections' },
   ];
 
   const handlers = useSwipeable({
@@ -146,6 +138,78 @@ export default function SavedPage() {
     preventScrollOnSwipe: true,
     delta: 40,
   });
+
+  const [favoriteToRemove, setFavoriteToRemove] = useState<number | null>(null);
+
+  // --- Notes State ---
+  const [searchQuery, setSearchQuery] = useState('');
+  type SortOrder = 'asc' | 'desc' | 'lastEdited' | 'dateAdded';
+  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+  const [collapsedSurahs, setCollapsedSurahs] = useState<Set<number>>(new Set());
+
+  const toggleSurah = (surahNum: number) => {
+    setCollapsedSurahs(prev => {
+      const next = new Set(prev);
+      if (next.has(surahNum)) next.delete(surahNum);
+      else next.add(surahNum);
+      return next;
+    });
+  };
+
+  const sortLabels: Record<SortOrder, string> = {
+    asc: 'Ascending', desc: 'Descending', lastEdited: 'Last Edited', dateAdded: 'Date Added',
+  };
+
+  const sortNotes = (list: typeof notes) => {
+    return [...list].sort((a, b) => {
+      if (sortOrder === 'asc') return a.verseNumber - b.verseNumber;
+      if (sortOrder === 'desc') return b.verseNumber - a.verseNumber;
+      if (sortOrder === 'lastEdited') return new Date(b.updatedAt || 0).getTime() - new Date(a.updatedAt || 0).getTime();
+      if (sortOrder === 'dateAdded') return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
+      return 0;
+    });
+  };
+
+  const groupedNotes = notes.reduce((acc, note) => {
+    if (!acc[note.surahNumber]) acc[note.surahNumber] = [];
+    acc[note.surahNumber].push(note);
+    return acc;
+  }, {} as Record<number, typeof notes>);
+
+  const getSurahName = (num: number) => surahs?.find(s => s.number === num)?.name || `Surah ${num}`;
+  const getSurahArabic = (num: number) => surahs?.find(s => s.number === num)?.nameArabic || '';
+
+  const filteredSurahNumbersForNotes = Object.keys(groupedNotes)
+    .map(Number)
+    .filter(num => {
+      const name = getSurahName(num).toLowerCase();
+      const query = searchQuery.toLowerCase();
+      return name.includes(query) || num.toString().includes(query);
+    })
+    .sort((a, b) => a - b);
+
+  // --- Collections State ---
+  const selectedFolderId = searchParams.get('folder');
+  const setSelectedFolderId = (id: string | null) => {
+    setSearchParams(prev => {
+      if (id) { prev.set('folder', id); } else { prev.delete('folder'); }
+      return prev;
+    }, { replace: true });
+  };
+
+  const [isCreateFolderOpen, setIsCreateFolderOpen] = useState(false);
+  const [newFolderName, setNewFolderName] = useState('');
+  const [editingFolderId, setEditingFolderId] = useState<string | null>(null);
+  const [editFolderName, setEditFolderName] = useState('');
+  const [isAddVerseOpen, setIsAddVerseOpen] = useState(false);
+  const [selectorSurah, setSelectorSurah] = useState<number | ''>('');
+  const [selectorVerse, setSelectorVerse] = useState<number | ''>('');
+  const [folderToDeleteId, setFolderToDeleteId] = useState<string | null>(null);
+  const [verseToRemove, setVerseToRemove] = useState<{ folderId: string, surahNumber: number, verseNumber: number } | null>(null);
+  const { data: verses } = useSurahVerses(selectorSurah || 1);
+  const selectedFolder = collections.find(c => c.id === selectedFolderId);
+
+  const favoriteSurahs = surahs?.filter(s => favorites.includes(s.number)) || [];
 
   return (
     <div {...handlers} className="min-h-screen pb-24 flex flex-col">
@@ -165,32 +229,30 @@ export default function SavedPage() {
         </div>
       </div>
 
-      <div className="px-4 mt-6">
-        <div className="mb-5 rounded-full border border-border bg-secondary/40 p-1 backdrop-blur-sm relative">
-          <div className="grid grid-cols-3 gap-1 relative">
+      <div className="px-4 mt-4 mb-2 max-w-lg mx-auto w-full">
+        {/* Horizontal scrollable tabs navigation */}
+        <div className="scrollbar-hide overflow-x-auto">
+          <div className="flex space-x-2 py-2">
             {tabs.map((tab) => {
               const active = activeView === tab.id;
               return (
                 <button
                   key={tab.id}
                   onClick={() => setActiveView(tab.id)}
-                  className={`relative rounded-full px-4 py-2.5 text-xs font-semibold transition-colors z-10 ${active ? 'text-primary-foreground' : 'text-muted-foreground'
-                    }`}
-                >
-                  {active && (
-                    <motion.div
-                      layoutId="savedTabIndicator"
-                      className="absolute inset-0 bg-primary rounded-full shadow-sm z-[-1]"
-                      transition={{ type: "spring", bounce: 0, duration: 0.4 }}
-                    />
+                  className={cn(
+                    "flex-shrink-0 px-4 py-2 text-sm font-semibold rounded-full border border-border/50 transition-colors whitespace-nowrap",
+                    active ? "bg-primary text-primary-foreground border-primary" : "bg-card text-muted-foreground hover:bg-secondary"
                   )}
+                >
                   {tab.label}
                 </button>
               );
             })}
           </div>
         </div>
+      </div>
 
+      <div className="px-4 mt-2 max-w-lg mx-auto w-full">
         <AnimatePresence mode="wait">
           {loading ? (
             null
@@ -222,11 +284,9 @@ export default function SavedPage() {
                       >
                         <Link to={`/surah/${surah.number}`} className="block">
                           <div className="surah-card flex items-center gap-4">
-                            {/* Surah number circle */}
                             <div className="flex-shrink-0 w-10 h-10 rounded-full border border-border flex items-center justify-center bg-muted/30">
                               <span className="text-xs font-mono text-muted-foreground tabular-nums">{surah.number}</span>
                             </div>
-                            
                             <div className="flex-1 min-w-0">
                               <p className="font-display text-sm font-semibold truncate">{surah.name}</p>
                               <p className="text-xs text-muted-foreground">{surah.verseCount} verses</p>
@@ -254,29 +314,7 @@ export default function SavedPage() {
             </motion.div>
           )}
 
-          <AlertDialog open={!!favoriteToRemove} onOpenChange={(open) => !open && setFavoriteToRemove(null)}>
-            <AlertDialogContent className="w-[92vw] max-w-[360px] rounded-[2rem] border-none bg-white dark:bg-background shadow-2xl p-6">
-              <AlertDialogHeader className="space-y-2">
-                <AlertDialogTitle className="text-left text-lg font-bold">Remove Favorite?</AlertDialogTitle>
-                <AlertDialogDescription className="text-left text-sm leading-relaxed text-muted-foreground">
-                  Are you sure you want to remove <strong>{surahs?.find(s => s.number === favoriteToRemove)?.name}</strong> from your favorite Surahs?
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter className="flex flex-row justify-end gap-2 mt-4">
-                <AlertDialogCancel className="h-10 px-6 rounded-full border-border bg-secondary/10 text-foreground text-[13px] font-medium hover:bg-secondary/20 transition-all">
-                  Cancel
-                </AlertDialogCancel>
-                <AlertDialogAction 
-                  onClick={() => { if (favoriteToRemove) toggleFavorite(favoriteToRemove); setFavoriteToRemove(null); }}
-                  className="h-10 px-6 rounded-full bg-destructive text-destructive-foreground text-[13px] font-bold hover:bg-destructive/90 transition-all"
-                >
-                  Remove
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-
-          {!loading && activeView === 'bookmarks' && (
+          {(!loading && activeView === 'bookmarks') && (
             <motion.div
               key="bookmarks"
               initial={{ opacity: 0, y: 20 }}
@@ -318,20 +356,588 @@ export default function SavedPage() {
             </motion.div>
           )}
 
-          {!loading && activeView === 'highlights' && (
+          {!loading && activeView === 'notes' && (
             <motion.div
-              key="highlights"
+              key="notes"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             >
-              <h2 className="mb-3 flex items-center gap-2 font-display text-sm font-semibold text-muted-foreground/80">
-                <Highlighter size={14} className="gold-accent" /> Highlights
-              </h2>
-              <p className="py-20 text-center text-[13px] text-muted-foreground opacity-60">No highlights yet</p>
+              <div className="flex gap-3 mb-6">
+                <div className="relative flex-1 group">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors" size={18} />
+                  <input
+                    type="text"
+                    placeholder="Search Notes"
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-3 rounded-2xl bg-card border border-border text-sm text-foreground focus:outline-none focus:border-primary/50 transition-colors"
+                  />
+                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="h-[46px] w-[46px] sm:w-auto sm:px-4 flex items-center justify-center gap-1.5 rounded-full bg-card border border-border text-muted-foreground transition-colors font-medium text-[13px] whitespace-nowrap">
+                      <ArrowUpDown size={15} />
+                      <span className="hidden sm:inline">{sortLabels[sortOrder]}</span>
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-44 p-1.5 rounded-2xl bg-white/95 backdrop-blur-sm dark:bg-black/95 border-border shadow-xl">
+                    {(['asc', 'desc', 'lastEdited', 'dateAdded'] as SortOrder[]).map(opt => (
+                      <DropdownMenuItem
+                        key={opt}
+                        onClick={() => setSortOrder(opt)}
+                        className={`flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer transition-colors ${sortOrder === opt
+                          ? 'bg-primary/25 text-primary font-semibold'
+                          : 'text-foreground data-[highlighted]:bg-foreground/[0.05] data-[highlighted]:text-foreground font-medium'
+                          }`}
+                      >
+                        <span className="text-[13.5px] font-medium">{sortLabels[opt]}</span>
+                        {sortOrder === opt && <Check size={14} className="text-primary" />}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                <button
+                  onClick={() => navigate('/note-builder')}
+                  className="bg-primary text-primary-foreground px-4 rounded-2xl flex items-center justify-center shadow-sm whitespace-nowrap gap-2 font-medium text-[14px]"
+                >
+                  <Plus size={18} /> New
+                </button>
+              </div>
+
+              {notes.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-20 text-center opacity-60">
+                  <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
+                    <FileText size={32} className="text-muted-foreground" />
+                  </div>
+                  <p className="text-[15px] font-medium text-foreground mb-1">No notes yet</p>
+                  <p className="text-[13px] text-muted-foreground">Start adding notes for verses.</p>
+                </div>
+              ) : filteredSurahNumbersForNotes.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-10 text-center">
+                  <p className="text-[15px] text-muted-foreground">No matching notes found.</p>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  <AnimatePresence>
+                    {filteredSurahNumbersForNotes.map(surahNum => (
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                        key={`group-${surahNum}`}
+                        className="space-y-3"
+                      >
+                        <div
+                          onClick={() => toggleSurah(surahNum)}
+                          className="flex items-center justify-between pb-1 border-b border-border/40 cursor-pointer group"
+                        >
+                          <h3 className="font-semibold text-[14px] text-muted-foreground flex items-center gap-2 transition-colors">
+                            <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[11px] font-bold tabular-nums">
+                              {surahNum}
+                            </span>
+                            {getSurahName(surahNum)}
+                          </h3>
+                          <div className="flex items-center gap-3">
+                            <span className="font-arabic text-primary/70 text-lg">
+                              {getSurahArabic(surahNum)}
+                            </span>
+                            <button className="text-muted-foreground transition-colors p-1 -mr-1 rounded-md flex items-center justify-center">
+                              {collapsedSurahs.has(surahNum) ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
+                            </button>
+                          </div>
+                        </div>
+
+                        <AnimatePresence initial={false}>
+                          {!collapsedSurahs.has(surahNum) && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.25, ease: "easeOut" }}
+                              className="overflow-hidden"
+                            >
+                              <div className="space-y-3 pt-3 pb-1">
+                                <AnimatePresence>
+                                  {sortNotes(groupedNotes[surahNum]).map(item => {
+                                    return (
+                                      <motion.div
+                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.95 }}
+                                        transition={{ duration: 0.25, ease: "easeOut" }}
+                                        key={item.id}
+                                        onClick={() => navigate(`/note-view?id=${item.id}`)}
+                                        className="bg-card border border-border rounded-[1.2rem] p-4 shadow-[0_2px_10px_rgba(0,0,0,0.02)] flex items-center justify-between gap-4 cursor-pointer transition-all"
+                                      >
+                                        <div className="flex-1 flex items-center min-w-0 pr-4">
+                                          <button
+                                            type="button"
+                                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-primary font-medium text-[13px] border border-primary/10 shadow-sm hover:bg-primary/5 transition-colors"
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              navigate(`/surah/${surahNum}?verse=${item.verseNumber}`);
+                                            }}
+                                          >
+                                            <Bookmark size={14} className="opacity-70" />
+                                            Verse {item.verseNumber}
+                                          </button>
+                                        </div>
+                                        <div className="flex items-center" onClick={e => e.stopPropagation()}>
+                                          <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                              <button className="w-10 h-10 flex items-center justify-center rounded-full text-muted-foreground transition-colors outline-none cursor-pointer">
+                                                <MoreVertical size={20} />
+                                              </button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end" className="w-48 p-1.5 rounded-2xl bg-white/95 backdrop-blur-sm dark:bg-black/95 border-border shadow-[0_10px_30px_rgba(0,0,0,0.05)]">
+                                              <DropdownMenuItem
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  navigate(`/surah/${surahNum}?verse=${item.verseNumber}`);
+                                                }}
+                                                className="flex items-center gap-2.5 px-3 py-2.5 outline-none rounded-xl cursor-pointer transition-colors text-[14px] font-medium"
+                                              >
+                                                <Eye size={16} /> Show Verse
+                                              </DropdownMenuItem>
+                                              <DropdownMenuItem
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  navigate(`/note-builder?id=${item.id}`);
+                                                }}
+                                                className="flex items-center gap-2.5 px-3 py-2.5 outline-none rounded-xl cursor-pointer transition-colors text-[14px] font-medium"
+                                              >
+                                                <Edit2 size={16} /> Edit Note
+                                              </DropdownMenuItem>
+                                              <DropdownMenuSeparator className="bg-border/50 my-1 mx-1" />
+                                              <AlertDialog>
+                                                <AlertDialogTrigger asChild>
+                                                  <DropdownMenuItem
+                                                    onSelect={e => e.preventDefault()}
+                                                    className="flex items-center gap-2.5 px-3 py-2.5 outline-none rounded-xl cursor-pointer text-destructive focus:bg-destructive/10 transition-colors text-[14px] font-medium"
+                                                  >
+                                                    <Trash2 size={16} /> Delete
+                                                  </DropdownMenuItem>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent
+                                                  className="w-[92vw] max-w-[360px] border-none bg-white dark:bg-background shadow-2xl p-6 rounded-[2rem]"
+                                                  onClick={e => e.stopPropagation()}
+                                                >
+                                                  <AlertDialogHeader className="space-y-2">
+                                                    <AlertDialogTitle className="text-left text-lg font-bold text-foreground">
+                                                      Delete Note?
+                                                    </AlertDialogTitle>
+                                                    <AlertDialogDescription className="text-left text-sm leading-relaxed text-muted-foreground">
+                                                      Are you sure you want to delete this note for <strong>Surah {getSurahName(surahNum)} Verse {item.verseNumber}</strong>?
+                                                    </AlertDialogDescription>
+                                                  </AlertDialogHeader>
+                                                  <AlertDialogFooter className="flex flex-row justify-end gap-2 mt-4">
+                                                    <AlertDialogCancel className="h-10 px-6 rounded-full border-border bg-secondary/10 text-foreground text-[13px] font-medium hover:bg-secondary/20 transition-all">
+                                                      Cancel
+                                                    </AlertDialogCancel>
+                                                    <AlertDialogAction
+                                                      onClick={() => deleteNote(item.id)}
+                                                      className="h-10 px-6 rounded-full bg-destructive text-destructive-foreground text-[13px] font-bold hover:bg-destructive/90 transition-all"
+                                                    >
+                                                      Delete
+                                                    </AlertDialogAction>
+                                                  </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                              </AlertDialog>
+                                            </DropdownMenuContent>
+                                          </DropdownMenu>
+                                        </div>
+                                      </motion.div>
+                                    );
+                                  })}
+                                </AnimatePresence>
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </div>
+              )}
             </motion.div>
           )}
+
+          {!loading && activeView === 'collections' && (
+            <motion.div
+              key="collections"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full"
+            >
+              <AnimatePresence mode="wait">
+                {!selectedFolderId ? (
+                  /* FOLDER LIST VIEW */
+                  <motion.div 
+                    key="folder-list"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    className="space-y-4"
+                  >
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-[15px] font-semibold text-foreground/80">Folders</h3>
+                      <button 
+                        onClick={() => setIsCreateFolderOpen(true)}
+                        className="flex items-center gap-1.5 text-primary text-[13px] font-semibold hover:opacity-80 transition-opacity"
+                      >
+                        <FolderPlus size={16} />
+                        New Folder
+                      </button>
+                    </div>
+
+                    {collections.length === 0 ? (
+                      <div className="bg-muted/10 border border-dashed border-border rounded-2xl py-12 flex flex-col items-center justify-center text-center px-6">
+                        <div className="w-12 h-12 rounded-full bg-secondary/50 flex items-center justify-center mb-4 text-muted-foreground/60">
+                          <Book size={20} />
+                        </div>
+                        <p className="text-sm font-medium text-foreground/70 mb-1">No collections yet</p>
+                        <p className="text-[12px] text-muted-foreground max-w-[200px]">Create folders to organize your favorite verses.</p>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 gap-3">
+                        {collections.map(folder => (
+                          <div 
+                            key={folder.id}
+                            className="bg-card border border-border rounded-2xl p-4 flex items-center justify-between hover:shadow-md transition-all group"
+                          >
+                            <div 
+                              onClick={() => setSelectedFolderId(folder.id)}
+                              className="flex-1 flex items-center gap-3 cursor-pointer"
+                            >
+                              <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                                <Book size={18} />
+                              </div>
+                              <div>
+                                <h4 className="text-[15px] font-semibold text-foreground">{folder.name}</h4>
+                                <p className="text-[12px] text-muted-foreground">{folder.items.length} {folder.items.length === 1 ? 'item' : 'items'}</p>
+                              </div>
+                            </div>
+
+                            <DropdownMenu modal={false}>
+                              <DropdownMenuTrigger asChild>
+                                <button className="p-2 text-muted-foreground/60 hover:text-foreground transition-colors">
+                                  <MoreHorizontal size={18} />
+                                </button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end" className="w-40 p-1 rounded-xl bg-white border-border shadow-lg">
+                                <DropdownMenuItem 
+                                  onClick={() => {
+                                    setEditingFolderId(folder.id);
+                                    setEditFolderName(folder.name);
+                                  }}
+                                  className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer"
+                                >
+                                  <Edit2 size={14} />
+                                  <span className="text-sm font-medium">Rename</span>
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator className="bg-border/50" />
+                                <DropdownMenuItem 
+                                  onClick={() => setFolderToDeleteId(folder.id)}
+                                  className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive transition-colors outline-none"
+                                >
+                                  <Trash2 size={14} />
+                                  <span className="text-sm font-medium">Delete</span>
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </motion.div>
+                ) : (
+                  /* FOLDER DETAIL VIEW */
+                  <motion.div 
+                    key="folder-detail"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    className="space-y-4"
+                  >
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-2">
+                        <button 
+                          onClick={() => setSelectedFolderId(null)}
+                          className="p-1.5 -ml-1 text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          <ArrowLeft size={18} />
+                        </button>
+                        <h3 className="text-[17px] font-bold text-foreground">{selectedFolder?.name}</h3>
+                      </div>
+                      <button 
+                        onClick={() => setIsAddVerseOpen(true)}
+                        className="bg-primary text-primary-foreground px-4 py-1.5 rounded-full text-[13px] font-bold shadow-sm hover:opacity-90 transition-opacity"
+                      >
+                        Add Verse
+                      </button>
+                    </div>
+
+                    {!selectedFolder || selectedFolder.items.length === 0 ? (
+                      <div className="bg-muted/10 border border-dashed border-border rounded-2xl py-12 flex flex-col items-center justify-center text-center px-6">
+                        <p className="text-sm font-medium text-foreground/70 mb-1">No verses in this folder</p>
+                        <p className="text-[12px] text-muted-foreground mb-4">Click 'Add Verse' to start building your collection.</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {selectedFolder.items.map(item => {
+                          const surah = surahs?.find(s => s.number === item.surahNumber);
+                          if (!surah) return null;
+                          return (
+                            <div 
+                              key={`${item.surahNumber}-${item.verseNumber}`}
+                              className="bg-card border border-border rounded-2xl p-4 flex items-center justify-between group"
+                            >
+                              <div 
+                                onClick={() => navigate(`/surah/${item.surahNumber}?verse=${item.verseNumber}`)}
+                                className="flex-1 flex items-center gap-3 cursor-pointer"
+                              >
+                                <div className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-[11px] font-mono text-muted-foreground tabular-nums">
+                                  {surah.number}
+                                </div>
+                                <div>
+                                  <h4 className="text-[14px] font-semibold text-foreground">{surah.name}</h4>
+                                  <p className="text-[11px] text-muted-foreground">Verse {item.verseNumber}</p>
+                                </div>
+                              </div>
+                              
+                              <button 
+                                onClick={() => setVerseToRemove({ folderId: selectedFolder.id, surahNumber: item.surahNumber, verseNumber: item.verseNumber })}
+                                className="p-2 text-destructive transition-colors"
+                                aria-label="Remove from collection"
+                              >
+                                <Trash2 size={16} />
+                              </button>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Collections Modals / Drawers */}
+              <AnimatePresence>
+                {(isCreateFolderOpen || editingFolderId) && (
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-[2px] flex items-center justify-center p-6"
+                  >
+                    <motion.div 
+                      initial={{ scale: 0.9, y: 20 }}
+                      animate={{ scale: 1, y: 0 }}
+                      exit={{ scale: 0.9, y: 20 }}
+                      className="bg-background w-full max-w-sm rounded-[2rem] p-6 shadow-2xl border border-border"
+                    >
+                      <div className="flex justify-between items-center mb-6">
+                        <h3 className="font-display font-bold text-lg">
+                          {editingFolderId ? 'Rename Folder' : 'New Folder'}
+                        </h3>
+                        <button onClick={() => { setIsCreateFolderOpen(false); setEditingFolderId(null); }} className="text-muted-foreground">
+                          <X size={20} />
+                        </button>
+                      </div>
+                      <input 
+                        autoFocus
+                        type="text"
+                        placeholder="Folder name (e.g. Daily Reflections)"
+                        value={editingFolderId ? editFolderName : newFolderName}
+                        onChange={e => editingFolderId ? setEditFolderName(e.target.value) : setNewFolderName(e.target.value)}
+                        className="w-full bg-secondary/30 border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors mb-6"
+                        onKeyDown={e => {
+                          if (e.key === 'Enter') {
+                            if (editingFolderId) {
+                              renameCollection(editingFolderId, editFolderName);
+                              setEditingFolderId(null);
+                            } else {
+                              addCollection(newFolderName);
+                              setIsCreateFolderOpen(false);
+                              setNewFolderName('');
+                            }
+                          }
+                        }}
+                      />
+                      <div className="flex gap-3">
+                        <button 
+                          onClick={() => { setIsCreateFolderOpen(false); setEditingFolderId(null); }}
+                          className="flex-1 py-3 rounded-full text-sm font-semibold border border-border shadow-sm active:scale-95 transition-all"
+                        >
+                          Cancel
+                        </button>
+                        <button 
+                          onClick={() => {
+                            if (editingFolderId) {
+                              renameCollection(editingFolderId, editFolderName);
+                              setEditingFolderId(null);
+                            } else {
+                              addCollection(newFolderName);
+                              setIsCreateFolderOpen(false);
+                              setNewFolderName('');
+                            }
+                          }}
+                          disabled={editingFolderId ? !editFolderName.trim() : !newFolderName.trim()}
+                          className="flex-1 py-3 rounded-full text-sm font-semibold bg-primary text-primary-foreground shadow-md active:scale-95 transition-all disabled:opacity-50"
+                        >
+                          {editingFolderId ? 'Save' : 'Create'}
+                        </button>
+                      </div>
+                    </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <Drawer open={isAddVerseOpen} onOpenChange={setIsAddVerseOpen}>
+                <DrawerContent className="rounded-t-[2.5rem] bg-background border-none p-6">
+                  <div className="max-w-md mx-auto w-full">
+                    <DrawerHeader className="px-0 pt-2 mb-6">
+                      <DrawerTitle className="text-xl font-display font-bold text-left">Add Verse to {selectedFolder?.name}</DrawerTitle>
+                      <DrawerDescription className="text-left">Select a surah and verse to save.</DrawerDescription>
+                    </DrawerHeader>
+                    <div className="space-y-6 mb-8">
+                      <div className="space-y-2">
+                        <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest ml-1">Surah</label>
+                        <Select 
+                          value={selectorSurah ? selectorSurah.toString() : ''} 
+                          onValueChange={(v) => { setSelectorSurah(Number(v)); setSelectorVerse(''); }}
+                        >
+                          <SelectTrigger className="w-full h-14 rounded-2xl bg-secondary/20 border-border px-4">
+                            <SelectValue placeholder="Select Surah" />
+                          </SelectTrigger>
+                          <SelectContent className="max-h-[300px] rounded-2xl p-2 border-border shadow-2xl">
+                            {surahs?.map(s => (
+                              <SelectItem key={s.number} value={s.number.toString()} className="rounded-xl py-3 cursor-pointer">
+                                <div className="flex justify-between items-center w-64">
+                                  <span className="font-semibold">{s.number}. {s.name}</span>
+                                  <span className="font-arabic text-primary text-lg">{s.nameArabic}</span>
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest ml-1">Verse</label>
+                        <Select 
+                          disabled={!selectorSurah} 
+                          value={selectorVerse ? selectorVerse.toString() : ''} 
+                          onValueChange={(v) => setSelectorVerse(Number(v))}
+                        >
+                          <SelectTrigger className="w-full h-14 rounded-2xl bg-secondary/20 border-border px-4">
+                            <SelectValue placeholder="Select Verse" />
+                          </SelectTrigger>
+                          <SelectContent className="max-h-[250px] rounded-2xl p-2 border-border shadow-2xl">
+                            {verses?.map(v => (
+                              <SelectItem key={v.numberInSurah} value={v.numberInSurah.toString()} className="rounded-xl py-3 cursor-pointer">
+                                Verse {v.numberInSurah}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <DrawerFooter className="px-0 pb-0 flex flex-row gap-3">
+                      <DrawerClose asChild>
+                        <button className="flex-1 py-4 rounded-full text-[15px] font-bold border border-border shadow-sm active:scale-95 transition-all">
+                          Cancel
+                        </button>
+                      </DrawerClose>
+                      <button 
+                        onClick={() => {
+                          if (selectedFolderId && selectorSurah && selectorVerse) {
+                            addItemToCollection(selectedFolderId, Number(selectorSurah), Number(selectorVerse));
+                            setIsAddVerseOpen(false);
+                            setSelectorSurah('');
+                            setSelectorVerse('');
+                          }
+                        }}
+                        disabled={!selectorSurah || !selectorVerse}
+                        className="flex-1 py-4 rounded-full text-[15px] font-bold bg-primary text-primary-foreground shadow-lg shadow-primary/20 active:scale-95 transition-all disabled:opacity-50"
+                      >
+                        Add Verse
+                      </button>
+                    </DrawerFooter>
+                  </div>
+                </DrawerContent>
+              </Drawer>
+
+              <AlertDialog open={!!folderToDeleteId} onOpenChange={(open) => !open && setFolderToDeleteId(null)}>
+                <AlertDialogContent className="w-[92vw] max-w-[360px] rounded-[2rem] border-none bg-white dark:bg-background shadow-2xl p-6">
+                  <AlertDialogHeader className="space-y-2">
+                    <AlertDialogTitle className="text-left text-lg font-bold text-foreground">Delete Folder?</AlertDialogTitle>
+                    <AlertDialogDescription className="text-left text-sm leading-relaxed text-muted-foreground">
+                      Are you sure you want to delete this folder? All items inside will be lost.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter className="flex flex-row justify-end gap-2 mt-4">
+                    <AlertDialogCancel className="h-10 px-6 rounded-full border-border bg-secondary/10 text-foreground text-[13px] font-medium hover:bg-secondary/20 transition-all">Cancel</AlertDialogCancel>
+                    <AlertDialogAction 
+                      onClick={() => { if (folderToDeleteId) { deleteCollection(folderToDeleteId); setFolderToDeleteId(null); } }}
+                      className="h-10 px-6 rounded-full bg-destructive text-destructive-foreground text-[13px] font-bold hover:bg-destructive/90 transition-all"
+                    >
+                      Delete
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+
+              <AlertDialog open={!!verseToRemove} onOpenChange={(open) => !open && setVerseToRemove(null)}>
+                <AlertDialogContent className="w-[92vw] max-w-[360px] rounded-[2rem] border-none bg-white dark:bg-background shadow-2xl p-6">
+                  <AlertDialogHeader className="space-y-2">
+                    <AlertDialogTitle className="text-left text-lg font-bold text-foreground">Remove Verse?</AlertDialogTitle>
+                    <AlertDialogDescription className="text-left text-sm leading-relaxed text-muted-foreground">
+                      Are you sure you want to remove this verse from the folder?
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter className="flex flex-row justify-end gap-2 mt-4">
+                    <AlertDialogCancel className="h-10 px-6 rounded-full border-border bg-secondary/10 text-foreground text-[13px] font-medium hover:bg-secondary/20 transition-all">Cancel</AlertDialogCancel>
+                    <AlertDialogAction 
+                      onClick={() => { if (verseToRemove) { removeItemFromCollection(verseToRemove.folderId, verseToRemove.surahNumber, verseToRemove.verseNumber); setVerseToRemove(null); } }}
+                      className="h-10 px-6 rounded-full bg-destructive text-destructive-foreground text-[13px] font-bold hover:bg-destructive/90 transition-all"
+                    >
+                      Remove
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+
+            </motion.div>
+          )}
+
+          <AlertDialog open={!!favoriteToRemove} onOpenChange={(open) => !open && setFavoriteToRemove(null)}>
+            <AlertDialogContent className="w-[92vw] max-w-[360px] rounded-[2rem] border-none bg-white dark:bg-background shadow-2xl p-6">
+              <AlertDialogHeader className="space-y-2">
+                <AlertDialogTitle className="text-left text-lg font-bold">Remove Favorite?</AlertDialogTitle>
+                <AlertDialogDescription className="text-left text-sm leading-relaxed text-muted-foreground">
+                  Are you sure you want to remove <strong>{surahs?.find(s => s.number === favoriteToRemove)?.name}</strong> from your favorite Surahs?
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter className="flex flex-row justify-end gap-2 mt-4">
+                <AlertDialogCancel className="h-10 px-6 rounded-full border-border bg-secondary/10 text-foreground text-[13px] font-medium hover:bg-secondary/20 transition-all">
+                  Cancel
+                </AlertDialogCancel>
+                <AlertDialogAction 
+                  onClick={() => { if (favoriteToRemove) toggleFavorite(favoriteToRemove); setFavoriteToRemove(null); }}
+                  className="h-10 px-6 rounded-full bg-destructive text-destructive-foreground text-[13px] font-bold hover:bg-destructive/90 transition-all"
+                >
+                  Remove
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </AnimatePresence>
       </div>
     </div>

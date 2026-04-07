@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, MoreHorizontal, Book, FolderPlus, Trash2, ChevronRight, Plus, X, Search, Bookmark, Edit2 } from 'lucide-react';
-import { useSurahs, useSurahVerses } from '@/hooks/useQuranData';
-import { useLastRead, useCollections } from '@/hooks/useAppStore';
+import { ArrowLeft, Search, Plus, Trash2, Eye, Bookmark, Edit2, ArrowUpDown, Check, ChevronUp, ChevronDown, MoreVertical, FileText } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSwipeable } from 'react-swipeable';
-import { useEffect, useRef } from 'react';
+import { useExplanations, useCustomTafsirs } from '@/hooks/useAppStore';
+import { useSurahs } from '@/hooks/useQuranData';
+import { formatVerseRange, cn } from '@/lib/utils';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,16 +13,6 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { 
-  Drawer, 
-  DrawerContent, 
-  DrawerHeader, 
-  DrawerTitle, 
-  DrawerDescription,
-  DrawerFooter,
-  DrawerClose
-} from "@/components/ui/drawer";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -35,116 +25,113 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-function formatRelativeTime(timestamp: string): string {
-  if (!timestamp) return '';
-  const now = new Date();
-  const date = new Date(timestamp);
-  const diffMs = now.getTime() - date.getTime();
-
-  const diffMins = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMs / 3600000);
-  const diffDays = Math.floor(diffHours / 24);
-
-  if (diffMins < 1) {
-    return 'Just now';
-  } else if (diffHours < 1) {
-    return `${diffMins} min ago`;
-  } else if (diffHours < 24) {
-    return `${diffHours} hr ago`;
-  } else if (diffDays >= 1 && diffDays < 2) {
-    return 'Yesterday';
-  } else {
-    return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-  }
-}
-
 export default function LibraryPage() {
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { explanations, deleteExplanation } = useExplanations();
+  const { tafsirRecords, deleteTafsirRecord } = useCustomTafsirs();
   const { data: surahs } = useSurahs();
-  const { lastRead, removeLastRead } = useLastRead();
-  const {
-    collections,
-    addCollection,
-    deleteCollection,
-    renameCollection,
-    addItemToCollection,
-    removeItemFromCollection
-  } = useCollections();
 
-  const tabs = ['last-read', 'collections'] as const;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabParam = searchParams.get('tab');
+  const activeTab = (tabParam as 'explanations' | 'tafsirs') || 'explanations';
 
-  // URL-driven state
-  const activeTab = (searchParams.get('tab') as 'last-read' | 'collections') || 'last-read';
-  const selectedFolderId = searchParams.get('folder');
-
-  const [loading, setLoading] = useState(true);
-
-  const setActiveTab = (tab: 'last-read' | 'collections') => {
-    setSearchParams(prev => {
-      prev.set('tab', tab);
-      prev.delete('folder'); // Clear folder when switching tabs
-      return prev;
-    });
+  const setActiveTab = (tab: 'explanations' | 'tafsirs') => {
+    setSearchParams({ tab }, { replace: true });
   };
-
-  const setSelectedFolderId = (id: string | null) => {
-    setSearchParams(prev => {
-      if (id) {
-        prev.set('folder', id);
-        prev.set('tab', 'collections');
-      } else {
-        prev.delete('folder');
-      }
-      return prev;
-    });
-  };
-
-  // Collections logic
-  const [isCreateFolderOpen, setIsCreateFolderOpen] = useState(false);
-  const [newFolderName, setNewFolderName] = useState('');
-  const [editingFolderId, setEditingFolderId] = useState<string | null>(null);
-  const [editFolderName, setEditFolderName] = useState('');
-
-  // Verse Selector logic
-  const [isAddVerseOpen, setIsAddVerseOpen] = useState(false);
-  const [selectorSurah, setSelectorSurah] = useState<number | ''>('');
-  const [selectorVerse, setSelectorVerse] = useState<number | ''>('');
-  
-  // Deletion Confirmation logic
-  const [folderToDeleteId, setFolderToDeleteId] = useState<string | null>(null);
-  const [verseToRemove, setVerseToRemove] = useState<{ folderId: string, surahNumber: number, verseNumber: number } | null>(null);
-  
-  const { data: verses } = useSurahVerses(selectorSurah || 1);
-  const selectedFolder = collections.find(c => c.id === selectedFolderId);
-
-  useEffect(() => {
-    setLoading(true);
-    const timer = setTimeout(() => setLoading(false), 300);
-    return () => clearTimeout(timer);
-  }, [activeTab]);
 
   const handlers = useSwipeable({
     onSwipedLeft: () => {
-      const idx = tabs.indexOf(activeTab);
-      if (idx !== -1 && idx < tabs.length - 1) setActiveTab(tabs[idx + 1]);
+      if (activeTab === 'explanations') setActiveTab('tafsirs');
     },
     onSwipedRight: () => {
-      const idx = tabs.indexOf(activeTab);
-      if (idx > 0) setActiveTab(tabs[idx - 1]);
+      if (activeTab === 'tafsirs') setActiveTab('explanations');
     },
     trackMouse: true,
     preventScrollOnSwipe: true,
     delta: 40,
   });
 
+  const [searchQuery, setSearchQuery] = useState('');
+
+  type SortOrder = 'asc' | 'desc' | 'lastEdited' | 'dateAdded';
+  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+  const [collapsedSurahs, setCollapsedSurahs] = useState<Set<number>>(new Set());
+
+  const toggleSurah = (surahNum: number) => {
+    setCollapsedSurahs(prev => {
+      const next = new Set(prev);
+      if (next.has(surahNum)) next.delete(surahNum);
+      else next.add(surahNum);
+      return next;
+    });
+  };
+
+  const sortLabels: Record<SortOrder, string> = {
+    asc: 'Ascending',
+    desc: 'Descending',
+    lastEdited: 'Last Edited',
+    dateAdded: 'Date Added',
+  };
+  
+  const items = activeTab === 'explanations' ? explanations : tafsirRecords;
+
+  const sortItems = (list: (typeof explanations[0] | typeof tafsirRecords[0])[]) => {
+    return [...list].sort((a, b) => {
+      let aVerse = 0;
+      let bVerse = 0;
+
+      if (activeTab === 'explanations') {
+        const exp = a as typeof explanations[0];
+        const nextExp = b as typeof explanations[0];
+        aVerse = (exp.concise?.length ? exp.concise.map((c: { verseNumber: number }) => c.verseNumber).filter((v: number) => v > 0) : exp.verses || []).sort((x: number, y: number) => x - y)[0] ?? 0;
+        bVerse = (nextExp.concise?.length ? nextExp.concise.map((c: { verseNumber: number }) => c.verseNumber).filter((v: number) => v > 0) : nextExp.verses || []).sort((x: number, y: number) => x - y)[0] ?? 0;
+      } else {
+        aVerse = (a as typeof tafsirRecords[0]).verseNumber;
+        bVerse = (b as typeof tafsirRecords[0]).verseNumber;
+      }
+
+      if (sortOrder === 'asc') return aVerse - bVerse;
+      if (sortOrder === 'desc') return bVerse - aVerse;
+      if (sortOrder === 'lastEdited') return new Date(b.updatedAt || 0).getTime() - new Date(a.updatedAt || 0).getTime();
+      if (sortOrder === 'dateAdded') return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
+      return 0;
+    });
+  };
+
+  // Group by Surah
+  const groupedItems = items.reduce((acc, item) => {
+    if (!acc[item.surahNumber]) acc[item.surahNumber] = [];
+    acc[item.surahNumber].push(item);
+    return acc;
+  }, {} as Record<number, (typeof explanations[0] | typeof tafsirRecords[0])[]>);
+
+  const getSurahName = (num: number) => surahs?.find(s => s.number === num)?.name || `Surah ${num}`;
+  const getSurahArabic = (num: number) => surahs?.find(s => s.number === num)?.nameArabic || '';
+
+  const filteredSurahNumbers = Object.keys(groupedItems)
+    .map(Number)
+    .filter(num => {
+      const name = getSurahName(num).toLowerCase();
+      const query = searchQuery.toLowerCase();
+      return name.includes(query) || num.toString().includes(query);
+    })
+    .sort((a, b) => a - b);
+
+  const handleDelete = (id: string) => {
+    if (activeTab === 'explanations') {
+      deleteExplanation(id);
+    } else {
+      deleteTafsirRecord(id);
+    }
+  };
+
   return (
-    <motion.div {...handlers} className="min-h-screen pb-24 flex flex-col">
+    <motion.div {...handlers} className="min-h-screen bg-background pb-32">
       {/* Header */}
       <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-md pb-2 pt-1 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border-b border-border/60 transform-gpu">
         <div className="flex items-center gap-3 px-4 h-14">
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate(-1)}
             className="w-10 h-10 flex items-center justify-center rounded-full transition-all text-foreground outline-none"
             aria-label="Back"
           >
@@ -156,514 +143,270 @@ export default function LibraryPage() {
         </div>
       </div>
 
-      <div className="px-4 mt-6 max-w-lg mx-auto w-full">
-        <div className="mb-5 rounded-full border border-border bg-secondary/40 p-1 backdrop-blur-sm relative">
+      <div className="px-4 mt-6 max-w-md mx-auto space-y-6">
+        {/* Tabs */}
+        <div className="mb-4 rounded-full border border-border bg-secondary/40 p-1 backdrop-blur-sm relative">
           <div className="grid grid-cols-2 gap-1 relative">
-            {(['last-read', 'collections'] as const).map((tab) => {
-              const isActive = activeTab === tab;
+            {[
+              { id: 'explanations', label: 'Explanations' },
+              { id: 'tafsirs', label: 'Tafsirs' },
+            ].map((tab) => {
+              const active = activeTab === tab.id;
               return (
                 <button
-                  key={tab}
-                  onClick={() => {
-                    setActiveTab(tab);
-                    setSelectedFolderId(null);
-                  }}
-                  className={`relative rounded-full px-4 py-2.5 text-xs font-semibold transition-colors z-10 ${
-                    isActive 
-                      ? 'text-primary-foreground'
-                      : 'text-muted-foreground'
-                    }`}
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as 'explanations' | 'tafsirs')}
+                  className={cn(
+                    "relative rounded-full px-4 py-2.5 text-xs font-semibold transition-colors z-10",
+                    active ? 'text-primary-foreground' : 'text-muted-foreground'
+                  )}
                 >
-                  {isActive && (
+                  {active && (
                     <motion.div
                       layoutId="libraryTabIndicator"
                       className="absolute inset-0 bg-primary rounded-full shadow-sm z-[-1]"
                       transition={{ type: "spring", bounce: 0, duration: 0.4 }}
                     />
                   )}
-                  {tab === 'last-read' ? 'Last Read' : 'Collections'}
+                  {tab.label}
                 </button>
               );
             })}
           </div>
         </div>
 
-        {/* Content */}
-        <div className="overflow-hidden">
-          <AnimatePresence mode="wait">
-            {loading ? (
-              null
-            ) : activeTab === 'last-read' && (
-              <motion.div
-                key="last-read"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className=""
-              >
-                {lastRead.length === 0 ? (
-                  <div className="text-center py-20 flex flex-col items-center">
-                    <div className="w-16 h-16 rounded-full bg-secondary flex items-center justify-center mb-4 text-muted-foreground">
-                      <Book size={28} />
-                    </div>
-                    <h3 className="font-display font-medium text-lg text-foreground mb-1">No reading history</h3>
-                    <p className="text-sm text-muted-foreground px-8 text-muted-foreground/80">
-                      Your recently read surahs will appear here. Start reading to build your history.
-                    </p>
-                    <button
-                      onClick={() => navigate('/')}
-                      className="mt-6 bg-primary text-primary-foreground px-6 py-2.5 rounded-full text-sm font-medium transition-colors cursor-pointer"
-                    >
-                      Go to Home
-                    </button>
-                  </div>
-                ) : (
-                <div className="flex flex-col">
-                    <AnimatePresence initial={false}>
-                      {lastRead.map((item) => {
-                        const surah = surahs?.find(s => s.number === item.surahNumber);
-                        if (!surah) return null;
-
-                        const timeString = formatRelativeTime(item.timestamp);
-
-                        return (
-                          <motion.div
-                            layout
-                          initial={{ opacity: 0, scale: 0.95, marginBottom: 12 }}
-                          animate={{ opacity: 1, scale: 1, height: 'auto', marginBottom: 12 }}
-                          exit={{ opacity: 0, scale: 0.9, height: 0, marginBottom: 0 }}
-                          transition={{ duration: 0.2 }}
-                            key={`${item.surahNumber}-${item.verseNumber}`}
-                          className="overflow-hidden"
-                          >
-                          <div className="flex items-stretch bg-card border border-border rounded-[1.25rem] shadow-[0_4px_20px_rgba(0,0,0,0.02)] transition-all">
-                            <div
-                              onClick={() => navigate(`/surah/${item.surahNumber}?verse=${item.verseNumber}`)}
-                              className="flex-1 flex items-center p-4 cursor-pointer transition-transform origin-left rounded-[1.25rem] group"
-                            >
-                              <div className="flex-shrink-0 w-10 h-10 rounded-full border border-border flex items-center justify-center bg-muted/30 transition-transform">
-                                <span className="text-xs font-mono text-muted-foreground tabular-nums">
-                                  {surah.number}
-                                </span>
-                              </div>
-
-                              <div className="ml-4 flex-1">
-                                <h3 className="font-display font-semibold text-[16px] text-foreground mb-0.5">
-                                  {surah.name}
-                                </h3>
-                                <div className="flex items-center gap-2 text-[12px] text-muted-foreground">
-                                  <span className="font-medium">Verse {item.verseNumber}</span>
-                                  <span className="w-1 h-1 rounded-full bg-border"></span>
-                                  <span>{timeString}</span>
-                                </div>
-                              </div>
-
-                              <div className="flex flex-col items-end shrink-0 pl-2">
-                                <p className="arabic-text text-xl text-primary mb-1">
-                                  {surah.nameArabic}
-                                </p>
-                              </div>
-                            </div>
-
-                            <div className="pr-4 py-4 flex items-center justify-center">
-                              <DropdownMenu modal={false}>
-                                <DropdownMenuTrigger asChild>
-                                  <button
-                                    className="p-2 -mr-2 rounded-lg transition-colors text-muted-foreground outline-none"
-                                  >
-                                    <MoreHorizontal size={20} />
-                                  </button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="w-44 p-1.5 rounded-2xl bg-white/95 backdrop-blur-sm dark:bg-black/95 border-border shadow-xl animate-in fade-in-0 zoom-in-95">
-                                  <DropdownMenuItem
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      removeLastRead(item.surahNumber);
-                                    }}
-                                     className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-destructive focus:bg-destructive/10 transition-colors outline-none"
-                                  >
-                                    <Trash2 size={16} />
-                                    <span className="font-medium text-[13.5px]">Clear History</span>
-                                  </DropdownMenuItem>
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-                            </div>
-                          </div>
-                          </motion.div>
-                        );
-                      })}
-                    </AnimatePresence>
-                  </div>
-                )}
-              </motion.div>
-            )}
-
-            {!loading && activeTab === 'collections' && (
-              <motion.div
-                key="collections"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="w-full"
-              >
-                <AnimatePresence mode="wait">
-                  {!selectedFolderId ? (
-                    /* FOLDER LIST VIEW */
-                    <motion.div 
-                      key="folder-list"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                      className="space-y-4"
-                    >
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-[15px] font-semibold text-foreground/80">Folders</h3>
-                        <button 
-                          onClick={() => setIsCreateFolderOpen(true)}
-                          className="flex items-center gap-1.5 text-primary text-[13px] font-semibold hover:opacity-80 transition-opacity"
-                        >
-                          <FolderPlus size={16} />
-                          New Folder
-                        </button>
-                      </div>
-
-                      {collections.length === 0 ? (
-                        <div className="bg-muted/10 border border-dashed border-border rounded-2xl py-12 flex flex-col items-center justify-center text-center px-6">
-                          <div className="w-12 h-12 rounded-full bg-secondary/50 flex items-center justify-center mb-4 text-muted-foreground/60">
-                            <Book size={20} />
-                          </div>
-                          <p className="text-sm font-medium text-foreground/70 mb-1">No collections yet</p>
-                          <p className="text-[12px] text-muted-foreground max-w-[200px]">Create folders to organize your favorite verses and reflections.</p>
-                        </div>
-                      ) : (
-                        <div className="grid grid-cols-1 gap-3">
-                          {collections.map(folder => (
-                            <div 
-                              key={folder.id}
-                              className="bg-card border border-border rounded-2xl p-4 flex items-center justify-between hover:shadow-md transition-all group"
-                            >
-                              <div 
-                                onClick={() => setSelectedFolderId(folder.id)}
-                                className="flex-1 flex items-center gap-3 cursor-pointer"
-                              >
-                                <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                                  <Book size={18} />
-                                </div>
-                                <div>
-                                  <h4 className="text-[15px] font-semibold text-foreground">{folder.name}</h4>
-                                  <p className="text-[12px] text-muted-foreground">{folder.items.length} {folder.items.length === 1 ? 'item' : 'items'}</p>
-                                </div>
-                              </div>
-
-                              <DropdownMenu modal={false}>
-                                <DropdownMenuTrigger asChild>
-                                  <button className="p-2 text-muted-foreground/60 hover:text-foreground transition-colors">
-                                    <MoreHorizontal size={18} />
-                                  </button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="w-40 p-1 rounded-xl bg-white border-border shadow-lg">
-                                  <DropdownMenuItem 
-                                    onClick={() => {
-                                      setEditingFolderId(folder.id);
-                                      setEditFolderName(folder.name);
-                                    }}
-                                    className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer"
-                                  >
-                                    <Edit2 size={14} />
-                                    <span className="text-sm font-medium">Rename</span>
-                                  </DropdownMenuItem>
-                                  <DropdownMenuSeparator className="bg-border/50" />
-                                  <DropdownMenuItem 
-                                    onClick={() => setFolderToDeleteId(folder.id)}
-                                    className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive transition-colors outline-none"
-                                  >
-                                    <Trash2 size={14} />
-                                    <span className="text-sm font-medium">Delete</span>
-                                  </DropdownMenuItem>
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </motion.div>
-                  ) : (
-                    /* FOLDER DETAIL VIEW */
-                    <motion.div 
-                      key="folder-detail"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                      className="space-y-4"
-                    >
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-2">
-                          <button 
-                            onClick={() => setSelectedFolderId(null)}
-                            className="p-1.5 -ml-1 text-muted-foreground hover:text-foreground transition-colors"
-                          >
-                            <ArrowLeft size={18} />
-                          </button>
-                          <h3 className="text-[17px] font-bold text-foreground">{selectedFolder?.name}</h3>
-                        </div>
-                        <button 
-                          onClick={() => setIsAddVerseOpen(true)}
-                          className="bg-primary text-primary-foreground px-4 py-1.5 rounded-full text-[13px] font-bold shadow-sm hover:opacity-90 transition-opacity"
-                        >
-                          Add Verse
-                        </button>
-                      </div>
-
-                      {!selectedFolder || selectedFolder.items.length === 0 ? (
-                        <div className="bg-muted/10 border border-dashed border-border rounded-2xl py-12 flex flex-col items-center justify-center text-center px-6">
-                          <p className="text-sm font-medium text-foreground/70 mb-1">No verses in this folder</p>
-                          <p className="text-[12px] text-muted-foreground mb-4">Click 'Add Verse' to start building your collection.</p>
-                        </div>
-                      ) : (
-                        <div className="space-y-3">
-                          {selectedFolder.items.map(item => {
-                            const surah = surahs?.find(s => s.number === item.surahNumber);
-                            if (!surah) return null;
-                            return (
-                              <div 
-                                key={`${item.surahNumber}-${item.verseNumber}`}
-                                className="bg-card border border-border rounded-2xl p-4 flex items-center justify-between group"
-                              >
-                                <div 
-                                  onClick={() => navigate(`/surah/${item.surahNumber}?verse=${item.verseNumber}`)}
-                                  className="flex-1 flex items-center gap-3 cursor-pointer"
-                                >
-                                  <div className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-[11px] font-mono text-muted-foreground tabular-nums">
-                                    {surah.number}
-                                  </div>
-                                  <div>
-                                    <h4 className="text-[14px] font-semibold text-foreground">{surah.name}</h4>
-                                    <p className="text-[11px] text-muted-foreground">Verse {item.verseNumber}</p>
-                                  </div>
-                                </div>
-                                
-                                <button 
-                                  onClick={() => setVerseToRemove({ folderId: selectedFolder.id, surahNumber: item.surahNumber, verseNumber: item.verseNumber })}
-                                  className="p-2 text-destructive transition-colors"
-                                  aria-label="Remove from collection"
-                                >
-                                  <Trash2 size={16} />
-                                </button>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      )}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            )}
-          </AnimatePresence>
+        {/* Search, Filter & Add New */}
+        <div className="flex gap-3">
+          <div className="relative flex-1 group">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors" size={18} />
+            <input
+              type="text"
+              placeholder="Search by Surah"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 rounded-2xl bg-card border border-border text-sm text-foreground focus:outline-none focus:border-primary/50 transition-colors"
+            />
+          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="h-[46px] w-[46px] sm:w-auto sm:px-4 flex items-center justify-center gap-1.5 rounded-full bg-card border border-border text-muted-foreground transition-colors font-medium text-[13px] whitespace-nowrap">
+                <ArrowUpDown size={15} />
+                <span className="hidden sm:inline">{sortLabels[sortOrder]}</span>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-44 p-1.5 rounded-2xl bg-white/95 backdrop-blur-sm dark:bg-black/95 border-border shadow-xl">
+              {(['asc', 'desc', 'lastEdited', 'dateAdded'] as SortOrder[]).map(opt => (
+                <DropdownMenuItem
+                  key={opt}
+                  onClick={() => setSortOrder(opt)}
+                  className={`flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer transition-colors ${sortOrder === opt
+                    ? 'bg-primary/25 text-primary font-semibold'
+                    : 'text-foreground data-[highlighted]:bg-foreground/[0.05] data-[highlighted]:text-foreground font-medium'
+                    }`}
+                >
+                  <span className="text-[13.5px] font-medium">{sortLabels[opt]}</span>
+                  {sortOrder === opt && <Check size={14} className="text-primary" />}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <button
+            onClick={() => {
+              navigate(activeTab === 'explanations' ? '/explanation-builder' : '/tafsir-builder');
+            }}
+            className="bg-primary text-primary-foreground px-4 rounded-2xl flex items-center justify-center shadow-sm whitespace-nowrap gap-2 font-medium text-[14px]"
+          >
+            <Plus size={18} /> Add New
+          </button>
         </div>
 
-        {/* MODALS / DRAWERS */}
-        
-        {/* Create/Rename Folder Modal (using simple conditional rendering for speed/consistency) */}
-        <AnimatePresence>
-          {(isCreateFolderOpen || editingFolderId) && (
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-[2px] flex items-center justify-center p-6"
+        {/* List */}
+        <div className="relative min-h-[50vh]">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full"
             >
-              <motion.div 
-                initial={{ scale: 0.9, y: 20 }}
-                animate={{ scale: 1, y: 0 }}
-                exit={{ scale: 0.9, y: 20 }}
-                className="bg-background w-full max-w-sm rounded-[2rem] p-6 shadow-2xl border border-border"
-              >
-                <div className="flex justify-between items-center mb-6">
-                  <h3 className="font-display font-bold text-lg">
-                    {editingFolderId ? 'Rename Folder' : 'New Folder'}
-                  </h3>
-                  <button onClick={() => { setIsCreateFolderOpen(false); setEditingFolderId(null); }} className="text-muted-foreground">
-                    <X size={20} />
-                  </button>
+              {items.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-20 text-center opacity-60">
+                  <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
+                    <FileText size={32} className="text-muted-foreground" />
+                  </div>
+                  <p className="text-[15px] font-medium text-foreground mb-1">No {activeTab} yet</p>
+                  <p className="text-[13px] text-muted-foreground">Start deep-diving into the Quran by adding your first {activeTab === 'explanations' ? 'explanation' : 'tafsir'}.</p>
                 </div>
-                
-                <input 
-                  autoFocus
-                  type="text"
-                  placeholder="Folder name (e.g. Daily Reflections)"
-                  value={editingFolderId ? editFolderName : newFolderName}
-                  onChange={e => editingFolderId ? setEditFolderName(e.target.value) : setNewFolderName(e.target.value)}
-                  className="w-full bg-secondary/30 border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors mb-6"
-                  onKeyDown={e => {
-                    if (e.key === 'Enter') {
-                      if (editingFolderId) {
-                        renameCollection(editingFolderId, editFolderName);
-                        setEditingFolderId(null);
-                      } else {
-                        addCollection(newFolderName);
-                        setIsCreateFolderOpen(false);
-                        setNewFolderName('');
-                      }
-                    }
-                  }}
-                />
-                
-                <div className="flex gap-3">
-                  <button 
-                    onClick={() => { setIsCreateFolderOpen(false); setEditingFolderId(null); }}
-                    className="flex-1 py-3 rounded-full text-sm font-semibold border border-border shadow-sm active:scale-95 transition-all"
-                  >
-                    Cancel
-                  </button>
-                  <button 
-                    onClick={() => {
-                      if (editingFolderId) {
-                        renameCollection(editingFolderId, editFolderName);
-                        setEditingFolderId(null);
-                      } else {
-                        addCollection(newFolderName);
-                        setIsCreateFolderOpen(false);
-                        setNewFolderName('');
-                      }
-                    }}
-                    disabled={editingFolderId ? !editFolderName.trim() : !newFolderName.trim()}
-                    className="flex-1 py-3 rounded-full text-sm font-semibold bg-primary text-primary-foreground shadow-md active:scale-95 transition-all disabled:opacity-50"
-                  >
-                    {editingFolderId ? 'Save' : 'Create'}
-                  </button>
+              ) : filteredSurahNumbers.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-10 text-center">
+                  <p className="text-[15px] text-muted-foreground">No matching {activeTab} found.</p>
                 </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Add Verse Selector Modal */}
-        <Drawer open={isAddVerseOpen} onOpenChange={setIsAddVerseOpen}>
-          <DrawerContent className="rounded-t-[2.5rem] bg-background border-none p-6">
-            <div className="max-w-md mx-auto w-full">
-              <DrawerHeader className="px-0 pt-2 mb-6">
-                <DrawerTitle className="text-xl font-display font-bold text-left">Add Verse to {selectedFolder?.name}</DrawerTitle>
-                <DrawerDescription className="text-left">Select a surah and verse to save to this collection.</DrawerDescription>
-              </DrawerHeader>
-              
-              <div className="space-y-6 mb-8">
-                <div className="space-y-2">
-                  <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest ml-1">Surah</label>
-                  <Select 
-                    value={selectorSurah ? selectorSurah.toString() : ''} 
-                    onValueChange={(v) => { setSelectorSurah(Number(v)); setSelectorVerse(''); }}
-                  >
-                    <SelectTrigger className="w-full h-14 rounded-2xl bg-secondary/20 border-border px-4">
-                      <SelectValue placeholder="Select Surah" />
-                    </SelectTrigger>
-                    <SelectContent className="max-h-[300px] rounded-2xl p-2 border-border shadow-2xl">
-                      {surahs?.map(s => (
-                        <SelectItem key={s.number} value={s.number.toString()} className="rounded-xl py-3 cursor-pointer">
-                          <div className="flex justify-between items-center w-64">
-                            <span className="font-semibold">{s.number}. {s.name}</span>
-                            <span className="font-arabic text-primary text-lg">{s.nameArabic}</span>
+              ) : (
+                <div className="space-y-6">
+                  <AnimatePresence>
+                    {filteredSurahNumbers.map(surahNum => (
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                        key={`group-${surahNum}`}
+                        className="space-y-3"
+                      >
+                        <div
+                          onClick={() => toggleSurah(surahNum)}
+                          className="flex items-center justify-between pb-1 border-b border-border/40 cursor-pointer group"
+                        >
+                          <h3 className="font-semibold text-[14px] text-muted-foreground flex items-center gap-2 transition-colors">
+                            <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[11px] font-bold tabular-nums">
+                              {surahNum}
+                            </span>
+                            {getSurahName(surahNum)}
+                          </h3>
+                          <div className="flex items-center gap-3">
+                            <span className="font-arabic text-primary/70 text-lg">
+                              {getSurahArabic(surahNum)}
+                            </span>
+                            <button className="text-muted-foreground transition-colors p-1 -mr-1 rounded-md flex items-center justify-center">
+                              {collapsedSurahs.has(surahNum) ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
+                            </button>
                           </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <div className="space-y-2">
-                  <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest ml-1">Verse</label>
-                  <Select 
-                    disabled={!selectorSurah} 
-                    value={selectorVerse ? selectorVerse.toString() : ''} 
-                    onValueChange={(v) => setSelectorVerse(Number(v))}
-                  >
-                    <SelectTrigger className="w-full h-14 rounded-2xl bg-secondary/20 border-border px-4">
-                      <SelectValue placeholder="Select Verse" />
-                    </SelectTrigger>
-                    <SelectContent className="max-h-[250px] rounded-2xl p-2 border-border shadow-2xl">
-                      {verses?.map(v => (
-                        <SelectItem key={v.numberInSurah} value={v.numberInSurah.toString()} className="rounded-xl py-3 cursor-pointer">
-                          Verse {v.numberInSurah}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              
-              <DrawerFooter className="px-0 pb-0 flex flex-row gap-3">
-                <DrawerClose asChild>
-                  <button className="flex-1 py-4 rounded-full text-[15px] font-bold border border-border shadow-sm active:scale-95 transition-all">
-                    Cancel
-                  </button>
-                </DrawerClose>
-                <button 
-                  onClick={() => {
-                    if (selectedFolderId && selectorSurah && selectorVerse) {
-                      addItemToCollection(selectedFolderId, Number(selectorSurah), Number(selectorVerse));
-                      setIsAddVerseOpen(false);
-                      setSelectorSurah('');
-                      setSelectorVerse('');
-                    }
-                  }}
-                  disabled={!selectorSurah || !selectorVerse}
-                  className="flex-1 py-4 rounded-full text-[15px] font-bold bg-primary text-primary-foreground shadow-lg shadow-primary/20 active:scale-95 transition-all disabled:opacity-50"
-                >
-                  Add Verse
-                </button>
-              </DrawerFooter>
-            </div>
-          </DrawerContent>
-        </Drawer>
-        
-        {/* Deletion Confirmations */}
-        <AlertDialog open={!!folderToDeleteId} onOpenChange={(open) => !open && setFolderToDeleteId(null)}>
-          <AlertDialogContent className="w-[92vw] max-w-[360px] rounded-[2rem] border-none bg-white dark:bg-background shadow-2xl p-6">
-            <AlertDialogHeader className="space-y-2">
-              <AlertDialogTitle className="text-left text-lg font-bold text-foreground">Delete Folder?</AlertDialogTitle>
-              <AlertDialogDescription className="text-left text-sm leading-relaxed text-muted-foreground">
-                Are you sure you want to delete the folder <strong>{collections.find(c => c.id === folderToDeleteId)?.name}</strong>? All verses and items saved inside this folder will be permanently lost.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter className="flex flex-row justify-end gap-2 mt-4">
-              <AlertDialogCancel className="h-10 px-6 rounded-full border-border bg-secondary/10 text-foreground text-[13px] font-medium hover:bg-secondary/20 transition-all">
-                Cancel
-              </AlertDialogCancel>
-              <AlertDialogAction 
-                onClick={() => { if (folderToDeleteId) { deleteCollection(folderToDeleteId); setFolderToDeleteId(null); } }}
-                className="h-10 px-6 rounded-full bg-destructive text-destructive-foreground text-[13px] font-bold hover:bg-destructive/90 transition-all"
-              >
-                Delete
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+                        </div>
 
-        <AlertDialog open={!!verseToRemove} onOpenChange={(open) => !open && setVerseToRemove(null)}>
-          <AlertDialogContent className="w-[92vw] max-w-[360px] rounded-[2rem] border-none bg-white dark:bg-background shadow-2xl p-6">
-            <AlertDialogHeader className="space-y-2">
-              <AlertDialogTitle className="text-left text-lg font-bold text-foreground">Remove Verse?</AlertDialogTitle>
-              <AlertDialogDescription className="text-left text-sm leading-relaxed text-muted-foreground">
-                Are you sure you want to remove this verse from the folder? You can add it back later from the Quran.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter className="flex flex-row justify-end gap-2 mt-4">
-              <AlertDialogCancel className="h-10 px-6 rounded-full border-border bg-secondary/10 text-foreground text-[13px] font-medium hover:bg-secondary/20 transition-all">
-                Cancel
-              </AlertDialogCancel>
-              <AlertDialogAction 
-                onClick={() => { if (verseToRemove) { removeItemFromCollection(verseToRemove.folderId, verseToRemove.surahNumber, verseToRemove.verseNumber); setVerseToRemove(null); } }}
-                className="h-10 px-6 rounded-full bg-destructive text-destructive-foreground text-[13px] font-bold hover:bg-destructive/90 transition-all"
-              >
-                Remove
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+                        <AnimatePresence initial={false}>
+                          {!collapsedSurahs.has(surahNum) && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.25, ease: "easeOut" }}
+                              className="overflow-hidden"
+                            >
+                              <div className="space-y-3 pt-3 pb-1">
+                                <AnimatePresence>
+                                  {sortItems(groupedItems[surahNum]).map(item => {
+                                    const verseText = activeTab === 'explanations'
+                                      ? (formatVerseRange((item as typeof explanations[0]).concise?.length ? (item as typeof explanations[0]).concise.map((b: { verseNumber: number }) => b.verseNumber).filter((v: number) => v > 0) : (item as typeof explanations[0]).verses || []) || (item as typeof explanations[0]).verseRange || '')
+                                      : `Verse ${(item as typeof tafsirRecords[0]).verseNumber}`;
+
+                                    const isMultiple = activeTab === 'explanations' && (verseText.includes('-') || verseText.includes(','));
+
+                                    return (
+                                      <motion.div
+                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.95 }}
+                                        transition={{ duration: 0.25, ease: "easeOut" }}
+                                        key={item.id}
+                                        onClick={() => {
+                                          if (activeTab === 'explanations') navigate(`/explanation-view?id=${item.id}`);
+                                          else if (activeTab === 'tafsirs') navigate(`/tafsir-view?surah=${item.surahNumber}&verse=${(item as typeof tafsirRecords[0]).verseNumber}`);
+                                        }}
+                                        className="bg-card border border-border rounded-[1.2rem] p-4 shadow-[0_2px_10px_rgba(0,0,0,0.02)] flex items-center justify-between gap-4 cursor-pointer transition-all"
+                                      >
+                                        <div className="flex-1 flex items-center min-w-0 pr-4">
+                                          <button
+                                            type="button"
+                                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-primary font-medium text-[13px] border border-primary/10 shadow-sm hover:bg-primary/5 transition-colors"
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              const v = activeTab === 'explanations'
+                                                ? ((item as typeof explanations[0]).concise?.length
+                                                  ? (item as typeof explanations[0]).concise.map((c: { verseNumber: number }) => c.verseNumber).filter((v: number) => v > 0).sort((x: number, y: number) => x - y)[0]
+                                                  : (item as typeof explanations[0]).verses || [])
+                                                : (item as typeof tafsirRecords[0]).verseNumber;
+                                              navigate(v ? `/surah/${surahNum}?verse=${v}` : `/surah/${surahNum}`);
+                                            }}
+                                          >
+                                            <Bookmark size={14} className="opacity-70" />
+                                            {activeTab === 'explanations' ? (isMultiple ? 'Verses' : 'Verse') : 'Verse'} {verseText.replace('Verse ', '')}
+                                          </button>
+                                        </div>
+                                        <div className="flex items-center" onClick={e => e.stopPropagation()}>
+                                          <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                              <button className="w-10 h-10 flex items-center justify-center rounded-full text-muted-foreground transition-colors outline-none cursor-pointer">
+                                                <MoreVertical size={20} />
+                                              </button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end" className="w-48 p-1.5 rounded-2xl bg-white/95 backdrop-blur-sm dark:bg-black/95 border-border shadow-[0_10px_30px_rgba(0,0,0,0.05)]">
+                                              <DropdownMenuItem
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  const v = activeTab === 'explanations'
+                                                    ? ((item as typeof explanations[0]).concise?.length ? (item as typeof explanations[0]).concise.map((c: { verseNumber: number }) => c.verseNumber).filter((v: number) => v > 0) : (item as typeof explanations[0]).verses || []).sort((x: number, y: number) => x - y)[0]
+                                                    : (item as typeof tafsirRecords[0]).verseNumber;
+                                                  navigate(v ? `/surah/${surahNum}?verse=${v}` : `/surah/${surahNum}`);
+                                                }}
+                                                className="flex items-center gap-2.5 px-3 py-2.5 outline-none rounded-xl cursor-pointer transition-colors text-[14px] font-medium"
+                                              >
+                                                <Eye size={16} /> Show Verse
+                                              </DropdownMenuItem>
+                                              <DropdownMenuItem
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  navigate(activeTab === 'explanations' ? `/explanation-builder?id=${item.id}` : `/tafsir-builder?surah=${item.surahNumber}&verse=${(item as typeof tafsirRecords[0]).verseNumber}`);
+                                                }}
+                                                className="flex items-center gap-2.5 px-3 py-2.5 outline-none rounded-xl cursor-pointer transition-colors text-[14px] font-medium"
+                                              >
+                                                <Edit2 size={16} /> Edit
+                                              </DropdownMenuItem>
+                                              <DropdownMenuSeparator className="bg-border/50 my-1 mx-1" />
+                                              <AlertDialog>
+                                                <AlertDialogTrigger asChild>
+                                                  <DropdownMenuItem
+                                                    onSelect={e => e.preventDefault()}
+                                                    className="flex items-center gap-2.5 px-3 py-2.5 outline-none rounded-xl cursor-pointer text-destructive focus:bg-destructive/10 transition-colors text-[14px] font-medium"
+                                                  >
+                                                    <Trash2 size={16} /> Delete
+                                                  </DropdownMenuItem>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent
+                                                  className="w-[92vw] max-w-[360px] border-none bg-white dark:bg-background shadow-2xl p-6 rounded-[2rem]"
+                                                  onClick={e => e.stopPropagation()}
+                                                >
+                                                  <AlertDialogHeader className="space-y-2">
+                                                    <AlertDialogTitle className="text-left text-lg font-bold text-foreground">
+                                                      Delete {activeTab === 'explanations' ? 'Explanation' : 'Tafsir'}?
+                                                    </AlertDialogTitle>
+                                                    <AlertDialogDescription className="text-left text-sm leading-relaxed text-muted-foreground">
+                                                      Are you sure you want to delete this {activeTab.slice(0, -1)} for <strong>Surah {getSurahName(surahNum)} {verseText}</strong>? This will permanently remove your stored records for this verse.
+                                                    </AlertDialogDescription>
+                                                  </AlertDialogHeader>
+                                                  <AlertDialogFooter className="flex flex-row justify-end gap-2 mt-4">
+                                                    <AlertDialogCancel className="h-10 px-6 rounded-full border-border bg-secondary/10 text-foreground text-[13px] font-medium hover:bg-secondary/20 transition-all">
+                                                      Cancel
+                                                    </AlertDialogCancel>
+                                                    <AlertDialogAction
+                                                      onClick={() => handleDelete(item.id)}
+                                                      className="h-10 px-6 rounded-full bg-destructive text-destructive-foreground text-[13px] font-bold hover:bg-destructive/90 transition-all"
+                                                    >
+                                                      Delete
+                                                    </AlertDialogAction>
+                                                  </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                              </AlertDialog>
+                                            </DropdownMenuContent>
+                                          </DropdownMenu>
+                                        </div>
+                                      </motion.div>
+                                    );
+                                  })}
+                                </AnimatePresence>
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
     </motion.div>
   );

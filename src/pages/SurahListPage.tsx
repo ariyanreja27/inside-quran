@@ -1,15 +1,16 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Menu, LifeBuoy } from 'lucide-react';
+import { Search, Menu, LifeBuoy, BookOpen } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { useSurahs } from '@/hooks/useQuranData';
-import { useFavorites } from '@/hooks/useAppStore';
+import { useFavorites, useLastRead } from '@/hooks/useAppStore';
 import SurahCard from '@/components/SurahCard';
 import SearchOverlay from '@/components/SearchOverlay';
 
@@ -19,8 +20,30 @@ export default function SurahListPage() {
   const navigate = useNavigate();
   const { data: surahs, isLoading } = useSurahs();
   const { isFavorite, toggleFavorite } = useFavorites();
+  const { lastRead } = useLastRead();
   const [filter, setFilter] = useState<Filter>('all');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  const recentRead = lastRead.length > 0 ? lastRead[0] : null;
+  const [showPopup, setShowPopup] = useState(!!recentRead);
+
+  // Hide popup on scroll or timeout
+  useEffect(() => {
+    if (!showPopup) return;
+    const timer = setTimeout(() => setShowPopup(false), 5000); // 5 sec timeout
+
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setShowPopup(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [showPopup]);
 
   const filtered = useMemo(() => {
     if (!surahs) return [];
@@ -55,6 +78,16 @@ export default function SurahListPage() {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56 p-1.5 rounded-2xl bg-white/95 backdrop-blur-sm dark:bg-black/95 border-border shadow-xl animate-in fade-in-0 zoom-in-95">
+
+              <DropdownMenuItem 
+                onClick={() => navigate('/last-read')}
+                className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer focus:bg-primary/5 focus:text-primary transition-colors mb-0.5"
+              >
+                <BookOpen size={18} />
+                <span className="font-medium text-[13.5px]">Last Read</span>
+              </DropdownMenuItem>
+              
+              <DropdownMenuSeparator className="bg-border/50 mx-2" />
 
               <DropdownMenuItem 
                 onClick={() => navigate('/help')}
@@ -130,6 +163,22 @@ export default function SurahListPage() {
           )}
         </AnimatePresence>
       </div>
+
+      {/* Continue Reading Popup */}
+      <AnimatePresence>
+        {showPopup && recentRead && (
+          <motion.div
+            initial={{ opacity: 0, y: 30, x: "-50%", scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }}
+            exit={{ opacity: 0, y: 10, x: "-50%", scale: 0.95 }}
+            transition={{ duration: 0.3, delay:0.2, ease: 'easeOut' }}
+            className="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-background/95 backdrop-blur-md text-primary font-bold px-6 py-2 rounded-full border border-primary/20 shadow-[0_8px_30px_rgba(0,0,0,0.12)] cursor-pointer flex items-center gap-2 hover:bg-background/100 transition-colors"
+            onClick={() => navigate(`/surah/${recentRead.surahNumber}?verse=${recentRead.verseNumber}`)}
+          >
+            <span className="text-[13.5px] tracking-tight whitespace-nowrap pt-0.5">Continue Reading</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

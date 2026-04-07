@@ -16,7 +16,8 @@ import TafsirBuilderPage from "@/pages/TafsirBuilderPage";
 import TafsirViewPage from "@/pages/TafsirViewPage";
 import NoteViewPage from "@/pages/NoteViewPage";
 import NoteBuilderPage from "@/pages/NoteBuilderPage";
-import ManagePage from "@/pages/ManagePage";
+import ExplorePage from "@/pages/ExplorePage";
+import LastReadPage from "@/pages/LastReadPage";
 import HelpSupportPage from "@/pages/HelpSupportPage";
 import TajweedGuidePage from "@/pages/TajweedGuidePage";
 import NotFound from "@/pages/NotFound";
@@ -42,8 +43,9 @@ const App = () => (
           <Route path="/tafsir-view" element={<TafsirViewPage />} />
           <Route path="/note-view" element={<NoteViewPage />} />
           <Route path="/note-builder" element={<NoteBuilderPage />} />
-          <Route path="/manage" element={<ManagePage />} />
+          <Route path="/explore" element={<ExplorePage />} />
           <Route path="/library" element={<LibraryPage />} />
+          <Route path="/last-read" element={<LastReadPage />} />
           <Route path="/help" element={<HelpSupportPage />} />
           <Route path="/tajweed-guide" element={<TajweedGuidePage />} />
           <Route path="*" element={<NotFound />} />
