@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, MoreVertical, BookmarkCheck, Bookmark as BookmarkIcon, FileText, Pencil, BookOpen, PenLine } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -10,6 +10,7 @@ import {
   DrawerTitle,
   DrawerDescription,
 } from "@/components/ui/drawer";
+import { TajweedText } from '@/components/TajweedText';
 import type { Verse } from '@/types/quran';
 
 export default function SurahReadingPage() {
@@ -36,6 +37,18 @@ export default function SurahReadingPage() {
   const [currentPage, setCurrentPage] = useState<number | null>(null);
   const [editingVerse, setEditingVerse] = useState<number | null>(null);
   const [editText, setEditText] = useState('');
+
+  // Draggable scroll handle
+  const [scrollPercent, setScrollPercent] = useState(0);
+  const [currentVerseNum, setCurrentVerseNum] = useState(1);
+  const [isDragging, setIsDragging] = useState(false);
+  const [showVerseNum, setShowVerseNum] = useState(false);
+  const [handleVisible, setHandleVisible] = useState(false);
+  const handleRef = useRef<HTMLDivElement>(null);
+  const hideTimeoutRef = useRef<NodeJS.Timeout>();
+  const verseNumTimeoutRef = useRef<NodeJS.Timeout>();
+  const dragStartY = useRef(0);
+  const dragStartScroll = useRef(0);
   
   const editingVerseObj = verses?.find(a => a.numberInSurah === editingVerse);
   const activeCustomTrans = editingVerse ? getCustomTranslation(surahNumber, editingVerse, settings.language) : null;
@@ -44,6 +57,92 @@ export default function SurahReadingPage() {
 
   const menuRef = useRef<HTMLDivElement>(null);
   const saveTimeoutRef = useRef<NodeJS.Timeout>();
+
+  // Show handle briefly then auto-hide
+  const showHandle = useCallback(() => {
+    setHandleVisible(true);
+    if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
+    hideTimeoutRef.current = setTimeout(() => {
+      if (!isDragging) setHandleVisible(false);
+    }, 2000);
+  }, [isDragging]);
+
+  // Sync scroll % from window scroll
+  useEffect(() => {
+    const onScroll = () => {
+      const scrollTop = window.scrollY;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = maxScroll > 0 ? scrollTop / maxScroll : 0;
+      setScrollPercent(pct);
+      // Only show handle on regular scroll, not verse number
+      setHandleVisible(true);
+      if (!isDragging) {
+        if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
+        hideTimeoutRef.current = setTimeout(() => setHandleVisible(false), 1500);
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [isDragging]);
+
+  // Drag handlers
+  const onDragStart = useCallback((clientY: number) => {
+    setIsDragging(true);
+    setHandleVisible(true);
+    setShowVerseNum(true); // show verse number when drag starts
+    if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
+    if (verseNumTimeoutRef.current) clearTimeout(verseNumTimeoutRef.current);
+    dragStartY.current = clientY;
+    dragStartScroll.current = window.scrollY;
+  }, []);
+
+  const onDragMove = useCallback((clientY: number) => {
+    if (!isDragging) return;
+    const deltaY = clientY - dragStartY.current;
+    const trackHeight = Math.max(1, window.innerHeight - 56 - 24 - 80); // matches render: HEADER_H + GAP + hit area
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollDelta = (deltaY / trackHeight) * maxScroll;
+    const newScroll = Math.max(0, Math.min(maxScroll, dragStartScroll.current + scrollDelta));
+    window.scrollTo({ top: newScroll });
+  }, [isDragging]);
+
+  const onDragEnd = useCallback(() => {
+    setIsDragging(false);
+    // Keep verse number visible for 1.5s then collapse back to pill
+    verseNumTimeoutRef.current = setTimeout(() => setShowVerseNum(false), 1500);
+    // Hide handle after 2s
+    hideTimeoutRef.current = setTimeout(() => setHandleVisible(false), 2000);
+  }, []);
+
+  // Mouse events
+  useEffect(() => {
+    if (!isDragging) return;
+    const onMove = (e: MouseEvent) => onDragMove(e.clientY);
+    const onUp = () => onDragEnd();
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onUp);
+    };
+  }, [isDragging, onDragMove, onDragEnd]);
+
+  // Touch events
+  useEffect(() => {
+    if (!isDragging) return;
+    const onMove = (e: TouchEvent) => { e.preventDefault(); onDragMove(e.touches[0].clientY); };
+    const onEnd = () => onDragEnd();
+    window.addEventListener('touchmove', onMove, { passive: false });
+    window.addEventListener('touchend', onEnd);
+    return () => {
+      window.removeEventListener('touchmove', onMove);
+      window.removeEventListener('touchend', onEnd);
+    };
+  }, [isDragging, onDragMove, onDragEnd]);
+
+  // Cleanup
+  useEffect(() => () => { if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current); }, []);
+
 
   const surah = surahs?.find(s => s.number === surahNumber);
 
@@ -68,73 +167,77 @@ export default function SurahReadingPage() {
   useEffect(() => {
     if (!isRendered || isLoading) return;
 
-    let scrollTimeout: NodeJS.Timeout;
     const headerOffset = 70; // 56px sticky header + 14px safety buffer
+    let rafId: number | null = null;
 
+    const scanVisibleVerse = () => {
+      rafId = null;
+      const verseElements = document.querySelectorAll('[id^="verse-"]');
+      let topMostVerseNum = -1;
+
+      for (let i = 0; i < verseElements.length; i++) {
+        const el = verseElements[i];
+        const arabicEl = el.querySelector('.arabic-text');
+        const transEl = el.querySelector('p.font-display.text-muted-foreground');
+        
+        let isVisible = false;
+
+        if (arabicEl) {
+          const rect = arabicEl.getBoundingClientRect();
+          if (rect.bottom > headerOffset && rect.top < window.innerHeight) {
+            isVisible = true;
+          }
+        }
+
+        if (transEl && !isVisible) {
+          const rect = transEl.getBoundingClientRect();
+          if (rect.bottom > headerOffset && rect.top < window.innerHeight) {
+            isVisible = true;
+          }
+        }
+
+        // Fallback if neither exists
+        if (!arabicEl && !transEl) {
+          const rect = el.getBoundingClientRect();
+          if (rect.bottom > headerOffset && rect.top < window.innerHeight) {
+            isVisible = true;
+          }
+        }
+
+        if (isVisible) {
+          topMostVerseNum = parseInt(el.id.split('-')[1]);
+          break;
+        }
+      }
+
+      if (topMostVerseNum !== -1) {
+        const verse = verses?.find(a => a.numberInSurah === topMostVerseNum);
+        if (verse) {
+          setCurrentJuz(verse.juz);
+          setCurrentPage(verse.page);
+          setCurrentVerseNum(topMostVerseNum);
+          if (surahNumber) {
+            if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+            saveTimeoutRef.current = setTimeout(() => {
+              saveLastRead(surahNumber, topMostVerseNum);
+            }, 400); // 400ms debounce prevents scroll-restoration save-spam
+          }
+        }
+      }
+    };
+
+    // rAF-throttled scroll handler: fires once per frame during fast scroll
     const handleScroll = () => {
-      if (scrollTimeout) clearTimeout(scrollTimeout);
-      
-      scrollTimeout = setTimeout(() => {
-        const verseElements = document.querySelectorAll('[id^="verse-"]');
-        let topMostVerseNum = -1;
-
-        for (let i = 0; i < verseElements.length; i++) {
-          const el = verseElements[i];
-          const arabicEl = el.querySelector('.arabic-text');
-          const transEl = el.querySelector('p.font-display.text-muted-foreground');
-          
-          let isVisible = false;
-
-          if (arabicEl) {
-            const rect = arabicEl.getBoundingClientRect();
-            if (rect.bottom > headerOffset && rect.top < window.innerHeight) {
-              isVisible = true;
-            }
-          }
-
-          if (transEl && !isVisible) {
-            const rect = transEl.getBoundingClientRect();
-            if (rect.bottom > headerOffset && rect.top < window.innerHeight) {
-              isVisible = true;
-            }
-          }
-
-          // Fallback if neither exists
-          if (!arabicEl && !transEl) {
-            const rect = el.getBoundingClientRect();
-            if (rect.bottom > headerOffset && rect.top < window.innerHeight) {
-              isVisible = true;
-            }
-          }
-
-          if (isVisible) {
-            topMostVerseNum = parseInt(el.id.split('-')[1]);
-            break;
-          }
-        }
-
-        if (topMostVerseNum !== -1) {
-          const verse = verses?.find(a => a.numberInSurah === topMostVerseNum);
-          if (verse) {
-            setCurrentJuz(verse.juz);
-            setCurrentPage(verse.page);
-            if (surahNumber) {
-              if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
-              saveTimeoutRef.current = setTimeout(() => {
-                saveLastRead(surahNumber, topMostVerseNum);
-              }, 400); // 400ms exit-debounce prevents browser scroll restoration bugs
-            }
-          }
-        }
-      }, 100); // Highly efficient 100ms throttle
+      if (rafId !== null) return; // already queued for this frame
+      rafId = requestAnimationFrame(scanVisibleVerse);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Check state immediately after rendering
+    scanVisibleVerse(); // run immediately on mount
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      if (scrollTimeout) clearTimeout(scrollTimeout);
+      if (rafId !== null) cancelAnimationFrame(rafId);
       if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
     };
   }, [verses, isLoading, surahNumber, saveLastRead, isRendered]);
@@ -177,6 +280,14 @@ export default function SurahReadingPage() {
   let lastPage = 0;
   let lastRuku = 0;
 
+  // Read header bottom live — always accurate, no stale state
+  // h-14 header = 56px (Tailwind constant), no DOM measurement needed
+  const HEADER_H = 56;
+  const GAP = 18;     // clear gap below header border
+  const HIT_HALF = 40; // half of 80px hit area height
+  const trackH = window.innerHeight - HEADER_H + GAP - HIT_HALF * 2;
+  const handleTop = (HEADER_H - GAP + HIT_HALF) + scrollPercent * Math.max(0, trackH);
+
   return (
     <div className="min-h-screen pb-24">
       {/* Header */}
@@ -209,6 +320,69 @@ export default function SurahReadingPage() {
           )}
         </div>
       </div>
+
+      {/* Draggable Scroll Handle */}
+      {isRendered && (
+        <div
+          ref={handleRef}
+          onMouseDown={(e) => { e.preventDefault(); onDragStart(e.clientY); }}
+          onTouchStart={(e) => { onDragStart(e.touches[0].clientY); }}
+          style={{
+            position: 'fixed',
+            right: '0px',
+            top: `${handleTop}px`,
+            transform: 'translateY(-50%)',
+            zIndex: 50,
+            opacity: handleVisible || isDragging ? 1 : 0,
+            transition: isDragging ? 'opacity 0.15s' : 'opacity 0.4s, top 0s',
+            touchAction: 'none',
+            userSelect: 'none',
+            cursor: isDragging ? 'grabbing' : 'grab',
+            // Large invisible hit area — easy to tap even when pill is thin
+            width: '48px',
+            height: '80px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+          }}
+        >
+          <div
+            style={{
+              width: showVerseNum ? '42px' : '6px',
+              height: showVerseNum ? '42px' : '42px',
+              borderRadius: '100px 0 0 100px',
+              background: isDragging
+                ? 'hsl(var(--primary))'
+                : 'hsl(var(--primary) / 0.75)',
+              boxShadow: isDragging
+                ? '-4px 0 16px hsl(var(--primary) / 0.4)'
+                : '-2px 0 8px hsl(var(--primary) / 0.2)',
+              transition: 'width 0.25s cubic-bezier(0.34,1.56,0.64,1), background 0.2s, box-shadow 0.2s',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              overflow: 'hidden',
+            }}
+          >
+            <span
+              style={{
+                color: 'hsl(var(--primary-foreground))',
+                fontSize: '11px',
+                fontWeight: 700,
+                fontFamily: 'var(--font-body, sans-serif)',
+                letterSpacing: '-0.3px',
+                lineHeight: 1,
+                pointerEvents: 'none',
+                opacity: showVerseNum ? 1 : 0,
+                transition: 'opacity 0.15s',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {currentVerseNum}
+            </span>
+          </div>
+        </div>
+      )}
 
       <AnimatePresence mode="wait">
         {isLoading ? (
@@ -371,7 +545,7 @@ export default function SurahReadingPage() {
                       lineHeight: settings.lineSpacing
                     }}
                   >
-                    {verse.text}
+                    <TajweedText text={verse.text} showColors={settings.showTajweed} waqf={verse.waqf} />
                   </p>
 
                   {/* Translation */}

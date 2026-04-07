@@ -12,6 +12,7 @@ export interface Verse {
   numberInSurah: number;
   text: string;
   translation: string;
+  waqf?: string;
   juz: number;
   page: number;
   hizbQuarter: number;

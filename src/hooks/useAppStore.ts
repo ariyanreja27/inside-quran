@@ -19,18 +19,22 @@ export interface TafsirRecord {
 
 export interface UserSettings {
   language: 'en' | 'bn' | 'hi' | 'ur';
+  arabicFont: 'Amiri' | 'Noorehuda';
   arabicFontSize: number;
   translationFontSize: number;
   lineSpacing: number;
   showOnlyExplained: boolean;
+  showTajweed: boolean;
 }
 
 export const defaultSettings: UserSettings = {
   language: 'en',
+  arabicFont: 'Amiri',
   arabicFontSize: 24,
   translationFontSize: 14,
   lineSpacing: 2.0,
   showOnlyExplained: false,
+  showTajweed: true,
 };
 
 export function useSettings() {
@@ -39,6 +43,14 @@ export function useSettings() {
   const updateSettings = (newSettings: Partial<UserSettings>) => {
     setSettings((prev) => ({ ...prev, ...newSettings }));
   };
+
+  useEffect(() => {
+    // Dynamically apply chosen Arabic font to the CSS variables
+    const fontStr = settings.arabicFont === 'Noorehuda' 
+      ? "'Noorehuda', 'Amiri', 'Traditional Arabic', serif"
+      : "'Amiri', 'Traditional Arabic', serif";
+    document.documentElement.style.setProperty('--font-arabic', fontStr);
+  }, [settings.arabicFont]);
 
   return { settings, updateSettings };
 }

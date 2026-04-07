@@ -1,0 +1,916 @@
+diff --git a/src/App.tsx b/src/App.tsx
+index 1c720bf..eeb1a84 100644
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -17,6 +17,8 @@ import TafsirViewPage from "@/pages/TafsirViewPage";
+ import NoteViewPage from "@/pages/NoteViewPage";
+ import NoteBuilderPage from "@/pages/NoteBuilderPage";
+ import ManagePage from "@/pages/ManagePage";
++import HelpSupportPage from "@/pages/HelpSupportPage";
++import TajweedGuidePage from "@/pages/TajweedGuidePage";
+ import NotFound from "@/pages/NotFound";
+ import ScrollToTop from "@/components/ScrollToTop";
+ 
+@@ -42,6 +44,8 @@ const App = () => (
+           <Route path="/note-builder" element={<NoteBuilderPage />} />
+           <Route path="/manage" element={<ManagePage />} />
+           <Route path="/library" element={<LibraryPage />} />
++          <Route path="/help" element={<HelpSupportPage />} />
++          <Route path="/tajweed-guide" element={<TajweedGuidePage />} />
+           <Route path="*" element={<NotFound />} />
+         </Routes>
+         <BottomNav />
+diff --git a/src/hooks/useAppStore.ts b/src/hooks/useAppStore.ts
+index bcca7dc..2aad99c 100644
+--- a/src/hooks/useAppStore.ts
++++ b/src/hooks/useAppStore.ts
+@@ -19,18 +19,22 @@ export interface TafsirRecord {
+ 
+ export interface UserSettings {
+   language: 'en' | 'bn' | 'hi' | 'ur';
++  arabicFont: 'Amiri' | 'Noorehuda';
+   arabicFontSize: number;
+   translationFontSize: number;
+   lineSpacing: number;
+   showOnlyExplained: boolean;
++  showTajweed: boolean;
+ }
+ 
+ export const defaultSettings: UserSettings = {
+   language: 'en',
++  arabicFont: 'Amiri',
+   arabicFontSize: 24,
+   translationFontSize: 14,
+   lineSpacing: 2.0,
+   showOnlyExplained: false,
++  showTajweed: true,
+ };
+ 
+ export function useSettings() {
+@@ -40,6 +44,14 @@ export function useSettings() {
+     setSettings((prev) => ({ ...prev, ...newSettings }));
+   };
+ 
++  useEffect(() => {
++    // Dynamically apply chosen Arabic font to the CSS variables
++    const fontStr = settings.arabicFont === 'Noorehuda' 
++      ? "'Noorehuda', 'Amiri', 'Traditional Arabic', serif"
++      : "'Amiri', 'Traditional Arabic', serif";
++    document.documentElement.style.setProperty('--font-arabic', fontStr);
++  }, [settings.arabicFont]);
++
+   return { settings, updateSettings };
+ }
+ 
+diff --git a/src/hooks/useQuranData.ts b/src/hooks/useQuranData.ts
+index f470727..69b0a6e 100644
+--- a/src/hooks/useQuranData.ts
++++ b/src/hooks/useQuranData.ts
+@@ -19,28 +19,68 @@ export function useSurahVerses(surahNumber: number) {
+   const { settings } = useSettings();
+ 
+   return useQuery<Verse[]>({
+-    queryKey: ['surah-verses', surahNumber, settings.language],
++    queryKey: ['surah-verses', surahNumber, settings.language, settings.showTajweed, settings.arabicFont],
+     queryFn: async () => {
+       const translationEdition = 
+         settings.language === 'bn' ? 'bn.bengali' : 
+         settings.language === 'hi' ? 'hi.hindi' : 
+         'en.sahih';
+ 
+-      const [arabicRes, translationRes] = await Promise.all([
+-        fetch(`${API_BASE}/surah/${surahNumber}`),
++      const arabicEndpoint = settings.showTajweed ? `${API_BASE}/surah/${surahNumber}/quran-tajweed` : `${API_BASE}/surah/${surahNumber}`;
++
++      const [arabicRes, translationRes, waqfRes] = await Promise.all([
++        fetch(arabicEndpoint),
+         fetch(`${API_BASE}/surah/${surahNumber}/${translationEdition}`),
++        fetch(`https://api.quran.com/api/v4/quran/verses/indopak?chapter_number=${surahNumber}`)
++      ]);
++
++      const [arabicData, translationData, waqfData] = await Promise.all([
++        arabicRes.json(),
++        translationRes.json(),
++        waqfRes.json()
+       ]);
+-      const arabicData = await arabicRes.json();
+-      const translationData = await translationRes.json();
+ 
+-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
++      // Create a map of verse numbers to their stop markers from the Quran.com Indopak text
++      const waqfMap: Record<number, string> = {};
++      if (waqfData.verses) {
++        waqfData.verses.forEach((v: any) => {
++          const vNum = parseInt(v.verse_key.split(':')[1]);
++          // Regex to extract stop marks (U+06D6 to U+06E0) from the end of the text
++          const text = v.text_indopak || '';
++          const match = text.match(/[\u06D6-\u06E0]+(?=[^\u0621-\u064A]*$)/);
++          if (match) {
++            waqfMap[vNum] = match[0];
++          }
++        });
++      }
++
+       return arabicData.data.ayahs.map((a: any, i: number) => {
+         let text = a.text;
++        
++        // If we are fetching the Tajweed edition, normalize specific Uthmani-exclusive characters 
++        // back to the Simple/IndoPak styling that the default API endpoint uses.
++        // The user explicitly noted this normalizer looks better for the Amiri font, whereas Noorehuda handles the Uthmani string natively.
++        if (settings.showTajweed && settings.arabicFont === 'Amiri') {
++          text = text
++            .replace(/\u0652/g, '\u06E1') // Round Sukun -> Quranic Sukun
++            .replace(/\u064A/g, '\u06CC') // Standard Yeh -> Farsi Yeh
++            .replace(/\u0649/g, '\u06CC') // Alef Maksura -> Farsi Yeh
++            .replace(/\u0653/g, '\u06E4'); // Standard Madda -> Quranic Madda
++        }
++
+         // Strip Bismillah prefix from the first verse of every surah except Surah 1 (Al-Fatihah)
+         if (surahNumber !== 1 && a.numberInSurah === 1) {
+-          const bismillah = "بِسۡمِ ٱللَّهِ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ";
+-          if (text.startsWith(bismillah)) {
+-            text = text.substring(bismillah.length).trim();
++          const bismillah1 = "بِسۡمِ ٱللَّهِ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ";
++          const bismillah2 = "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ";
++          // Also check normalized string just in case
++          const bismillahNorm = bismillah2.replace(/\u0652/g, '\u06E1').replace(/\u064A/g, '\u06CC').replace(/\u0649/g, '\u06CC').replace(/\u0653/g, '\u06E4');
++          
++          if (text.startsWith(bismillah1)) {
++            text = text.substring(bismillah1.length).trim();
++          } else if (text.startsWith(bismillah2)) {
++            text = text.substring(bismillah2.length).trim();
++          } else if (text.startsWith(bismillahNorm)) {
++            text = text.substring(bismillahNorm.length).trim();
+           }
+         }
+ 
+@@ -49,6 +89,7 @@ export function useSurahVerses(surahNumber: number) {
+           numberInSurah: a.numberInSurah,
+           text: text,
+           translation: translationData.data.ayahs[i]?.text || '',
++          waqf: waqfMap[a.numberInSurah],
+           juz: a.juz,
+           page: a.page,
+           hizbQuarter: a.hizbQuarter,
+diff --git a/src/index.css b/src/index.css
+index 3a92848..eb696e9 100644
+--- a/src/index.css
++++ b/src/index.css
+@@ -6,6 +6,12 @@
+   font-display: block;
+ }
+ 
++@font-face {
++  font-family: 'Noorehuda';
++  src: url('/fonts/noorehuda.ttf') format('truetype');
++  font-display: swap;
++}
++
+ @tailwind base;
+ @tailwind components;
+ @tailwind utilities;
+@@ -59,7 +65,7 @@
+     --explained: 140 40% 92%;
+     --explained-border: 140 35% 75%;
+ 
+-    --font-arabic: 'Amiri', 'Traditional Arabic', serif;
++    --font-arabic: 'Noorehuda', 'Amiri', 'Traditional Arabic', serif;
+     --font-quran: 'Calibri', 'Katibeh', 'Scheherazade New', serif;
+     --font-display: 'Fraunces', Georgia, serif;
+     --font-body: 'Geist Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+@@ -114,7 +120,6 @@
+ }
+ 
+   html {
+-    scrollbar-gutter: stable;
+     overflow-x: clip;
+   }
+ 
+@@ -194,20 +199,14 @@
+                       radial-gradient(circle at 80% 20%, hsl(var(--primary) / 0.05) 0%, transparent 50%);
+   }
+ 
+-  /* Custom Draggable Scrollbar */
++  /* Hide native scrollbar — custom draggable handle used instead */
+   ::-webkit-scrollbar {
+-    width: 10px;
+-    height: 10px;
+-  }
+-
+-  ::-webkit-scrollbar-track {
+-    background: transparent;
++    width: 0;
++    height: 0;
+   }
+-
+-  ::-webkit-scrollbar-thumb {
+-    background: hsl(var(--muted-foreground) / 0.2);
+-    border-radius: 10px;
+-    border: 2px solid hsl(var(--background));
++  * {
++    scrollbar-width: none;  /* Firefox */
++    -ms-overflow-style: none;  /* IE/Edge */
+   }
+ 
+ 
+diff --git a/src/pages/ExplanationBuilderPage.tsx b/src/pages/ExplanationBuilderPage.tsx
+index ce4ee1d..b383964 100644
+--- a/src/pages/ExplanationBuilderPage.tsx
++++ b/src/pages/ExplanationBuilderPage.tsx
+@@ -11,6 +11,8 @@ import { Switch } from '@/components/ui/switch';
+ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+ import { useToast } from '@/hooks/use-toast';
+ import LoadingScreen from '@/components/LoadingScreen';
++import { TajweedText } from '@/components/TajweedText';
++import { useSettings } from '@/hooks/useAppStore';
+ import {
+   Dialog,
+   DialogContent,
+@@ -39,6 +41,7 @@ export default function ExplanationBuilderPage() {
+   const { data: surahs } = useSurahs();
+   const { explanations, getExplanation, saveExplanation } = useExplanations();
+   const { toast } = useToast();
++  const { settings } = useSettings();
+ 
+   // Handled inline
+ 
+@@ -501,7 +504,9 @@ export default function ExplanationBuilderPage() {
+                     {/* Verse Display */}
+                     {block.verseNumber > 0 && (
+                       <div className="bg-muted/50 rounded-2xl p-4 flex flex-col items-center justify-center min-h-[80px] border border-border/50">
+-                        <p className="arabic-text text-2xl leading-[2.5] text-center text-foreground font-arabic" dangerouslySetInnerHTML={{ __html: (getVerseText(block.verseNumber) || '').replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ', '<span class="bismillah-text text-xl block -mb-2">﷽</span>') }} />
++                        <p className="arabic-text text-2xl leading-[2.5] text-center text-foreground font-arabic">
++                          <TajweedText text={getVerseText(block.verseNumber)} showColors={settings.showTajweed} />
++                        </p>
+                       </div>
+                     )}
+ 
+diff --git a/src/pages/ExplanationViewPage.tsx b/src/pages/ExplanationViewPage.tsx
+index 8db22b6..6fb9ab3 100644
+--- a/src/pages/ExplanationViewPage.tsx
++++ b/src/pages/ExplanationViewPage.tsx
+@@ -23,6 +23,7 @@ import type { Explanation, RootWord } from '@/types/quran';
+ import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+ import { Drawer, DrawerContent, DrawerTitle, DrawerDescription } from '@/components/ui/drawer';
+ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
++import { TajweedText } from '@/components/TajweedText';
+ 
+ export default function ExplanationViewPage() {
+   const navigate = useNavigate();
+@@ -257,7 +258,9 @@ export default function ExplanationViewPage() {
+                         {/* Verse Text Box */}
+                         {verseData && (
+                           <div className="bg-card/50 dark:bg-card/30 rounded-3xl p-6 flex items-center justify-center min-h-[100px] shadow-[0_2px_10px_rgba(0,0,0,0.02)] mb-6 border border-border/50">
+-                             <p className="font-arabic text-3xl leading-loose text-center text-foreground" style={{ fontSize: `${settings.arabicFontSize + 6}px` }} dangerouslySetInnerHTML={{ __html: (verseData.text || '').replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ', '<span class="bismillah-text text-2xl block -mb-4">﷽</span>') }} />
++                             <p className="font-arabic text-3xl leading-loose text-center text-foreground" style={{ fontSize: `${settings.arabicFontSize + 6}px` }}>
++                                <TajweedText text={verseData.text} showColors={settings.showTajweed} />
++                             </p>
+                           </div>
+                         )}
+ 
+diff --git a/src/pages/NoteBuilderPage.tsx b/src/pages/NoteBuilderPage.tsx
+index 4ff507e..4882bcc 100644
+--- a/src/pages/NoteBuilderPage.tsx
++++ b/src/pages/NoteBuilderPage.tsx
+@@ -1,13 +1,13 @@
+ import { useState, useEffect } from 'react';
+ import { useNavigate, useSearchParams } from 'react-router-dom';
+-import { ArrowLeft, AlertCircle, Info } from 'lucide-react';
++import { ArrowLeft, Info } from 'lucide-react';
+ import { motion, AnimatePresence } from 'framer-motion';
+ import { useSurahs, useSurahVerses } from '@/hooks/useQuranData';
+ import { useNotes, useSettings } from '@/hooks/useAppStore';
+ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+ import { useToast } from '@/hooks/use-toast';
+ import LoadingScreen from '@/components/LoadingScreen';
+-import { cn } from '@/lib/utils';
++import { TajweedText } from '@/components/TajweedText';
+ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+ 
+ const generateId = () => {
+@@ -174,10 +174,12 @@ export default function NoteBuilderPage() {
+               className="bg-muted/30 border border-border/60 rounded-2xl p-4 flex flex-col items-center justify-center min-h-[80px] relative overflow-hidden"
+             >
+               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-[100px] -z-10 blur-xl" />
+-              <p 
++              <div 
+                 className="arabic-text text-2xl leading-[2.5] text-center text-foreground font-arabic" 
+-                dangerouslySetInnerHTML={{ __html: (verseData.text || '').replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ', '<span class="bismillah-text text-xl block -mb-2">﷽</span>') }}
+-              />
++                dir="rtl"
++              >
++                <TajweedText text={verseData.text} showColors={settings.showTajweed} />
++              </div>
+             </motion.div>
+           )}
+         </AnimatePresence>
+diff --git a/src/pages/SavedPage.tsx b/src/pages/SavedPage.tsx
+index 10f8f13..7ec2607 100644
+--- a/src/pages/SavedPage.tsx
++++ b/src/pages/SavedPage.tsx
+@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from 'framer-motion';
+ import { useFavorites, useBookmarks } from '@/hooks/useAppStore';
+ import { useSurahs, useSurahVerses } from '@/hooks/useQuranData';
+ import { useEffect } from 'react';
++import { TajweedText } from '@/components/TajweedText';
++import { useSettings } from '@/hooks/useAppStore';
+ import {
+   DropdownMenu,
+   DropdownMenuContent,
+@@ -28,6 +30,7 @@ type SavedView = 'favorites' | 'bookmarks' | 'highlights';
+ function BookmarkedVerseCard({ surahNumber, verseNumber, onRemove }: { surahNumber: number; verseNumber: number; onRemove: (s: number, v: number) => void }) {
+   const { data: surahs } = useSurahs();
+   const { data: verses } = useSurahVerses(surahNumber);
++  const { settings } = useSettings();
+   const surah = surahs?.find(s => s.number === surahNumber);
+   const verse = verses?.find(a => a.numberInSurah === verseNumber);
+   const navigate = useNavigate();
+@@ -45,7 +48,9 @@ function BookmarkedVerseCard({ surahNumber, verseNumber, onRemove }: { surahNumb
+           <BookmarkCheck size={14} className="gold-accent" />
+           <span className="text-xs font-medium text-foreground">{surah.name} : {verseNumber}</span>
+         </div>
+-        <p className="arabic-text truncate leading-loose py-1 text-sm text-foreground">{verse.text}</p>
++        <p className="arabic-text truncate leading-loose py-1 text-sm text-foreground">
++          <TajweedText text={verse.text} showColors={settings.showTajweed} />
++        </p>
+         <p className="mt-1 truncate text-xs text-muted-foreground">{verse.translation}</p>
+       </div>
+ 
+diff --git a/src/pages/SettingsPage.tsx b/src/pages/SettingsPage.tsx
+index 463f778..d04d215 100644
+--- a/src/pages/SettingsPage.tsx
++++ b/src/pages/SettingsPage.tsx
+@@ -47,8 +47,10 @@ export default function SettingsPage() {
+   const { lastRead } = useLastRead();
+   const { customTranslations } = useCustomTranslations();
+ 
++  const targetArabicFontSize = settings.arabicFont === 'Noorehuda' ? 34 : 24;
++
+   const isModified =
+-    settings.arabicFontSize !== defaultSettings.arabicFontSize ||
++    settings.arabicFontSize !== targetArabicFontSize ||
+     settings.translationFontSize !== defaultSettings.translationFontSize ||
+     settings.lineSpacing !== defaultSettings.lineSpacing;
+ 
+@@ -355,7 +357,7 @@ export default function SettingsPage() {
+                 rotate: isModified ? 0 : -90
+               }}
+               onClick={() => updateSettings({
+-                arabicFontSize: defaultSettings.arabicFontSize,
++                arabicFontSize: targetArabicFontSize,
+                 translationFontSize: defaultSettings.translationFontSize,
+                 lineSpacing: defaultSettings.lineSpacing,
+               })}
+@@ -367,12 +369,45 @@ export default function SettingsPage() {
+             </motion.button>
+           </div>
+           <div className="bg-card border border-border rounded-2xl p-4 space-y-6 shadow-sm">
++            <div className="flex flex-col gap-2">
++              <div className="flex items-center justify-between mb-1">
++                <div>
++                  <p className="text-sm font-semibold text-foreground/90 tracking-tight transition-colors">Arabic Font Profile</p>
++                  <p className="text-[11px] text-muted-foreground leading-tight mt-0.5 opacity-80">Select standard or IndoPak style</p>
++                </div>
++              </div>
++              <div className="grid grid-cols-2 gap-2">
++                {[
++                  { id: 'Amiri', label: 'Amiri (Standard)' },
++                  { id: 'Noorehuda', label: 'Noorehuda (IndoPak)' }
++                ].map((font) => (
++                  <button
++                    key={font.id}
++                    onClick={() => {
++                      if (settings.arabicFont === font.id) return;
++                      const newSize = font.id === 'Amiri' ? 24 : 34; // Automatically bump up Noorehuda size 
++                      updateSettings({ arabicFont: font.id as 'Amiri' | 'Noorehuda', arabicFontSize: newSize });
++                    }}
++                    className={`h-10 rounded-xl text-[13px] font-bold transition-all shadow-sm ${
++                      settings.arabicFont === font.id
++                        ? 'bg-primary text-primary-foreground border border-primary/20'
++                        : 'bg-secondary/40 text-foreground border border-border hover:bg-secondary/80'
++                    }`}
++                  >
++                    {font.label}
++                  </button>
++                ))}
++              </div>
++            </div>
++
++            <div className="h-px bg-border/50 -mx-4" />
++
+             <Stepper
+               label="Arabic Size"
+               description="Font size for Quranic text"
+               value={settings.arabicFontSize}
+               unit="px"
+-              min={16} max={48} step={2}
++              min={16} max={56} step={2}
+               onChange={(val: number) => updateSettings({ arabicFontSize: val })}
+             />
+ 
+@@ -398,18 +433,33 @@ export default function SettingsPage() {
+ 
+         {/* SECTION 7: APPEARANCE (Moved up for logical flow) */}
+         <section>
+-          <SectionTitle icon={Eye} title="Filter" />
+-          <div className="bg-card border border-border rounded-2xl p-4 flex items-center justify-between shadow-sm">
+-            <div>
+-              <p className="text-sm font-medium">Explained Verses Only</p>
+-              <p className="text-xs text-muted-foreground">Hide verses without tafsir</p>
++          <SectionTitle icon={Eye} title="Display & Filters" />
++          <div className="bg-card border border-border rounded-2xl space-y-2 p-4 shadow-sm">
++            <div className="flex items-center justify-between pb-3 border-b border-border/40">
++              <div>
++                <p className="text-sm font-medium">Tajweed Highlighting</p>
++                <p className="text-xs text-muted-foreground">Color-coded tajweed rules</p>
++              </div>
++              <button
++                onClick={() => updateSettings({ showTajweed: !settings.showTajweed })}
++                className={`w-12 h-6 rounded-full transition-colors relative ${settings.showTajweed ? 'bg-primary' : 'bg-secondary'}`}
++              >
++                <span className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${settings.showTajweed ? 'translate-x-6' : 'translate-x-0'}`} />
++              </button>
++            </div>
++            <div className="h-px bg-border/50 -mx-4" />
++            <div className="flex items-center justify-between">
++              <div>
++                <p className="text-sm font-medium">Explained Verses Only</p>
++                <p className="text-xs text-muted-foreground">Hide verses without tafsir</p>
++              </div>
++              <button
++                onClick={() => updateSettings({ showOnlyExplained: !settings.showOnlyExplained })}
++                className={`w-12 h-6 rounded-full transition-colors relative ${settings.showOnlyExplained ? 'bg-primary' : 'bg-secondary'}`}
++              >
++                <span className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${settings.showOnlyExplained ? 'translate-x-6' : 'translate-x-0'}`} />
++              </button>
+             </div>
+-            <button
+-              onClick={() => updateSettings({ showOnlyExplained: !settings.showOnlyExplained })}
+-              className={`w-12 h-6 rounded-full transition-colors relative ${settings.showOnlyExplained ? 'bg-primary' : 'bg-secondary'}`}
+-            >
+-              <span className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${settings.showOnlyExplained ? 'translate-x-6' : 'translate-x-0'}`} />
+-            </button>
+           </div>
+         </section>
+ 
+diff --git a/src/pages/SurahListPage.tsx b/src/pages/SurahListPage.tsx
+index 9f69dc1..516b0c7 100644
+--- a/src/pages/SurahListPage.tsx
++++ b/src/pages/SurahListPage.tsx
+@@ -1,13 +1,12 @@
+ import { useState, useMemo } from 'react';
+ import { useNavigate } from 'react-router-dom';
+-import { Search, Menu, FileText, Settings } from 'lucide-react';
++import { Search, Menu, LifeBuoy } from 'lucide-react';
+ import { motion, AnimatePresence } from 'framer-motion';
+ import {
+   DropdownMenu,
+   DropdownMenuContent,
+   DropdownMenuItem,
+   DropdownMenuTrigger,
+-  DropdownMenuSeparator,
+ } from "@/components/ui/dropdown-menu";
+ import { useSurahs } from '@/hooks/useQuranData';
+ import { useFavorites } from '@/hooks/useAppStore';
+@@ -58,11 +57,11 @@ export default function SurahListPage() {
+             <DropdownMenuContent align="end" className="w-56 p-1.5 rounded-2xl bg-white/95 backdrop-blur-sm dark:bg-black/95 border-border shadow-xl animate-in fade-in-0 zoom-in-95">
+ 
+               <DropdownMenuItem 
+-                onClick={() => navigate('/settings')}
++                onClick={() => navigate('/help')}
+                 className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer focus:bg-primary/5 focus:text-primary transition-colors"
+               >
+-                <Settings size={18} />
+-                <span className="font-medium text-[13.5px]">Settings</span>
++                <LifeBuoy size={18} />
++                <span className="font-medium text-[13.5px]">Help &amp; Support</span>
+               </DropdownMenuItem>
+             </DropdownMenuContent>
+           </DropdownMenu>
+diff --git a/src/pages/SurahReadingPage.tsx b/src/pages/SurahReadingPage.tsx
+index 95cc44b..0af0703 100644
+--- a/src/pages/SurahReadingPage.tsx
++++ b/src/pages/SurahReadingPage.tsx
+@@ -1,4 +1,4 @@
+-import { useState, useRef, useEffect } from 'react';
++import { useState, useRef, useEffect, useCallback } from 'react';
+ import { useParams, useNavigate, useLocation } from 'react-router-dom';
+ import { ArrowLeft, MoreVertical, BookmarkCheck, Bookmark as BookmarkIcon, FileText, Pencil, BookOpen, PenLine } from 'lucide-react';
+ import { motion, AnimatePresence } from 'framer-motion';
+@@ -10,6 +10,7 @@ import {
+   DrawerTitle,
+   DrawerDescription,
+ } from "@/components/ui/drawer";
++import { TajweedText } from '@/components/TajweedText';
+ import type { Verse } from '@/types/quran';
+ 
+ export default function SurahReadingPage() {
+@@ -36,6 +37,18 @@ export default function SurahReadingPage() {
+   const [currentPage, setCurrentPage] = useState<number | null>(null);
+   const [editingVerse, setEditingVerse] = useState<number | null>(null);
+   const [editText, setEditText] = useState('');
++
++  // Draggable scroll handle
++  const [scrollPercent, setScrollPercent] = useState(0);
++  const [currentVerseNum, setCurrentVerseNum] = useState(1);
++  const [isDragging, setIsDragging] = useState(false);
++  const [showVerseNum, setShowVerseNum] = useState(false);
++  const [handleVisible, setHandleVisible] = useState(false);
++  const handleRef = useRef<HTMLDivElement>(null);
++  const hideTimeoutRef = useRef<NodeJS.Timeout>();
++  const verseNumTimeoutRef = useRef<NodeJS.Timeout>();
++  const dragStartY = useRef(0);
++  const dragStartScroll = useRef(0);
+   
+   const editingVerseObj = verses?.find(a => a.numberInSurah === editingVerse);
+   const activeCustomTrans = editingVerse ? getCustomTranslation(surahNumber, editingVerse, settings.language) : null;
+@@ -45,6 +58,92 @@ export default function SurahReadingPage() {
+   const menuRef = useRef<HTMLDivElement>(null);
+   const saveTimeoutRef = useRef<NodeJS.Timeout>();
+ 
++  // Show handle briefly then auto-hide
++  const showHandle = useCallback(() => {
++    setHandleVisible(true);
++    if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
++    hideTimeoutRef.current = setTimeout(() => {
++      if (!isDragging) setHandleVisible(false);
++    }, 2000);
++  }, [isDragging]);
++
++  // Sync scroll % from window scroll
++  useEffect(() => {
++    const onScroll = () => {
++      const scrollTop = window.scrollY;
++      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
++      const pct = maxScroll > 0 ? scrollTop / maxScroll : 0;
++      setScrollPercent(pct);
++      // Only show handle on regular scroll, not verse number
++      setHandleVisible(true);
++      if (!isDragging) {
++        if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
++        hideTimeoutRef.current = setTimeout(() => setHandleVisible(false), 1500);
++      }
++    };
++    window.addEventListener('scroll', onScroll, { passive: true });
++    return () => window.removeEventListener('scroll', onScroll);
++  }, [isDragging]);
++
++  // Drag handlers
++  const onDragStart = useCallback((clientY: number) => {
++    setIsDragging(true);
++    setHandleVisible(true);
++    setShowVerseNum(true); // show verse number when drag starts
++    if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
++    if (verseNumTimeoutRef.current) clearTimeout(verseNumTimeoutRef.current);
++    dragStartY.current = clientY;
++    dragStartScroll.current = window.scrollY;
++  }, []);
++
++  const onDragMove = useCallback((clientY: number) => {
++    if (!isDragging) return;
++    const deltaY = clientY - dragStartY.current;
++    const trackHeight = Math.max(1, window.innerHeight - 56 - 24 - 80); // matches render: HEADER_H + GAP + hit area
++    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
++    const scrollDelta = (deltaY / trackHeight) * maxScroll;
++    const newScroll = Math.max(0, Math.min(maxScroll, dragStartScroll.current + scrollDelta));
++    window.scrollTo({ top: newScroll });
++  }, [isDragging]);
++
++  const onDragEnd = useCallback(() => {
++    setIsDragging(false);
++    // Keep verse number visible for 1.5s then collapse back to pill
++    verseNumTimeoutRef.current = setTimeout(() => setShowVerseNum(false), 1500);
++    // Hide handle after 2s
++    hideTimeoutRef.current = setTimeout(() => setHandleVisible(false), 2000);
++  }, []);
++
++  // Mouse events
++  useEffect(() => {
++    if (!isDragging) return;
++    const onMove = (e: MouseEvent) => onDragMove(e.clientY);
++    const onUp = () => onDragEnd();
++    window.addEventListener('mousemove', onMove);
++    window.addEventListener('mouseup', onUp);
++    return () => {
++      window.removeEventListener('mousemove', onMove);
++      window.removeEventListener('mouseup', onUp);
++    };
++  }, [isDragging, onDragMove, onDragEnd]);
++
++  // Touch events
++  useEffect(() => {
++    if (!isDragging) return;
++    const onMove = (e: TouchEvent) => { e.preventDefault(); onDragMove(e.touches[0].clientY); };
++    const onEnd = () => onDragEnd();
++    window.addEventListener('touchmove', onMove, { passive: false });
++    window.addEventListener('touchend', onEnd);
++    return () => {
++      window.removeEventListener('touchmove', onMove);
++      window.removeEventListener('touchend', onEnd);
++    };
++  }, [isDragging, onDragMove, onDragEnd]);
++
++  // Cleanup
++  useEffect(() => () => { if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current); }, []);
++
++
+   const surah = surahs?.find(s => s.number === surahNumber);
+ 
+   useEffect(() => {
+@@ -68,73 +167,77 @@ export default function SurahReadingPage() {
+   useEffect(() => {
+     if (!isRendered || isLoading) return;
+ 
+-    let scrollTimeout: NodeJS.Timeout;
+     const headerOffset = 70; // 56px sticky header + 14px safety buffer
++    let rafId: number | null = null;
+ 
+-    const handleScroll = () => {
+-      if (scrollTimeout) clearTimeout(scrollTimeout);
+-      
+-      scrollTimeout = setTimeout(() => {
+-        const verseElements = document.querySelectorAll('[id^="verse-"]');
+-        let topMostVerseNum = -1;
+-
+-        for (let i = 0; i < verseElements.length; i++) {
+-          const el = verseElements[i];
+-          const arabicEl = el.querySelector('.arabic-text');
+-          const transEl = el.querySelector('p.font-display.text-muted-foreground');
+-          
+-          let isVisible = false;
++    const scanVisibleVerse = () => {
++      rafId = null;
++      const verseElements = document.querySelectorAll('[id^="verse-"]');
++      let topMostVerseNum = -1;
+ 
+-          if (arabicEl) {
+-            const rect = arabicEl.getBoundingClientRect();
+-            if (rect.bottom > headerOffset && rect.top < window.innerHeight) {
+-              isVisible = true;
+-            }
+-          }
++      for (let i = 0; i < verseElements.length; i++) {
++        const el = verseElements[i];
++        const arabicEl = el.querySelector('.arabic-text');
++        const transEl = el.querySelector('p.font-display.text-muted-foreground');
++        
++        let isVisible = false;
+ 
+-          if (transEl && !isVisible) {
+-            const rect = transEl.getBoundingClientRect();
+-            if (rect.bottom > headerOffset && rect.top < window.innerHeight) {
+-              isVisible = true;
+-            }
++        if (arabicEl) {
++          const rect = arabicEl.getBoundingClientRect();
++          if (rect.bottom > headerOffset && rect.top < window.innerHeight) {
++            isVisible = true;
+           }
++        }
+ 
+-          // Fallback if neither exists
+-          if (!arabicEl && !transEl) {
+-            const rect = el.getBoundingClientRect();
+-            if (rect.bottom > headerOffset && rect.top < window.innerHeight) {
+-              isVisible = true;
+-            }
++        if (transEl && !isVisible) {
++          const rect = transEl.getBoundingClientRect();
++          if (rect.bottom > headerOffset && rect.top < window.innerHeight) {
++            isVisible = true;
+           }
++        }
+ 
+-          if (isVisible) {
+-            topMostVerseNum = parseInt(el.id.split('-')[1]);
+-            break;
++        // Fallback if neither exists
++        if (!arabicEl && !transEl) {
++          const rect = el.getBoundingClientRect();
++          if (rect.bottom > headerOffset && rect.top < window.innerHeight) {
++            isVisible = true;
+           }
+         }
+ 
+-        if (topMostVerseNum !== -1) {
+-          const verse = verses?.find(a => a.numberInSurah === topMostVerseNum);
+-          if (verse) {
+-            setCurrentJuz(verse.juz);
+-            setCurrentPage(verse.page);
+-            if (surahNumber) {
+-              if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+-              saveTimeoutRef.current = setTimeout(() => {
+-                saveLastRead(surahNumber, topMostVerseNum);
+-              }, 400); // 400ms exit-debounce prevents browser scroll restoration bugs
+-            }
++        if (isVisible) {
++          topMostVerseNum = parseInt(el.id.split('-')[1]);
++          break;
++        }
++      }
++
++      if (topMostVerseNum !== -1) {
++        const verse = verses?.find(a => a.numberInSurah === topMostVerseNum);
++        if (verse) {
++          setCurrentJuz(verse.juz);
++          setCurrentPage(verse.page);
++          setCurrentVerseNum(topMostVerseNum);
++          if (surahNumber) {
++            if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
++            saveTimeoutRef.current = setTimeout(() => {
++              saveLastRead(surahNumber, topMostVerseNum);
++            }, 400); // 400ms debounce prevents scroll-restoration save-spam
+           }
+         }
+-      }, 100); // Highly efficient 100ms throttle
++      }
++    };
++
++    // rAF-throttled scroll handler: fires once per frame during fast scroll
++    const handleScroll = () => {
++      if (rafId !== null) return; // already queued for this frame
++      rafId = requestAnimationFrame(scanVisibleVerse);
+     };
+ 
+     window.addEventListener('scroll', handleScroll, { passive: true });
+-    handleScroll(); // Check state immediately after rendering
++    scanVisibleVerse(); // run immediately on mount
+ 
+     return () => {
+       window.removeEventListener('scroll', handleScroll);
+-      if (scrollTimeout) clearTimeout(scrollTimeout);
++      if (rafId !== null) cancelAnimationFrame(rafId);
+       if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+     };
+   }, [verses, isLoading, surahNumber, saveLastRead, isRendered]);
+@@ -177,6 +280,14 @@ export default function SurahReadingPage() {
+   let lastPage = 0;
+   let lastRuku = 0;
+ 
++  // Read header bottom live — always accurate, no stale state
++  // h-14 header = 56px (Tailwind constant), no DOM measurement needed
++  const HEADER_H = 56;
++  const GAP = 18;     // clear gap below header border
++  const HIT_HALF = 40; // half of 80px hit area height
++  const trackH = window.innerHeight - HEADER_H + GAP - HIT_HALF * 2;
++  const handleTop = (HEADER_H - GAP + HIT_HALF) + scrollPercent * Math.max(0, trackH);
++
+   return (
+     <div className="min-h-screen pb-24">
+       {/* Header */}
+@@ -210,6 +321,69 @@ export default function SurahReadingPage() {
+         </div>
+       </div>
+ 
++      {/* Draggable Scroll Handle */}
++      {isRendered && (
++        <div
++          ref={handleRef}
++          onMouseDown={(e) => { e.preventDefault(); onDragStart(e.clientY); }}
++          onTouchStart={(e) => { onDragStart(e.touches[0].clientY); }}
++          style={{
++            position: 'fixed',
++            right: '0px',
++            top: `${handleTop}px`,
++            transform: 'translateY(-50%)',
++            zIndex: 50,
++            opacity: handleVisible || isDragging ? 1 : 0,
++            transition: isDragging ? 'opacity 0.15s' : 'opacity 0.4s, top 0s',
++            touchAction: 'none',
++            userSelect: 'none',
++            cursor: isDragging ? 'grabbing' : 'grab',
++            // Large invisible hit area — easy to tap even when pill is thin
++            width: '48px',
++            height: '80px',
++            display: 'flex',
++            alignItems: 'center',
++            justifyContent: 'flex-end',
++          }}
++        >
++          <div
++            style={{
++              width: showVerseNum ? '42px' : '6px',
++              height: showVerseNum ? '42px' : '42px',
++              borderRadius: '100px 0 0 100px',
++              background: isDragging
++                ? 'hsl(var(--primary))'
++                : 'hsl(var(--primary) / 0.75)',
++              boxShadow: isDragging
++                ? '-4px 0 16px hsl(var(--primary) / 0.4)'
++                : '-2px 0 8px hsl(var(--primary) / 0.2)',
++              transition: 'width 0.25s cubic-bezier(0.34,1.56,0.64,1), background 0.2s, box-shadow 0.2s',
++              display: 'flex',
++              alignItems: 'center',
++              justifyContent: 'center',
++              overflow: 'hidden',
++            }}
++          >
++            <span
++              style={{
++                color: 'hsl(var(--primary-foreground))',
++                fontSize: '11px',
++                fontWeight: 700,
++                fontFamily: 'var(--font-body, sans-serif)',
++                letterSpacing: '-0.3px',
++                lineHeight: 1,
++                pointerEvents: 'none',
++                opacity: showVerseNum ? 1 : 0,
++                transition: 'opacity 0.15s',
++                whiteSpace: 'nowrap',
++              }}
++            >
++              {currentVerseNum}
++            </span>
++          </div>
++        </div>
++      )}
++
+       <AnimatePresence mode="wait">
+         {isLoading ? (
+           null
+@@ -371,7 +545,7 @@ export default function SurahReadingPage() {
+                       lineHeight: settings.lineSpacing
+                     }}
+                   >
+-                    {verse.text}
++                    <TajweedText text={verse.text} showColors={settings.showTajweed} waqf={verse.waqf} />
+                   </p>
+ 
+                   {/* Translation */}
+diff --git a/src/pages/TafsirBuilderPage.tsx b/src/pages/TafsirBuilderPage.tsx
+index 2d81f9c..3684344 100644
+--- a/src/pages/TafsirBuilderPage.tsx
++++ b/src/pages/TafsirBuilderPage.tsx
+@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
+ import { useToast } from '@/hooks/use-toast';
+ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+ import LoadingScreen from '@/components/LoadingScreen';
++import { TajweedText } from '@/components/TajweedText';
+ import {
+   Drawer,
+   DrawerContent,
+@@ -353,12 +354,13 @@ export default function TafsirBuilderPage() {
+             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+             className="bg-muted/30 border border-border/60 rounded-2xl p-4 flex flex-col items-center justify-center min-h-[80px]"
+           >
+-             {(() => {
++              {(() => {
+                const verseObj = currentSurahVerses?.find(v => v.numberInSurah === Number(selectedVerse));
+                if (!verseObj) return null;
+                return (
+-                 <p className="arabic-text text-2xl leading-[2.5] text-center text-foreground font-arabic" 
+-                    dangerouslySetInnerHTML={{ __html: verseObj.text.replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ', '<span class="bismillah-text text-xl block -mb-2">﷽</span>') }} />
++                 <p className="arabic-text text-2xl leading-[2.5] text-center text-foreground font-arabic">
++                   <TajweedText text={verseObj.text} showColors={settings.showTajweed} />
++                 </p>
+                );
+              })()}
+           </motion.div>
+diff --git a/src/pages/TafsirViewPage.tsx b/src/pages/TafsirViewPage.tsx
+index 58ef5f6..6b28923 100644
+--- a/src/pages/TafsirViewPage.tsx
++++ b/src/pages/TafsirViewPage.tsx
+@@ -18,6 +18,7 @@ import remarkGfm from 'remark-gfm';
+ import { motion, AnimatePresence } from 'framer-motion';
+ import { useSurahVerses, useSurahs } from '@/hooks/useQuranData';
+ import { useSettings, useCustomTranslations, useCustomTafsirs, useTafsirSources } from '@/hooks/useAppStore';
++import { TajweedText } from '@/components/TajweedText';
+ import type { TafsirRecord } from '@/hooks/useAppStore';
+ 
+ export default function TafsirViewPage() {
+@@ -197,7 +198,9 @@ export default function TafsirViewPage() {
+                 {verseData && (
+                   <div className="bg-card/50 dark:bg-card/30 rounded-[2rem] p-6 pb-8 flex items-center justify-center min-h-[100px] shadow-[0_2px_15px_rgba(0,0,0,0.02)] mb-8 border border-border/80 relative overflow-hidden">
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-[100px] -z-10 blur-xl" />
+-                     <p className="font-arabic text-3xl leading-loose text-center text-foreground" style={{ fontSize: `${settings.arabicFontSize + 6}px` }} dangerouslySetInnerHTML={{ __html: (verseData.text || '').replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ', '<span class="bismillah-text text-2xl block -mb-4">﷽</span>') }} />
++                     <p className="font-arabic text-3xl leading-loose text-center text-foreground" style={{ fontSize: `${settings.arabicFontSize + 6}px` }}>
++                       <TajweedText text={verseData.text} showColors={settings.showTajweed} />
++                     </p>
+                   </div>
+                 )}
+ 
+diff --git a/src/types/quran.ts b/src/types/quran.ts
+index 66b0684..36c3332 100644
+--- a/src/types/quran.ts
++++ b/src/types/quran.ts
+@@ -12,6 +12,7 @@ export interface Verse {
+   numberInSurah: number;
+   text: string;
+   translation: string;
++  waqf?: string;
+   juz: number;
+   page: number;
+   hizbQuarter: number;
+diff --git a/tailwind.config.ts b/tailwind.config.ts
+index 2c6dbc6..7d8d8ac 100644
+--- a/tailwind.config.ts
++++ b/tailwind.config.ts
+@@ -20,7 +20,7 @@ export default {
+     },
+     extend: {
+       fontFamily: {
+-        arabic: ['Amiri', 'serif'],
++        arabic: ['var(--font-arabic)', 'serif'],
+         display: ['Fraunces', 'Georgia', 'serif'],
+         body: ['Inter', 'sans-serif'],
+       },

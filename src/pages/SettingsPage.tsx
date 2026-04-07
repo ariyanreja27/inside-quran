@@ -47,8 +47,10 @@ export default function SettingsPage() {
   const { lastRead } = useLastRead();
   const { customTranslations } = useCustomTranslations();
 
+  const targetArabicFontSize = settings.arabicFont === 'Noorehuda' ? 34 : 24;
+
   const isModified =
-    settings.arabicFontSize !== defaultSettings.arabicFontSize ||
+    settings.arabicFontSize !== targetArabicFontSize ||
     settings.translationFontSize !== defaultSettings.translationFontSize ||
     settings.lineSpacing !== defaultSettings.lineSpacing;
 
@@ -355,7 +357,7 @@ export default function SettingsPage() {
                 rotate: isModified ? 0 : -90
               }}
               onClick={() => updateSettings({
-                arabicFontSize: defaultSettings.arabicFontSize,
+                arabicFontSize: targetArabicFontSize,
                 translationFontSize: defaultSettings.translationFontSize,
                 lineSpacing: defaultSettings.lineSpacing,
               })}
@@ -367,12 +369,45 @@ export default function SettingsPage() {
             </motion.button>
           </div>
           <div className="bg-card border border-border rounded-2xl p-4 space-y-6 shadow-sm">
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between mb-1">
+                <div>
+                  <p className="text-sm font-semibold text-foreground/90 tracking-tight transition-colors">Arabic Font Profile</p>
+                  <p className="text-[11px] text-muted-foreground leading-tight mt-0.5 opacity-80">Select standard or IndoPak style</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { id: 'Amiri', label: 'Amiri (Standard)' },
+                  { id: 'Noorehuda', label: 'Noorehuda (IndoPak)' }
+                ].map((font) => (
+                  <button
+                    key={font.id}
+                    onClick={() => {
+                      if (settings.arabicFont === font.id) return;
+                      const newSize = font.id === 'Amiri' ? 24 : 34; // Automatically bump up Noorehuda size 
+                      updateSettings({ arabicFont: font.id as 'Amiri' | 'Noorehuda', arabicFontSize: newSize });
+                    }}
+                    className={`h-10 rounded-xl text-[13px] font-bold transition-all shadow-sm ${
+                      settings.arabicFont === font.id
+                        ? 'bg-primary text-primary-foreground border border-primary/20'
+                        : 'bg-secondary/40 text-foreground border border-border hover:bg-secondary/80'
+                    }`}
+                  >
+                    {font.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="h-px bg-border/50 -mx-4" />
+
             <Stepper
               label="Arabic Size"
               description="Font size for Quranic text"
               value={settings.arabicFontSize}
               unit="px"
-              min={16} max={48} step={2}
+              min={16} max={56} step={2}
               onChange={(val: number) => updateSettings({ arabicFontSize: val })}
             />
 
@@ -398,18 +433,33 @@ export default function SettingsPage() {
 
         {/* SECTION 7: APPEARANCE (Moved up for logical flow) */}
         <section>
-          <SectionTitle icon={Eye} title="Filter" />
-          <div className="bg-card border border-border rounded-2xl p-4 flex items-center justify-between shadow-sm">
-            <div>
-              <p className="text-sm font-medium">Explained Verses Only</p>
-              <p className="text-xs text-muted-foreground">Hide verses without tafsir</p>
+          <SectionTitle icon={Eye} title="Display & Filters" />
+          <div className="bg-card border border-border rounded-2xl space-y-2 p-4 shadow-sm">
+            <div className="flex items-center justify-between pb-3 border-b border-border/40">
+              <div>
+                <p className="text-sm font-medium">Tajweed Highlighting</p>
+                <p className="text-xs text-muted-foreground">Color-coded tajweed rules</p>
+              </div>
+              <button
+                onClick={() => updateSettings({ showTajweed: !settings.showTajweed })}
+                className={`w-12 h-6 rounded-full transition-colors relative ${settings.showTajweed ? 'bg-primary' : 'bg-secondary'}`}
+              >
+                <span className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${settings.showTajweed ? 'translate-x-6' : 'translate-x-0'}`} />
+              </button>
             </div>
-            <button
-              onClick={() => updateSettings({ showOnlyExplained: !settings.showOnlyExplained })}
-              className={`w-12 h-6 rounded-full transition-colors relative ${settings.showOnlyExplained ? 'bg-primary' : 'bg-secondary'}`}
-            >
-              <span className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${settings.showOnlyExplained ? 'translate-x-6' : 'translate-x-0'}`} />
-            </button>
+            <div className="h-px bg-border/50 -mx-4" />
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium">Explained Verses Only</p>
+                <p className="text-xs text-muted-foreground">Hide verses without tafsir</p>
+              </div>
+              <button
+                onClick={() => updateSettings({ showOnlyExplained: !settings.showOnlyExplained })}
+                className={`w-12 h-6 rounded-full transition-colors relative ${settings.showOnlyExplained ? 'bg-primary' : 'bg-secondary'}`}
+              >
+                <span className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${settings.showOnlyExplained ? 'translate-x-6' : 'translate-x-0'}`} />
+              </button>
+            </div>
           </div>
         </section>
 

@@ -11,6 +11,8 @@ import { Switch } from '@/components/ui/switch';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useToast } from '@/hooks/use-toast';
 import LoadingScreen from '@/components/LoadingScreen';
+import { TajweedText } from '@/components/TajweedText';
+import { useSettings } from '@/hooks/useAppStore';
 import {
   Dialog,
   DialogContent,
@@ -39,6 +41,7 @@ export default function ExplanationBuilderPage() {
   const { data: surahs } = useSurahs();
   const { explanations, getExplanation, saveExplanation } = useExplanations();
   const { toast } = useToast();
+  const { settings } = useSettings();
 
   // Handled inline
 
@@ -501,7 +504,9 @@ export default function ExplanationBuilderPage() {
                     {/* Verse Display */}
                     {block.verseNumber > 0 && (
                       <div className="bg-muted/50 rounded-2xl p-4 flex flex-col items-center justify-center min-h-[80px] border border-border/50">
-                        <p className="arabic-text text-2xl leading-[2.5] text-center text-foreground font-arabic" dangerouslySetInnerHTML={{ __html: (getVerseText(block.verseNumber) || '').replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ', '<span class="bismillah-text text-xl block -mb-2">﷽</span>') }} />
+                        <p className="arabic-text text-2xl leading-[2.5] text-center text-foreground font-arabic">
+                          <TajweedText text={getVerseText(block.verseNumber)} showColors={settings.showTajweed} />
+                        </p>
                       </div>
                     )}
 

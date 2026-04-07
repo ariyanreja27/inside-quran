@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, AlertCircle, Info } from 'lucide-react';
+import { ArrowLeft, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSurahs, useSurahVerses } from '@/hooks/useQuranData';
 import { useNotes, useSettings } from '@/hooks/useAppStore';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import LoadingScreen from '@/components/LoadingScreen';
-import { cn } from '@/lib/utils';
+import { TajweedText } from '@/components/TajweedText';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 const generateId = () => {
@@ -174,10 +174,12 @@ export default function NoteBuilderPage() {
               className="bg-muted/30 border border-border/60 rounded-2xl p-4 flex flex-col items-center justify-center min-h-[80px] relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-[100px] -z-10 blur-xl" />
-              <p 
+              <div 
                 className="arabic-text text-2xl leading-[2.5] text-center text-foreground font-arabic" 
-                dangerouslySetInnerHTML={{ __html: (verseData.text || '').replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ', '<span class="bismillah-text text-xl block -mb-2">﷽</span>') }}
-              />
+                dir="rtl"
+              >
+                <TajweedText text={verseData.text} showColors={settings.showTajweed} />
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

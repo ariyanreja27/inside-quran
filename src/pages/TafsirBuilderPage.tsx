@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import LoadingScreen from '@/components/LoadingScreen';
+import { TajweedText } from '@/components/TajweedText';
 import {
   Drawer,
   DrawerContent,
@@ -353,12 +354,13 @@ export default function TafsirBuilderPage() {
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             className="bg-muted/30 border border-border/60 rounded-2xl p-4 flex flex-col items-center justify-center min-h-[80px]"
           >
-             {(() => {
+              {(() => {
                const verseObj = currentSurahVerses?.find(v => v.numberInSurah === Number(selectedVerse));
                if (!verseObj) return null;
                return (
-                 <p className="arabic-text text-2xl leading-[2.5] text-center text-foreground font-arabic" 
-                    dangerouslySetInnerHTML={{ __html: verseObj.text.replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ', '<span class="bismillah-text text-xl block -mb-2">﷽</span>') }} />
+                 <p className="arabic-text text-2xl leading-[2.5] text-center text-foreground font-arabic">
+                   <TajweedText text={verseObj.text} showColors={settings.showTajweed} />
+                 </p>
                );
              })()}
           </motion.div>

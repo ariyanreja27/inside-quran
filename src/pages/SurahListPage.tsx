@@ -1,13 +1,12 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Menu, FileText, Settings } from 'lucide-react';
+import { Search, Menu, LifeBuoy } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { useSurahs } from '@/hooks/useQuranData';
 import { useFavorites } from '@/hooks/useAppStore';
@@ -58,11 +57,11 @@ export default function SurahListPage() {
             <DropdownMenuContent align="end" className="w-56 p-1.5 rounded-2xl bg-white/95 backdrop-blur-sm dark:bg-black/95 border-border shadow-xl animate-in fade-in-0 zoom-in-95">
 
               <DropdownMenuItem 
-                onClick={() => navigate('/settings')}
+                onClick={() => navigate('/help')}
                 className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer focus:bg-primary/5 focus:text-primary transition-colors"
               >
-                <Settings size={18} />
-                <span className="font-medium text-[13.5px]">Settings</span>
+                <LifeBuoy size={18} />
+                <span className="font-medium text-[13.5px]">Help &amp; Support</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

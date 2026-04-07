@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useFavorites, useBookmarks } from '@/hooks/useAppStore';
 import { useSurahs, useSurahVerses } from '@/hooks/useQuranData';
 import { useEffect } from 'react';
+import { TajweedText } from '@/components/TajweedText';
+import { useSettings } from '@/hooks/useAppStore';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,6 +30,7 @@ type SavedView = 'favorites' | 'bookmarks' | 'highlights';
 function BookmarkedVerseCard({ surahNumber, verseNumber, onRemove }: { surahNumber: number; verseNumber: number; onRemove: (s: number, v: number) => void }) {
   const { data: surahs } = useSurahs();
   const { data: verses } = useSurahVerses(surahNumber);
+  const { settings } = useSettings();
   const surah = surahs?.find(s => s.number === surahNumber);
   const verse = verses?.find(a => a.numberInSurah === verseNumber);
   const navigate = useNavigate();
@@ -45,7 +48,9 @@ function BookmarkedVerseCard({ surahNumber, verseNumber, onRemove }: { surahNumb
           <BookmarkCheck size={14} className="gold-accent" />
           <span className="text-xs font-medium text-foreground">{surah.name} : {verseNumber}</span>
         </div>
-        <p className="arabic-text truncate leading-loose py-1 text-sm text-foreground">{verse.text}</p>
+        <p className="arabic-text truncate leading-loose py-1 text-sm text-foreground">
+          <TajweedText text={verse.text} showColors={settings.showTajweed} />
+        </p>
         <p className="mt-1 truncate text-xs text-muted-foreground">{verse.translation}</p>
       </div>
 

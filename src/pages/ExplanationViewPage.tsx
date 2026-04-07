@@ -23,6 +23,7 @@ import type { Explanation, RootWord } from '@/types/quran';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Drawer, DrawerContent, DrawerTitle, DrawerDescription } from '@/components/ui/drawer';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
+import { TajweedText } from '@/components/TajweedText';
 
 export default function ExplanationViewPage() {
   const navigate = useNavigate();
@@ -257,7 +258,9 @@ export default function ExplanationViewPage() {
                         {/* Verse Text Box */}
                         {verseData && (
                           <div className="bg-card/50 dark:bg-card/30 rounded-3xl p-6 flex items-center justify-center min-h-[100px] shadow-[0_2px_10px_rgba(0,0,0,0.02)] mb-6 border border-border/50">
-                             <p className="font-arabic text-3xl leading-loose text-center text-foreground" style={{ fontSize: `${settings.arabicFontSize + 6}px` }} dangerouslySetInnerHTML={{ __html: (verseData.text || '').replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ', '<span class="bismillah-text text-2xl block -mb-4">﷽</span>') }} />
+                             <p className="font-arabic text-3xl leading-loose text-center text-foreground" style={{ fontSize: `${settings.arabicFontSize + 6}px` }}>
+                                <TajweedText text={verseData.text} showColors={settings.showTajweed} />
+                             </p>
                           </div>
                         )}
 

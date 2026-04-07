@@ -18,6 +18,7 @@ import remarkGfm from 'remark-gfm';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSurahVerses, useSurahs } from '@/hooks/useQuranData';
 import { useSettings, useCustomTranslations, useCustomTafsirs, useTafsirSources } from '@/hooks/useAppStore';
+import { TajweedText } from '@/components/TajweedText';
 import type { TafsirRecord } from '@/hooks/useAppStore';
 
 export default function TafsirViewPage() {
@@ -197,7 +198,9 @@ export default function TafsirViewPage() {
                 {verseData && (
                   <div className="bg-card/50 dark:bg-card/30 rounded-[2rem] p-6 pb-8 flex items-center justify-center min-h-[100px] shadow-[0_2px_15px_rgba(0,0,0,0.02)] mb-8 border border-border/80 relative overflow-hidden">
                      <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-[100px] -z-10 blur-xl" />
-                     <p className="font-arabic text-3xl leading-loose text-center text-foreground" style={{ fontSize: `${settings.arabicFontSize + 6}px` }} dangerouslySetInnerHTML={{ __html: (verseData.text || '').replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ', '<span class="bismillah-text text-2xl block -mb-4">﷽</span>') }} />
+                     <p className="font-arabic text-3xl leading-loose text-center text-foreground" style={{ fontSize: `${settings.arabicFontSize + 6}px` }}>
+                       <TajweedText text={verseData.text} showColors={settings.showTajweed} />
+                     </p>
                   </div>
                 )}
 

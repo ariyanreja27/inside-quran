@@ -17,6 +17,8 @@ import TafsirViewPage from "@/pages/TafsirViewPage";
 import NoteViewPage from "@/pages/NoteViewPage";
 import NoteBuilderPage from "@/pages/NoteBuilderPage";
 import ManagePage from "@/pages/ManagePage";
+import HelpSupportPage from "@/pages/HelpSupportPage";
+import TajweedGuidePage from "@/pages/TajweedGuidePage";
 import NotFound from "@/pages/NotFound";
 import ScrollToTop from "@/components/ScrollToTop";
 
@@ -42,6 +44,8 @@ const App = () => (
           <Route path="/note-builder" element={<NoteBuilderPage />} />
           <Route path="/manage" element={<ManagePage />} />
           <Route path="/library" element={<LibraryPage />} />
+          <Route path="/help" element={<HelpSupportPage />} />
+          <Route path="/tajweed-guide" element={<TajweedGuidePage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <BottomNav />
