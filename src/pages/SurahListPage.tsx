@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Menu, LifeBuoy, BookOpen } from 'lucide-react';
+import { Search, Menu, LifeBuoy, BookOpen, History } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   DropdownMenu,
@@ -64,41 +64,41 @@ export default function SurahListPage() {
       {/* Sticky Header */}
       <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-md pb-2 pt-1 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border-b border-border/60 transform-gpu">
         {/* Header */}
-        <div className="flex items-center justify-start gap-1 px-3 h-14">
-          <DropdownMenu modal={false}>
-            <DropdownMenuTrigger asChild>
-              <button 
-                className="w-10 h-10 flex items-center justify-center rounded-full text-foreground transition-all outline-none"
-                aria-label="Menu"
-              >
-                <Menu size={22} />
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-56 p-1.5 rounded-2xl bg-white/95 backdrop-blur-sm dark:bg-black/95 border-border shadow-xl duration-0">
+        <div className="flex items-center justify-between px-3 h-14">
+          <div className="flex items-center gap-1">
+            <DropdownMenu modal={false}>
+              <DropdownMenuTrigger asChild>
+                <button 
+                  className="w-10 h-10 flex items-center justify-center rounded-full text-foreground transition-all outline-none"
+                  aria-label="Menu"
+                >
+                  <Menu size={22} />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-56 p-1.5 rounded-2xl bg-white/95 backdrop-blur-sm dark:bg-black/95 border-border shadow-xl duration-0">
+                
+                <DropdownMenuItem 
+                  onClick={() => navigate('/help')}
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer focus:bg-primary/5 focus:text-primary transition-colors"
+                >
+                  <LifeBuoy size={18} />
+                  <span className="font-medium text-[13.5px]">Help & Support</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
-              <DropdownMenuItem 
-                onClick={() => navigate('/last-read')}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer focus:bg-primary/5 focus:text-primary transition-colors mb-0.5"
-              >
-                <BookOpen size={18} />
-                <span className="font-medium text-[13.5px]">Last Read</span>
-              </DropdownMenuItem>
-              
-              <DropdownMenuSeparator className="bg-border/50 mx-2" />
+            <h1 className="font-display text-xl font-semibold text-foreground pt-0.5">
+              Inside Quran
+            </h1>
+          </div>
 
-              <DropdownMenuItem 
-                onClick={() => navigate('/help')}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer focus:bg-primary/5 focus:text-primary transition-colors"
-              >
-                <LifeBuoy size={18} />
-                <span className="font-medium text-[13.5px]">Help &amp; Support</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          <h1 className="font-display text-xl font-semibold text-foreground pt-0.5">
-            Inside Quran
-          </h1>
+          <button 
+            onClick={() => navigate('/last-read')}
+            className="w-10 h-10 flex items-center justify-center rounded-full text-foreground hover:bg-muted/50 transition-all outline-none"
+            aria-label="History"
+          >
+            <History size={22} />
+          </button>
         </div>
       </div>
 
