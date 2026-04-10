@@ -1,0 +1,46 @@
+{
+  "surahNumber": 89,
+  "edition": "ur.roman",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Kasam hai fajr ki"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Aur dus raaton ki"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Aur jufft(even) aur taaq(odd) ki"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Aur Raat ki jabke woh ruksat ho rahi ho"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "kya ismein kisi sahib-e-aqal ke liye koi kasam hai"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Tumne dekha nahin ke tumhare Rubb ne kya bartao kiya"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Unchey sutuno waley Aad-e-iram kay saath"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "Jinke manind koi qaum duniya kay mulkon mein paida nahin ki gayi thi"
+    },
+    {
+      "numberInSurah": 9,
+      "text": "Aur Samood ke saath jinhon ne wadi mei chattane tarashi thi"
+    },
+    {
+      "numberInSurah": 10,
+      "text": "Aur mekhon waley Firoun kay saath"
+    }
+  ]
+}

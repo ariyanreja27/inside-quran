@@ -1,0 +1,46 @@
+{
+  "surahNumber": 90,
+  "edition": "ur.roman",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Nahin mai kasam khata hoon is shehar(city) ki"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Aur haal yeh hai ke (Aey nabi) is shehar mein tumko halal kar liya gaya hai"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Aur kasam khata hoon baap(Adam) ki aur us aulad ki jo ussey paida hui"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Dar haqeeqat humne Insan ko mushakkat mein paida kiya hai"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Kya usne yeh samajh rakhha hai kay uspar koi qaabu na paa sakega"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Kehta hai ke maine dhairon maal udaa diya"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Kya woh samajhta hai kay kisi ne usko nahin dekha"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "Kya humne usey do aankhein"
+    },
+    {
+      "numberInSurah": 9,
+      "text": "Aur ek zubaan aur do honth nahin diye"
+    },
+    {
+      "numberInSurah": 10,
+      "text": "Aur dono numayan raste usey (nahin) dikha diye"
+    }
+  ]
+}

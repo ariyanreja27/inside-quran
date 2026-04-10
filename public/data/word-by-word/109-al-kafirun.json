@@ -1,0 +1,355 @@
+{
+  "surahNumber": 109,
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "words": [
+        {
+          "id": 158,
+          "position": 1,
+          "text": "قُلْ",
+          "transliteration": "qul",
+          "translation": "Say",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:1:1"
+        },
+        {
+          "id": 159,
+          "position": 2,
+          "text": "يَـٰٓأَيُّهَا",
+          "transliteration": "yāayyuhā",
+          "translation": "O",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:1:2"
+        },
+        {
+          "id": 160,
+          "position": 3,
+          "text": "ٱلْكَـٰفِرُونَ",
+          "transliteration": "l-kāfirūna",
+          "translation": "disbelievers",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:1:3"
+        },
+        {
+          "id": 161,
+          "position": 4,
+          "text": "١",
+          "transliteration": "",
+          "translation": "(1)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "109:1:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 2,
+      "words": [
+        {
+          "id": 942,
+          "position": 1,
+          "text": "لَآ",
+          "transliteration": "lā",
+          "translation": "Not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:2:1"
+        },
+        {
+          "id": 943,
+          "position": 2,
+          "text": "أَعْبُدُ",
+          "transliteration": "aʿbudu",
+          "translation": "I worship",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:2:2"
+        },
+        {
+          "id": 944,
+          "position": 3,
+          "text": "مَا",
+          "transliteration": "mā",
+          "translation": "what",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:2:3"
+        },
+        {
+          "id": 945,
+          "position": 4,
+          "text": "تَعْبُدُونَ",
+          "transliteration": "taʿbudūna",
+          "translation": "you worship",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:2:4"
+        },
+        {
+          "id": 946,
+          "position": 5,
+          "text": "٢",
+          "transliteration": "",
+          "translation": "(2)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "109:2:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 3,
+      "words": [
+        {
+          "id": 2570,
+          "position": 1,
+          "text": "وَلَآ",
+          "transliteration": "walā",
+          "translation": "And not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:3:1"
+        },
+        {
+          "id": 2571,
+          "position": 2,
+          "text": "أَنتُمْ",
+          "transliteration": "antum",
+          "translation": "you",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:3:2"
+        },
+        {
+          "id": 2572,
+          "position": 3,
+          "text": "عَـٰبِدُونَ",
+          "transliteration": "ʿābidūna",
+          "translation": "(are) worshippers",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:3:3"
+        },
+        {
+          "id": 2573,
+          "position": 4,
+          "text": "مَآ",
+          "transliteration": "mā",
+          "translation": "(of) what",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:3:4"
+        },
+        {
+          "id": 2574,
+          "position": 5,
+          "text": "أَعْبُدُ",
+          "transliteration": "aʿbudu",
+          "translation": "I worship",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:3:5"
+        },
+        {
+          "id": 2575,
+          "position": 6,
+          "text": "٣",
+          "transliteration": "",
+          "translation": "(3)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "109:3:6"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 4,
+      "words": [
+        {
+          "id": 3992,
+          "position": 1,
+          "text": "وَلَآ",
+          "transliteration": "walā",
+          "translation": "And not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:4:1"
+        },
+        {
+          "id": 3993,
+          "position": 2,
+          "text": "أَنَا۠",
+          "transliteration": "anā",
+          "translation": "I am",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:4:2"
+        },
+        {
+          "id": 3994,
+          "position": 3,
+          "text": "عَابِدٌۭ",
+          "transliteration": "ʿābidun",
+          "translation": "a worshipper",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:4:3"
+        },
+        {
+          "id": 3995,
+          "position": 4,
+          "text": "مَّا",
+          "transliteration": "mā",
+          "translation": "(of) what",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:4:4"
+        },
+        {
+          "id": 3996,
+          "position": 5,
+          "text": "عَبَدتُّمْ",
+          "transliteration": "ʿabadttum",
+          "translation": "you worship",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:4:5"
+        },
+        {
+          "id": 3997,
+          "position": 6,
+          "text": "٤",
+          "transliteration": "",
+          "translation": "(4)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "109:4:6"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 5,
+      "words": [
+        {
+          "id": 5290,
+          "position": 1,
+          "text": "وَلَآ",
+          "transliteration": "walā",
+          "translation": "And not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:5:1"
+        },
+        {
+          "id": 5291,
+          "position": 2,
+          "text": "أَنتُمْ",
+          "transliteration": "antum",
+          "translation": "you",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:5:2"
+        },
+        {
+          "id": 5292,
+          "position": 3,
+          "text": "عَـٰبِدُونَ",
+          "transliteration": "ʿābidūna",
+          "translation": "(are) worshippers",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:5:3"
+        },
+        {
+          "id": 5293,
+          "position": 4,
+          "text": "مَآ",
+          "transliteration": "mā",
+          "translation": "(of) what",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:5:4"
+        },
+        {
+          "id": 5294,
+          "position": 5,
+          "text": "أَعْبُدُ",
+          "transliteration": "aʿbudu",
+          "translation": "I worship",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:5:5"
+        },
+        {
+          "id": 5295,
+          "position": 6,
+          "text": "٥",
+          "transliteration": "",
+          "translation": "(5)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "109:5:6"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 6,
+      "words": [
+        {
+          "id": 6550,
+          "position": 1,
+          "text": "لَكُمْ",
+          "transliteration": "lakum",
+          "translation": "For you",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:6:1"
+        },
+        {
+          "id": 6551,
+          "position": 2,
+          "text": "دِينُكُمْ",
+          "transliteration": "dīnukum",
+          "translation": "(is) your religion",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:6:2"
+        },
+        {
+          "id": 6552,
+          "position": 3,
+          "text": "وَلِىَ",
+          "transliteration": "waliya",
+          "translation": "and for me",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:6:3"
+        },
+        {
+          "id": 6553,
+          "position": 4,
+          "text": "دِينِ",
+          "transliteration": "dīni",
+          "translation": "(is) my religion",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "109:6:4"
+        },
+        {
+          "id": 6554,
+          "position": 5,
+          "text": "٦",
+          "transliteration": "",
+          "translation": "(6)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "109:6:5"
+        }
+      ]
+    }
+  ]
+}

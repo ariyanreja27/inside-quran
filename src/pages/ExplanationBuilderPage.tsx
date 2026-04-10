@@ -12,6 +12,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { useToast } from '@/hooks/use-toast';
 import LoadingScreen from '@/components/LoadingScreen';
 import { TajweedText } from '@/components/TajweedText';
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { useSettings } from '@/hooks/useAppStore';
 import {
   Dialog,
@@ -23,6 +24,14 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
+
+const FIXED_CATEGORIES = [
+  'Grammar & Rhetoric',
+  'Historical Context',
+  'Coherence',
+  'Psychological/Social',
+  'Quranic Wisdom'
+];
 
 const generateId = () => {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
@@ -55,7 +64,14 @@ export default function ExplanationBuilderPage() {
   const [verseRange, setVerseRange] = useState<string>('');
   const [rootWordsOn, setRootWordsOn] = useState(false);
   const [rootWords, setRootWords] = useState<RootWord[]>([]);
-  const [categories, setCategories] = useState<DeeperLookCategory[]>([]);
+  const [categories, setCategories] = useState<DeeperLookCategory[]>(() => 
+    FIXED_CATEGORIES.map((title, index) => ({
+      id: generateId(),
+      title,
+      content: '',
+      order: index
+    }))
+  );
   const [rangeError, setRangeError] = useState<string | null>(null);
 
   // Editing logic
@@ -113,7 +129,19 @@ export default function ExplanationBuilderPage() {
       if (existing.deeperLook) {
         setRootWords(existing.deeperLook.rootWords || []);
         if (existing.deeperLook.rootWords?.length > 0) setRootWordsOn(true);
-        setCategories(existing.deeperLook.categories || []);
+        
+        const loadedCategories = existing.deeperLook.categories || [];
+        const mergedCategories = FIXED_CATEGORIES.map((title, index) => {
+          const matching = loadedCategories.find(c => c.title === title);
+          return {
+            id: matching?.id || generateId(),
+            title,
+            content: matching?.content || '',
+            order: index
+          };
+        });
+        setCategories(mergedCategories);
+
         if (existing.concise?.length === 0 && (existing.deeperLook.rootWords?.length > 0 || existing.deeperLook.categories?.length > 0)) {
           setMode('deeper');
         }
@@ -264,7 +292,8 @@ export default function ExplanationBuilderPage() {
 
     // Clean up empty or too short root words and categories so view page isn't polluted
     const validRootWords = rootWords.filter(rw => rw.arabic.trim() && rw.explanation.trim().length >= 10);
-    const validCategories = categories.filter(c => c.title.trim() && c.content.trim().length >= 10);
+    // Ensure we save all fixed categories
+    const validCategories = categories;
 
     const newExplanation: Explanation = {
       id: currentId,
@@ -602,18 +631,18 @@ export default function ExplanationBuilderPage() {
               className="space-y-6 pb-20 relative"
             >
               {!hasSelectedVerse && (
-                <div className="absolute inset-x-[-10px] inset-y-[-10px] z-[60] bg-background/60 backdrop-blur-[2px] rounded-3xl">
-                  <div className="sticky top-[40vh] flex flex-col items-center justify-center text-center p-8 pt-0">
-                    <div className="w-16 h-16 bg-muted text-muted-foreground rounded-full flex items-center justify-center mb-4 mx-auto">
+                <div className="absolute inset-0 z-20 bg-background/60 backdrop-blur-[2px] rounded-[2rem] flex items-center justify-center p-8">
+                  <div className="flex flex-col items-center justify-center text-center animate-in fade-in zoom-in duration-300">
+                    <div className="w-16 h-16 bg-muted/80 text-muted-foreground rounded-full flex items-center justify-center mb-5 mx-auto shadow-sm">
                       <Info size={28} />
                     </div>
-                    <h4 className="text-foreground font-semibold text-lg mb-2">Verse Selection Required</h4>
-                    <p className="text-muted-foreground text-sm max-w-[240px] leading-relaxed mx-auto">
-                      Please select at least one verse in the <strong>Concise</strong> tab first.
+                    <h4 className="text-foreground font-display text-lg font-bold mb-2">Verse Selection Required</h4>
+                    <p className="text-muted-foreground text-[13.5px] max-w-[220px] leading-relaxed mx-auto">
+                      Please select at least one verse in the <strong className="text-primary font-bold">Concise</strong> tab first.
                     </p>
                     <button
                       onClick={() => setMode('concise')}
-                      className="mt-6 text-primary font-medium text-sm mx-auto"
+                      className="mt-6 bg-primary text-primary-foreground px-6 py-2 rounded-full font-bold text-[13px] hover:bg-primary/90 transition-all active:scale-95 shadow-md shadow-primary/10"
                     >
                       Go to Concise Tab
                     </button>
@@ -624,6 +653,7 @@ export default function ExplanationBuilderPage() {
               <div className={`${!hasSelectedVerse ? 'pointer-events-none opacity-20' : ''}`}>
                 {/* Verse Range */}
                 <div>
+
                   <div className="flex items-center justify-between mb-2">
                     <label className="block text-[11px] font-medium text-[#A69B9B] uppercase tracking-widest ml-1">VERSE(S)</label>
                     <Popover>
@@ -844,148 +874,91 @@ export default function ExplanationBuilderPage() {
                 {/* Categories */}
                 <div className="mb-24">
                   <label className="block text-[11px] font-medium text-[#A69B9B] uppercase tracking-widest mb-3 ml-1">CATEGORIES</label>
-
-                  {categories.map((cat, cIndex) => (
-                    <div key={cat.id} className="bg-white border border-[#E8E2E2] rounded-[1.5rem] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] mb-4">
-                      <div className="flex justify-between items-center mb-4">
-                        <span className="text-[12px] font-semibold text-muted-foreground uppercase tracking-widest pl-1">Category</span>
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <button className="outline-none">
-                              <Trash2 size={16} className="text-[#E05252] transition-colors" />
-                            </button>
-                          </DialogTrigger>
-                          <DialogContent className="w-[92vw] max-w-[360px] rounded-[2rem] border-none bg-white dark:bg-background shadow-2xl p-6 [&>button]:hidden">
-                            <DialogHeader className="space-y-2">
-                              <DialogTitle className="text-left text-lg font-bold">Delete Category?</DialogTitle>
-                              <DialogDescription className="text-left text-sm leading-relaxed text-muted-foreground">
-                                Are you sure you want to delete the category <strong>"{categories[cIndex].title || 'Untitled'}"</strong>? All sub-items and content written inside will be lost.
-                              </DialogDescription>
-                            </DialogHeader>
-                            <div className="flex flex-row justify-end gap-2 mt-4">
-                              <DialogClose asChild>
-                                <button className="h-10 px-6 rounded-full border border-border bg-secondary/10 text-foreground text-[13px] font-medium hover:bg-secondary/20 transition-all">
-                                  Cancel
+                  <Accordion type="single" collapsible className="space-y-4">
+                    {categories.map((cat, cIndex) => (
+                      <AccordionItem 
+                        key={cat.id} 
+                        value={cat.id} 
+                        className="bg-white border border-[#E8E2E2] rounded-[1.5rem] px-5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] data-[state=open]:shadow-[0_4px_25px_rgba(0,0,0,0.08)] transition-all mb-4 border-none"
+                      >
+                        <AccordionTrigger className="no-underline py-5 font-bold text-[#3A2424] tracking-wide uppercase px-1 hover:no-underline">
+                          {cat.title}
+                        </AccordionTrigger>
+                        <AccordionContent className="pb-6 pt-2">
+                          <div className="flex items-center justify-between mb-3 px-1">
+                            <span className="text-[12px] font-semibold text-muted-foreground uppercase tracking-widest pl-1">CONTENT</span>
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <button className="text-muted-foreground transition-colors p-1 outline-none">
+                                  <Info size={18} />
                                 </button>
-                              </DialogClose>
-                              <DialogClose asChild>
-                                <button 
-                                  onClick={() => { const nc = [...categories]; nc.splice(cIndex, 1); setCategories(nc); }}
-                                  className="h-10 px-6 rounded-full bg-destructive text-destructive-foreground text-[13px] font-bold hover:bg-destructive/90 transition-all shadow-md active:scale-95"
-                                >
-                                  Delete
-                                </button>
-                              </DialogClose>
-                            </div>
-                          </DialogContent>
-                        </Dialog>
-                      </div>
-                      <div>
-                        <input 
-                          disabled={!verseRange.trim() || !!rangeError}
-                          type="text" 
-                          value={cat.title} 
-                          onChange={e => { const nc = [...categories]; nc[cIndex].title = e.target.value; setCategories(nc); }} 
-                          className="w-full bg-white border border-[#E8E2E2] rounded-full px-4 py-3.5 text-[14px] focus:outline-none focus:border-[#5A2A31] disabled:opacity-50 disabled:bg-[#FCFAFA] disabled:cursor-not-allowed" 
-                          placeholder={!verseRange.trim() || !!rangeError ? "Enter a Verse Range first" : "Category Title"} 
-                        />
-                        {!verseRange.trim() || !!rangeError ? (
-                          <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
-                            Enter a Verse Range first.
-                          </p>
-                        ) : !cat.title.trim() && (
-                          <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
-                            Enter the Category Title first to write content.
-                          </p>
-                        )}
-                      </div>
-
-                      <div className="flex items-center justify-between mb-3 px-1">
-                        <span className="text-[12px] font-semibold text-muted-foreground uppercase tracking-widest pl-1">CONTENT</span>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <button className="text-muted-foreground transition-colors p-1 outline-none">
-                              <Info size={18} />
-                            </button>
-                          </PopoverTrigger>
-                            <PopoverContent className="w-[280px] p-4 text-sm bg-popover border-border shadow-2xl rounded-[1.5rem] z-[100] outline-none" align="end">
-                              <div className="space-y-3">
-                                <h4 className="font-semibold text-foreground text-[14px] px-0.5">Markdown Guide</h4>
-                                <div className="max-h-[260px] overflow-auto pr-1 custom-scrollbar">
-                                  <div className="grid grid-cols-1 gap-y-1 pb-2">
-                                    {[
-                                      { s: "# H1", d: "Heading 1" },
-                                      { s: "## H2", d: "Heading 2" },
-                                      { s: "### H3", d: "Heading 3" },
-                                      { s: "**bold**", d: "Bold text" },
-                                      { s: "*italic*", d: "Italic text" },
-                                      { s: "***text***", d: "Bold & Italic" },
-                                      { s: "- item", d: "Bullet List" },
-                                      { s: "1. item", d: "Numbered List" },
-                                      { s: "- [ ] task", d: "Task List" },
-                                      { s: "> quote", d: "Blockquote" },
-                                      { s: "`code`", d: "Inline Code" },
-                                      { s: "```code```", d: "Code Block" },
-                                      { s: "[link](url)", d: "Hyperlink" },
-                                      { s: "---", d: "Divider Line" },
-                                      { s: "| a | b |", d: "Table Row" },
-                                      { s: "~~strike~~", d: "Strikethrough" },
-                                    ].map((item, i) => (
-                                      <div key={i} className="grid grid-cols-[90px,1fr] gap-x-3 items-center text-[12px] group py-2 border-b border-border/30 last:border-0 px-0.5">
-                                        <code className="bg-primary/5 text-primary px-1.5 py-0.5 rounded font-mono text-[11px] whitespace-nowrap flex-shrink-0 transition-colors justify-self-start">
-                                          {item.s}
-                                        </code>
-                                        <span className="text-muted-foreground text-right truncate transition-colors">{item.d}</span>
+                              </PopoverTrigger>
+                                <PopoverContent className="w-[280px] p-4 text-sm bg-popover border-border shadow-2xl rounded-[1.5rem] z-[100] outline-none" align="end">
+                                  <div className="space-y-3">
+                                    <h4 className="font-semibold text-foreground text-[14px] px-0.5">Markdown Guide</h4>
+                                    <div className="max-h-[260px] overflow-auto pr-1 custom-scrollbar">
+                                      <div className="grid grid-cols-1 gap-y-1 pb-2">
+                                        {[
+                                          { s: "# H1", d: "Heading 1" },
+                                          { s: "## H2", d: "Heading 2" },
+                                          { s: "### H3", d: "Heading 3" },
+                                          { s: "**bold**", d: "Bold text" },
+                                          { s: "*italic*", d: "Italic text" },
+                                          { s: "***text***", d: "Bold & Italic" },
+                                          { s: "- item", d: "Bullet List" },
+                                          { s: "1. item", d: "Numbered List" },
+                                          { s: "- [ ] task", d: "Task List" },
+                                          { s: "> quote", d: "Blockquote" },
+                                          { s: "`code`", d: "Inline Code" },
+                                          { s: "```code```", d: "Code Block" },
+                                          { s: "[link](url)", d: "Hyperlink" },
+                                          { s: "---", d: "Divider Line" },
+                                          { s: "| a | b |", d: "Table Row" },
+                                          { s: "~~strike~~", d: "Strikethrough" },
+                                        ].map((item, i) => (
+                                          <div key={i} className="grid grid-cols-[90px,1fr] gap-x-3 items-center text-[12px] group py-2 border-b border-border/30 last:border-0 px-0.5">
+                                            <code className="bg-primary/5 text-primary px-1.5 py-0.5 rounded font-mono text-[11px] whitespace-nowrap flex-shrink-0 transition-colors justify-self-start">
+                                              {item.s}
+                                            </code>
+                                            <span className="text-muted-foreground text-right truncate transition-colors">{item.d}</span>
+                                          </div>
+                                        ))}
                                       </div>
-                                    ))}
+                                    </div>
                                   </div>
-                                </div>
-                              </div>
-                            </PopoverContent>
-                        </Popover>
-                      </div>
+                                </PopoverContent>
+                            </Popover>
+                          </div>
+                          <div>
+                            <textarea
+                              disabled={!verseRange.trim() || !!rangeError}
+                              value={cat.content}
+                              onChange={e => { const nc = [...categories]; nc[cIndex].content = e.target.value; setCategories(nc); }}
+                              className="w-full bg-white border border-[#E8E2E2] rounded-2xl p-4 text-[14px] min-h-[140px] focus:outline-none focus:border-[#5A2A31] disabled:opacity-50 disabled:bg-[#FCFAFA] disabled:cursor-not-allowed"
+                              placeholder={!verseRange.trim() || !!rangeError ? "Enter a Verse Range first" : `Write about ${cat.title.toLowerCase()}...`}
+                            />
+                            {!verseRange.trim() || !!rangeError ? (
+                              <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
+                                Enter a Verse Range first.
+                              </p>
+                            ) : cat.content.trim().length > 0 && cat.content.trim().length < 10 && (
+                              <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
+                                Need {10 - cat.content.trim().length} more characters.
+                              </p>
+                            )}
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
 
-                      <div>
-                        <textarea
-                          disabled={!cat.title.trim() || !verseRange.trim() || !!rangeError}
-                          value={cat.content}
-                          onChange={e => { const nc = [...categories]; nc[cIndex].content = e.target.value; setCategories(nc); }}
-                          className="w-full bg-white border border-[#E8E2E2] rounded-2xl p-4 text-[14px] min-h-[140px] focus:outline-none focus:border-[#5A2A31] disabled:opacity-50 disabled:bg-[#FCFAFA] disabled:cursor-not-allowed"
-                          placeholder={!verseRange.trim() || !!rangeError ? "Enter a Verse Range first" : cat.title.trim() ? "## Heading\n\nYour content here...\n\nUse **bold** for emphasis" : "Category Title required first..."}
-                        />
-                        {!verseRange.trim() || !!rangeError ? (
-                          <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
-                            Enter a Verse Range first.
-                          </p>
-                        ) : !cat.title.trim() ? (
-                          <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
-                            Enter the Category Title first to write content.
-                          </p>
-                        ) : cat.content.trim().length > 0 && cat.content.trim().length < 10 && (
-                          <p className="text-destructive text-[12px] font-medium mt-2 ml-1">
-                            Need {10 - cat.content.trim().length} more characters.
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-
-                  <div className="flex flex-col">
-                    <button
-                      disabled={!verseRange.trim() || !!rangeError}
-                      onClick={() => {
-                        setCategories([...categories, { id: generateId(), title: '', content: '', order: categories.length }]);
-                      }}
-                      className={`w-full border border-dashed border-[#D2C8C8] rounded-2xl py-[16px] text-[#8C7D7D] font-medium flex justify-center items-center gap-2 bg-white transition-all ${!verseRange.trim() || !!rangeError ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    >
-                      <Plus size={18} /> Add Category
-                    </button>
-                    {(!verseRange.trim() || !!rangeError) && (
-                      <p className="text-destructive text-[12px] font-medium mt-2 text-center w-full">
+                  {(!verseRange.trim() || !!rangeError) && (
+                    <div className="flex flex-col mt-4">
+                      <p className="text-destructive text-[12px] font-medium text-center w-full">
                         {rangeError ? "Fix the verse range error first." : "Enter a Verse Range first."}
                       </p>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </motion.div>

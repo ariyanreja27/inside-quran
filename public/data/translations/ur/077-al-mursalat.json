@@ -1,0 +1,46 @@
+{
+  "surahNumber": 77,
+  "edition": "ur.roman",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Kasam hai un ( hawaon) ki jo pai dar pai bheji jati hain"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Phir toofani raftar se chalti hai"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Aur (baadalon ko) utha kar phailati hai"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Phir (unko) phaad kar juda karti hai"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Phir (dilon mei khuda ki)yaad daalti hai"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Uzar (justification) ke taur par ya daravey ke taur par"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Jis cheez ka tumse wada kiya ja raha hai woh zaroor waqey honay wali hai"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "Phir jab sitarey maand (extinguish) pad jayengey"
+    },
+    {
+      "numberInSurah": 9,
+      "text": "Aur aasmaan phaad diya jayega"
+    },
+    {
+      "numberInSurah": 10,
+      "text": "Aur pahad dhunak daaley jayengey (blown away)"
+    }
+  ]
+}

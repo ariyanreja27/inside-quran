@@ -1,0 +1,46 @@
+{
+  "surahNumber": 52,
+  "edition": "ur.roman",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Kasam hai Tur (Mount) ki"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Aur ek aisi khuli kitaab ki"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Jo raqeeq jild(fine parchment) mein likkhi hui hai"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Aur aabaad (much-frequented) ghar ki"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Aur unchi chatt (canopy) ki"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Aur maujzan samandar (swelling sea) ki"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Ke tere Rubb ka azaab zaroor waqeh honay wala hai"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "Jisey koi dafa karne wala nahin"
+    },
+    {
+      "numberInSurah": 9,
+      "text": "Woh us roz waqeh hoga jab aasmaan buri tarah dagmagayega"
+    },
+    {
+      "numberInSurah": 10,
+      "text": "Aur pahad udey udey phirenge"
+    }
+  ]
+}

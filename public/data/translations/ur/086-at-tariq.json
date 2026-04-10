@@ -1,0 +1,46 @@
+{
+  "surahNumber": 86,
+  "edition": "ur.roman",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Kasam hai aasmaan ki aur raat ko namudaar honay wale ki"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Aur tum kya jaano kay woh raat ko namudaar honay wala kya hai"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Chamakta hua tara"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "koi jaan aisi nahin hai jiske upar koi nigehbaan na ho"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Phir zara Insan yahi dekh le ke woh kis cheez se paida kiya gaya hai"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Ek uchalne wale pani se paida kiya gaya hai"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Jo peet aur seeney ki haddiyon kay darmiyan se nikalta hai"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "Yaqeenan woh (khaliq) usey dobara paida karne par qadir hai"
+    },
+    {
+      "numberInSurah": 9,
+      "text": "Jis roz poshida asraar ki jaanch padtal hogi"
+    },
+    {
+      "numberInSurah": 10,
+      "text": "Us waqt Insan ke paas na khud apna koi zoar hoga aur na koi uski madad karne wala hoga"
+    }
+  ]
+}

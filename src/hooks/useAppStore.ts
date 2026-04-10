@@ -25,6 +25,8 @@ export interface UserSettings {
   lineSpacing: number;
   showOnlyExplained: boolean;
   showTajweed: boolean;
+  showWordByWord: boolean;
+  showTransliteration: boolean;
 }
 
 export const defaultSettings: UserSettings = {
@@ -35,6 +37,8 @@ export const defaultSettings: UserSettings = {
   lineSpacing: 2.0,
   showOnlyExplained: false,
   showTajweed: true,
+  showWordByWord: false,
+  showTransliteration: true,
 };
 
 export function useSettings() {

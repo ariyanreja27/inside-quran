@@ -1,0 +1,22 @@
+{
+  "surahNumber": 112,
+  "edition": "bn.bengali",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "বলুন, তিনি আল্লাহ, এক,"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "আল্লাহ অমুখাপেক্ষী,"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "তিনি কাউকে জন্ম দেননি এবং কেউ তাকে জন্ম দেয়নি"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "এবং তার সমতুল্য কেউ নেই।"
+    }
+  ]
+}

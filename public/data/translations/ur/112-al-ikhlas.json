@@ -1,0 +1,22 @@
+{
+  "surahNumber": 112,
+  "edition": "ur.roman",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Kaho woh Allah hai, Yakta"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Allah sab se bay-niyaz hai aur sab us kay mohtaj hain"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Na uski koi aulad hai aur na woh kisi ki aulad"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Aur koi uska humsar nahin hai"
+    }
+  ]
+}

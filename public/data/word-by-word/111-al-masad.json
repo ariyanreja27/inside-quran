@@ -1,0 +1,310 @@
+{
+  "surahNumber": 111,
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "words": [
+        {
+          "id": 18,
+          "position": 1,
+          "text": "تَبَّتْ",
+          "transliteration": "tabbat",
+          "translation": "Perish",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "111:1:1"
+        },
+        {
+          "id": 19,
+          "position": 2,
+          "text": "يَدَآ",
+          "transliteration": "yadā",
+          "translation": "(the) hands",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "111:1:2"
+        },
+        {
+          "id": 20,
+          "position": 3,
+          "text": "أَبِى",
+          "transliteration": "abī",
+          "translation": "(of) Abu",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "111:1:3"
+        },
+        {
+          "id": 21,
+          "position": 4,
+          "text": "لَهَبٍۢ",
+          "transliteration": "lahabin",
+          "translation": "Lahab",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "111:1:4"
+        },
+        {
+          "id": 22,
+          "position": 5,
+          "text": "وَتَبَّ",
+          "transliteration": "watabba",
+          "translation": "and perish he",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "111:1:5"
+        },
+        {
+          "id": 23,
+          "position": 6,
+          "text": "١",
+          "transliteration": "",
+          "translation": "(1)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "111:1:6"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 2,
+      "words": [
+        {
+          "id": 949,
+          "position": 1,
+          "text": "مَآ",
+          "transliteration": "mā",
+          "translation": "Not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "111:2:1"
+        },
+        {
+          "id": 950,
+          "position": 2,
+          "text": "أَغْنَىٰ",
+          "transliteration": "aghnā",
+          "translation": "(will) avail",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "111:2:2"
+        },
+        {
+          "id": 951,
+          "position": 3,
+          "text": "عَنْهُ",
+          "transliteration": "ʿanhu",
+          "translation": "him",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "111:2:3"
+        },
+        {
+          "id": 952,
+          "position": 4,
+          "text": "مَالُهُۥ",
+          "transliteration": "māluhu",
+          "translation": "his wealth",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "111:2:4"
+        },
+        {
+          "id": 953,
+          "position": 5,
+          "text": "وَمَا",
+          "transliteration": "wamā",
+          "translation": "and what",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "111:2:5"
+        },
+        {
+          "id": 954,
+          "position": 6,
+          "text": "كَسَبَ",
+          "transliteration": "kasaba",
+          "translation": "he earned",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "111:2:6"
+        },
+        {
+          "id": 955,
+          "position": 7,
+          "text": "٢",
+          "transliteration": "",
+          "translation": "(2)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "111:2:7"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 3,
+      "words": [
+        {
+          "id": 2625,
+          "position": 1,
+          "text": "سَيَصْلَىٰ",
+          "transliteration": "sayaṣlā",
+          "translation": "He will be burnt",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "111:3:1"
+        },
+        {
+          "id": 2626,
+          "position": 2,
+          "text": "نَارًۭا",
+          "transliteration": "nāran",
+          "translation": "(in) a Fire",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "111:3:2"
+        },
+        {
+          "id": 2627,
+          "position": 3,
+          "text": "ذَاتَ",
+          "transliteration": "dhāta",
+          "translation": "of",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "111:3:3"
+        },
+        {
+          "id": 2628,
+          "position": 4,
+          "text": "لَهَبٍۢ",
+          "transliteration": "lahabin",
+          "translation": "Blazing Flames",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "111:3:4"
+        },
+        {
+          "id": 2629,
+          "position": 5,
+          "text": "٣",
+          "transliteration": "",
+          "translation": "(3)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "111:3:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 4,
+      "words": [
+        {
+          "id": 4041,
+          "position": 1,
+          "text": "وَٱمْرَأَتُهُۥ",
+          "transliteration": "wa-im'ra-atuhu",
+          "translation": "And his wife",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "111:4:1"
+        },
+        {
+          "id": 4042,
+          "position": 2,
+          "text": "حَمَّالَةَ",
+          "transliteration": "ḥammālata",
+          "translation": "(the) carrier",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "111:4:2"
+        },
+        {
+          "id": 4043,
+          "position": 3,
+          "text": "ٱلْحَطَبِ",
+          "transliteration": "l-ḥaṭabi",
+          "translation": "(of) firewood",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "111:4:3"
+        },
+        {
+          "id": 4044,
+          "position": 4,
+          "text": "٤",
+          "transliteration": "",
+          "translation": "(4)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "111:4:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 5,
+      "words": [
+        {
+          "id": 5280,
+          "position": 1,
+          "text": "فِى",
+          "transliteration": "fī",
+          "translation": "In",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "111:5:1"
+        },
+        {
+          "id": 5281,
+          "position": 2,
+          "text": "جِيدِهَا",
+          "transliteration": "jīdihā",
+          "translation": "her neck",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "111:5:2"
+        },
+        {
+          "id": 5282,
+          "position": 3,
+          "text": "حَبْلٌۭ",
+          "transliteration": "ḥablun",
+          "translation": "(will be) a rope",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "111:5:3"
+        },
+        {
+          "id": 5283,
+          "position": 4,
+          "text": "مِّن",
+          "transliteration": "min",
+          "translation": "of",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "111:5:4"
+        },
+        {
+          "id": 5284,
+          "position": 5,
+          "text": "مَّسَدٍۭ",
+          "transliteration": "masadin",
+          "translation": "palm-fiber",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "111:5:5"
+        },
+        {
+          "id": 5285,
+          "position": 6,
+          "text": "٥",
+          "transliteration": "",
+          "translation": "(5)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "111:5:6"
+        }
+      ]
+    }
+  ]
+}

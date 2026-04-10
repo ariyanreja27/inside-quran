@@ -1,0 +1,46 @@
+{
+  "surahNumber": 88,
+  "edition": "ur.roman",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Kya tumhein us chaa janey wali aafat ki khabar pahunchi hai"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Kuch chehrey us roz khauff zada hongey"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Sakht mashakkat kar rahe hongey"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Thakey jatey hongey, shadeed aag mei jhulas rahe hongey"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "khaultey(boiling) huey chashmey(spring) ka paani unhei peene ko diya jaeyga"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "khar-dar(kaante-daar) sukhi ghaans ke siwa koi khana unke liye na hoga"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Jo na mota karey na bhook mitaye"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "kuch chehrey us roz ba-raunak hongey"
+    },
+    {
+      "numberInSurah": 9,
+      "text": "Apne kar-guzari par khush hongey"
+    },
+    {
+      "numberInSurah": 10,
+      "text": "Aali muqaam jannat mein hongey"
+    }
+  ]
+}

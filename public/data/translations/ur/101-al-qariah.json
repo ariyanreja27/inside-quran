@@ -1,0 +1,46 @@
+{
+  "surahNumber": 101,
+  "edition": "ur.roman",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Azeem hadisa"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Kya hai woh azeem hadisa"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Tum kya jano ke woh azeem hadisa kya hai"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "woh din jab log bhikre huey parwano ki tarah"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Aur pahad rang bi rangi dhunki hui oon ke tarah hongey"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Phir jiske palade bhari hongey"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Woh dil pasand aish mei hoga"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "Aur jis kay palade halke hongey"
+    },
+    {
+      "numberInSurah": 9,
+      "text": "Uski jaye qarar gehri khayi hogi"
+    },
+    {
+      "numberInSurah": 10,
+      "text": "Aur tumhein kya khabar kay woh kya cheez hai"
+    }
+  ]
+}

@@ -1,0 +1,295 @@
+{
+  "surahNumber": 114,
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "words": [
+        {
+          "id": 115,
+          "position": 1,
+          "text": "قُلْ",
+          "transliteration": "qul",
+          "translation": "Say",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "114:1:1"
+        },
+        {
+          "id": 116,
+          "position": 2,
+          "text": "أَعُوذُ",
+          "transliteration": "aʿūdhu",
+          "translation": "I seek refuge",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "114:1:2"
+        },
+        {
+          "id": 117,
+          "position": 3,
+          "text": "بِرَبِّ",
+          "transliteration": "birabbi",
+          "translation": "in (the) Lord",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "114:1:3"
+        },
+        {
+          "id": 118,
+          "position": 4,
+          "text": "ٱلنَّاسِ",
+          "transliteration": "l-nāsi",
+          "translation": "(of) mankind",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "114:1:4"
+        },
+        {
+          "id": 119,
+          "position": 5,
+          "text": "١",
+          "transliteration": "",
+          "translation": "(1)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "114:1:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 2,
+      "words": [
+        {
+          "id": 932,
+          "position": 1,
+          "text": "مَلِكِ",
+          "transliteration": "maliki",
+          "translation": "(The) King",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "114:2:1"
+        },
+        {
+          "id": 933,
+          "position": 2,
+          "text": "ٱلنَّاسِ",
+          "transliteration": "l-nāsi",
+          "translation": "(of) mankind",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "114:2:2"
+        },
+        {
+          "id": 934,
+          "position": 3,
+          "text": "٢",
+          "transliteration": "",
+          "translation": "(2)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "114:2:3"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 3,
+      "words": [
+        {
+          "id": 2819,
+          "position": 1,
+          "text": "إِلَـٰهِ",
+          "transliteration": "ilāhi",
+          "translation": "(The) God",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "114:3:1"
+        },
+        {
+          "id": 2820,
+          "position": 2,
+          "text": "ٱلنَّاسِ",
+          "transliteration": "l-nāsi",
+          "translation": "(of) mankind",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "114:3:2"
+        },
+        {
+          "id": 2821,
+          "position": 3,
+          "text": "٣",
+          "transliteration": "",
+          "translation": "(3)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "114:3:3"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 4,
+      "words": [
+        {
+          "id": 4131,
+          "position": 1,
+          "text": "مِن",
+          "transliteration": "min",
+          "translation": "From",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "114:4:1"
+        },
+        {
+          "id": 4132,
+          "position": 2,
+          "text": "شَرِّ",
+          "transliteration": "sharri",
+          "translation": "(the) evil",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "114:4:2"
+        },
+        {
+          "id": 4133,
+          "position": 3,
+          "text": "ٱلْوَسْوَاسِ",
+          "transliteration": "l-waswāsi",
+          "translation": "(of) the whisperer",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "114:4:3"
+        },
+        {
+          "id": 4134,
+          "position": 4,
+          "text": "ٱلْخَنَّاسِ",
+          "transliteration": "l-khanāsi",
+          "translation": "the one who withdraws",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "114:4:4"
+        },
+        {
+          "id": 4135,
+          "position": 5,
+          "text": "٤",
+          "transliteration": "",
+          "translation": "(4)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "114:4:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 5,
+      "words": [
+        {
+          "id": 5496,
+          "position": 1,
+          "text": "ٱلَّذِى",
+          "transliteration": "alladhī",
+          "translation": "The one who",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "114:5:1"
+        },
+        {
+          "id": 5497,
+          "position": 2,
+          "text": "يُوَسْوِسُ",
+          "transliteration": "yuwaswisu",
+          "translation": "whispers",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "114:5:2"
+        },
+        {
+          "id": 5498,
+          "position": 3,
+          "text": "فِى",
+          "transliteration": "fī",
+          "translation": "in",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "114:5:3"
+        },
+        {
+          "id": 5499,
+          "position": 4,
+          "text": "صُدُورِ",
+          "transliteration": "ṣudūri",
+          "translation": "(the) breasts",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "114:5:4"
+        },
+        {
+          "id": 5500,
+          "position": 5,
+          "text": "ٱلنَّاسِ",
+          "transliteration": "l-nāsi",
+          "translation": "(of) mankind",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "114:5:5"
+        },
+        {
+          "id": 5501,
+          "position": 6,
+          "text": "٥",
+          "transliteration": "",
+          "translation": "(5)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "114:5:6"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 6,
+      "words": [
+        {
+          "id": 6729,
+          "position": 1,
+          "text": "مِنَ",
+          "transliteration": "mina",
+          "translation": "From",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "114:6:1"
+        },
+        {
+          "id": 6730,
+          "position": 2,
+          "text": "ٱلْجِنَّةِ",
+          "transliteration": "l-jinati",
+          "translation": "the jinn",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "114:6:2"
+        },
+        {
+          "id": 6731,
+          "position": 3,
+          "text": "وَٱلنَّاسِ",
+          "transliteration": "wal-nāsi",
+          "translation": "and men",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "114:6:3"
+        },
+        {
+          "id": 6732,
+          "position": 4,
+          "text": "٦",
+          "transliteration": "",
+          "translation": "(6)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "114:6:4"
+        }
+      ]
+    }
+  ]
+}

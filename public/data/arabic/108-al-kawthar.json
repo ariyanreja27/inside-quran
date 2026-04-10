@@ -1,0 +1,30 @@
+{
+  "surahNumber": 108,
+  "surahName": "Al-Kawthar",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "بِسۡمِ ٱللَّهِ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ إِنَّاۤ أَعۡطَیۡنَـٰكَ ٱلۡكَوۡثَرَ\n",
+      "juz": 30,
+      "page": 602,
+      "hizbQuarter": 240,
+      "ruku": 550
+    },
+    {
+      "numberInSurah": 2,
+      "text": "فَصَلِّ لِرَبِّكَ وَٱنۡحَرۡ\n",
+      "juz": 30,
+      "page": 602,
+      "hizbQuarter": 240,
+      "ruku": 550
+    },
+    {
+      "numberInSurah": 3,
+      "text": "إِنَّ شَانِئَكَ هُوَ ٱلۡأَبۡتَرُ\n",
+      "juz": 30,
+      "page": 602,
+      "hizbQuarter": 240,
+      "ruku": 550
+    }
+  ]
+}

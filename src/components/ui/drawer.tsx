@@ -24,8 +24,10 @@ DrawerOverlay.displayName = DrawerPrimitive.Overlay.displayName;
 
 const DrawerContent = React.forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content> & {
+    handleStyle?: React.CSSProperties;
+  }
+>(({ className, children, handleStyle, ...props }, ref) => (
   <DrawerPortal>
     <DrawerOverlay />
     <DrawerPrimitive.Content
@@ -36,7 +38,20 @@ const DrawerContent = React.forwardRef<
       )}
       {...props}
     >
-      <div className="mx-auto mt-2.5 h-1 w-8 rounded-full bg-[#E5E1E1]" />
+      {/* Default pill — used by all drawers unless overridden */}
+      {!handleStyle && (
+        <div
+          className="mx-auto mt-3 rounded-full"
+          style={{ width: 40, height: 5, backgroundColor: 'rgba(0,0,0,0.14)' }}
+        />
+      )}
+      {/* Custom pill — used by Word Detail drawer (gradient background) */}
+      {handleStyle && (
+        <div
+          className="mx-auto mt-3 rounded-full"
+          style={handleStyle}
+        />
+      )}
       {children}
     </DrawerPrimitive.Content>
   </DrawerPortal>

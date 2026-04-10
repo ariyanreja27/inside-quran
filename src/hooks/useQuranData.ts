@@ -3,7 +3,42 @@ import type { Verse } from '@/types/quran';
 import { surahList, type SurahMeta } from '@/data/quranMeta';
 import { useSettings } from './useAppStore';
 
-const API_BASE = 'https://api.alquran.cloud/v1';
+// ─── Local data paths (served from public/data/) ─────────────────────────────
+const LOCAL_DATA = '/data';
+
+/** Maps a surah number + name to a zero-padded slug filename, matching the fetch script */
+function surahSlug(surahNumber: number): string {
+  const meta = surahList.find(s => s.number === surahNumber);
+  if (!meta) return String(surahNumber).padStart(3, '0');
+  const slug = meta.name
+    .toLowerCase()
+    .replace(/['']/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return `${String(surahNumber).padStart(3, '0')}-${slug}`;
+}
+
+/** Try to fetch a local JSON file; returns null if not available (offline / file missing) */
+async function fetchLocal<T>(path: string): Promise<T | null> {
+  try {
+    const res = await fetch(path);
+    if (!res.ok) return null;
+    return (await res.json()) as T;
+  } catch {
+    return null;
+  }
+}
+
+// ─── Type stubs for local JSON shapes ────────────────────────────────────────
+interface LocalArabicVerse  { numberInSurah: number; text: string; juz: number; page: number; hizbQuarter: number; ruku: number; }
+interface LocalArabicFile   { surahNumber: number; verses: LocalArabicVerse[]; }
+interface LocalTransVerse   { numberInSurah: number; text: string; }
+interface LocalTransFile    { surahNumber: number; verses: LocalTransVerse[]; }
+interface LocalWaqfVerse    { numberInSurah: number; waqfMark: string; }
+interface LocalWaqfFile     { surahNumber: number; verses: LocalWaqfVerse[]; }
+interface LocalWord         { id: number; position: number; text: string; transliteration: string; translation: string; rootLetters?: string | null; charTypeName?: string | null; location?: string | null; }
+interface LocalWbwVerse     { numberInSurah: number; words: LocalWord[]; }
+interface LocalWbwFile      { surahNumber: number; verses: LocalWbwVerse[]; }
 
 export function useSurahs() {
   return useQuery<SurahMeta[]>({
@@ -21,80 +56,82 @@ export function useSurahVerses(surahNumber: number) {
   return useQuery<Verse[]>({
     queryKey: ['surah-verses', surahNumber, settings.language, settings.showTajweed, settings.arabicFont],
     queryFn: async () => {
-      const translationEdition = 
-        settings.language === 'bn' ? 'bn.bengali' : 
-        settings.language === 'hi' ? 'hi.hindi' : 
-        'en.sahih';
+      const translationLang =
+        settings.language === 'bn' ? 'bn' :
+        settings.language === 'hi' ? 'hi' :
+        settings.language === 'ur' ? 'ur' :
+        'en';
 
-      const arabicEndpoint = settings.showTajweed ? `${API_BASE}/surah/${surahNumber}/quran-tajweed` : `${API_BASE}/surah/${surahNumber}`;
+      const slug = surahSlug(surahNumber);
 
-      const [arabicRes, translationRes, waqfRes] = await Promise.all([
-        fetch(arabicEndpoint),
-        fetch(`${API_BASE}/surah/${surahNumber}/${translationEdition}`),
-        fetch(`https://api.quran.com/api/v4/quran/verses/indopak?chapter_number=${surahNumber}`)
-      ]);
+      // ── 1. Load Arabic text ─────────────────────────────────────────────────
+      const local = await fetchLocal<LocalArabicFile>(`${LOCAL_DATA}/arabic/${slug}.json`);
+      const arabicVerses = local?.verses || [];
 
-      const [arabicData, translationData, waqfData] = await Promise.all([
-        arabicRes.json(),
-        translationRes.json(),
-        waqfRes.json()
-      ]);
-
-      // Create a map of verse numbers to their stop markers from the Quran.com Indopak text
-      const waqfMap: Record<number, string> = {};
-      if (waqfData.verses) {
-        waqfData.verses.forEach((v: any) => {
-          const vNum = parseInt(v.verse_key.split(':')[1]);
-          // Regex to extract stop marks (U+06D6 to U+06E0) from the end of the text
-          const text = v.text_indopak || '';
-          const match = text.match(/[\u06D6-\u06E0]+(?=[^\u0621-\u064A]*$)/);
-          if (match) {
-            waqfMap[vNum] = match[0];
-          }
-        });
+      // If Tajweed mode, also parse the tajweed files to overlay color rendering atop the verse map
+      let tajweedVerses: Record<number, string> | null = null;
+      if (settings.showTajweed) {
+        const localTajweed = await fetchLocal<any>(`${LOCAL_DATA}/tajweed/${slug}.json`);
+        if (localTajweed?.verses?.length) {
+          tajweedVerses = {};
+          localTajweed.verses.forEach((v: any) => {
+            tajweedVerses![v.numberInSurah] = v.text;
+          });
+        }
       }
 
-      return arabicData.data.ayahs.map((a: any, i: number) => {
+      // ── 2. Load Translation ─────────────────────────────────────────────────
+      let translationMap: Record<number, string> = {};
+      const localTrans = await fetchLocal<LocalTransFile>(
+        `${LOCAL_DATA}/translations/${translationLang}/${slug}.json`
+      );
+      if (localTrans?.verses?.length) {
+        localTrans.verses.forEach(v => { translationMap[v.numberInSurah] = v.text; });
+      }
+
+      // ── 3. Load Waqf markers ────────────────────────────────────────────────
+      const waqfMap: Record<number, string> = {};
+      const localWaqf = await fetchLocal<LocalWaqfFile>(`${LOCAL_DATA}/waqf/${slug}.json`);
+      if (localWaqf?.verses?.length) {
+        localWaqf.verses.forEach(v => { if (v.waqfMark) waqfMap[v.numberInSurah] = v.waqfMark; });
+      }
+
+      // ── 4. Load Word-by-Word ────────────────────────────────────────────────
+      const wbwMap: Record<number, any[]> = {};
+      const localWbw = await fetchLocal<LocalWbwFile>(`${LOCAL_DATA}/word-by-word/${slug}.json`);
+      if (localWbw?.verses?.length) {
+        localWbw.verses.forEach(v => { wbwMap[v.numberInSurah] = v.words; });
+      }
+
+      // ── 5. Build the unified Verse array ───────────────────────────────────
+      return arabicVerses.map(a => {
+        // If tajweed flag is active and we captured it, lay it atop the standard text
         let text = a.text;
-        
-        // If we are fetching the Tajweed edition, normalize specific Uthmani-exclusive characters 
-        // back to the Simple/IndoPak styling that the default API endpoint uses.
-        // The user explicitly noted this normalizer looks better for the Amiri font, whereas Noorehuda handles the Uthmani string natively.
+        if (settings.showTajweed && tajweedVerses && tajweedVerses[a.numberInSurah]) {
+          text = tajweedVerses[a.numberInSurah];
+        }
+
+        // Tajweed normalization for Amiri font
         if (settings.showTajweed && settings.arabicFont === 'Amiri') {
           text = text
-            .replace(/\u0652/g, '\u06E1') // Round Sukun -> Quranic Sukun
-            .replace(/\u064A/g, '\u06CC') // Standard Yeh -> Farsi Yeh
-            .replace(/\u0649/g, '\u06CC') // Alef Maksura -> Farsi Yeh
-            .replace(/\u0653/g, '\u06E4'); // Standard Madda -> Quranic Madda
+            .replace(/\u0652/g, '\u06E1') 
+            .replace(/\u064A/g, '\u06CC') 
+            .replace(/\u0649/g, '\u06CC') 
+            .replace(/\u0653/g, '\u06E4'); 
         }
-
-        // Strip Bismillah prefix from the first verse of every surah except Surah 1 (Al-Fatihah)
-        if (surahNumber !== 1 && a.numberInSurah === 1) {
-          const bismillah1 = "بِسۡمِ ٱللَّهِ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ";
-          const bismillah2 = "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ";
-          // Also check normalized string just in case
-          const bismillahNorm = bismillah2.replace(/\u0652/g, '\u06E1').replace(/\u064A/g, '\u06CC').replace(/\u0649/g, '\u06CC').replace(/\u0653/g, '\u06E4');
-          
-          if (text.startsWith(bismillah1)) {
-            text = text.substring(bismillah1.length).trim();
-          } else if (text.startsWith(bismillah2)) {
-            text = text.substring(bismillah2.length).trim();
-          } else if (text.startsWith(bismillahNorm)) {
-            text = text.substring(bismillahNorm.length).trim();
-          }
-        }
-
+        
         return {
-          number: a.number,
+          number: a.numberInSurah, // global ayah number approx
           numberInSurah: a.numberInSurah,
-          text: text,
-          translation: translationData.data.ayahs[i]?.text || '',
+          text,
+          translation: translationMap[a.numberInSurah] || '',
           waqf: waqfMap[a.numberInSurah],
           juz: a.juz,
           page: a.page,
           hizbQuarter: a.hizbQuarter,
           ruku: a.ruku,
           surahNumber,
+          words: wbwMap[a.numberInSurah] || [],
         };
       });
     },

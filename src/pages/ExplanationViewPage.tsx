@@ -19,11 +19,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSurahVerses, useSurahs } from '@/hooks/useQuranData';
 import { formatVerseRange } from '@/lib/utils';
 import { useExplanations, useSettings, useCustomTranslations } from '@/hooks/useAppStore';
-import type { Explanation, RootWord } from '@/types/quran';
+import type { Explanation, RootWord, Word } from '@/types/quran';
+import { WordDetailDrawer } from '@/components/WordDetailDrawer';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Drawer, DrawerContent, DrawerTitle, DrawerDescription } from '@/components/ui/drawer';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { TajweedText } from '@/components/TajweedText';
+import { WordByWordVerse } from '@/components/WordByWordVerse';
 
 export default function ExplanationViewPage() {
   const navigate = useNavigate();
@@ -40,6 +42,7 @@ export default function ExplanationViewPage() {
   const [explanation, setExplanation] = useState<Explanation | null>(null);
   const [activeTab, setActiveTab] = useState<'concise' | 'deeper' | 'ask'>('concise');
   const [isDeleting, setIsDeleting] = useState(false);
+  const [selectedWord, setSelectedWord] = useState<Word | null>(null);
 
   const handleDelete = () => {
     setIsDeleting(true);
@@ -261,9 +264,21 @@ export default function ExplanationViewPage() {
                             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-[100px] -z-10 blur-xl" />
                             <div 
                               className="arabic-text text-sm text-center text-foreground w-full" 
-                              style={{ fontSize: 26, lineHeight: 2.2, wordSpacing: '1px' }}
+                              style={{ 
+                                fontSize: settings.showWordByWord ? undefined : 26, 
+                                lineHeight: settings.showWordByWord ? undefined : 2.2, 
+                                wordSpacing: '1px' 
+                              }}
                             >
-                              <TajweedText text={verseData.text} showColors={settings.showTajweed} />
+                              {settings.showWordByWord ? (
+                                <WordByWordVerse 
+                                  verse={verseData} 
+                                  showTransliteration={settings.showTransliteration} 
+                                  onWordClick={(w) => setSelectedWord(w)}
+                                />
+                              ) : (
+                                <TajweedText text={verseData.text} showColors={settings.showTajweed} />
+                              )}
                             </div>
                           </div>
                         )}
@@ -308,11 +323,11 @@ export default function ExplanationViewPage() {
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="space-y-8 pb-10"
             >
-                {(!explanation.deeperLook?.rootWords?.length && !explanation.deeperLook?.categories?.length) && (
+                {(!explanation.deeperLook?.rootWords?.length && !explanation.deeperLook?.categories?.some(cat => cat.content?.trim().length > 0)) && (
                    <p className="text-center text-muted-foreground py-8">No deeper look data available.</p>
                 )}
 
-                {(explanation.deeperLook?.rootWords?.length > 0 || explanation.deeperLook?.categories?.length > 0) && (() => {
+                {(explanation.deeperLook?.rootWords?.length > 0 || explanation.deeperLook?.categories?.some(cat => cat.content?.trim().length > 0)) && (() => {
                    const verseText = explanation.verseRange || (explanation.verses ? formatVerseRange(explanation.verses) : '');
                    const isMultiple = verseText.includes('-') || verseText.includes(',');
                    return (
@@ -349,29 +364,31 @@ export default function ExplanationViewPage() {
                    </div>
                 )}
 
-                {explanation.deeperLook?.categories?.length > 0 && (
+                {explanation.deeperLook?.categories?.some(cat => cat.content?.trim().length > 0) && (
                    <div className="space-y-4">
                       <Accordion type="multiple" className="space-y-4 w-full">
-                         {explanation.deeperLook.categories.map((cat) => (
-                            <AccordionItem key={cat.id} value={cat.id} className="bg-card border-none rounded-[1.25rem] px-5 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.04)] transition-shadow data-[state=open]:shadow-[0_4px_25px_rgba(0,0,0,0.08)] mb-4">
-                               <AccordionTrigger className="no-underline py-5 font-display font-medium text-[15.5px] text-foreground flex items-center justify-between">
-                                  <span className="flex items-center gap-3">
-                                     <BookOpen size={18} className="text-primary" />
-                                     {cat.title}
-                                  </span>
-                               </AccordionTrigger>
-                               <AccordionContent className="pb-6 pt-2">
-                                  <div className="prose prose-sm max-w-none text-muted-foreground leading-[1.8] text-[15px]
-                                    prose-headings:font-display prose-headings:font-bold prose-headings:text-foreground 
-                                    prose-headings:mt-6 prose-headings:mb-3
-                                    prose-strong:font-bold prose-strong:text-foreground
-                                    prose-a:text-primary prose-a:break-all
-                                    break-words overflow-x-hidden">
-                                     <ReactMarkdown remarkPlugins={[remarkGfm]}>{cat.content}</ReactMarkdown>
-                                  </div>
-                               </AccordionContent>
-                            </AccordionItem>
-                         ))}
+                         {explanation.deeperLook.categories
+                           .filter(cat => cat.content?.trim().length > 0)
+                           .map((cat) => (
+                             <AccordionItem key={cat.id} value={cat.id} className="bg-card border-none rounded-[1.25rem] px-5 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.04)] transition-shadow data-[state=open]:shadow-[0_4px_25px_rgba(0,0,0,0.08)] mb-4">
+                                <AccordionTrigger className="no-underline py-5 font-display font-medium text-[15.5px] text-foreground flex items-center justify-between">
+                                   <span className="flex items-center gap-3">
+                                      <BookOpen size={18} className="text-primary" />
+                                      {cat.title}
+                                   </span>
+                                </AccordionTrigger>
+                                <AccordionContent className="pb-6 pt-2">
+                                   <div className="prose prose-sm max-w-none text-muted-foreground leading-[1.8] text-[15px]
+                                     prose-headings:font-display prose-headings:font-bold prose-headings:text-foreground 
+                                     prose-headings:mt-6 prose-headings:mb-3
+                                     prose-strong:font-bold prose-strong:text-foreground
+                                     prose-a:text-primary prose-a:break-all
+                                     break-words overflow-x-hidden">
+                                      <ReactMarkdown remarkPlugins={[remarkGfm]}>{cat.content}</ReactMarkdown>
+                                   </div>
+                                </AccordionContent>
+                             </AccordionItem>
+                          ))}
                       </Accordion>
                    </div>
                 )}
@@ -460,8 +477,13 @@ export default function ExplanationViewPage() {
             )}
          </DrawerContent>
       </Drawer>
-        </motion.div>
-      )}
-    </AnimatePresence>
+      
+      <WordDetailDrawer 
+        word={selectedWord} 
+        onClose={() => setSelectedWord(null)}
+      />
+    </motion.div>
+  )}
+</AnimatePresence>
   );
 }

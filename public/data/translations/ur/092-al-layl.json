@@ -1,0 +1,46 @@
+{
+  "surahNumber": 92,
+  "edition": "ur.roman",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Kasam hai raat ki jabke woh chaa jaaye"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Aur din ki jabke woh roshan ho"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Aur us zaat ki jisne nar(male) aur maada(female) ko paida kiya"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Dar haqeeqat tum logon ki koshishein mukhtalif qism ki hai"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "To jisne (rah e khuda mein) maal diya aur (khuda ki nafarmani se) parhez kiya"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Aur bhalayi ko sach mana"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Usko hum aasan raastey kay liye sahulat denge"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "Aur jisne bukhl(kanjoosi) kiya aur (apney khuda se) be niyazi(self-sufficient/independent) barti"
+    },
+    {
+      "numberInSurah": 9,
+      "text": "aur bhalayi ko jhutlaya"
+    },
+    {
+      "numberInSurah": 10,
+      "text": "Usko hum sakht rastey kay liye sahulat dengey"
+    }
+  ]
+}

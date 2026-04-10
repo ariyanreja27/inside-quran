@@ -448,6 +448,36 @@ export default function SettingsPage() {
               </button>
             </div>
             <div className="h-px bg-border/50 -mx-4" />
+            <div className="flex items-center justify-between pb-3 border-b border-border/40">
+              <div>
+                <p className="text-sm font-medium">Word by Word</p>
+                <p className="text-xs text-muted-foreground">Show translation for each word</p>
+              </div>
+              <button
+                onClick={() => updateSettings({ showWordByWord: !settings.showWordByWord })}
+                className={`w-12 h-6 rounded-full transition-colors relative ${settings.showWordByWord ? 'bg-primary' : 'bg-secondary'}`}
+              >
+                <span className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${settings.showWordByWord ? 'translate-x-6' : 'translate-x-0'}`} />
+              </button>
+            </div>
+            {settings.showWordByWord && (
+              <>
+                <div className="h-px bg-border/50 -mx-4" />
+                <div className="flex items-center justify-between pb-3 border-b border-border/40">
+                  <div>
+                    <p className="text-sm font-medium">Show Transliteration</p>
+                    <p className="text-xs text-muted-foreground">Show word pronunciation</p>
+                  </div>
+                  <button
+                    onClick={() => updateSettings({ showTransliteration: !settings.showTransliteration })}
+                    className={`w-12 h-6 rounded-full transition-colors relative ${settings.showTransliteration ? 'bg-primary' : 'bg-secondary'}`}
+                  >
+                    <span className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${settings.showTransliteration ? 'translate-x-6' : 'translate-x-0'}`} />
+                  </button>
+                </div>
+              </>
+            )}
+            <div className="h-px bg-border/50 -mx-4" />
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium">Explained Verses Only</p>

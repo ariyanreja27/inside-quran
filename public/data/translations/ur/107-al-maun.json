@@ -1,0 +1,34 @@
+{
+  "surahNumber": 107,
+  "edition": "ur.roman",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Tum ne dekha us shaks ko jo aakhirat ki jaza va saza ko jhutlata hai"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Wahi to hai jo yateem ko dhakkey deta hai"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Aur miskeen ka khana dene par nahin uksata"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Phir tabahi hai un namaz padhne walon ke liye"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Jo apni namaz se gaflat barat-tey hain"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Jo riya-kaari(dikhawa) karte hai"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Aur maamuli zarurat ki cheezen (logon ko) dene se gurez karte hai"
+    }
+  ]
+}

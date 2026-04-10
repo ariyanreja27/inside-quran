@@ -1,0 +1,46 @@
+{
+  "surahNumber": 79,
+  "edition": "ur.roman",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Kasam hai un (Farishton) ki jo doob kar khinchte hain"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "aur aahistagi se (gently) nikaal le jataey hain"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Aur (un farishton ki jo qayinaat mein) tezi se tairtey phirtay hain"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "phir (hukum baja laane mein) sabqat karte hain"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "phir (ehkam-ilahi ke mutabiq) maamlaat ka intizam chalate hain"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Jis roz hila marey ga zalzalay ka jhatka"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Aur uske pichey ek aur jhatka padega"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "Kuch dil hongey jo us roz khauf se kaanp rahey hongey"
+    },
+    {
+      "numberInSurah": 9,
+      "text": "Nigahein unki sehmi(downcast) hui hogi"
+    },
+    {
+      "numberInSurah": 10,
+      "text": "Yeh log kehte hain “Kya waqai hum palta kar phir wapas laaye jayenge?”"
+    }
+  ]
+}

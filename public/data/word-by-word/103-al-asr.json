@@ -1,0 +1,190 @@
+{
+  "surahNumber": 103,
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "words": [
+        {
+          "id": 177,
+          "position": 1,
+          "text": "وَٱلْعَصْرِ",
+          "transliteration": "wal-ʿaṣri",
+          "translation": "By the time",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "103:1:1"
+        },
+        {
+          "id": 178,
+          "position": 2,
+          "text": "١",
+          "transliteration": "",
+          "translation": "(1)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "103:1:2"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 2,
+      "words": [
+        {
+          "id": 1056,
+          "position": 1,
+          "text": "إِنَّ",
+          "transliteration": "inna",
+          "translation": "Indeed",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "103:2:1"
+        },
+        {
+          "id": 1057,
+          "position": 2,
+          "text": "ٱلْإِنسَـٰنَ",
+          "transliteration": "l-insāna",
+          "translation": "mankind",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "103:2:2"
+        },
+        {
+          "id": 1058,
+          "position": 3,
+          "text": "لَفِى",
+          "transliteration": "lafī",
+          "translation": "(is) surely, in",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "103:2:3"
+        },
+        {
+          "id": 1059,
+          "position": 4,
+          "text": "خُسْرٍ",
+          "transliteration": "khus'rin",
+          "translation": "loss",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "103:2:4"
+        },
+        {
+          "id": 1060,
+          "position": 5,
+          "text": "٢",
+          "transliteration": "",
+          "translation": "(2)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "103:2:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 3,
+      "words": [
+        {
+          "id": 2213,
+          "position": 1,
+          "text": "إِلَّا",
+          "transliteration": "illā",
+          "translation": "Except",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "103:3:1"
+        },
+        {
+          "id": 2214,
+          "position": 2,
+          "text": "ٱلَّذِينَ",
+          "transliteration": "alladhīna",
+          "translation": "those who",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "103:3:2"
+        },
+        {
+          "id": 2215,
+          "position": 3,
+          "text": "ءَامَنُوا۟",
+          "transliteration": "āmanū",
+          "translation": "believe",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "103:3:3"
+        },
+        {
+          "id": 2216,
+          "position": 4,
+          "text": "وَعَمِلُوا۟",
+          "transliteration": "waʿamilū",
+          "translation": "and do",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "103:3:4"
+        },
+        {
+          "id": 2217,
+          "position": 5,
+          "text": "ٱلصَّـٰلِحَـٰتِ",
+          "transliteration": "l-ṣāliḥāti",
+          "translation": "righteous deeds",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "103:3:5"
+        },
+        {
+          "id": 2218,
+          "position": 6,
+          "text": "وَتَوَاصَوْا۟",
+          "transliteration": "watawāṣaw",
+          "translation": "and enjoin (each other)",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "103:3:6"
+        },
+        {
+          "id": 2219,
+          "position": 7,
+          "text": "بِٱلْحَقِّ",
+          "transliteration": "bil-ḥaqi",
+          "translation": "to the truth",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "103:3:7"
+        },
+        {
+          "id": 2220,
+          "position": 8,
+          "text": "وَتَوَاصَوْا۟",
+          "transliteration": "watawāṣaw",
+          "translation": "and enjoin (each other)",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "103:3:8"
+        },
+        {
+          "id": 2221,
+          "position": 9,
+          "text": "بِٱلصَّبْرِ",
+          "transliteration": "bil-ṣabri",
+          "translation": "to [the] patience",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "103:3:9"
+        },
+        {
+          "id": 2222,
+          "position": 10,
+          "text": "٣",
+          "transliteration": "",
+          "translation": "(3)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "103:3:10"
+        }
+      ]
+    }
+  ]
+}

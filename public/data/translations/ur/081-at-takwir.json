@@ -1,0 +1,46 @@
+{
+  "surahNumber": 81,
+  "edition": "ur.roman",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Jab Suraj lapeit diya jayega"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Aur jab taarey bikhar jayenge"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Aur jab pahad chalaye jayenge"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Aur jab dus mahine ki hamila ountniyan (she-camels) apne haal par chod di jayengi"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Aur jab jungli jaanwar sameth kar ikhattey kar diye jayenge"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Aur jab samandar bhadka diye jayenge"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Aur jab jaane (Jismon se) jodh di jayengi"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "Aur jab zinda gaadi hui(buried) ladki se pucha jayega"
+    },
+    {
+      "numberInSurah": 9,
+      "text": "ke woh kis kasoor mei mari gayi"
+    },
+    {
+      "numberInSurah": 10,
+      "text": "Aur jab aamal-naame(scrolls of deeds) kholey jayenge"
+    }
+  ]
+}

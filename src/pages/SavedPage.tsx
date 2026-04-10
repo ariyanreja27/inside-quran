@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
-import { Star, BookmarkCheck, ArrowLeft, MoreHorizontal, Trash2, Search, ArrowUpDown, Check, ChevronUp, ChevronDown, MoreVertical, FileText, Eye, Edit2, Book, FolderPlus, Plus, X, Bookmark, Folder, Heart, Box, Layers, Briefcase, Coffee, List, Camera, Music, Image, Map, Compass, Shield, Flag, Globe, Bell, Calendar, Clock, Crown, Feather, Key, Lightbulb, MapPin, Moon, Sun, Umbrella, Tag, Hash, FolderOpen, PenTool, Sparkles, Anchor, Activity, Award, CheckCircle, Crosshair, Diamond, Gem, Gift, Hexagon, Infinity, LifeBuoy, Magnet, Palette, PieChart, Puzzle, Rocket, Target, Trophy, Wand2, Zap, Cloud, CloudRain, Droplet, Flame, Leaf, Wind, Snowflake, Plane, Car, Ship, Mountain, Archive, Backpack, Bird, Bug, Cat, Cookie, Cross, Dog, Dumbbell, Fish, Ghost, Glasses, Hammer, Headphones, Keyboard, Laptop, Mic, Navigation, Palmtree, Paperclip, PawPrint, Pipette, Scissors, Shirt, Smartphone, Sword, Tent, Ticket, Tv, Watch, Trees, Flower, Apple, Mouse } from 'lucide-react';
+import { Star, BookmarkCheck, ArrowLeft, MoreHorizontal, Trash2, Search, ArrowUpDown, Check, ChevronUp, ChevronDown, MoreVertical, FileText, Eye, Edit2, Book, FolderPlus, Plus, X, Bookmark, Folder, Heart, Box, Layers, Briefcase, Coffee, List, Camera, Music, Image, Map, Compass, Shield, Flag, Globe, Bell, Calendar, Clock, Crown, Feather, Key, Lightbulb, MapPin, Moon, Sun, Umbrella, Tag, Hash, FolderOpen, PenTool, Sparkles, Anchor, Activity, Award, CheckCircle, Crosshair, Diamond, Gem, Gift, Hexagon, Infinity as InfinityIcon, LifeBuoy, Magnet, Palette, PieChart, Puzzle, Rocket, Target, Trophy, Wand2, Zap, Cloud, CloudRain, Droplet, Flame, Leaf, Wind, Snowflake, Plane, Car, Ship, Mountain, Archive, Backpack, Bird, Bug, Cat, Cookie, Cross, Dog, Dumbbell, Fish, Ghost, Glasses, Hammer, Headphones, Keyboard, Laptop, Mic, Navigation, Palmtree, Paperclip, PawPrint, Pipette, Scissors, Shirt, Smartphone, Sword, Tent, Ticket, Tv, Watch, Trees, Flower, Apple, Mouse } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useFavorites, useBookmarks, useNotes, useCollections, useSettings } from '@/hooks/useAppStore';
 import { useSurahs, useSurahVerses } from '@/hooks/useQuranData';
@@ -100,7 +100,7 @@ const FOLDER_ICONS: Record<string, React.ElementType> = {
   Camera, Music, Image, Map, Compass, Shield, Flag, Globe, Bell, Calendar, Clock, 
   Crown, Feather, Key, Lightbulb, MapPin, Moon, Sun, Umbrella, Tag, Hash, FolderOpen, 
   PenTool, Sparkles, Anchor, Activity, Award, CheckCircle, Crosshair, Diamond, Gem, 
-  Gift, Hexagon, Infinity, LifeBuoy, Magnet, Palette, PieChart, Puzzle, Rocket, 
+  Gift, Hexagon, InfinityIcon, LifeBuoy, Magnet, Palette, PieChart, Puzzle, Rocket, 
   Target, Trophy, Wand2, Zap, Cloud, CloudRain, Droplet, Flame, Leaf, Wind, Snowflake, 
   Plane, Car, Ship, Mountain, Archive, Backpack, Bird, Bug, Cat, Cookie, Cross, Dog, 
   Dumbbell, Fish, Ghost, Glasses, Hammer, Headphones, Keyboard, Laptop, Mic, Navigation, 

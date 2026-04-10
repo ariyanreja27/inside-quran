@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, BookOpen, Quote, Sparkles, Timer, Users, CloudSun, ChevronRight } from 'lucide-react';
+import { ArrowLeft, BookOpen, Quote, Sparkles, Timer, Users, CloudSun, ChevronRight, type LucideIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { topics } from '@/data/topics';
 
-const iconMap: Record<string, any> = {
+const iconMap: Record<string, LucideIcon> = {
   Sparkles: Sparkles,
   Timer: Timer,
   Users: Users,

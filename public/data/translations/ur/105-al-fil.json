@@ -1,0 +1,26 @@
+{
+  "surahNumber": 105,
+  "edition": "ur.roman",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Tumne dekha nahin ke tumhare Rubb ne haathi walon ke saath kya kiya"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Kya usne unki tadbir ko akarat nahin kar diya"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Aur un par parindo ke jhund ke jhund bhej diye"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Jo un par pakey huey mitti ke patthar phenk rahey thay"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Phir un ka yeh haal kar diya jaise janwaron ka khaya hua bhoosa"
+    }
+  ]
+}

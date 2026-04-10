@@ -1,0 +1,22 @@
+{
+  "surahNumber": 112,
+  "edition": "hi.hindi",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "(ऐ रसूल) तुम कह दो कि ख़ुदा एक है"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "ख़ुदा बरहक़ बेनियाज़ है"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "न उसने किसी को जना न उसको किसी ने जना,"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "और उसका कोई हमसर नहीं"
+    }
+  ]
+}

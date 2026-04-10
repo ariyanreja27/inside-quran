@@ -1,0 +1,395 @@
+{
+  "surahNumber": 94,
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "words": [
+        {
+          "id": 188,
+          "position": 1,
+          "text": "أَلَمْ",
+          "transliteration": "alam",
+          "translation": "Have not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:1:1"
+        },
+        {
+          "id": 189,
+          "position": 2,
+          "text": "نَشْرَحْ",
+          "transliteration": "nashraḥ",
+          "translation": "We expanded",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:1:2"
+        },
+        {
+          "id": 190,
+          "position": 3,
+          "text": "لَكَ",
+          "transliteration": "laka",
+          "translation": "for you",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:1:3"
+        },
+        {
+          "id": 191,
+          "position": 4,
+          "text": "صَدْرَكَ",
+          "transliteration": "ṣadraka",
+          "translation": "your breast",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:1:4"
+        },
+        {
+          "id": 192,
+          "position": 5,
+          "text": "١",
+          "transliteration": "",
+          "translation": "(1)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "94:1:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 2,
+      "words": [
+        {
+          "id": 1361,
+          "position": 1,
+          "text": "وَوَضَعْنَا",
+          "transliteration": "wawaḍaʿnā",
+          "translation": "And We removed",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:2:1"
+        },
+        {
+          "id": 1362,
+          "position": 2,
+          "text": "عَنكَ",
+          "transliteration": "ʿanka",
+          "translation": "from you",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:2:2"
+        },
+        {
+          "id": 1363,
+          "position": 3,
+          "text": "وِزْرَكَ",
+          "transliteration": "wiz'raka",
+          "translation": "your burden",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:2:3"
+        },
+        {
+          "id": 1364,
+          "position": 4,
+          "text": "٢",
+          "transliteration": "",
+          "translation": "(2)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "94:2:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 3,
+      "words": [
+        {
+          "id": 2546,
+          "position": 1,
+          "text": "ٱلَّذِىٓ",
+          "transliteration": "alladhī",
+          "translation": "Which",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:3:1"
+        },
+        {
+          "id": 2547,
+          "position": 2,
+          "text": "أَنقَضَ",
+          "transliteration": "anqaḍa",
+          "translation": "weighed upon",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:3:2"
+        },
+        {
+          "id": 2548,
+          "position": 3,
+          "text": "ظَهْرَكَ",
+          "transliteration": "ẓahraka",
+          "translation": "your back",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:3:3"
+        },
+        {
+          "id": 2549,
+          "position": 4,
+          "text": "٣",
+          "transliteration": "",
+          "translation": "(3)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "94:3:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 4,
+      "words": [
+        {
+          "id": 3914,
+          "position": 1,
+          "text": "وَرَفَعْنَا",
+          "transliteration": "warafaʿnā",
+          "translation": "And We raised high",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:4:1"
+        },
+        {
+          "id": 3915,
+          "position": 2,
+          "text": "لَكَ",
+          "transliteration": "laka",
+          "translation": "for you",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:4:2"
+        },
+        {
+          "id": 3916,
+          "position": 3,
+          "text": "ذِكْرَكَ",
+          "transliteration": "dhik'raka",
+          "translation": "your reputation",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:4:3"
+        },
+        {
+          "id": 3917,
+          "position": 4,
+          "text": "٤",
+          "transliteration": "",
+          "translation": "(4)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "94:4:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 5,
+      "words": [
+        {
+          "id": 5270,
+          "position": 1,
+          "text": "فَإِنَّ",
+          "transliteration": "fa-inna",
+          "translation": "So indeed",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:5:1"
+        },
+        {
+          "id": 5271,
+          "position": 2,
+          "text": "مَعَ",
+          "transliteration": "maʿa",
+          "translation": "with",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:5:2"
+        },
+        {
+          "id": 5272,
+          "position": 3,
+          "text": "ٱلْعُسْرِ",
+          "transliteration": "l-ʿus'ri",
+          "translation": "the hardship",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:5:3"
+        },
+        {
+          "id": 5273,
+          "position": 4,
+          "text": "يُسْرًا",
+          "transliteration": "yus'ran",
+          "translation": "(is) ease",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:5:4"
+        },
+        {
+          "id": 5274,
+          "position": 5,
+          "text": "٥",
+          "transliteration": "",
+          "translation": "(5)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "94:5:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 6,
+      "words": [
+        {
+          "id": 6456,
+          "position": 1,
+          "text": "إِنَّ",
+          "transliteration": "inna",
+          "translation": "Indeed",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:6:1"
+        },
+        {
+          "id": 6457,
+          "position": 2,
+          "text": "مَعَ",
+          "transliteration": "maʿa",
+          "translation": "with",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:6:2"
+        },
+        {
+          "id": 6458,
+          "position": 3,
+          "text": "ٱلْعُسْرِ",
+          "transliteration": "l-ʿus'ri",
+          "translation": "the hardship",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:6:3"
+        },
+        {
+          "id": 6459,
+          "position": 4,
+          "text": "يُسْرًۭا",
+          "transliteration": "yus'ran",
+          "translation": "(is) ease",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:6:4"
+        },
+        {
+          "id": 6460,
+          "position": 5,
+          "text": "٦",
+          "transliteration": "",
+          "translation": "(6)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "94:6:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 7,
+      "words": [
+        {
+          "id": 7614,
+          "position": 1,
+          "text": "فَإِذَا",
+          "transliteration": "fa-idhā",
+          "translation": "So when",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:7:1"
+        },
+        {
+          "id": 7615,
+          "position": 2,
+          "text": "فَرَغْتَ",
+          "transliteration": "faraghta",
+          "translation": "you have finished",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:7:2"
+        },
+        {
+          "id": 7616,
+          "position": 3,
+          "text": "فَٱنصَبْ",
+          "transliteration": "fa-inṣab",
+          "translation": "then labor hard",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:7:3"
+        },
+        {
+          "id": 7617,
+          "position": 4,
+          "text": "٧",
+          "transliteration": "",
+          "translation": "(7)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "94:7:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 8,
+      "words": [
+        {
+          "id": 9077,
+          "position": 1,
+          "text": "وَإِلَىٰ",
+          "transliteration": "wa-ilā",
+          "translation": "And to",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:8:1"
+        },
+        {
+          "id": 9078,
+          "position": 2,
+          "text": "رَبِّكَ",
+          "transliteration": "rabbika",
+          "translation": "your Lord",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:8:2"
+        },
+        {
+          "id": 9079,
+          "position": 3,
+          "text": "فَٱرْغَب",
+          "transliteration": "fa-ir'ghab",
+          "translation": "turn your attention",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "94:8:3"
+        },
+        {
+          "id": 9080,
+          "position": 4,
+          "text": "٨",
+          "transliteration": "",
+          "translation": "(8)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "94:8:4"
+        }
+      ]
+    }
+  ]
+}

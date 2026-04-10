@@ -1,0 +1,46 @@
+{
+  "surahNumber": 91,
+  "edition": "ur.roman",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Suraj aur uski dhoop ki kasam"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Aur Chand ki kasam jabke wo uske pichey aata hai"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Aur din ki kasam jabke woh (Suraj ko) numaya kar deta hai"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Aur raat ki kasam jabke woh (suraj ko) dhank leti hai"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Aur aasman ki aur us zaat ki kasam jisne usey qayam kiya"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Aur zameen ki aur us zaat ki kasam jisne usey bichaya"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Aur nafs-e-Insani ki aur us zaat ki kasam jisne usey hamwar kiya"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "Phir uski badi aur uski parhezgari uss par ilham kar di"
+    },
+    {
+      "numberInSurah": 9,
+      "text": "Yaqeenan falah pa gaya woh jisne nafs ka tazkiya kiya"
+    },
+    {
+      "numberInSurah": 10,
+      "text": "Aur na-murad hua woh jisne usko daba diya"
+    }
+  ]
+}

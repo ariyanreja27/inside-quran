@@ -1,0 +1,22 @@
+{
+  "surahNumber": 112,
+  "edition": "quran-tajweed",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "قُلْ هُوَ [h:8078[ٱ]للَّهُ أَحَ[q[د]ٌ"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "ٱللَّهُ [h:14675[ٱ][l[ل]صَّمَ[q[د]ُ"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "لَمْ يَلِ[q:14676[دْ] وَلَمْ يُولَ[q:14677[دْ]"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "وَلَمْ يَك[u:2596[ُن ل]َّهُ[n[ۥ] كُفُوًا أَحَ[q[د]ُۢ"
+    }
+  ]
+}

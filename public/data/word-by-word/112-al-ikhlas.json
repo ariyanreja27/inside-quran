@@ -1,0 +1,215 @@
+{
+  "surahNumber": 112,
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "words": [
+        {
+          "id": 6,
+          "position": 1,
+          "text": "قُلْ",
+          "transliteration": "qul",
+          "translation": "Say",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "112:1:1"
+        },
+        {
+          "id": 7,
+          "position": 2,
+          "text": "هُوَ",
+          "transliteration": "huwa",
+          "translation": "He",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "112:1:2"
+        },
+        {
+          "id": 8,
+          "position": 3,
+          "text": "ٱللَّهُ",
+          "transliteration": "l-lahu",
+          "translation": "(is) Allah",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "112:1:3"
+        },
+        {
+          "id": 9,
+          "position": 4,
+          "text": "أَحَدٌ",
+          "transliteration": "aḥadun",
+          "translation": "the One",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "112:1:4"
+        },
+        {
+          "id": 10,
+          "position": 5,
+          "text": "١",
+          "transliteration": "",
+          "translation": "(1)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "112:1:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 2,
+      "words": [
+        {
+          "id": 916,
+          "position": 1,
+          "text": "ٱللَّهُ",
+          "transliteration": "al-lahu",
+          "translation": "Allah",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "112:2:1"
+        },
+        {
+          "id": 917,
+          "position": 2,
+          "text": "ٱلصَّمَدُ",
+          "transliteration": "l-ṣamadu",
+          "translation": "the Eternal, the Absolute",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "112:2:2"
+        },
+        {
+          "id": 918,
+          "position": 3,
+          "text": "٢",
+          "transliteration": "",
+          "translation": "(2)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "112:2:3"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 3,
+      "words": [
+        {
+          "id": 2746,
+          "position": 1,
+          "text": "لَمْ",
+          "transliteration": "lam",
+          "translation": "Not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "112:3:1"
+        },
+        {
+          "id": 2747,
+          "position": 2,
+          "text": "يَلِدْ",
+          "transliteration": "yalid",
+          "translation": "He begets",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "112:3:2"
+        },
+        {
+          "id": 2748,
+          "position": 3,
+          "text": "وَلَمْ",
+          "transliteration": "walam",
+          "translation": "and not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "112:3:3"
+        },
+        {
+          "id": 2749,
+          "position": 4,
+          "text": "يُولَدْ",
+          "transliteration": "yūlad",
+          "translation": "He is begotten",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "112:3:4"
+        },
+        {
+          "id": 2750,
+          "position": 5,
+          "text": "٣",
+          "transliteration": "",
+          "translation": "(3)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "112:3:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 4,
+      "words": [
+        {
+          "id": 4136,
+          "position": 1,
+          "text": "وَلَمْ",
+          "transliteration": "walam",
+          "translation": "And not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "112:4:1"
+        },
+        {
+          "id": 4137,
+          "position": 2,
+          "text": "يَكُن",
+          "transliteration": "yakun",
+          "translation": "is",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "112:4:2"
+        },
+        {
+          "id": 4138,
+          "position": 3,
+          "text": "لَّهُۥ",
+          "transliteration": "lahu",
+          "translation": "for Him",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "112:4:3"
+        },
+        {
+          "id": 4139,
+          "position": 4,
+          "text": "كُفُوًا",
+          "transliteration": "kufuwan",
+          "translation": "equivalent",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "112:4:4"
+        },
+        {
+          "id": 4140,
+          "position": 5,
+          "text": "أَحَدٌۢ",
+          "transliteration": "aḥadun",
+          "translation": "any [one]",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "112:4:5"
+        },
+        {
+          "id": 4141,
+          "position": 6,
+          "text": "٤",
+          "transliteration": "",
+          "translation": "(4)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "112:4:6"
+        }
+      ]
+    }
+  ]
+}

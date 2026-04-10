@@ -1,0 +1,46 @@
+{
+  "surahNumber": 78,
+  "edition": "ur.roman",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Yeh log kis cheez ke baarey mei puch-gajj kar rahe hain"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Kya us badi khabar ke baarey mein"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Jiske mutaaliq yeh mukhtalif che-mei-goiyan (disagreement) karne mein lagey huey hain"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Hargiz nahin an-qareeb inhein maloom ho jayega"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Haan hargiz nahin, an-qareeb inhein maloom ho jayega"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Kya yeh waqiya nahin hai ke humne zameen ko farsh banaya"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Aur pahadon ko mekhon(pegs) ki tarah gaad diya"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "Aur tumhein (mardon aur auraton ke) jodon ki shakal mein paida kiya"
+    },
+    {
+      "numberInSurah": 9,
+      "text": "Aur tumhari neend ko baaisey sukoon banaya"
+    },
+    {
+      "numberInSurah": 10,
+      "text": "Aur raat ko purdah posh"
+    }
+  ]
+}

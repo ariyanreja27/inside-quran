@@ -1,0 +1,46 @@
+{
+  "surahNumber": 2,
+  "edition": "ur.roman",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Alif Laam Meem"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Yeh Allah ki kitab hai, is mein koi shakk nahin, hidayat hai un parheizgaar logon ke liye"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Jo gaib par iman latey hain, namaz qayam karte hain , jo rizq humne unko diya hai usmein se kharch karte hain"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Jo kitab tumpar nazil ki gayi hai (yani Quran) aur jo kitabein tumse pehle nazil ki gayi thi un sab par iman latey hain aur aakhirat par yaqeen rakhte hain"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Aisey log apne Rubb ki taraf se raah e raast par hain aur wahi falaah paney waley hain"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Jin logon ne (in baaton ko tasleem karne se) inkar kardiya, unke liye yaksan hai, khwa tum unhein khabardaar karo ya na karo, bahar haal woh maanne waley nahin hai"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Allah ne unke dilon aur unke kaano par mohar laga di hai aur unki aankhon par purda padh gaya hai, woh sakht saza ke mustahiq hain"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "Baaz log aisey bhi hain jo kehte hain ke hum Allah par aur aakhirat ke din par iman laye hain, halaanke dar-haqeeqat woh momin nahin hain"
+    },
+    {
+      "numberInSurah": 9,
+      "text": "Woh Allah aur iman laney walon ke saath dhoke-baazi kar rahey hain, magar darasal woh khud apne aap hi ko dhoke mein daal rahey hain aur unhein iska shaoor nahin hai"
+    },
+    {
+      "numberInSurah": 10,
+      "text": "Unke dilon mein ek bimari hai jisey Allah ne aur zyada bada diya, aur jo jhoot woh bolte hain, uski padash mein unke liye dardnaak saza hai"
+    }
+  ]
+}

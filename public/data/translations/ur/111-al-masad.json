@@ -1,0 +1,26 @@
+{
+  "surahNumber": 111,
+  "edition": "ur.roman",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Toot gaye Abu Lahab ke haath aur na-murad ho gaya woh"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Uska maal aur jo kuch us ne kamaya woh uske kisi kaam na aaya"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Zaroor woh shola zan Aag mei dala jayega"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Aur (us ke saath) us ki joru(wife) bhi lagai bujhai karne wali"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Us ki gardan(neck) mein moonj ki rassi hogi"
+    }
+  ]
+}

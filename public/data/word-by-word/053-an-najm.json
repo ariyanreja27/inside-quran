@@ -1,0 +1,4535 @@
+{
+  "surahNumber": 53,
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "words": [
+        {
+          "id": 280,
+          "position": 1,
+          "text": "وَٱلنَّجْمِ",
+          "transliteration": "wal-najmi",
+          "translation": "By the star",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:1:1"
+        },
+        {
+          "id": 281,
+          "position": 2,
+          "text": "إِذَا",
+          "transliteration": "idhā",
+          "translation": "when",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:1:2"
+        },
+        {
+          "id": 282,
+          "position": 3,
+          "text": "هَوَىٰ",
+          "transliteration": "hawā",
+          "translation": "it goes down",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:1:3"
+        },
+        {
+          "id": 283,
+          "position": 4,
+          "text": "١",
+          "transliteration": "",
+          "translation": "(1)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:1:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 2,
+      "words": [
+        {
+          "id": 1162,
+          "position": 1,
+          "text": "مَا",
+          "transliteration": "mā",
+          "translation": "Not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:2:1"
+        },
+        {
+          "id": 1163,
+          "position": 2,
+          "text": "ضَلَّ",
+          "transliteration": "ḍalla",
+          "translation": "has strayed",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:2:2"
+        },
+        {
+          "id": 1164,
+          "position": 3,
+          "text": "صَاحِبُكُمْ",
+          "transliteration": "ṣāḥibukum",
+          "translation": "your companion",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:2:3"
+        },
+        {
+          "id": 1165,
+          "position": 4,
+          "text": "وَمَا",
+          "transliteration": "wamā",
+          "translation": "and not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:2:4"
+        },
+        {
+          "id": 1166,
+          "position": 5,
+          "text": "غَوَىٰ",
+          "transliteration": "ghawā",
+          "translation": "has he erred",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:2:5"
+        },
+        {
+          "id": 1167,
+          "position": 6,
+          "text": "٢",
+          "transliteration": "",
+          "translation": "(2)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:2:6"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 3,
+      "words": [
+        {
+          "id": 2208,
+          "position": 1,
+          "text": "وَمَا",
+          "transliteration": "wamā",
+          "translation": "And not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:3:1"
+        },
+        {
+          "id": 2209,
+          "position": 2,
+          "text": "يَنطِقُ",
+          "transliteration": "yanṭiqu",
+          "translation": "he speaks",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:3:2"
+        },
+        {
+          "id": 2210,
+          "position": 3,
+          "text": "عَنِ",
+          "transliteration": "ʿani",
+          "translation": "from",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:3:3"
+        },
+        {
+          "id": 2211,
+          "position": 4,
+          "text": "ٱلْهَوَىٰٓ",
+          "transliteration": "l-hawā",
+          "translation": "the desire",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:3:4"
+        },
+        {
+          "id": 2212,
+          "position": 5,
+          "text": "٣",
+          "transliteration": "",
+          "translation": "(3)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:3:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 4,
+      "words": [
+        {
+          "id": 3538,
+          "position": 1,
+          "text": "إِنْ",
+          "transliteration": "in",
+          "translation": "Not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:4:1"
+        },
+        {
+          "id": 3539,
+          "position": 2,
+          "text": "هُوَ",
+          "transliteration": "huwa",
+          "translation": "it",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:4:2"
+        },
+        {
+          "id": 3540,
+          "position": 3,
+          "text": "إِلَّا",
+          "transliteration": "illā",
+          "translation": "(is) except",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:4:3"
+        },
+        {
+          "id": 3541,
+          "position": 4,
+          "text": "وَحْىٌۭ",
+          "transliteration": "waḥyun",
+          "translation": "a revelation",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:4:4"
+        },
+        {
+          "id": 3542,
+          "position": 5,
+          "text": "يُوحَىٰ",
+          "transliteration": "yūḥā",
+          "translation": "revealed",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:4:5"
+        },
+        {
+          "id": 3543,
+          "position": 6,
+          "text": "٤",
+          "transliteration": "",
+          "translation": "(4)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:4:6"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 5,
+      "words": [
+        {
+          "id": 4898,
+          "position": 1,
+          "text": "عَلَّمَهُۥ",
+          "transliteration": "ʿallamahu",
+          "translation": "Has taught him",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:5:1"
+        },
+        {
+          "id": 4899,
+          "position": 2,
+          "text": "شَدِيدُ",
+          "transliteration": "shadīdu",
+          "translation": "the (one) mighty",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:5:2"
+        },
+        {
+          "id": 4900,
+          "position": 3,
+          "text": "ٱلْقُوَىٰ",
+          "transliteration": "l-quwā",
+          "translation": "(in) power",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:5:3"
+        },
+        {
+          "id": 4901,
+          "position": 4,
+          "text": "٥",
+          "transliteration": "",
+          "translation": "(5)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:5:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 6,
+      "words": [
+        {
+          "id": 6144,
+          "position": 1,
+          "text": "ذُو",
+          "transliteration": "dhū",
+          "translation": "Possessor of soundness",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:6:1"
+        },
+        {
+          "id": 6145,
+          "position": 2,
+          "text": "مِرَّةٍۢ",
+          "transliteration": "mirratin",
+          "translation": "Possessor of soundness",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:6:2"
+        },
+        {
+          "id": 6146,
+          "position": 3,
+          "text": "فَٱسْتَوَىٰ",
+          "transliteration": "fa-is'tawā",
+          "translation": "And he rose",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:6:3"
+        },
+        {
+          "id": 6147,
+          "position": 4,
+          "text": "٦",
+          "transliteration": "",
+          "translation": "(6)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:6:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 7,
+      "words": [
+        {
+          "id": 7482,
+          "position": 1,
+          "text": "وَهُوَ",
+          "transliteration": "wahuwa",
+          "translation": "While he",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:7:1"
+        },
+        {
+          "id": 7483,
+          "position": 2,
+          "text": "بِٱلْأُفُقِ",
+          "transliteration": "bil-ufuqi",
+          "translation": "(was) in the horizon ",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:7:2"
+        },
+        {
+          "id": 7484,
+          "position": 3,
+          "text": "ٱلْأَعْلَىٰ",
+          "transliteration": "l-aʿlā",
+          "translation": "the highest",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:7:3"
+        },
+        {
+          "id": 7485,
+          "position": 4,
+          "text": "٧",
+          "transliteration": "",
+          "translation": "(7)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:7:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 8,
+      "words": [
+        {
+          "id": 8727,
+          "position": 1,
+          "text": "ثُمَّ",
+          "transliteration": "thumma",
+          "translation": "Then",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:8:1"
+        },
+        {
+          "id": 8728,
+          "position": 2,
+          "text": "دَنَا",
+          "transliteration": "danā",
+          "translation": "he approached",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:8:2"
+        },
+        {
+          "id": 8729,
+          "position": 3,
+          "text": "فَتَدَلَّىٰ",
+          "transliteration": "fatadallā",
+          "translation": "and came down",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:8:3"
+        },
+        {
+          "id": 8730,
+          "position": 4,
+          "text": "٨",
+          "transliteration": "",
+          "translation": "(8)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:8:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 9,
+      "words": [
+        {
+          "id": 9952,
+          "position": 1,
+          "text": "فَكَانَ",
+          "transliteration": "fakāna",
+          "translation": "And was",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:9:1"
+        },
+        {
+          "id": 9953,
+          "position": 2,
+          "text": "قَابَ",
+          "transliteration": "qāba",
+          "translation": "(at) a distance",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:9:2"
+        },
+        {
+          "id": 9954,
+          "position": 3,
+          "text": "قَوْسَيْنِ",
+          "transliteration": "qawsayni",
+          "translation": "(of) two bow-(lengths)",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:9:3"
+        },
+        {
+          "id": 9955,
+          "position": 4,
+          "text": "أَوْ",
+          "transliteration": "aw",
+          "translation": "or",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:9:4"
+        },
+        {
+          "id": 9956,
+          "position": 5,
+          "text": "أَدْنَىٰ",
+          "transliteration": "adnā",
+          "translation": "nearer",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:9:5"
+        },
+        {
+          "id": 9957,
+          "position": 6,
+          "text": "٩",
+          "transliteration": "",
+          "translation": "(9)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:9:6"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 10,
+      "words": [
+        {
+          "id": 11155,
+          "position": 1,
+          "text": "فَأَوْحَىٰٓ",
+          "transliteration": "fa-awḥā",
+          "translation": "So he revealed",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:10:1"
+        },
+        {
+          "id": 11156,
+          "position": 2,
+          "text": "إِلَىٰ",
+          "transliteration": "ilā",
+          "translation": "to",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:10:2"
+        },
+        {
+          "id": 11157,
+          "position": 3,
+          "text": "عَبْدِهِۦ",
+          "transliteration": "ʿabdihi",
+          "translation": "His slave",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:10:3"
+        },
+        {
+          "id": 11158,
+          "position": 4,
+          "text": "مَآ",
+          "transliteration": "mā",
+          "translation": "what",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:10:4"
+        },
+        {
+          "id": 11159,
+          "position": 5,
+          "text": "أَوْحَىٰ",
+          "transliteration": "awḥā",
+          "translation": "he revealed",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:10:5"
+        },
+        {
+          "id": 11160,
+          "position": 6,
+          "text": "١٠",
+          "transliteration": "",
+          "translation": "(10)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:10:6"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 11,
+      "words": [
+        {
+          "id": 12481,
+          "position": 1,
+          "text": "مَا",
+          "transliteration": "mā",
+          "translation": "Not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:11:1"
+        },
+        {
+          "id": 12482,
+          "position": 2,
+          "text": "كَذَبَ",
+          "transliteration": "kadhaba",
+          "translation": "lied",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:11:2"
+        },
+        {
+          "id": 12483,
+          "position": 3,
+          "text": "ٱلْفُؤَادُ",
+          "transliteration": "l-fuādu",
+          "translation": "the heart",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:11:3"
+        },
+        {
+          "id": 12484,
+          "position": 4,
+          "text": "مَا",
+          "transliteration": "mā",
+          "translation": "what",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:11:4"
+        },
+        {
+          "id": 12485,
+          "position": 5,
+          "text": "رَأَىٰٓ",
+          "transliteration": "raā",
+          "translation": "it saw",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:11:5"
+        },
+        {
+          "id": 12486,
+          "position": 6,
+          "text": "١١",
+          "transliteration": "",
+          "translation": "(11)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:11:6"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 12,
+      "words": [
+        {
+          "id": 13797,
+          "position": 1,
+          "text": "أَفَتُمَـٰرُونَهُۥ",
+          "transliteration": "afatumārūnahu",
+          "translation": "Then will you dispute with him",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:12:1"
+        },
+        {
+          "id": 13798,
+          "position": 2,
+          "text": "عَلَىٰ",
+          "transliteration": "ʿalā",
+          "translation": "about",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:12:2"
+        },
+        {
+          "id": 13799,
+          "position": 3,
+          "text": "مَا",
+          "transliteration": "mā",
+          "translation": "what",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:12:3"
+        },
+        {
+          "id": 13800,
+          "position": 4,
+          "text": "يَرَىٰ",
+          "transliteration": "yarā",
+          "translation": "he saw",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:12:4"
+        },
+        {
+          "id": 13801,
+          "position": 5,
+          "text": "١٢",
+          "transliteration": "",
+          "translation": "(12)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:12:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 13,
+      "words": [
+        {
+          "id": 14959,
+          "position": 1,
+          "text": "وَلَقَدْ",
+          "transliteration": "walaqad",
+          "translation": "And certainly",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:13:1"
+        },
+        {
+          "id": 14960,
+          "position": 2,
+          "text": "رَءَاهُ",
+          "transliteration": "raāhu",
+          "translation": "he saw him",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:13:2"
+        },
+        {
+          "id": 14961,
+          "position": 3,
+          "text": "نَزْلَةً",
+          "transliteration": "nazlatan",
+          "translation": "(in) descent",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:13:3"
+        },
+        {
+          "id": 14962,
+          "position": 4,
+          "text": "أُخْرَىٰ",
+          "transliteration": "ukh'rā",
+          "translation": "another",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:13:4"
+        },
+        {
+          "id": 14963,
+          "position": 5,
+          "text": "١٣",
+          "transliteration": "",
+          "translation": "(13)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:13:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 14,
+      "words": [
+        {
+          "id": 16023,
+          "position": 1,
+          "text": "عِندَ",
+          "transliteration": "ʿinda",
+          "translation": "Near",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:14:1"
+        },
+        {
+          "id": 16024,
+          "position": 2,
+          "text": "سِدْرَةِ",
+          "transliteration": "sid'rati",
+          "translation": "(the) Lote Tree",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:14:2"
+        },
+        {
+          "id": 16025,
+          "position": 3,
+          "text": "ٱلْمُنتَهَىٰ",
+          "transliteration": "l-muntahā",
+          "translation": "(of) the utmost boundary",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:14:3"
+        },
+        {
+          "id": 16026,
+          "position": 4,
+          "text": "١٤",
+          "transliteration": "",
+          "translation": "(14)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:14:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 15,
+      "words": [
+        {
+          "id": 17245,
+          "position": 1,
+          "text": "عِندَهَا",
+          "transliteration": "ʿindahā",
+          "translation": "Near it",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:15:1"
+        },
+        {
+          "id": 17246,
+          "position": 2,
+          "text": "جَنَّةُ",
+          "transliteration": "jannatu",
+          "translation": "(is the) Garden",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:15:2"
+        },
+        {
+          "id": 17247,
+          "position": 3,
+          "text": "ٱلْمَأْوَىٰٓ",
+          "transliteration": "l-mawā",
+          "translation": "(of) Abode",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:15:3"
+        },
+        {
+          "id": 17248,
+          "position": 4,
+          "text": "١٥",
+          "transliteration": "",
+          "translation": "(15)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:15:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 16,
+      "words": [
+        {
+          "id": 18307,
+          "position": 1,
+          "text": "إِذْ",
+          "transliteration": "idh",
+          "translation": "When",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:16:1"
+        },
+        {
+          "id": 18308,
+          "position": 2,
+          "text": "يَغْشَى",
+          "transliteration": "yaghshā",
+          "translation": "covered",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:16:2"
+        },
+        {
+          "id": 18309,
+          "position": 3,
+          "text": "ٱلسِّدْرَةَ",
+          "transliteration": "l-sid'rata",
+          "translation": "the Lote Tree",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:16:3"
+        },
+        {
+          "id": 18310,
+          "position": 4,
+          "text": "مَا",
+          "transliteration": "mā",
+          "translation": "what",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:16:4"
+        },
+        {
+          "id": 18311,
+          "position": 5,
+          "text": "يَغْشَىٰ",
+          "transliteration": "yaghshā",
+          "translation": "covers",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:16:5"
+        },
+        {
+          "id": 18312,
+          "position": 6,
+          "text": "١٦",
+          "transliteration": "",
+          "translation": "(16)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:16:6"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 17,
+      "words": [
+        {
+          "id": 19317,
+          "position": 1,
+          "text": "مَا",
+          "transliteration": "mā",
+          "translation": "Not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:17:1"
+        },
+        {
+          "id": 19318,
+          "position": 2,
+          "text": "زَاغَ",
+          "transliteration": "zāgha",
+          "translation": "swerved",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:17:2"
+        },
+        {
+          "id": 19319,
+          "position": 3,
+          "text": "ٱلْبَصَرُ",
+          "transliteration": "l-baṣaru",
+          "translation": "the sight",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:17:3"
+        },
+        {
+          "id": 19320,
+          "position": 4,
+          "text": "وَمَا",
+          "transliteration": "wamā",
+          "translation": "and not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:17:4"
+        },
+        {
+          "id": 19321,
+          "position": 5,
+          "text": "طَغَىٰ",
+          "transliteration": "ṭaghā",
+          "translation": "it transgressed",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:17:5"
+        },
+        {
+          "id": 19322,
+          "position": 6,
+          "text": "١٧",
+          "transliteration": "",
+          "translation": "(17)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:17:6"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 18,
+      "words": [
+        {
+          "id": 20389,
+          "position": 1,
+          "text": "لَقَدْ",
+          "transliteration": "laqad",
+          "translation": "Certainly",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:18:1"
+        },
+        {
+          "id": 20390,
+          "position": 2,
+          "text": "رَأَىٰ",
+          "transliteration": "raā",
+          "translation": "he saw",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:18:2"
+        },
+        {
+          "id": 20391,
+          "position": 3,
+          "text": "مِنْ",
+          "transliteration": "min",
+          "translation": "of",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:18:3"
+        },
+        {
+          "id": 20392,
+          "position": 4,
+          "text": "ءَايَـٰتِ",
+          "transliteration": "āyāti",
+          "translation": "(the) Signs",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:18:4"
+        },
+        {
+          "id": 20393,
+          "position": 5,
+          "text": "رَبِّهِ",
+          "transliteration": "rabbihi",
+          "translation": "(of) his Lord",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:18:5"
+        },
+        {
+          "id": 20394,
+          "position": 6,
+          "text": "ٱلْكُبْرَىٰٓ",
+          "transliteration": "l-kub'rā",
+          "translation": "the Greatest",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:18:6"
+        },
+        {
+          "id": 20395,
+          "position": 7,
+          "text": "١٨",
+          "transliteration": "",
+          "translation": "(18)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:18:7"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 19,
+      "words": [
+        {
+          "id": 21466,
+          "position": 1,
+          "text": "أَفَرَءَيْتُمُ",
+          "transliteration": "afara-aytumu",
+          "translation": "So have you seen",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:19:1"
+        },
+        {
+          "id": 21467,
+          "position": 2,
+          "text": "ٱللَّـٰتَ",
+          "transliteration": "l-lāta",
+          "translation": "the Lat",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:19:2"
+        },
+        {
+          "id": 21468,
+          "position": 3,
+          "text": "وَٱلْعُزَّىٰ",
+          "transliteration": "wal-ʿuzā",
+          "translation": "and the Uzza",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:19:3"
+        },
+        {
+          "id": 21469,
+          "position": 4,
+          "text": "١٩",
+          "transliteration": "",
+          "translation": "(19)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:19:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 20,
+      "words": [
+        {
+          "id": 22554,
+          "position": 1,
+          "text": "وَمَنَوٰةَ",
+          "transliteration": "wamanata",
+          "translation": "And Manat",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:20:1"
+        },
+        {
+          "id": 22555,
+          "position": 2,
+          "text": "ٱلثَّالِثَةَ",
+          "transliteration": "l-thālithata",
+          "translation": "the third",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:20:2"
+        },
+        {
+          "id": 22556,
+          "position": 3,
+          "text": "ٱلْأُخْرَىٰٓ",
+          "transliteration": "l-ukh'rā",
+          "translation": "the other",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:20:3"
+        },
+        {
+          "id": 22557,
+          "position": 4,
+          "text": "٢٠",
+          "transliteration": "",
+          "translation": "(20)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:20:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 21,
+      "words": [
+        {
+          "id": 23720,
+          "position": 1,
+          "text": "أَلَكُمُ",
+          "transliteration": "alakumu",
+          "translation": "Is for you",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:21:1"
+        },
+        {
+          "id": 23721,
+          "position": 2,
+          "text": "ٱلذَّكَرُ",
+          "transliteration": "l-dhakaru",
+          "translation": "the male",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:21:2"
+        },
+        {
+          "id": 23722,
+          "position": 3,
+          "text": "وَلَهُ",
+          "transliteration": "walahu",
+          "translation": "and for Him",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:21:3"
+        },
+        {
+          "id": 23723,
+          "position": 4,
+          "text": "ٱلْأُنثَىٰ",
+          "transliteration": "l-unthā",
+          "translation": "the female",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:21:4"
+        },
+        {
+          "id": 23724,
+          "position": 5,
+          "text": "٢١",
+          "transliteration": "",
+          "translation": "(21)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:21:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 22,
+      "words": [
+        {
+          "id": 24754,
+          "position": 1,
+          "text": "تِلْكَ",
+          "transliteration": "til'ka",
+          "translation": "This",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:22:1"
+        },
+        {
+          "id": 24755,
+          "position": 2,
+          "text": "إِذًۭا",
+          "transliteration": "idhan",
+          "translation": "then",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:22:2"
+        },
+        {
+          "id": 24756,
+          "position": 3,
+          "text": "قِسْمَةٌۭ",
+          "transliteration": "qis'matun",
+          "translation": "(is) a division",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:22:3"
+        },
+        {
+          "id": 24757,
+          "position": 4,
+          "text": "ضِيزَىٰٓ",
+          "transliteration": "ḍīzā",
+          "translation": "unfair",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:22:4"
+        },
+        {
+          "id": 24758,
+          "position": 5,
+          "text": "٢٢",
+          "transliteration": "",
+          "translation": "(22)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:22:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 23,
+      "words": [
+        {
+          "id": 25755,
+          "position": 1,
+          "text": "إِنْ",
+          "transliteration": "in",
+          "translation": "Not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:23:1"
+        },
+        {
+          "id": 25756,
+          "position": 2,
+          "text": "هِىَ",
+          "transliteration": "hiya",
+          "translation": "they",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:23:2"
+        },
+        {
+          "id": 25757,
+          "position": 3,
+          "text": "إِلَّآ",
+          "transliteration": "illā",
+          "translation": "(are) except",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:23:3"
+        },
+        {
+          "id": 25758,
+          "position": 4,
+          "text": "أَسْمَآءٌۭ",
+          "transliteration": "asmāon",
+          "translation": "names",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:23:4"
+        },
+        {
+          "id": 25759,
+          "position": 5,
+          "text": "سَمَّيْتُمُوهَآ",
+          "transliteration": "sammaytumūhā",
+          "translation": "you have named them",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:23:5"
+        },
+        {
+          "id": 25760,
+          "position": 6,
+          "text": "أَنتُمْ",
+          "transliteration": "antum",
+          "translation": "you",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:23:6"
+        },
+        {
+          "id": 25761,
+          "position": 7,
+          "text": "وَءَابَآؤُكُم",
+          "transliteration": "waābāukum",
+          "translation": "and your forefathers",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:23:7"
+        },
+        {
+          "id": 25762,
+          "position": 8,
+          "text": "مَّآ",
+          "transliteration": "mā",
+          "translation": "not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:23:8"
+        },
+        {
+          "id": 25763,
+          "position": 9,
+          "text": "أَنزَلَ",
+          "transliteration": "anzala",
+          "translation": "has Allah sent down",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:23:9"
+        },
+        {
+          "id": 25764,
+          "position": 10,
+          "text": "ٱللَّهُ",
+          "transliteration": "l-lahu",
+          "translation": "has Allah sent down",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:23:10"
+        },
+        {
+          "id": 25765,
+          "position": 11,
+          "text": "بِهَا",
+          "transliteration": "bihā",
+          "translation": "for it",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:23:11"
+        },
+        {
+          "id": 25766,
+          "position": 12,
+          "text": "مِن",
+          "transliteration": "min",
+          "translation": "any",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:23:12"
+        },
+        {
+          "id": 25767,
+          "position": 13,
+          "text": "سُلْطَـٰنٍ ۚ",
+          "transliteration": "sul'ṭānin",
+          "translation": "authority",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:23:13"
+        },
+        {
+          "id": 25769,
+          "position": 14,
+          "text": "إِن",
+          "transliteration": "in",
+          "translation": "Not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:23:14"
+        },
+        {
+          "id": 25770,
+          "position": 15,
+          "text": "يَتَّبِعُونَ",
+          "transliteration": "yattabiʿūna",
+          "translation": "they follow",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:23:15"
+        },
+        {
+          "id": 25771,
+          "position": 16,
+          "text": "إِلَّا",
+          "transliteration": "illā",
+          "translation": "except",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:23:16"
+        },
+        {
+          "id": 25772,
+          "position": 17,
+          "text": "ٱلظَّنَّ",
+          "transliteration": "l-ẓana",
+          "translation": "assumption",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:23:17"
+        },
+        {
+          "id": 25773,
+          "position": 18,
+          "text": "وَمَا",
+          "transliteration": "wamā",
+          "translation": "and what",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:23:18"
+        },
+        {
+          "id": 25774,
+          "position": 19,
+          "text": "تَهْوَى",
+          "transliteration": "tahwā",
+          "translation": "desire",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:23:19"
+        },
+        {
+          "id": 25775,
+          "position": 20,
+          "text": "ٱلْأَنفُسُ ۖ",
+          "transliteration": "l-anfusu",
+          "translation": "the(ir) souls",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:23:20"
+        },
+        {
+          "id": 25777,
+          "position": 21,
+          "text": "وَلَقَدْ",
+          "transliteration": "walaqad",
+          "translation": "And certainly",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:23:21"
+        },
+        {
+          "id": 25778,
+          "position": 22,
+          "text": "جَآءَهُم",
+          "transliteration": "jāahum",
+          "translation": "has come to them",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:23:22"
+        },
+        {
+          "id": 25779,
+          "position": 23,
+          "text": "مِّن",
+          "transliteration": "min",
+          "translation": "from",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:23:23"
+        },
+        {
+          "id": 25780,
+          "position": 24,
+          "text": "رَّبِّهِمُ",
+          "transliteration": "rabbihimu",
+          "translation": "their Lord",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:23:24"
+        },
+        {
+          "id": 25781,
+          "position": 25,
+          "text": "ٱلْهُدَىٰٓ",
+          "transliteration": "l-hudā",
+          "translation": "the guidance",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:23:25"
+        },
+        {
+          "id": 25782,
+          "position": 26,
+          "text": "٢٣",
+          "transliteration": "",
+          "translation": "(23)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:23:26"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 24,
+      "words": [
+        {
+          "id": 26826,
+          "position": 1,
+          "text": "أَمْ",
+          "transliteration": "am",
+          "translation": "Or",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:24:1"
+        },
+        {
+          "id": 26827,
+          "position": 2,
+          "text": "لِلْإِنسَـٰنِ",
+          "transliteration": "lil'insāni",
+          "translation": "(is) for man",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:24:2"
+        },
+        {
+          "id": 26828,
+          "position": 3,
+          "text": "مَا",
+          "transliteration": "mā",
+          "translation": "what",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:24:3"
+        },
+        {
+          "id": 26829,
+          "position": 4,
+          "text": "تَمَنَّىٰ",
+          "transliteration": "tamannā",
+          "translation": "he wishes",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:24:4"
+        },
+        {
+          "id": 26830,
+          "position": 5,
+          "text": "٢٤",
+          "transliteration": "",
+          "translation": "(24)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:24:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 25,
+      "words": [
+        {
+          "id": 27869,
+          "position": 1,
+          "text": "فَلِلَّهِ",
+          "transliteration": "falillahi",
+          "translation": "But for Allah",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:25:1"
+        },
+        {
+          "id": 27870,
+          "position": 2,
+          "text": "ٱلْـَٔاخِرَةُ",
+          "transliteration": "l-ākhiratu",
+          "translation": "(is) the last",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:25:2"
+        },
+        {
+          "id": 27871,
+          "position": 3,
+          "text": "وَٱلْأُولَىٰ",
+          "transliteration": "wal-ūlā",
+          "translation": "and the first",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:25:3"
+        },
+        {
+          "id": 27872,
+          "position": 4,
+          "text": "٢٥",
+          "transliteration": "",
+          "translation": "(25)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:25:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 26,
+      "words": [
+        {
+          "id": 28829,
+          "position": 1,
+          "text": "۞ وَكَم",
+          "transliteration": "wakam",
+          "translation": "And how many",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:26:1"
+        },
+        {
+          "id": 28830,
+          "position": 2,
+          "text": "مِّن",
+          "transliteration": "min",
+          "translation": "of",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:26:2"
+        },
+        {
+          "id": 28831,
+          "position": 3,
+          "text": "مَّلَكٍۢ",
+          "transliteration": "malakin",
+          "translation": "(the) Angels",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:26:3"
+        },
+        {
+          "id": 28832,
+          "position": 4,
+          "text": "فِى",
+          "transliteration": "fī",
+          "translation": "in",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:26:4"
+        },
+        {
+          "id": 28833,
+          "position": 5,
+          "text": "ٱلسَّمَـٰوَٰتِ",
+          "transliteration": "l-samāwāti",
+          "translation": "the heavens",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:26:5"
+        },
+        {
+          "id": 28834,
+          "position": 6,
+          "text": "لَا",
+          "transliteration": "lā",
+          "translation": "not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:26:6"
+        },
+        {
+          "id": 28835,
+          "position": 7,
+          "text": "تُغْنِى",
+          "transliteration": "tugh'nī",
+          "translation": "will avail",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:26:7"
+        },
+        {
+          "id": 28836,
+          "position": 8,
+          "text": "شَفَـٰعَتُهُمْ",
+          "transliteration": "shafāʿatuhum",
+          "translation": "their intercession",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:26:8"
+        },
+        {
+          "id": 28837,
+          "position": 9,
+          "text": "شَيْـًٔا",
+          "transliteration": "shayan",
+          "translation": "anything",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:26:9"
+        },
+        {
+          "id": 28838,
+          "position": 10,
+          "text": "إِلَّا",
+          "transliteration": "illā",
+          "translation": "except",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:26:10"
+        },
+        {
+          "id": 28839,
+          "position": 11,
+          "text": "مِنۢ",
+          "transliteration": "min",
+          "translation": "after",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:26:11"
+        },
+        {
+          "id": 28840,
+          "position": 12,
+          "text": "بَعْدِ",
+          "transliteration": "baʿdi",
+          "translation": "after",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:26:12"
+        },
+        {
+          "id": 28841,
+          "position": 13,
+          "text": "أَن",
+          "transliteration": "an",
+          "translation": "[that]",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:26:13"
+        },
+        {
+          "id": 28842,
+          "position": 14,
+          "text": "يَأْذَنَ",
+          "transliteration": "yadhana",
+          "translation": "Allah has given permission",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:26:14"
+        },
+        {
+          "id": 28843,
+          "position": 15,
+          "text": "ٱللَّهُ",
+          "transliteration": "l-lahu",
+          "translation": "Allah has given permission",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:26:15"
+        },
+        {
+          "id": 28844,
+          "position": 16,
+          "text": "لِمَن",
+          "transliteration": "liman",
+          "translation": "for whom",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:26:16"
+        },
+        {
+          "id": 28845,
+          "position": 17,
+          "text": "يَشَآءُ",
+          "transliteration": "yashāu",
+          "translation": "He wills",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:26:17"
+        },
+        {
+          "id": 28846,
+          "position": 18,
+          "text": "وَيَرْضَىٰٓ",
+          "transliteration": "wayarḍā",
+          "translation": "and approves",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:26:18"
+        },
+        {
+          "id": 28847,
+          "position": 19,
+          "text": "٢٦",
+          "transliteration": "",
+          "translation": "(26)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:26:19"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 27,
+      "words": [
+        {
+          "id": 29618,
+          "position": 1,
+          "text": "إِنَّ",
+          "transliteration": "inna",
+          "translation": "Indeed",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:27:1"
+        },
+        {
+          "id": 29619,
+          "position": 2,
+          "text": "ٱلَّذِينَ",
+          "transliteration": "alladhīna",
+          "translation": "those who",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:27:2"
+        },
+        {
+          "id": 29620,
+          "position": 3,
+          "text": "لَا",
+          "transliteration": "lā",
+          "translation": "(do) not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:27:3"
+        },
+        {
+          "id": 29621,
+          "position": 4,
+          "text": "يُؤْمِنُونَ",
+          "transliteration": "yu'minūna",
+          "translation": "believe",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:27:4"
+        },
+        {
+          "id": 29622,
+          "position": 5,
+          "text": "بِٱلْـَٔاخِرَةِ",
+          "transliteration": "bil-ākhirati",
+          "translation": "in the Hereafter",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:27:5"
+        },
+        {
+          "id": 29623,
+          "position": 6,
+          "text": "لَيُسَمُّونَ",
+          "transliteration": "layusammūna",
+          "translation": "surely they name",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:27:6"
+        },
+        {
+          "id": 29624,
+          "position": 7,
+          "text": "ٱلْمَلَـٰٓئِكَةَ",
+          "transliteration": "l-malāikata",
+          "translation": "the Angels",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:27:7"
+        },
+        {
+          "id": 29625,
+          "position": 8,
+          "text": "تَسْمِيَةَ",
+          "transliteration": "tasmiyata",
+          "translation": "name(s)",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:27:8"
+        },
+        {
+          "id": 29626,
+          "position": 9,
+          "text": "ٱلْأُنثَىٰ",
+          "transliteration": "l-unthā",
+          "translation": "(of) female",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:27:9"
+        },
+        {
+          "id": 29627,
+          "position": 10,
+          "text": "٢٧",
+          "transliteration": "",
+          "translation": "(27)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:27:10"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 28,
+      "words": [
+        {
+          "id": 30719,
+          "position": 1,
+          "text": "وَمَا",
+          "transliteration": "wamā",
+          "translation": "And not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:28:1"
+        },
+        {
+          "id": 30720,
+          "position": 2,
+          "text": "لَهُم",
+          "transliteration": "lahum",
+          "translation": "for them",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:28:2"
+        },
+        {
+          "id": 30721,
+          "position": 3,
+          "text": "بِهِۦ",
+          "transliteration": "bihi",
+          "translation": "about it",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:28:3"
+        },
+        {
+          "id": 30722,
+          "position": 4,
+          "text": "مِنْ",
+          "transliteration": "min",
+          "translation": "any",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:28:4"
+        },
+        {
+          "id": 30723,
+          "position": 5,
+          "text": "عِلْمٍ ۖ",
+          "transliteration": "ʿil'min",
+          "translation": "knowledge",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:28:5"
+        },
+        {
+          "id": 30725,
+          "position": 6,
+          "text": "إِن",
+          "transliteration": "in",
+          "translation": "Not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:28:6"
+        },
+        {
+          "id": 30726,
+          "position": 7,
+          "text": "يَتَّبِعُونَ",
+          "transliteration": "yattabiʿūna",
+          "translation": "they follow",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:28:7"
+        },
+        {
+          "id": 30727,
+          "position": 8,
+          "text": "إِلَّا",
+          "transliteration": "illā",
+          "translation": "but",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:28:8"
+        },
+        {
+          "id": 30728,
+          "position": 9,
+          "text": "ٱلظَّنَّ ۖ",
+          "transliteration": "l-ẓana",
+          "translation": "assumption",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:28:9"
+        },
+        {
+          "id": 30730,
+          "position": 10,
+          "text": "وَإِنَّ",
+          "transliteration": "wa-inna",
+          "translation": "And indeed",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:28:10"
+        },
+        {
+          "id": 30731,
+          "position": 11,
+          "text": "ٱلظَّنَّ",
+          "transliteration": "l-ẓana",
+          "translation": "the assumption",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:28:11"
+        },
+        {
+          "id": 30732,
+          "position": 12,
+          "text": "لَا",
+          "transliteration": "lā",
+          "translation": "(does) not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:28:12"
+        },
+        {
+          "id": 30733,
+          "position": 13,
+          "text": "يُغْنِى",
+          "transliteration": "yugh'nī",
+          "translation": "avail",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:28:13"
+        },
+        {
+          "id": 30734,
+          "position": 14,
+          "text": "مِنَ",
+          "transliteration": "mina",
+          "translation": "against",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:28:14"
+        },
+        {
+          "id": 30735,
+          "position": 15,
+          "text": "ٱلْحَقِّ",
+          "transliteration": "l-ḥaqi",
+          "translation": "the truth",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:28:15"
+        },
+        {
+          "id": 30736,
+          "position": 16,
+          "text": "شَيْـًۭٔا",
+          "transliteration": "shayan",
+          "translation": "anything",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:28:16"
+        },
+        {
+          "id": 30737,
+          "position": 17,
+          "text": "٢٨",
+          "transliteration": "",
+          "translation": "(28)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:28:17"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 29,
+      "words": [
+        {
+          "id": 31783,
+          "position": 1,
+          "text": "فَأَعْرِضْ",
+          "transliteration": "fa-aʿriḍ",
+          "translation": "So turn away",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:29:1"
+        },
+        {
+          "id": 31784,
+          "position": 2,
+          "text": "عَن",
+          "transliteration": "ʿan",
+          "translation": "from",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:29:2"
+        },
+        {
+          "id": 31785,
+          "position": 3,
+          "text": "مَّن",
+          "transliteration": "man",
+          "translation": "(him) who",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:29:3"
+        },
+        {
+          "id": 31786,
+          "position": 4,
+          "text": "تَوَلَّىٰ",
+          "transliteration": "tawallā",
+          "translation": "turns away",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:29:4"
+        },
+        {
+          "id": 31787,
+          "position": 5,
+          "text": "عَن",
+          "transliteration": "ʿan",
+          "translation": "from",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:29:5"
+        },
+        {
+          "id": 31788,
+          "position": 6,
+          "text": "ذِكْرِنَا",
+          "transliteration": "dhik'rinā",
+          "translation": "Our Reminder",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:29:6"
+        },
+        {
+          "id": 31789,
+          "position": 7,
+          "text": "وَلَمْ",
+          "transliteration": "walam",
+          "translation": "and not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:29:7"
+        },
+        {
+          "id": 31790,
+          "position": 8,
+          "text": "يُرِدْ",
+          "transliteration": "yurid",
+          "translation": "he desires",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:29:8"
+        },
+        {
+          "id": 31791,
+          "position": 9,
+          "text": "إِلَّا",
+          "transliteration": "illā",
+          "translation": "except",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:29:9"
+        },
+        {
+          "id": 31792,
+          "position": 10,
+          "text": "ٱلْحَيَوٰةَ",
+          "transliteration": "l-ḥayata",
+          "translation": "the life",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:29:10"
+        },
+        {
+          "id": 31793,
+          "position": 11,
+          "text": "ٱلدُّنْيَا",
+          "transliteration": "l-dun'yā",
+          "translation": "(of) the world",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:29:11"
+        },
+        {
+          "id": 31794,
+          "position": 12,
+          "text": "٢٩",
+          "transliteration": "",
+          "translation": "(29)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:29:12"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 30,
+      "words": [
+        {
+          "id": 32644,
+          "position": 1,
+          "text": "ذَٰلِكَ",
+          "transliteration": "dhālika",
+          "translation": "That",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:30:1"
+        },
+        {
+          "id": 32645,
+          "position": 2,
+          "text": "مَبْلَغُهُم",
+          "transliteration": "mablaghuhum",
+          "translation": "(is) their sum",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:30:2"
+        },
+        {
+          "id": 32646,
+          "position": 3,
+          "text": "مِّنَ",
+          "transliteration": "mina",
+          "translation": "of",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:30:3"
+        },
+        {
+          "id": 32647,
+          "position": 4,
+          "text": "ٱلْعِلْمِ ۚ",
+          "transliteration": "l-ʿil'mi",
+          "translation": "knowledge",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:30:4"
+        },
+        {
+          "id": 32649,
+          "position": 5,
+          "text": "إِنَّ",
+          "transliteration": "inna",
+          "translation": "Indeed",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:30:5"
+        },
+        {
+          "id": 32650,
+          "position": 6,
+          "text": "رَبَّكَ",
+          "transliteration": "rabbaka",
+          "translation": "your Lord",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:30:6"
+        },
+        {
+          "id": 32651,
+          "position": 7,
+          "text": "هُوَ",
+          "transliteration": "huwa",
+          "translation": "(is) He (Who)",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:30:7"
+        },
+        {
+          "id": 32652,
+          "position": 8,
+          "text": "أَعْلَمُ",
+          "transliteration": "aʿlamu",
+          "translation": "knows best",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:30:8"
+        },
+        {
+          "id": 32653,
+          "position": 9,
+          "text": "بِمَن",
+          "transliteration": "biman",
+          "translation": "(he) who",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:30:9"
+        },
+        {
+          "id": 32654,
+          "position": 10,
+          "text": "ضَلَّ",
+          "transliteration": "ḍalla",
+          "translation": "strays",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:30:10"
+        },
+        {
+          "id": 32655,
+          "position": 11,
+          "text": "عَن",
+          "transliteration": "ʿan",
+          "translation": "from",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:30:11"
+        },
+        {
+          "id": 32656,
+          "position": 12,
+          "text": "سَبِيلِهِۦ",
+          "transliteration": "sabīlihi",
+          "translation": "His Path",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:30:12"
+        },
+        {
+          "id": 32657,
+          "position": 13,
+          "text": "وَهُوَ",
+          "transliteration": "wahuwa",
+          "translation": "and He",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:30:13"
+        },
+        {
+          "id": 32658,
+          "position": 14,
+          "text": "أَعْلَمُ",
+          "transliteration": "aʿlamu",
+          "translation": "knows best",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:30:14"
+        },
+        {
+          "id": 32659,
+          "position": 15,
+          "text": "بِمَنِ",
+          "transliteration": "bimani",
+          "translation": "(he) who",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:30:15"
+        },
+        {
+          "id": 32660,
+          "position": 16,
+          "text": "ٱهْتَدَىٰ",
+          "transliteration": "ih'tadā",
+          "translation": "is guided",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:30:16"
+        },
+        {
+          "id": 32661,
+          "position": 17,
+          "text": "٣٠",
+          "transliteration": "",
+          "translation": "(30)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:30:17"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 31,
+      "words": [
+        {
+          "id": 33479,
+          "position": 1,
+          "text": "وَلِلَّهِ",
+          "transliteration": "walillahi",
+          "translation": "And for Allah",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:31:1"
+        },
+        {
+          "id": 33480,
+          "position": 2,
+          "text": "مَا",
+          "transliteration": "mā",
+          "translation": "(is) whatever",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:31:2"
+        },
+        {
+          "id": 33481,
+          "position": 3,
+          "text": "فِى",
+          "transliteration": "fī",
+          "translation": "(is) in",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:31:3"
+        },
+        {
+          "id": 33482,
+          "position": 4,
+          "text": "ٱلسَّمَـٰوَٰتِ",
+          "transliteration": "l-samāwāti",
+          "translation": "the heavens",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:31:4"
+        },
+        {
+          "id": 33483,
+          "position": 5,
+          "text": "وَمَا",
+          "transliteration": "wamā",
+          "translation": "and whatever",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:31:5"
+        },
+        {
+          "id": 33484,
+          "position": 6,
+          "text": "فِى",
+          "transliteration": "fī",
+          "translation": "(is) in",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:31:6"
+        },
+        {
+          "id": 33485,
+          "position": 7,
+          "text": "ٱلْأَرْضِ",
+          "transliteration": "l-arḍi",
+          "translation": "the earth",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:31:7"
+        },
+        {
+          "id": 33486,
+          "position": 8,
+          "text": "لِيَجْزِىَ",
+          "transliteration": "liyajziya",
+          "translation": "that He may recompense",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:31:8"
+        },
+        {
+          "id": 33487,
+          "position": 9,
+          "text": "ٱلَّذِينَ",
+          "transliteration": "alladhīna",
+          "translation": "those who",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:31:9"
+        },
+        {
+          "id": 33488,
+          "position": 10,
+          "text": "أَسَـٰٓـُٔوا۟",
+          "transliteration": "asāū",
+          "translation": "do evil",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:31:10"
+        },
+        {
+          "id": 33489,
+          "position": 11,
+          "text": "بِمَا",
+          "transliteration": "bimā",
+          "translation": "with what",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:31:11"
+        },
+        {
+          "id": 33490,
+          "position": 12,
+          "text": "عَمِلُوا۟",
+          "transliteration": "ʿamilū",
+          "translation": "they have done",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:31:12"
+        },
+        {
+          "id": 33491,
+          "position": 13,
+          "text": "وَيَجْزِىَ",
+          "transliteration": "wayajziya",
+          "translation": "and recompense",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:31:13"
+        },
+        {
+          "id": 33492,
+          "position": 14,
+          "text": "ٱلَّذِينَ",
+          "transliteration": "alladhīna",
+          "translation": "those who",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:31:14"
+        },
+        {
+          "id": 33493,
+          "position": 15,
+          "text": "أَحْسَنُوا۟",
+          "transliteration": "aḥsanū",
+          "translation": "do good",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:31:15"
+        },
+        {
+          "id": 33494,
+          "position": 16,
+          "text": "بِٱلْحُسْنَى",
+          "transliteration": "bil-ḥus'nā",
+          "translation": "with the best",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:31:16"
+        },
+        {
+          "id": 33495,
+          "position": 17,
+          "text": "٣١",
+          "transliteration": "",
+          "translation": "(31)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:31:17"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 32,
+      "words": [
+        {
+          "id": 34535,
+          "position": 1,
+          "text": "ٱلَّذِينَ",
+          "transliteration": "alladhīna",
+          "translation": "Those who",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:1"
+        },
+        {
+          "id": 34536,
+          "position": 2,
+          "text": "يَجْتَنِبُونَ",
+          "transliteration": "yajtanibūna",
+          "translation": "avoid",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:2"
+        },
+        {
+          "id": 34537,
+          "position": 3,
+          "text": "كَبَـٰٓئِرَ",
+          "transliteration": "kabāira",
+          "translation": "great",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:3"
+        },
+        {
+          "id": 34538,
+          "position": 4,
+          "text": "ٱلْإِثْمِ",
+          "transliteration": "l-ith'mi",
+          "translation": "sins",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:4"
+        },
+        {
+          "id": 34539,
+          "position": 5,
+          "text": "وَٱلْفَوَٰحِشَ",
+          "transliteration": "wal-fawāḥisha",
+          "translation": "and the immoralities",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:5"
+        },
+        {
+          "id": 34540,
+          "position": 6,
+          "text": "إِلَّا",
+          "transliteration": "illā",
+          "translation": "except",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:6"
+        },
+        {
+          "id": 34541,
+          "position": 7,
+          "text": "ٱللَّمَمَ ۚ",
+          "transliteration": "l-lamama",
+          "translation": "the small faults",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:7"
+        },
+        {
+          "id": 34543,
+          "position": 8,
+          "text": "إِنَّ",
+          "transliteration": "inna",
+          "translation": "indeed",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:8"
+        },
+        {
+          "id": 34544,
+          "position": 9,
+          "text": "رَبَّكَ",
+          "transliteration": "rabbaka",
+          "translation": "your Lord",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:9"
+        },
+        {
+          "id": 34545,
+          "position": 10,
+          "text": "وَٰسِعُ",
+          "transliteration": "wāsiʿu",
+          "translation": "(is) vast",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:10"
+        },
+        {
+          "id": 34546,
+          "position": 11,
+          "text": "ٱلْمَغْفِرَةِ ۚ",
+          "transliteration": "l-maghfirati",
+          "translation": "(in) forgiveness",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:11"
+        },
+        {
+          "id": 34548,
+          "position": 12,
+          "text": "هُوَ",
+          "transliteration": "huwa",
+          "translation": "He",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:12"
+        },
+        {
+          "id": 34549,
+          "position": 13,
+          "text": "أَعْلَمُ",
+          "transliteration": "aʿlamu",
+          "translation": "(is) most knowing about you",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:13"
+        },
+        {
+          "id": 34550,
+          "position": 14,
+          "text": "بِكُمْ",
+          "transliteration": "bikum",
+          "translation": "(is) most knowing about you",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:14"
+        },
+        {
+          "id": 34551,
+          "position": 15,
+          "text": "إِذْ",
+          "transliteration": "idh",
+          "translation": "when",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:15"
+        },
+        {
+          "id": 34552,
+          "position": 16,
+          "text": "أَنشَأَكُم",
+          "transliteration": "ansha-akum",
+          "translation": "He produced you",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:16"
+        },
+        {
+          "id": 34553,
+          "position": 17,
+          "text": "مِّنَ",
+          "transliteration": "mina",
+          "translation": "from",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:17"
+        },
+        {
+          "id": 34554,
+          "position": 18,
+          "text": "ٱلْأَرْضِ",
+          "transliteration": "l-arḍi",
+          "translation": "the earth",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:18"
+        },
+        {
+          "id": 34555,
+          "position": 19,
+          "text": "وَإِذْ",
+          "transliteration": "wa-idh",
+          "translation": "and when",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:19"
+        },
+        {
+          "id": 34556,
+          "position": 20,
+          "text": "أَنتُمْ",
+          "transliteration": "antum",
+          "translation": "you (were)",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:20"
+        },
+        {
+          "id": 34557,
+          "position": 21,
+          "text": "أَجِنَّةٌۭ",
+          "transliteration": "ajinnatun",
+          "translation": "fetuses",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:21"
+        },
+        {
+          "id": 34558,
+          "position": 22,
+          "text": "فِى",
+          "transliteration": "fī",
+          "translation": "in",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:22"
+        },
+        {
+          "id": 34559,
+          "position": 23,
+          "text": "بُطُونِ",
+          "transliteration": "buṭūni",
+          "translation": "(the) wombs",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:23"
+        },
+        {
+          "id": 34560,
+          "position": 24,
+          "text": "أُمَّهَـٰتِكُمْ ۖ",
+          "transliteration": "ummahātikum",
+          "translation": "(of) your mothers",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:24"
+        },
+        {
+          "id": 34562,
+          "position": 25,
+          "text": "فَلَا",
+          "transliteration": "falā",
+          "translation": "So (do) not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:25"
+        },
+        {
+          "id": 34563,
+          "position": 26,
+          "text": "تُزَكُّوٓا۟",
+          "transliteration": "tuzakkū",
+          "translation": "ascribe purity",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:26"
+        },
+        {
+          "id": 34564,
+          "position": 27,
+          "text": "أَنفُسَكُمْ ۖ",
+          "transliteration": "anfusakum",
+          "translation": "(to) yourselves",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:27"
+        },
+        {
+          "id": 34566,
+          "position": 28,
+          "text": "هُوَ",
+          "transliteration": "huwa",
+          "translation": "He",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:28"
+        },
+        {
+          "id": 34567,
+          "position": 29,
+          "text": "أَعْلَمُ",
+          "transliteration": "aʿlamu",
+          "translation": "knows best",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:29"
+        },
+        {
+          "id": 34568,
+          "position": 30,
+          "text": "بِمَنِ",
+          "transliteration": "bimani",
+          "translation": "(he) who",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:30"
+        },
+        {
+          "id": 34569,
+          "position": 31,
+          "text": "ٱتَّقَىٰٓ",
+          "transliteration": "ittaqā",
+          "translation": "fears",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:32:31"
+        },
+        {
+          "id": 34570,
+          "position": 32,
+          "text": "٣٢",
+          "transliteration": "",
+          "translation": "(32)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:32:32"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 33,
+      "words": [
+        {
+          "id": 35586,
+          "position": 1,
+          "text": "أَفَرَءَيْتَ",
+          "transliteration": "afara-ayta",
+          "translation": "Did you see",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:33:1"
+        },
+        {
+          "id": 35587,
+          "position": 2,
+          "text": "ٱلَّذِى",
+          "transliteration": "alladhī",
+          "translation": "the one who",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:33:2"
+        },
+        {
+          "id": 35588,
+          "position": 3,
+          "text": "تَوَلَّىٰ",
+          "transliteration": "tawallā",
+          "translation": "turned away",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:33:3"
+        },
+        {
+          "id": 35589,
+          "position": 4,
+          "text": "٣٣",
+          "transliteration": "",
+          "translation": "(33)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:33:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 34,
+      "words": [
+        {
+          "id": 36342,
+          "position": 1,
+          "text": "وَأَعْطَىٰ",
+          "transliteration": "wa-aʿṭā",
+          "translation": "And gave",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:34:1"
+        },
+        {
+          "id": 36343,
+          "position": 2,
+          "text": "قَلِيلًۭا",
+          "transliteration": "qalīlan",
+          "translation": "a little",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:34:2"
+        },
+        {
+          "id": 36344,
+          "position": 3,
+          "text": "وَأَكْدَىٰٓ",
+          "transliteration": "wa-akdā",
+          "translation": "and withheld",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:34:3"
+        },
+        {
+          "id": 36345,
+          "position": 4,
+          "text": "٣٤",
+          "transliteration": "",
+          "translation": "(34)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:34:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 35,
+      "words": [
+        {
+          "id": 36955,
+          "position": 1,
+          "text": "أَعِندَهُۥ",
+          "transliteration": "aʿindahu",
+          "translation": "Is with him",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:35:1"
+        },
+        {
+          "id": 36956,
+          "position": 2,
+          "text": "عِلْمُ",
+          "transliteration": "ʿil'mu",
+          "translation": "(the) knowledge",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:35:2"
+        },
+        {
+          "id": 36957,
+          "position": 3,
+          "text": "ٱلْغَيْبِ",
+          "transliteration": "l-ghaybi",
+          "translation": "(of) the unseen",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:35:3"
+        },
+        {
+          "id": 36958,
+          "position": 4,
+          "text": "فَهُوَ",
+          "transliteration": "fahuwa",
+          "translation": "so he",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:35:4"
+        },
+        {
+          "id": 36959,
+          "position": 5,
+          "text": "يَرَىٰٓ",
+          "transliteration": "yarā",
+          "translation": "sees",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:35:5"
+        },
+        {
+          "id": 36960,
+          "position": 6,
+          "text": "٣٥",
+          "transliteration": "",
+          "translation": "(35)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:35:6"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 36,
+      "words": [
+        {
+          "id": 37860,
+          "position": 1,
+          "text": "أَمْ",
+          "transliteration": "am",
+          "translation": "Or",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:36:1"
+        },
+        {
+          "id": 37861,
+          "position": 2,
+          "text": "لَمْ",
+          "transliteration": "lam",
+          "translation": "not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:36:2"
+        },
+        {
+          "id": 37862,
+          "position": 3,
+          "text": "يُنَبَّأْ",
+          "transliteration": "yunabba",
+          "translation": "he was informed",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:36:3"
+        },
+        {
+          "id": 37863,
+          "position": 4,
+          "text": "بِمَا",
+          "transliteration": "bimā",
+          "translation": "with what",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:36:4"
+        },
+        {
+          "id": 37864,
+          "position": 5,
+          "text": "فِى",
+          "transliteration": "fī",
+          "translation": "(was) in",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:36:5"
+        },
+        {
+          "id": 37865,
+          "position": 6,
+          "text": "صُحُفِ",
+          "transliteration": "ṣuḥufi",
+          "translation": "(the) Scriptures",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:36:6"
+        },
+        {
+          "id": 37866,
+          "position": 7,
+          "text": "مُوسَىٰ",
+          "transliteration": "mūsā",
+          "translation": "(of) Musa",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:36:7"
+        },
+        {
+          "id": 37867,
+          "position": 8,
+          "text": "٣٦",
+          "transliteration": "",
+          "translation": "(36)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:36:8"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 37,
+      "words": [
+        {
+          "id": 38737,
+          "position": 1,
+          "text": "وَإِبْرَٰهِيمَ",
+          "transliteration": "wa-ib'rāhīma",
+          "translation": "And Ibrahim",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:37:1"
+        },
+        {
+          "id": 38738,
+          "position": 2,
+          "text": "ٱلَّذِى",
+          "transliteration": "alladhī",
+          "translation": "who",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:37:2"
+        },
+        {
+          "id": 38739,
+          "position": 3,
+          "text": "وَفَّىٰٓ",
+          "transliteration": "waffā",
+          "translation": "fulfilled",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:37:3"
+        },
+        {
+          "id": 38740,
+          "position": 4,
+          "text": "٣٧",
+          "transliteration": "",
+          "translation": "(37)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:37:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 38,
+      "words": [
+        {
+          "id": 39692,
+          "position": 1,
+          "text": "أَلَّا",
+          "transliteration": "allā",
+          "translation": "That not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:38:1"
+        },
+        {
+          "id": 39693,
+          "position": 2,
+          "text": "تَزِرُ",
+          "transliteration": "taziru",
+          "translation": "will bear",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:38:2"
+        },
+        {
+          "id": 39694,
+          "position": 3,
+          "text": "وَازِرَةٌۭ",
+          "transliteration": "wāziratun",
+          "translation": "a bearer of burdens",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:38:3"
+        },
+        {
+          "id": 39695,
+          "position": 4,
+          "text": "وِزْرَ",
+          "transliteration": "wiz'ra",
+          "translation": "(the) burden",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:38:4"
+        },
+        {
+          "id": 39696,
+          "position": 5,
+          "text": "أُخْرَىٰ",
+          "transliteration": "ukh'rā",
+          "translation": "(of) another",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:38:5"
+        },
+        {
+          "id": 39697,
+          "position": 6,
+          "text": "٣٨",
+          "transliteration": "",
+          "translation": "(38)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:38:6"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 39,
+      "words": [
+        {
+          "id": 40444,
+          "position": 1,
+          "text": "وَأَن",
+          "transliteration": "wa-an",
+          "translation": "And that",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:39:1"
+        },
+        {
+          "id": 40445,
+          "position": 2,
+          "text": "لَّيْسَ",
+          "transliteration": "laysa",
+          "translation": "is not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:39:2"
+        },
+        {
+          "id": 40446,
+          "position": 3,
+          "text": "لِلْإِنسَـٰنِ",
+          "transliteration": "lil'insāni",
+          "translation": "for man",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:39:3"
+        },
+        {
+          "id": 40447,
+          "position": 4,
+          "text": "إِلَّا",
+          "transliteration": "illā",
+          "translation": "except",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:39:4"
+        },
+        {
+          "id": 40448,
+          "position": 5,
+          "text": "مَا",
+          "transliteration": "mā",
+          "translation": "what",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:39:5"
+        },
+        {
+          "id": 40449,
+          "position": 6,
+          "text": "سَعَىٰ",
+          "transliteration": "saʿā",
+          "translation": "he strives (for)",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:39:6"
+        },
+        {
+          "id": 40450,
+          "position": 7,
+          "text": "٣٩",
+          "transliteration": "",
+          "translation": "(39)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:39:7"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 40,
+      "words": [
+        {
+          "id": 41115,
+          "position": 1,
+          "text": "وَأَنَّ",
+          "transliteration": "wa-anna",
+          "translation": "And that",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:40:1"
+        },
+        {
+          "id": 41116,
+          "position": 2,
+          "text": "سَعْيَهُۥ",
+          "transliteration": "saʿyahu",
+          "translation": "his striving",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:40:2"
+        },
+        {
+          "id": 41117,
+          "position": 3,
+          "text": "سَوْفَ",
+          "transliteration": "sawfa",
+          "translation": "will soon",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:40:3"
+        },
+        {
+          "id": 41118,
+          "position": 4,
+          "text": "يُرَىٰ",
+          "transliteration": "yurā",
+          "translation": "be seen",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:40:4"
+        },
+        {
+          "id": 41119,
+          "position": 5,
+          "text": "٤٠",
+          "transliteration": "",
+          "translation": "(40)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:40:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 41,
+      "words": [
+        {
+          "id": 42022,
+          "position": 1,
+          "text": "ثُمَّ",
+          "transliteration": "thumma",
+          "translation": "Then",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:41:1"
+        },
+        {
+          "id": 42023,
+          "position": 2,
+          "text": "يُجْزَىٰهُ",
+          "transliteration": "yuj'zāhu",
+          "translation": "he will be recompensed for it",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:41:2"
+        },
+        {
+          "id": 42024,
+          "position": 3,
+          "text": "ٱلْجَزَآءَ",
+          "transliteration": "l-jazāa",
+          "translation": "the recompense",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:41:3"
+        },
+        {
+          "id": 42025,
+          "position": 4,
+          "text": "ٱلْأَوْفَىٰ",
+          "transliteration": "l-awfā",
+          "translation": "the fullest",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:41:4"
+        },
+        {
+          "id": 42026,
+          "position": 5,
+          "text": "٤١",
+          "transliteration": "",
+          "translation": "(41)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:41:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 42,
+      "words": [
+        {
+          "id": 42860,
+          "position": 1,
+          "text": "وَأَنَّ",
+          "transliteration": "wa-anna",
+          "translation": "And that",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:42:1"
+        },
+        {
+          "id": 42861,
+          "position": 2,
+          "text": "إِلَىٰ",
+          "transliteration": "ilā",
+          "translation": "to",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:42:2"
+        },
+        {
+          "id": 42862,
+          "position": 3,
+          "text": "رَبِّكَ",
+          "transliteration": "rabbika",
+          "translation": "your Lord",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:42:3"
+        },
+        {
+          "id": 42863,
+          "position": 4,
+          "text": "ٱلْمُنتَهَىٰ",
+          "transliteration": "l-muntahā",
+          "translation": "(is) the final goal",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:42:4"
+        },
+        {
+          "id": 42864,
+          "position": 5,
+          "text": "٤٢",
+          "transliteration": "",
+          "translation": "(42)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:42:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 43,
+      "words": [
+        {
+          "id": 43481,
+          "position": 1,
+          "text": "وَأَنَّهُۥ",
+          "transliteration": "wa-annahu",
+          "translation": "And that He",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:43:1"
+        },
+        {
+          "id": 43482,
+          "position": 2,
+          "text": "هُوَ",
+          "transliteration": "huwa",
+          "translation": "[He]",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:43:2"
+        },
+        {
+          "id": 43483,
+          "position": 3,
+          "text": "أَضْحَكَ",
+          "transliteration": "aḍḥaka",
+          "translation": "makes (one) laugh",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:43:3"
+        },
+        {
+          "id": 43484,
+          "position": 4,
+          "text": "وَأَبْكَىٰ",
+          "transliteration": "wa-abkā",
+          "translation": "and makes (one) weep",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:43:4"
+        },
+        {
+          "id": 43485,
+          "position": 5,
+          "text": "٤٣",
+          "transliteration": "",
+          "translation": "(43)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:43:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 44,
+      "words": [
+        {
+          "id": 44268,
+          "position": 1,
+          "text": "وَأَنَّهُۥ",
+          "transliteration": "wa-annahu",
+          "translation": "And that He",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:44:1"
+        },
+        {
+          "id": 44269,
+          "position": 2,
+          "text": "هُوَ",
+          "transliteration": "huwa",
+          "translation": "[He]",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:44:2"
+        },
+        {
+          "id": 44270,
+          "position": 3,
+          "text": "أَمَاتَ",
+          "transliteration": "amāta",
+          "translation": "causes death",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:44:3"
+        },
+        {
+          "id": 44271,
+          "position": 4,
+          "text": "وَأَحْيَا",
+          "transliteration": "wa-aḥyā",
+          "translation": "and gives life",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:44:4"
+        },
+        {
+          "id": 44272,
+          "position": 5,
+          "text": "٤٤",
+          "transliteration": "",
+          "translation": "(44)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:44:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 45,
+      "words": [
+        {
+          "id": 44949,
+          "position": 1,
+          "text": "وَأَنَّهُۥ",
+          "transliteration": "wa-annahu",
+          "translation": "And that He",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:45:1"
+        },
+        {
+          "id": 44950,
+          "position": 2,
+          "text": "خَلَقَ",
+          "transliteration": "khalaqa",
+          "translation": "created",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:45:2"
+        },
+        {
+          "id": 44951,
+          "position": 3,
+          "text": "ٱلزَّوْجَيْنِ",
+          "transliteration": "l-zawjayni",
+          "translation": "the pairs",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:45:3"
+        },
+        {
+          "id": 44952,
+          "position": 4,
+          "text": "ٱلذَّكَرَ",
+          "transliteration": "l-dhakara",
+          "translation": "the male",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:45:4"
+        },
+        {
+          "id": 44953,
+          "position": 5,
+          "text": "وَٱلْأُنثَىٰ",
+          "transliteration": "wal-unthā",
+          "translation": "and the female",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:45:5"
+        },
+        {
+          "id": 44954,
+          "position": 6,
+          "text": "٤٥",
+          "transliteration": "",
+          "translation": "(45)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:45:6"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 46,
+      "words": [
+        {
+          "id": 45859,
+          "position": 1,
+          "text": "مِن",
+          "transliteration": "min",
+          "translation": "From",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:46:1"
+        },
+        {
+          "id": 45860,
+          "position": 2,
+          "text": "نُّطْفَةٍ",
+          "transliteration": "nuṭ'fatin",
+          "translation": "a semen-drop",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:46:2"
+        },
+        {
+          "id": 45861,
+          "position": 3,
+          "text": "إِذَا",
+          "transliteration": "idhā",
+          "translation": "when",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:46:3"
+        },
+        {
+          "id": 45862,
+          "position": 4,
+          "text": "تُمْنَىٰ",
+          "transliteration": "tum'nā",
+          "translation": "it is emitted",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:46:4"
+        },
+        {
+          "id": 45863,
+          "position": 5,
+          "text": "٤٦",
+          "transliteration": "",
+          "translation": "(46)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:46:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 47,
+      "words": [
+        {
+          "id": 46700,
+          "position": 1,
+          "text": "وَأَنَّ",
+          "transliteration": "wa-anna",
+          "translation": "And that",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:47:1"
+        },
+        {
+          "id": 46701,
+          "position": 2,
+          "text": "عَلَيْهِ",
+          "transliteration": "ʿalayhi",
+          "translation": "upon Him",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:47:2"
+        },
+        {
+          "id": 46702,
+          "position": 3,
+          "text": "ٱلنَّشْأَةَ",
+          "transliteration": "l-nashata",
+          "translation": "(is) the bringing forth",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:47:3"
+        },
+        {
+          "id": 46703,
+          "position": 4,
+          "text": "ٱلْأُخْرَىٰ",
+          "transliteration": "l-ukh'rā",
+          "translation": "another",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:47:4"
+        },
+        {
+          "id": 46704,
+          "position": 5,
+          "text": "٤٧",
+          "transliteration": "",
+          "translation": "(47)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:47:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 48,
+      "words": [
+        {
+          "id": 47646,
+          "position": 1,
+          "text": "وَأَنَّهُۥ",
+          "transliteration": "wa-annahu",
+          "translation": "And that He",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:48:1"
+        },
+        {
+          "id": 47647,
+          "position": 2,
+          "text": "هُوَ",
+          "transliteration": "huwa",
+          "translation": "[He]",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:48:2"
+        },
+        {
+          "id": 47648,
+          "position": 3,
+          "text": "أَغْنَىٰ",
+          "transliteration": "aghnā",
+          "translation": "enriches",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:48:3"
+        },
+        {
+          "id": 47649,
+          "position": 4,
+          "text": "وَأَقْنَىٰ",
+          "transliteration": "wa-aqnā",
+          "translation": "and suffices",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:48:4"
+        },
+        {
+          "id": 47650,
+          "position": 5,
+          "text": "٤٨",
+          "transliteration": "",
+          "translation": "(48)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:48:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 49,
+      "words": [
+        {
+          "id": 48314,
+          "position": 1,
+          "text": "وَأَنَّهُۥ",
+          "transliteration": "wa-annahu",
+          "translation": "And that He",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:49:1"
+        },
+        {
+          "id": 48315,
+          "position": 2,
+          "text": "هُوَ",
+          "transliteration": "huwa",
+          "translation": "[He]",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:49:2"
+        },
+        {
+          "id": 48316,
+          "position": 3,
+          "text": "رَبُّ",
+          "transliteration": "rabbu",
+          "translation": "(is the) Lord",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:49:3"
+        },
+        {
+          "id": 48317,
+          "position": 4,
+          "text": "ٱلشِّعْرَىٰ",
+          "transliteration": "l-shiʿ'rā",
+          "translation": "(of) Sirius",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:49:4"
+        },
+        {
+          "id": 48318,
+          "position": 5,
+          "text": "٤٩",
+          "transliteration": "",
+          "translation": "(49)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:49:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 50,
+      "words": [
+        {
+          "id": 48615,
+          "position": 1,
+          "text": "وَأَنَّهُۥٓ",
+          "transliteration": "wa-annahu",
+          "translation": "And that He",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:50:1"
+        },
+        {
+          "id": 48616,
+          "position": 2,
+          "text": "أَهْلَكَ",
+          "transliteration": "ahlaka",
+          "translation": "destroyed",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:50:2"
+        },
+        {
+          "id": 48617,
+          "position": 3,
+          "text": "عَادًا",
+          "transliteration": "ʿādan",
+          "translation": "Aad",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:50:3"
+        },
+        {
+          "id": 48618,
+          "position": 4,
+          "text": "ٱلْأُولَىٰ",
+          "transliteration": "l-ūlā",
+          "translation": "the first",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:50:4"
+        },
+        {
+          "id": 48619,
+          "position": 5,
+          "text": "٥٠",
+          "transliteration": "",
+          "translation": "(50)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:50:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 51,
+      "words": [
+        {
+          "id": 49648,
+          "position": 1,
+          "text": "وَثَمُودَا۟",
+          "transliteration": "wathamūdā",
+          "translation": "And Thamud",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:51:1"
+        },
+        {
+          "id": 49649,
+          "position": 2,
+          "text": "فَمَآ",
+          "transliteration": "famā",
+          "translation": "so not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:51:2"
+        },
+        {
+          "id": 49650,
+          "position": 3,
+          "text": "أَبْقَىٰ",
+          "transliteration": "abqā",
+          "translation": "He spared",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:51:3"
+        },
+        {
+          "id": 49651,
+          "position": 4,
+          "text": "٥١",
+          "transliteration": "",
+          "translation": "(51)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:51:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 52,
+      "words": [
+        {
+          "id": 50274,
+          "position": 1,
+          "text": "وَقَوْمَ",
+          "transliteration": "waqawma",
+          "translation": "And (the) people",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:52:1"
+        },
+        {
+          "id": 50275,
+          "position": 2,
+          "text": "نُوحٍۢ",
+          "transliteration": "nūḥin",
+          "translation": "(of) Nuh",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:52:2"
+        },
+        {
+          "id": 50276,
+          "position": 3,
+          "text": "مِّن",
+          "transliteration": "min",
+          "translation": "before",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:52:3"
+        },
+        {
+          "id": 50277,
+          "position": 4,
+          "text": "قَبْلُ ۖ",
+          "transliteration": "qablu",
+          "translation": "before",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:52:4"
+        },
+        {
+          "id": 50279,
+          "position": 5,
+          "text": "إِنَّهُمْ",
+          "transliteration": "innahum",
+          "translation": "Indeed, they",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:52:5"
+        },
+        {
+          "id": 50280,
+          "position": 6,
+          "text": "كَانُوا۟",
+          "transliteration": "kānū",
+          "translation": "they were",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:52:6"
+        },
+        {
+          "id": 50281,
+          "position": 7,
+          "text": "هُمْ",
+          "transliteration": "hum",
+          "translation": "they were",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:52:7"
+        },
+        {
+          "id": 50282,
+          "position": 8,
+          "text": "أَظْلَمَ",
+          "transliteration": "aẓlama",
+          "translation": "more unjust",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:52:8"
+        },
+        {
+          "id": 50283,
+          "position": 9,
+          "text": "وَأَطْغَىٰ",
+          "transliteration": "wa-aṭghā",
+          "translation": "and more rebellious",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:52:9"
+        },
+        {
+          "id": 50284,
+          "position": 10,
+          "text": "٥٢",
+          "transliteration": "",
+          "translation": "(52)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:52:10"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 53,
+      "words": [
+        {
+          "id": 50919,
+          "position": 1,
+          "text": "وَٱلْمُؤْتَفِكَةَ",
+          "transliteration": "wal-mu'tafikata",
+          "translation": "And the overturned cities",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:53:1"
+        },
+        {
+          "id": 50920,
+          "position": 2,
+          "text": "أَهْوَىٰ",
+          "transliteration": "ahwā",
+          "translation": "He overthrew",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:53:2"
+        },
+        {
+          "id": 50921,
+          "position": 3,
+          "text": "٥٣",
+          "transliteration": "",
+          "translation": "(53)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:53:3"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 54,
+      "words": [
+        {
+          "id": 51535,
+          "position": 1,
+          "text": "فَغَشَّىٰهَا",
+          "transliteration": "faghashāhā",
+          "translation": "So covered them",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:54:1"
+        },
+        {
+          "id": 51536,
+          "position": 2,
+          "text": "مَا",
+          "transliteration": "mā",
+          "translation": "what",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:54:2"
+        },
+        {
+          "id": 51537,
+          "position": 3,
+          "text": "غَشَّىٰ",
+          "transliteration": "ghashā",
+          "translation": "covered",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:54:3"
+        },
+        {
+          "id": 51538,
+          "position": 4,
+          "text": "٥٤",
+          "transliteration": "",
+          "translation": "(54)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:54:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 55,
+      "words": [
+        {
+          "id": 51989,
+          "position": 1,
+          "text": "فَبِأَىِّ",
+          "transliteration": "fabi-ayyi",
+          "translation": "Then which (of)",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:55:1"
+        },
+        {
+          "id": 51990,
+          "position": 2,
+          "text": "ءَالَآءِ",
+          "transliteration": "ālāi",
+          "translation": "the Favors",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:55:2"
+        },
+        {
+          "id": 51991,
+          "position": 3,
+          "text": "رَبِّكَ",
+          "transliteration": "rabbika",
+          "translation": "(of) your Lord",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:55:3"
+        },
+        {
+          "id": 51992,
+          "position": 4,
+          "text": "تَتَمَارَىٰ",
+          "transliteration": "tatamārā",
+          "translation": "will you doubt",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:55:4"
+        },
+        {
+          "id": 51993,
+          "position": 5,
+          "text": "٥٥",
+          "transliteration": "",
+          "translation": "(55)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:55:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 56,
+      "words": [
+        {
+          "id": 52182,
+          "position": 1,
+          "text": "هَـٰذَا",
+          "transliteration": "hādhā",
+          "translation": "This",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:56:1"
+        },
+        {
+          "id": 52183,
+          "position": 2,
+          "text": "نَذِيرٌۭ",
+          "transliteration": "nadhīrun",
+          "translation": "(is) a warner",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:56:2"
+        },
+        {
+          "id": 52184,
+          "position": 3,
+          "text": "مِّنَ",
+          "transliteration": "mina",
+          "translation": "from",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:56:3"
+        },
+        {
+          "id": 52185,
+          "position": 4,
+          "text": "ٱلنُّذُرِ",
+          "transliteration": "l-nudhuri",
+          "translation": "the warners",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:56:4"
+        },
+        {
+          "id": 52186,
+          "position": 5,
+          "text": "ٱلْأُولَىٰٓ",
+          "transliteration": "l-ūlā",
+          "translation": "the former",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:56:5"
+        },
+        {
+          "id": 52187,
+          "position": 6,
+          "text": "٥٦",
+          "transliteration": "",
+          "translation": "(56)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:56:6"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 57,
+      "words": [
+        {
+          "id": 53029,
+          "position": 1,
+          "text": "أَزِفَتِ",
+          "transliteration": "azifati",
+          "translation": "Has approached",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:57:1"
+        },
+        {
+          "id": 53030,
+          "position": 2,
+          "text": "ٱلْـَٔازِفَةُ",
+          "transliteration": "l-āzifatu",
+          "translation": "the Approaching Day",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:57:2"
+        },
+        {
+          "id": 53031,
+          "position": 3,
+          "text": "٥٧",
+          "transliteration": "",
+          "translation": "(57)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:57:3"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 58,
+      "words": [
+        {
+          "id": 53252,
+          "position": 1,
+          "text": "لَيْسَ",
+          "transliteration": "laysa",
+          "translation": "Not is",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:58:1"
+        },
+        {
+          "id": 53253,
+          "position": 2,
+          "text": "لَهَا",
+          "transliteration": "lahā",
+          "translation": "for it",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:58:2"
+        },
+        {
+          "id": 53254,
+          "position": 3,
+          "text": "مِن",
+          "transliteration": "min",
+          "translation": "besides",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:58:3"
+        },
+        {
+          "id": 53255,
+          "position": 4,
+          "text": "دُونِ",
+          "transliteration": "dūni",
+          "translation": "besides",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:58:4"
+        },
+        {
+          "id": 53256,
+          "position": 5,
+          "text": "ٱللَّهِ",
+          "transliteration": "l-lahi",
+          "translation": "Allah",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:58:5"
+        },
+        {
+          "id": 53257,
+          "position": 6,
+          "text": "كَاشِفَةٌ",
+          "transliteration": "kāshifatun",
+          "translation": "any remover",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:58:6"
+        },
+        {
+          "id": 53258,
+          "position": 7,
+          "text": "٥٨",
+          "transliteration": "",
+          "translation": "(58)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:58:7"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 59,
+      "words": [
+        {
+          "id": 54094,
+          "position": 1,
+          "text": "أَفَمِنْ",
+          "transliteration": "afamin",
+          "translation": "Then of",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:59:1"
+        },
+        {
+          "id": 54095,
+          "position": 2,
+          "text": "هَـٰذَا",
+          "transliteration": "hādhā",
+          "translation": "this",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:59:2"
+        },
+        {
+          "id": 54096,
+          "position": 3,
+          "text": "ٱلْحَدِيثِ",
+          "transliteration": "l-ḥadīthi",
+          "translation": "statement",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:59:3"
+        },
+        {
+          "id": 54097,
+          "position": 4,
+          "text": "تَعْجَبُونَ",
+          "transliteration": "taʿjabūna",
+          "translation": "you wonder",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:59:4"
+        },
+        {
+          "id": 54098,
+          "position": 5,
+          "text": "٥٩",
+          "transliteration": "",
+          "translation": "(59)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:59:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 60,
+      "words": [
+        {
+          "id": 54420,
+          "position": 1,
+          "text": "وَتَضْحَكُونَ",
+          "transliteration": "wataḍḥakūna",
+          "translation": "And you laugh",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:60:1"
+        },
+        {
+          "id": 54421,
+          "position": 2,
+          "text": "وَلَا",
+          "transliteration": "walā",
+          "translation": "and (do) not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:60:2"
+        },
+        {
+          "id": 54422,
+          "position": 3,
+          "text": "تَبْكُونَ",
+          "transliteration": "tabkūna",
+          "translation": "weep",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:60:3"
+        },
+        {
+          "id": 54423,
+          "position": 4,
+          "text": "٦٠",
+          "transliteration": "",
+          "translation": "(60)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:60:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 61,
+      "words": [
+        {
+          "id": 55410,
+          "position": 1,
+          "text": "وَأَنتُمْ",
+          "transliteration": "wa-antum",
+          "translation": "While you",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:61:1"
+        },
+        {
+          "id": 55411,
+          "position": 2,
+          "text": "سَـٰمِدُونَ",
+          "transliteration": "sāmidūna",
+          "translation": "amuse (yourselves)",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:61:2"
+        },
+        {
+          "id": 55412,
+          "position": 3,
+          "text": "٦١",
+          "transliteration": "",
+          "translation": "(61)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:61:3"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 62,
+      "words": [
+        {
+          "id": 55823,
+          "position": 1,
+          "text": "فَٱسْجُدُوا۟",
+          "transliteration": "fa-us'judū",
+          "translation": "So prostrate",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:62:1"
+        },
+        {
+          "id": 55824,
+          "position": 2,
+          "text": "لِلَّهِ",
+          "transliteration": "lillahi",
+          "translation": "to Allah",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:62:2"
+        },
+        {
+          "id": 55825,
+          "position": 3,
+          "text": "وَٱعْبُدُوا۟ ۩",
+          "transliteration": "wa-uʿ'budū",
+          "translation": "and worship (Him)",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "53:62:3"
+        },
+        {
+          "id": 55827,
+          "position": 4,
+          "text": "٦٢",
+          "transliteration": "",
+          "translation": "(62)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "53:62:4"
+        }
+      ]
+    }
+  ]
+}

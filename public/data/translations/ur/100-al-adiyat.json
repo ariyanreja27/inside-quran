@@ -1,0 +1,46 @@
+{
+  "surahNumber": 100,
+  "edition": "ur.roman",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Kasam hai un (ghodon) ki jo phunkare marte hue dhaudte hai"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Phir (apne tapon se) chingariyan jhaadte hain"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Phir subah sawere chapa marte hain"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Phir is mauke par gard o gubar udatey hai"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Phir isi halat mei kisi majmey ke andar ja ghustey hai"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Haqiqat yeh hai ke Insan apne Rubb ka bada nashukra hai"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Aur woh khud is par gawah hai"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "Aur woh maal-o-daulat ki muhabbat mei buri tarah mubtala hai"
+    },
+    {
+      "numberInSurah": 9,
+      "text": "To kya woh us waqt ko nahin janta jab qabron mein jo kuch (madfun) hai usey nikal liya jayega"
+    },
+    {
+      "numberInSurah": 10,
+      "text": "Aur seeno mein jo kuch (makhfi) hai usey baramad karke uski jaanch padtal ki jayegi"
+    }
+  ]
+}

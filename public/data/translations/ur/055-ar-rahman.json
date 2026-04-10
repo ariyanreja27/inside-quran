@@ -1,0 +1,46 @@
+{
+  "surahNumber": 55,
+  "edition": "ur.roman",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Rahman ne"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Is Quran ki taleem di hai"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Usi ne Insan ko paida kiya"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Aur usey bolna sikhaya"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Suraj aur chand ek hisaab ke paband hain"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Aur taarey aur darakht sab sajda-reiz hain"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Aasman ko usne buland kiya aur mizan qayam kardi"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "Iska taqaza yeh hai ke tum mizaan mein khalal na daalo"
+    },
+    {
+      "numberInSurah": 9,
+      "text": "Insaaf ke saath theek theek tolo (weigh) aur tarazu mein dandi (skimp ) na maaro"
+    },
+    {
+      "numberInSurah": 10,
+      "text": "Zameen ko usne sab makhlooqat (creatures) ke liye banaya"
+    }
+  ]
+}

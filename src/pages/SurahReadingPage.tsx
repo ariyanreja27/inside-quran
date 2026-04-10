@@ -11,7 +11,9 @@ import {
   DrawerDescription,
 } from "@/components/ui/drawer";
 import { TajweedText } from '@/components/TajweedText';
-import type { Verse } from '@/types/quran';
+import { WordByWordVerse } from '@/components/WordByWordVerse';
+import { WordDetailDrawer } from '@/components/WordDetailDrawer';
+import type { Verse, Word } from '@/types/quran';
 
 export default function SurahReadingPage() {
   const { number } = useParams<{ number: string }>();
@@ -44,6 +46,7 @@ export default function SurahReadingPage() {
   const [isDragging, setIsDragging] = useState(false);
   const [showVerseNum, setShowVerseNum] = useState(false);
   const [handleVisible, setHandleVisible] = useState(false);
+  const [selectedWord, setSelectedWord] = useState<Word | null>(null);
   const handleRef = useRef<HTMLDivElement>(null);
   const hideTimeoutRef = useRef<NodeJS.Timeout>();
   const verseNumTimeoutRef = useRef<NodeJS.Timeout>();
@@ -538,15 +541,23 @@ export default function SurahReadingPage() {
                   </div>
 
                   {/* Arabic */}
-                  <p
-                    className="arabic-text text-center text-foreground mb-4"
-                    style={{
-                      fontSize: `${settings.arabicFontSize}px`,
-                      lineHeight: settings.lineSpacing
-                    }}
-                  >
-                    <TajweedText text={verse.text} showColors={settings.showTajweed} waqf={verse.waqf} />
-                  </p>
+                  {settings.showWordByWord ? (
+                    <WordByWordVerse 
+                      verse={verse} 
+                      showTransliteration={settings.showTransliteration} 
+                      onWordClick={(w) => setSelectedWord(w)}
+                    />
+                  ) : (
+                    <p
+                      className="arabic-text text-center text-foreground mb-4"
+                      style={{
+                        fontSize: `${settings.arabicFontSize}px`,
+                        lineHeight: settings.lineSpacing
+                      }}
+                    >
+                      <TajweedText text={verse.text} showColors={settings.showTajweed} waqf={verse.waqf} />
+                    </p>
+                  )}
 
                   {/* Translation */}
                   <p
@@ -620,7 +631,11 @@ export default function SurahReadingPage() {
             )}
          </DrawerContent>
       </Drawer>
-
+      
+      <WordDetailDrawer 
+        word={selectedWord} 
+        onClose={() => setSelectedWord(null)}
+      />
     </div>
   );
 }

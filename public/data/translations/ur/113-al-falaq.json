@@ -1,0 +1,26 @@
+{
+  "surahNumber": 113,
+  "edition": "ur.roman",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Kaho main panaah maangta hoon subah ke Rubb ki"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Har us cheez ke shar se jo usne paida ki hai"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Aur raat ki tareeki ke sharr se jab ke woh chaa jaye"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Aur girhon mein phoonkne walon (ya waliyon) ke sharr se"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Aur hasid(envies) ke sharr se jab ke woh hasad(envy) karey"
+    }
+  ]
+}

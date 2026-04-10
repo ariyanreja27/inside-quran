@@ -1,0 +1,570 @@
+{
+  "surahNumber": 93,
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "words": [
+        {
+          "id": 70,
+          "position": 1,
+          "text": "وَٱلضُّحَىٰ",
+          "transliteration": "wal-ḍuḥā",
+          "translation": "By the morning brightness",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:1:1"
+        },
+        {
+          "id": 71,
+          "position": 2,
+          "text": "١",
+          "transliteration": "",
+          "translation": "(1)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "93:1:2"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 2,
+      "words": [
+        {
+          "id": 1191,
+          "position": 1,
+          "text": "وَٱلَّيْلِ",
+          "transliteration": "wa-al-layli",
+          "translation": "And the night",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:2:1"
+        },
+        {
+          "id": 1192,
+          "position": 2,
+          "text": "إِذَا",
+          "transliteration": "idhā",
+          "translation": "when",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:2:2"
+        },
+        {
+          "id": 1193,
+          "position": 3,
+          "text": "سَجَىٰ",
+          "transliteration": "sajā",
+          "translation": "it covers with darkness",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:2:3"
+        },
+        {
+          "id": 1194,
+          "position": 4,
+          "text": "٢",
+          "transliteration": "",
+          "translation": "(2)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "93:2:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 3,
+      "words": [
+        {
+          "id": 2251,
+          "position": 1,
+          "text": "مَا",
+          "transliteration": "mā",
+          "translation": "Not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:3:1"
+        },
+        {
+          "id": 2252,
+          "position": 2,
+          "text": "وَدَّعَكَ",
+          "transliteration": "waddaʿaka",
+          "translation": "has forsaken you",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:3:2"
+        },
+        {
+          "id": 2253,
+          "position": 3,
+          "text": "رَبُّكَ",
+          "transliteration": "rabbuka",
+          "translation": "your Lord",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:3:3"
+        },
+        {
+          "id": 2254,
+          "position": 4,
+          "text": "وَمَا",
+          "transliteration": "wamā",
+          "translation": "and not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:3:4"
+        },
+        {
+          "id": 2255,
+          "position": 5,
+          "text": "قَلَىٰ",
+          "transliteration": "qalā",
+          "translation": "He is displeased",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:3:5"
+        },
+        {
+          "id": 2256,
+          "position": 6,
+          "text": "٣",
+          "transliteration": "",
+          "translation": "(3)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "93:3:6"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 4,
+      "words": [
+        {
+          "id": 3555,
+          "position": 1,
+          "text": "وَلَلْـَٔاخِرَةُ",
+          "transliteration": "walalākhiratu",
+          "translation": "And surely the Hereafter",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:4:1"
+        },
+        {
+          "id": 3556,
+          "position": 2,
+          "text": "خَيْرٌۭ",
+          "transliteration": "khayrun",
+          "translation": "(is) better",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:4:2"
+        },
+        {
+          "id": 3557,
+          "position": 3,
+          "text": "لَّكَ",
+          "transliteration": "laka",
+          "translation": "for you",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:4:3"
+        },
+        {
+          "id": 3558,
+          "position": 4,
+          "text": "مِنَ",
+          "transliteration": "mina",
+          "translation": "than",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:4:4"
+        },
+        {
+          "id": 3559,
+          "position": 5,
+          "text": "ٱلْأُولَىٰ",
+          "transliteration": "l-ūlā",
+          "translation": "the first",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:4:5"
+        },
+        {
+          "id": 3560,
+          "position": 6,
+          "text": "٤",
+          "transliteration": "",
+          "translation": "(4)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "93:4:6"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 5,
+      "words": [
+        {
+          "id": 4814,
+          "position": 1,
+          "text": "وَلَسَوْفَ",
+          "transliteration": "walasawfa",
+          "translation": "And soon",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:5:1"
+        },
+        {
+          "id": 4815,
+          "position": 2,
+          "text": "يُعْطِيكَ",
+          "transliteration": "yuʿ'ṭīka",
+          "translation": "will give you",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:5:2"
+        },
+        {
+          "id": 4816,
+          "position": 3,
+          "text": "رَبُّكَ",
+          "transliteration": "rabbuka",
+          "translation": "your Lord",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:5:3"
+        },
+        {
+          "id": 4817,
+          "position": 4,
+          "text": "فَتَرْضَىٰٓ",
+          "transliteration": "fatarḍā",
+          "translation": "then you will be satisfied",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:5:4"
+        },
+        {
+          "id": 4818,
+          "position": 5,
+          "text": "٥",
+          "transliteration": "",
+          "translation": "(5)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "93:5:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 6,
+      "words": [
+        {
+          "id": 5889,
+          "position": 1,
+          "text": "أَلَمْ",
+          "transliteration": "alam",
+          "translation": "Did not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:6:1"
+        },
+        {
+          "id": 5890,
+          "position": 2,
+          "text": "يَجِدْكَ",
+          "transliteration": "yajid'ka",
+          "translation": "He find you",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:6:2"
+        },
+        {
+          "id": 5891,
+          "position": 3,
+          "text": "يَتِيمًۭا",
+          "transliteration": "yatīman",
+          "translation": "an orphan",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:6:3"
+        },
+        {
+          "id": 5892,
+          "position": 4,
+          "text": "فَـَٔاوَىٰ",
+          "transliteration": "faāwā",
+          "translation": "and give shelter",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:6:4"
+        },
+        {
+          "id": 5893,
+          "position": 5,
+          "text": "٦",
+          "transliteration": "",
+          "translation": "(6)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "93:6:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 7,
+      "words": [
+        {
+          "id": 7732,
+          "position": 1,
+          "text": "وَوَجَدَكَ",
+          "transliteration": "wawajadaka",
+          "translation": "And He found you",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:7:1"
+        },
+        {
+          "id": 7733,
+          "position": 2,
+          "text": "ضَآلًّۭا",
+          "transliteration": "ḍāllan",
+          "translation": "lost",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:7:2"
+        },
+        {
+          "id": 7734,
+          "position": 3,
+          "text": "فَهَدَىٰ",
+          "transliteration": "fahadā",
+          "translation": "so He guided",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:7:3"
+        },
+        {
+          "id": 7735,
+          "position": 4,
+          "text": "٧",
+          "transliteration": "",
+          "translation": "(7)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "93:7:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 8,
+      "words": [
+        {
+          "id": 8971,
+          "position": 1,
+          "text": "وَوَجَدَكَ",
+          "transliteration": "wawajadaka",
+          "translation": "And He found you",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:8:1"
+        },
+        {
+          "id": 8972,
+          "position": 2,
+          "text": "عَآئِلًۭا",
+          "transliteration": "ʿāilan",
+          "translation": "in need",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:8:2"
+        },
+        {
+          "id": 8973,
+          "position": 3,
+          "text": "فَأَغْنَىٰ",
+          "transliteration": "fa-aghnā",
+          "translation": "so He made self-sufficient",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:8:3"
+        },
+        {
+          "id": 8974,
+          "position": 4,
+          "text": "٨",
+          "transliteration": "",
+          "translation": "(8)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "93:8:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 9,
+      "words": [
+        {
+          "id": 10182,
+          "position": 1,
+          "text": "فَأَمَّا",
+          "transliteration": "fa-ammā",
+          "translation": "So as for",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:9:1"
+        },
+        {
+          "id": 10183,
+          "position": 2,
+          "text": "ٱلْيَتِيمَ",
+          "transliteration": "l-yatīma",
+          "translation": "the orphan",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:9:2"
+        },
+        {
+          "id": 10184,
+          "position": 3,
+          "text": "فَلَا",
+          "transliteration": "falā",
+          "translation": "then (do) not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:9:3"
+        },
+        {
+          "id": 10185,
+          "position": 4,
+          "text": "تَقْهَرْ",
+          "transliteration": "taqhar",
+          "translation": "oppress",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:9:4"
+        },
+        {
+          "id": 10186,
+          "position": 5,
+          "text": "٩",
+          "transliteration": "",
+          "translation": "(9)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "93:9:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 10,
+      "words": [
+        {
+          "id": 11376,
+          "position": 1,
+          "text": "وَأَمَّا",
+          "transliteration": "wa-ammā",
+          "translation": "And as for",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:10:1"
+        },
+        {
+          "id": 11377,
+          "position": 2,
+          "text": "ٱلسَّآئِلَ",
+          "transliteration": "l-sāila",
+          "translation": "one who asks",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:10:2"
+        },
+        {
+          "id": 11378,
+          "position": 3,
+          "text": "فَلَا",
+          "transliteration": "falā",
+          "translation": "then (do) not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:10:3"
+        },
+        {
+          "id": 11379,
+          "position": 4,
+          "text": "تَنْهَرْ",
+          "transliteration": "tanhar",
+          "translation": "repel",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:10:4"
+        },
+        {
+          "id": 11380,
+          "position": 5,
+          "text": "١٠",
+          "transliteration": "",
+          "translation": "(10)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "93:10:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 11,
+      "words": [
+        {
+          "id": 12598,
+          "position": 1,
+          "text": "وَأَمَّا",
+          "transliteration": "wa-ammā",
+          "translation": "But as for",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:11:1"
+        },
+        {
+          "id": 12599,
+          "position": 2,
+          "text": "بِنِعْمَةِ",
+          "transliteration": "biniʿ'mati",
+          "translation": "(the) Favor",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:11:2"
+        },
+        {
+          "id": 12600,
+          "position": 3,
+          "text": "رَبِّكَ",
+          "transliteration": "rabbika",
+          "translation": "(of) your Lord",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:11:3"
+        },
+        {
+          "id": 12601,
+          "position": 4,
+          "text": "فَحَدِّثْ",
+          "transliteration": "faḥaddith",
+          "translation": "narrate",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "93:11:4"
+        },
+        {
+          "id": 12602,
+          "position": 5,
+          "text": "١١",
+          "transliteration": "",
+          "translation": "(11)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "93:11:5"
+        }
+      ]
+    }
+  ]
+}

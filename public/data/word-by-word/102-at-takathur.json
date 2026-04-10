@@ -1,0 +1,405 @@
+{
+  "surahNumber": 102,
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "words": [
+        {
+          "id": 164,
+          "position": 1,
+          "text": "أَلْهَىٰكُمُ",
+          "transliteration": "alhākumu",
+          "translation": "Diverts you",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:1:1"
+        },
+        {
+          "id": 165,
+          "position": 2,
+          "text": "ٱلتَّكَاثُرُ",
+          "transliteration": "l-takāthuru",
+          "translation": "the competition to increase",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:1:2"
+        },
+        {
+          "id": 166,
+          "position": 3,
+          "text": "١",
+          "transliteration": "",
+          "translation": "(1)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "102:1:3"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 2,
+      "words": [
+        {
+          "id": 1095,
+          "position": 1,
+          "text": "حَتَّىٰ",
+          "transliteration": "ḥattā",
+          "translation": "Until",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:2:1"
+        },
+        {
+          "id": 1096,
+          "position": 2,
+          "text": "زُرْتُمُ",
+          "transliteration": "zur'tumu",
+          "translation": "you visit",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:2:2"
+        },
+        {
+          "id": 1097,
+          "position": 3,
+          "text": "ٱلْمَقَابِرَ",
+          "transliteration": "l-maqābira",
+          "translation": "the graves",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:2:3"
+        },
+        {
+          "id": 1098,
+          "position": 4,
+          "text": "٢",
+          "transliteration": "",
+          "translation": "(2)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "102:2:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 3,
+      "words": [
+        {
+          "id": 2157,
+          "position": 1,
+          "text": "كَلَّا",
+          "transliteration": "kallā",
+          "translation": "Nay",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:3:1"
+        },
+        {
+          "id": 2158,
+          "position": 2,
+          "text": "سَوْفَ",
+          "transliteration": "sawfa",
+          "translation": "Soon",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:3:2"
+        },
+        {
+          "id": 2159,
+          "position": 3,
+          "text": "تَعْلَمُونَ",
+          "transliteration": "taʿlamūna",
+          "translation": "you will know",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:3:3"
+        },
+        {
+          "id": 2160,
+          "position": 4,
+          "text": "٣",
+          "transliteration": "",
+          "translation": "(3)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "102:3:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 4,
+      "words": [
+        {
+          "id": 3510,
+          "position": 1,
+          "text": "ثُمَّ",
+          "transliteration": "thumma",
+          "translation": "Then",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:4:1"
+        },
+        {
+          "id": 3511,
+          "position": 2,
+          "text": "كَلَّا",
+          "transliteration": "kallā",
+          "translation": "nay",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:4:2"
+        },
+        {
+          "id": 3512,
+          "position": 3,
+          "text": "سَوْفَ",
+          "transliteration": "sawfa",
+          "translation": "Soon",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:4:3"
+        },
+        {
+          "id": 3513,
+          "position": 4,
+          "text": "تَعْلَمُونَ",
+          "transliteration": "taʿlamūna",
+          "translation": "you will know",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:4:4"
+        },
+        {
+          "id": 3514,
+          "position": 5,
+          "text": "٤",
+          "transliteration": "",
+          "translation": "(4)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "102:4:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 5,
+      "words": [
+        {
+          "id": 4892,
+          "position": 1,
+          "text": "كَلَّا",
+          "transliteration": "kallā",
+          "translation": "Nay",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:5:1"
+        },
+        {
+          "id": 4893,
+          "position": 2,
+          "text": "لَوْ",
+          "transliteration": "law",
+          "translation": "If",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:5:2"
+        },
+        {
+          "id": 4894,
+          "position": 3,
+          "text": "تَعْلَمُونَ",
+          "transliteration": "taʿlamūna",
+          "translation": "you know",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:5:3"
+        },
+        {
+          "id": 4895,
+          "position": 4,
+          "text": "عِلْمَ",
+          "transliteration": "ʿil'ma",
+          "translation": "(with) a knowledge",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:5:4"
+        },
+        {
+          "id": 4896,
+          "position": 5,
+          "text": "ٱلْيَقِينِ",
+          "transliteration": "l-yaqīni",
+          "translation": "(of) certainty",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:5:5"
+        },
+        {
+          "id": 4897,
+          "position": 6,
+          "text": "٥",
+          "transliteration": "",
+          "translation": "(5)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "102:5:6"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 6,
+      "words": [
+        {
+          "id": 6141,
+          "position": 1,
+          "text": "لَتَرَوُنَّ",
+          "transliteration": "latarawunna",
+          "translation": "Surely you will see",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:6:1"
+        },
+        {
+          "id": 6142,
+          "position": 2,
+          "text": "ٱلْجَحِيمَ",
+          "transliteration": "l-jaḥīma",
+          "translation": "the Hellfire",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:6:2"
+        },
+        {
+          "id": 6143,
+          "position": 3,
+          "text": "٦",
+          "transliteration": "",
+          "translation": "(6)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "102:6:3"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 7,
+      "words": [
+        {
+          "id": 7440,
+          "position": 1,
+          "text": "ثُمَّ",
+          "transliteration": "thumma",
+          "translation": "Then",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:7:1"
+        },
+        {
+          "id": 7441,
+          "position": 2,
+          "text": "لَتَرَوُنَّهَا",
+          "transliteration": "latarawunnahā",
+          "translation": "surely you will see it",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:7:2"
+        },
+        {
+          "id": 7442,
+          "position": 3,
+          "text": "عَيْنَ",
+          "transliteration": "ʿayna",
+          "translation": "(with the) eye",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:7:3"
+        },
+        {
+          "id": 7443,
+          "position": 4,
+          "text": "ٱلْيَقِينِ",
+          "transliteration": "l-yaqīni",
+          "translation": "(of) certainty",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:7:4"
+        },
+        {
+          "id": 7444,
+          "position": 5,
+          "text": "٧",
+          "transliteration": "",
+          "translation": "(7)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "102:7:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 8,
+      "words": [
+        {
+          "id": 8678,
+          "position": 1,
+          "text": "ثُمَّ",
+          "transliteration": "thumma",
+          "translation": "Then",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:8:1"
+        },
+        {
+          "id": 8679,
+          "position": 2,
+          "text": "لَتُسْـَٔلُنَّ",
+          "transliteration": "latus'alunna",
+          "translation": "surely you will be asked",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:8:2"
+        },
+        {
+          "id": 8680,
+          "position": 3,
+          "text": "يَوْمَئِذٍ",
+          "transliteration": "yawma-idhin",
+          "translation": "that Day",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:8:3"
+        },
+        {
+          "id": 8681,
+          "position": 4,
+          "text": "عَنِ",
+          "transliteration": "ʿani",
+          "translation": "about",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:8:4"
+        },
+        {
+          "id": 8682,
+          "position": 5,
+          "text": "ٱلنَّعِيمِ",
+          "transliteration": "l-naʿīmi",
+          "translation": "the pleasures",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "102:8:5"
+        },
+        {
+          "id": 8683,
+          "position": 6,
+          "text": "٨",
+          "transliteration": "",
+          "translation": "(8)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "102:8:6"
+        }
+      ]
+    }
+  ]
+}

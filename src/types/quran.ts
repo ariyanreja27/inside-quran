@@ -7,6 +7,18 @@ export interface Surah {
   revelationType: 'Meccan' | 'Medinan';
 }
 
+export interface Word {
+  id: number;
+  position: number;
+  text: string;
+  transliteration: string;
+  translation: string;
+  audioUrl?: string;
+  rootLetters?: string;         // e.g. "س-م-و" (Arabic, dash-separated)
+  charTypeName?: string;         // "word" | "end" — end markers have no root
+  location?: string;            // e.g. "1:1:1"
+}
+
 export interface Verse {
   number: number;
   numberInSurah: number;
@@ -18,6 +30,7 @@ export interface Verse {
   hizbQuarter: number;
   ruku: number;
   surahNumber: number;
+  words?: Word[];
 }
 
 export interface RootWord {

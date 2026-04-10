@@ -1,0 +1,150 @@
+{
+  "surahNumber": 108,
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "words": [
+        {
+          "id": 276,
+          "position": 1,
+          "text": "إِنَّآ",
+          "transliteration": "innā",
+          "translation": "Indeed, We",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "108:1:1"
+        },
+        {
+          "id": 277,
+          "position": 2,
+          "text": "أَعْطَيْنَـٰكَ",
+          "transliteration": "aʿṭaynāka",
+          "translation": "We have given you",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "108:1:2"
+        },
+        {
+          "id": 278,
+          "position": 3,
+          "text": "ٱلْكَوْثَرَ",
+          "transliteration": "l-kawthara",
+          "translation": "Al-Kauthar",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "108:1:3"
+        },
+        {
+          "id": 279,
+          "position": 4,
+          "text": "١",
+          "transliteration": "",
+          "translation": "(1)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "108:1:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 2,
+      "words": [
+        {
+          "id": 996,
+          "position": 1,
+          "text": "فَصَلِّ",
+          "transliteration": "faṣalli",
+          "translation": "So pray",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "108:2:1"
+        },
+        {
+          "id": 997,
+          "position": 2,
+          "text": "لِرَبِّكَ",
+          "transliteration": "lirabbika",
+          "translation": "to your Lord",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "108:2:2"
+        },
+        {
+          "id": 998,
+          "position": 3,
+          "text": "وَٱنْحَرْ",
+          "transliteration": "wa-in'ḥar",
+          "translation": "and sacrifice",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "108:2:3"
+        },
+        {
+          "id": 999,
+          "position": 4,
+          "text": "٢",
+          "transliteration": "",
+          "translation": "(2)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "108:2:4"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 3,
+      "words": [
+        {
+          "id": 2556,
+          "position": 1,
+          "text": "إِنَّ",
+          "transliteration": "inna",
+          "translation": "Indeed",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "108:3:1"
+        },
+        {
+          "id": 2557,
+          "position": 2,
+          "text": "شَانِئَكَ",
+          "transliteration": "shāni-aka",
+          "translation": "your enemy ",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "108:3:2"
+        },
+        {
+          "id": 2558,
+          "position": 3,
+          "text": "هُوَ",
+          "transliteration": "huwa",
+          "translation": "he (is)",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "108:3:3"
+        },
+        {
+          "id": 2559,
+          "position": 4,
+          "text": "ٱلْأَبْتَرُ",
+          "transliteration": "l-abtaru",
+          "translation": "the one cut off",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "108:3:4"
+        },
+        {
+          "id": 2560,
+          "position": 5,
+          "text": "٣",
+          "transliteration": "",
+          "translation": "(3)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "108:3:5"
+        }
+      ]
+    }
+  ]
+}

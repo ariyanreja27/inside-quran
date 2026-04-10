@@ -1,0 +1,46 @@
+{
+  "surahNumber": 56,
+  "edition": "ur.roman",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Jab woh honay wala waqia pesh aa jayega"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "To koi uske waquh(occurrence) ko jhutlane wala na hoga"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Woh tah-o-bala (pasth aur buland) kardene wali aafat hogi"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Zameen us waqt ek baar hi hila daali jayegi"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Aur pahad is tarah reza reza kardiye jayenge"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Ke paraganda (scattered) gubar (dust) ban kar reh jayenge"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Tum log us waqt teen girohon (jamaat) mein taqseem ho jaogey"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "Dayein bazu waley, so dayein bazu walon (ke khush-naseebi ) ka kya kehna"
+    },
+    {
+      "numberInSurah": 9,
+      "text": "Aur bayein bazu waley, to bayein bazu walon (ki badnasibi ka) kya thikana"
+    },
+    {
+      "numberInSurah": 10,
+      "text": "Aur aagey waley to phir aagey waley hi hain"
+    }
+  ]
+}

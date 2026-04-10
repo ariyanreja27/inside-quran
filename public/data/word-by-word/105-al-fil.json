@@ -1,0 +1,310 @@
+{
+  "surahNumber": 105,
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "words": [
+        {
+          "id": 137,
+          "position": 1,
+          "text": "أَلَمْ",
+          "transliteration": "alam",
+          "translation": "Have not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "105:1:1"
+        },
+        {
+          "id": 138,
+          "position": 2,
+          "text": "تَرَ",
+          "transliteration": "tara",
+          "translation": "you seen",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "105:1:2"
+        },
+        {
+          "id": 139,
+          "position": 3,
+          "text": "كَيْفَ",
+          "transliteration": "kayfa",
+          "translation": "how",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "105:1:3"
+        },
+        {
+          "id": 140,
+          "position": 4,
+          "text": "فَعَلَ",
+          "transliteration": "faʿala",
+          "translation": "dealt",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "105:1:4"
+        },
+        {
+          "id": 141,
+          "position": 5,
+          "text": "رَبُّكَ",
+          "transliteration": "rabbuka",
+          "translation": "your Lord",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "105:1:5"
+        },
+        {
+          "id": 142,
+          "position": 6,
+          "text": "بِأَصْحَـٰبِ",
+          "transliteration": "bi-aṣḥābi",
+          "translation": "with (the) Companions",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "105:1:6"
+        },
+        {
+          "id": 143,
+          "position": 7,
+          "text": "ٱلْفِيلِ",
+          "transliteration": "l-fīli",
+          "translation": "(of the) Elephant",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "105:1:7"
+        },
+        {
+          "id": 144,
+          "position": 8,
+          "text": "١",
+          "transliteration": "",
+          "translation": "(1)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "105:1:8"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 2,
+      "words": [
+        {
+          "id": 1019,
+          "position": 1,
+          "text": "أَلَمْ",
+          "transliteration": "alam",
+          "translation": "Did not",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "105:2:1"
+        },
+        {
+          "id": 1020,
+          "position": 2,
+          "text": "يَجْعَلْ",
+          "transliteration": "yajʿal",
+          "translation": "He make",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "105:2:2"
+        },
+        {
+          "id": 1021,
+          "position": 3,
+          "text": "كَيْدَهُمْ",
+          "transliteration": "kaydahum",
+          "translation": "their plan",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "105:2:3"
+        },
+        {
+          "id": 1022,
+          "position": 4,
+          "text": "فِى",
+          "transliteration": "fī",
+          "translation": "go",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "105:2:4"
+        },
+        {
+          "id": 1023,
+          "position": 5,
+          "text": "تَضْلِيلٍۢ",
+          "transliteration": "taḍlīlin",
+          "translation": "astray",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "105:2:5"
+        },
+        {
+          "id": 1024,
+          "position": 6,
+          "text": "٢",
+          "transliteration": "",
+          "translation": "(2)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "105:2:6"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 3,
+      "words": [
+        {
+          "id": 2361,
+          "position": 1,
+          "text": "وَأَرْسَلَ",
+          "transliteration": "wa-arsala",
+          "translation": "And He sent",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "105:3:1"
+        },
+        {
+          "id": 2362,
+          "position": 2,
+          "text": "عَلَيْهِمْ",
+          "transliteration": "ʿalayhim",
+          "translation": "against them",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "105:3:2"
+        },
+        {
+          "id": 2363,
+          "position": 3,
+          "text": "طَيْرًا",
+          "transliteration": "ṭayran",
+          "translation": "birds",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "105:3:3"
+        },
+        {
+          "id": 2364,
+          "position": 4,
+          "text": "أَبَابِيلَ",
+          "transliteration": "abābīla",
+          "translation": "(in) flocks",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "105:3:4"
+        },
+        {
+          "id": 2365,
+          "position": 5,
+          "text": "٣",
+          "transliteration": "",
+          "translation": "(3)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "105:3:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 4,
+      "words": [
+        {
+          "id": 3867,
+          "position": 1,
+          "text": "تَرْمِيهِم",
+          "transliteration": "tarmīhim",
+          "translation": "Striking them",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "105:4:1"
+        },
+        {
+          "id": 3868,
+          "position": 2,
+          "text": "بِحِجَارَةٍۢ",
+          "transliteration": "biḥijāratin",
+          "translation": "with stones",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "105:4:2"
+        },
+        {
+          "id": 3869,
+          "position": 3,
+          "text": "مِّن",
+          "transliteration": "min",
+          "translation": "of",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "105:4:3"
+        },
+        {
+          "id": 3870,
+          "position": 4,
+          "text": "سِجِّيلٍۢ",
+          "transliteration": "sijjīlin",
+          "translation": "baked clay",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "105:4:4"
+        },
+        {
+          "id": 3871,
+          "position": 5,
+          "text": "٤",
+          "transliteration": "",
+          "translation": "(4)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "105:4:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 5,
+      "words": [
+        {
+          "id": 5092,
+          "position": 1,
+          "text": "فَجَعَلَهُمْ",
+          "transliteration": "fajaʿalahum",
+          "translation": "Then He made them",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "105:5:1"
+        },
+        {
+          "id": 5093,
+          "position": 2,
+          "text": "كَعَصْفٍۢ",
+          "transliteration": "kaʿaṣfin",
+          "translation": "like straw",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "105:5:2"
+        },
+        {
+          "id": 5094,
+          "position": 3,
+          "text": "مَّأْكُولٍۭ",
+          "transliteration": "makūlin",
+          "translation": "eaten up",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "105:5:3"
+        },
+        {
+          "id": 5095,
+          "position": 4,
+          "text": "٥",
+          "transliteration": "",
+          "translation": "(5)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "105:5:4"
+        }
+      ]
+    }
+  ]
+}

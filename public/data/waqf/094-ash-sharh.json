@@ -1,0 +1,37 @@
+{
+  "surahNumber": 94,
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "waqfMark": "ۙ"
+    },
+    {
+      "numberInSurah": 2,
+      "waqfMark": "ۙ"
+    },
+    {
+      "numberInSurah": 3,
+      "waqfMark": "ۙ"
+    },
+    {
+      "numberInSurah": 4,
+      "waqfMark": ""
+    },
+    {
+      "numberInSurah": 5,
+      "waqfMark": "ۙ"
+    },
+    {
+      "numberInSurah": 6,
+      "waqfMark": ""
+    },
+    {
+      "numberInSurah": 7,
+      "waqfMark": "ۙ"
+    },
+    {
+      "numberInSurah": 8,
+      "waqfMark": ""
+    }
+  ]
+}

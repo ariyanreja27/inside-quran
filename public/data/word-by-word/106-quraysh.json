@@ -1,0 +1,235 @@
+{
+  "surahNumber": 106,
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "words": [
+        {
+          "id": 266,
+          "position": 1,
+          "text": "لِإِيلَـٰفِ",
+          "transliteration": "liīlāfi",
+          "translation": "For (the) familiarity",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "106:1:1"
+        },
+        {
+          "id": 267,
+          "position": 2,
+          "text": "قُرَيْشٍ",
+          "transliteration": "qurayshin",
+          "translation": "(of the) Quraish",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "106:1:2"
+        },
+        {
+          "id": 268,
+          "position": 3,
+          "text": "١",
+          "transliteration": "",
+          "translation": "(1)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "106:1:3"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 2,
+      "words": [
+        {
+          "id": 961,
+          "position": 1,
+          "text": "إِۦلَـٰفِهِمْ",
+          "transliteration": "īlāfihim",
+          "translation": "Their familiarity",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "106:2:1"
+        },
+        {
+          "id": 962,
+          "position": 2,
+          "text": "رِحْلَةَ",
+          "transliteration": "riḥ'lata",
+          "translation": "(with the) journey",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "106:2:2"
+        },
+        {
+          "id": 963,
+          "position": 3,
+          "text": "ٱلشِّتَآءِ",
+          "transliteration": "l-shitāi",
+          "translation": "(of) winter",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "106:2:3"
+        },
+        {
+          "id": 964,
+          "position": 4,
+          "text": "وَٱلصَّيْفِ",
+          "transliteration": "wal-ṣayfi",
+          "translation": "and summer",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "106:2:4"
+        },
+        {
+          "id": 965,
+          "position": 5,
+          "text": "٢",
+          "transliteration": "",
+          "translation": "(2)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "106:2:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 3,
+      "words": [
+        {
+          "id": 2411,
+          "position": 1,
+          "text": "فَلْيَعْبُدُوا۟",
+          "transliteration": "falyaʿbudū",
+          "translation": "So let them worship",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "106:3:1"
+        },
+        {
+          "id": 2412,
+          "position": 2,
+          "text": "رَبَّ",
+          "transliteration": "rabba",
+          "translation": "(the) Lord",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "106:3:2"
+        },
+        {
+          "id": 2413,
+          "position": 3,
+          "text": "هَـٰذَا",
+          "transliteration": "hādhā",
+          "translation": "(of) this",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "106:3:3"
+        },
+        {
+          "id": 2414,
+          "position": 4,
+          "text": "ٱلْبَيْتِ",
+          "transliteration": "l-bayti",
+          "translation": "House",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "106:3:4"
+        },
+        {
+          "id": 2415,
+          "position": 5,
+          "text": "٣",
+          "transliteration": "",
+          "translation": "(3)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "106:3:5"
+        }
+      ]
+    },
+    {
+      "numberInSurah": 4,
+      "words": [
+        {
+          "id": 3906,
+          "position": 1,
+          "text": "ٱلَّذِىٓ",
+          "transliteration": "alladhī",
+          "translation": "The One Who",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "106:4:1"
+        },
+        {
+          "id": 3907,
+          "position": 2,
+          "text": "أَطْعَمَهُم",
+          "transliteration": "aṭʿamahum",
+          "translation": "feeds them",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "106:4:2"
+        },
+        {
+          "id": 3908,
+          "position": 3,
+          "text": "مِّن",
+          "transliteration": "min",
+          "translation": "[from]",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "106:4:3"
+        },
+        {
+          "id": 3909,
+          "position": 4,
+          "text": "جُوعٍۢ",
+          "transliteration": "jūʿin",
+          "translation": "(against) hunger",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "106:4:4"
+        },
+        {
+          "id": 3910,
+          "position": 5,
+          "text": "وَءَامَنَهُم",
+          "transliteration": "waāmanahum",
+          "translation": "and gives them security",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "106:4:5"
+        },
+        {
+          "id": 3911,
+          "position": 6,
+          "text": "مِّنْ",
+          "transliteration": "min",
+          "translation": "from",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "106:4:6"
+        },
+        {
+          "id": 3912,
+          "position": 7,
+          "text": "خَوْفٍۭ",
+          "transliteration": "khawfin",
+          "translation": "fear",
+          "rootLetters": null,
+          "charTypeName": "word",
+          "location": "106:4:7"
+        },
+        {
+          "id": 3913,
+          "position": 8,
+          "text": "٤",
+          "transliteration": "",
+          "translation": "(4)",
+          "rootLetters": null,
+          "charTypeName": "end",
+          "location": "106:4:8"
+        }
+      ]
+    }
+  ]
+}
