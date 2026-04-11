@@ -21,7 +21,7 @@ export default {
     extend: {
       fontFamily: {
         arabic: ['var(--font-arabic)', 'serif'],
-        display: ['Fraunces', 'Georgia', 'serif'],
+        display: ['Newsreader', 'Fraunces', 'Georgia', 'serif'],
         body: ['Inter', 'sans-serif'],
       },
       colors: {

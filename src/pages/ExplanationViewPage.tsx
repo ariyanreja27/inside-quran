@@ -19,13 +19,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSurahVerses, useSurahs } from '@/hooks/useQuranData';
 import { formatVerseRange } from '@/lib/utils';
 import { useExplanations, useSettings, useCustomTranslations } from '@/hooks/useAppStore';
-import type { Explanation, RootWord, Word } from '@/types/quran';
+import { WordByWordVerse } from '@/components/WordByWordVerse';
 import { WordDetailDrawer } from '@/components/WordDetailDrawer';
+import type { Explanation, RootWord, Word } from '@/types/quran';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Drawer, DrawerContent, DrawerTitle, DrawerDescription } from '@/components/ui/drawer';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { TajweedText } from '@/components/TajweedText';
-import { WordByWordVerse } from '@/components/WordByWordVerse';
 
 export default function ExplanationViewPage() {
   const navigate = useNavigate();
@@ -478,6 +478,7 @@ export default function ExplanationViewPage() {
          </DrawerContent>
       </Drawer>
       
+
       <WordDetailDrawer 
         word={selectedWord} 
         onClose={() => setSelectedWord(null)}

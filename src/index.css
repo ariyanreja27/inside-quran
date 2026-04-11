@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&family=Amiri:ital,wght@0,400;0,700;1,400&family=Scheherazade+New:wght@400;700&family=Katibeh&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Amiri:ital,wght@0,400;0,700;1,400&family=Scheherazade+New:wght@400;700&family=Katibeh&display=swap');
 
 @font-face {
   font-family: 'surah-font';
@@ -67,7 +67,7 @@
 
     --font-arabic: 'Noorehuda', 'Amiri', 'Traditional Arabic', serif;
     --font-quran: 'Calibri', 'Katibeh', 'Scheherazade New', serif;
-    --font-display: 'Fraunces', Georgia, serif;
+    --font-display: 'Newsreader', 'Fraunces', Georgia, serif;
     --font-body: 'Geist Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
 
@@ -161,7 +161,8 @@
 
   .font-display {
     font-family: var(--font-display);
-    font-variation-settings: 'SOFT' 100, 'WONK' 1;
+    /* Newsreader doesn't use SOFT/WONK variables from Fraunces, but supports optical sizing */
+    font-optical-sizing: auto;
   }
 
   .surah-card {
@@ -215,6 +216,35 @@
   .scrollbar-hide {
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .font-quran {
+    font-family: var(--font-quran);
+  }
+
+  /* Study Callouts */
+  .callout-block {
+    @apply my-8 p-6 rounded-[1.5rem] border-l-[6px] shadow-sm;
+  }
+  .callout-linguistic {
+    @apply bg-amber-500/5 border-amber-500/30 text-amber-900 dark:text-amber-200/90;
+  }
+  .callout-context {
+    @apply bg-indigo-500/5 border-indigo-500/30 text-indigo-900 dark:text-indigo-200/90;
+  }
+  .callout-tadabbur {
+    @apply bg-emerald-500/5 border-emerald-500/30 text-emerald-900 dark:text-emerald-200/90;
+  }
+  .callout-action {
+    @apply bg-rose-500/5 border-rose-500/30 text-rose-900 dark:text-rose-200/90;
   }
 }
 

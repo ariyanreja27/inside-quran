@@ -23,6 +23,7 @@ import ShaneNuzulPage from "@/pages/ShaneNuzulPage";
 import LastReadPage from "@/pages/LastReadPage";
 import HelpSupportPage from "@/pages/HelpSupportPage";
 import TajweedGuidePage from "@/pages/TajweedGuidePage";
+import WordDetailsPage from "@/pages/WordDetailsPage";
 import NotFound from "@/pages/NotFound";
 import ScrollToTop from "@/components/ScrollToTop";
 
@@ -54,6 +55,7 @@ const App = () => (
           <Route path="/last-read" element={<LastReadPage />} />
           <Route path="/help" element={<HelpSupportPage />} />
           <Route path="/tajweed-guide" element={<TajweedGuidePage />} />
+          <Route path="/word-details" element={<WordDetailsPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <BottomNav />

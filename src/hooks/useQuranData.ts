@@ -18,6 +18,19 @@ function surahSlug(surahNumber: number): string {
   return `${String(surahNumber).padStart(3, '0')}-${slug}`;
 }
 
+/** 
+ * Normalizes transliteration by fixing data artifacts like 'l-' at the start of a word.
+ * In Quranic WBW data, 'l-' often represents the definite article 'Al' when joined.
+ */
+function normalizeTransliteration(str: string): string {
+  if (!str) return str;
+  const trimmed = str.trim();
+  if (trimmed.toLowerCase().startsWith('l-')) {
+    return 'al-' + trimmed.slice(2);
+  }
+  return trimmed;
+}
+
 /** Try to fetch a local JSON file; returns null if not available (offline / file missing) */
 async function fetchLocal<T>(path: string): Promise<T | null> {
   try {
@@ -71,17 +84,17 @@ export function useSurahVerses(surahNumber: number) {
       // If Tajweed mode, also parse the tajweed files to overlay color rendering atop the verse map
       let tajweedVerses: Record<number, string> | null = null;
       if (settings.showTajweed) {
-        const localTajweed = await fetchLocal<any>(`${LOCAL_DATA}/tajweed/${slug}.json`);
+        const localTajweed = await fetchLocal<LocalTransFile>(`${LOCAL_DATA}/tajweed/${slug}.json`);
         if (localTajweed?.verses?.length) {
           tajweedVerses = {};
-          localTajweed.verses.forEach((v: any) => {
+          localTajweed.verses.forEach(v => {
             tajweedVerses![v.numberInSurah] = v.text;
           });
         }
       }
 
       // ── 2. Load Translation ─────────────────────────────────────────────────
-      let translationMap: Record<number, string> = {};
+      const translationMap: Record<number, string> = {};
       const localTrans = await fetchLocal<LocalTransFile>(
         `${LOCAL_DATA}/translations/${translationLang}/${slug}.json`
       );
@@ -97,7 +110,7 @@ export function useSurahVerses(surahNumber: number) {
       }
 
       // ── 4. Load Word-by-Word ────────────────────────────────────────────────
-      const wbwMap: Record<number, any[]> = {};
+      const wbwMap: Record<number, LocalWord[]> = {};
       const localWbw = await fetchLocal<LocalWbwFile>(`${LOCAL_DATA}/word-by-word/${slug}.json`);
       if (localWbw?.verses?.length) {
         localWbw.verses.forEach(v => { wbwMap[v.numberInSurah] = v.words; });
@@ -131,7 +144,10 @@ export function useSurahVerses(surahNumber: number) {
           hizbQuarter: a.hizbQuarter,
           ruku: a.ruku,
           surahNumber,
-          words: wbwMap[a.numberInSurah] || [],
+          words: (wbwMap[a.numberInSurah] || []).map(w => ({
+            ...w,
+            transliteration: normalizeTransliteration(w.transliteration)
+          })),
         };
       });
     },

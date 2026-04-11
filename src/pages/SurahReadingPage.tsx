@@ -17,8 +17,15 @@ import type { Verse, Word } from '@/types/quran';
 
 export default function SurahReadingPage() {
   const { number } = useParams<{ number: string }>();
-  const surahNumber = parseInt(number || '1');
   const navigate = useNavigate();
+  const surahNumber = parseInt(number || '1');
+  
+  useEffect(() => {
+    if (isNaN(surahNumber) || surahNumber < 1 || surahNumber > 114) {
+      navigate('/');
+    }
+  }, [surahNumber, navigate]);
+
   const { data: surahs } = useSurahs();
   const { data: verses, isLoading } = useSurahVerses(surahNumber);
   const location = useLocation();
@@ -427,7 +434,7 @@ export default function SurahReadingPage() {
             const customTrans = getCustomTranslation(surahNumber, verse.numberInSurah, settings.language);
             const displayTranslation = customTrans || verse.translation;
 
-            if (settings.showOnlyExplained && !explained) return null;
+
 
             return (
               <div key={verse.numberInSurah}>
@@ -544,7 +551,7 @@ export default function SurahReadingPage() {
                   {settings.showWordByWord ? (
                     <WordByWordVerse 
                       verse={verse} 
-                      showTransliteration={settings.showTransliteration} 
+                      showTransliteration={settings.showWordTransliteration} 
                       onWordClick={(w) => setSelectedWord(w)}
                     />
                   ) : (
@@ -559,11 +566,21 @@ export default function SurahReadingPage() {
                     </p>
                   )}
 
+                  {/* Full Verse Transliteration */}
+                  {settings.showTransliteration && (
+                    <p 
+                      className="font-serif italic text-primary/60 text-center mb-3 leading-snug px-4"
+                      style={{ fontSize: `${settings.translationFontSize - 1}px` }}
+                    >
+                      {verse.words?.filter(w => w.charTypeName !== 'end').map(w => w.transliteration).join(' ')}
+                    </p>
+                  )}
+
                   {/* Translation */}
                   <p
                     className="font-display text-muted-foreground text-center"
                     style={{
-                      fontSize: `${settings.translationFontSize}px`,
+                      fontSize: `${settings.language === 'en' ? settings.translationFontSize + 2 : settings.translationFontSize}px`,
                       lineHeight: 1.6,
                       direction: settings.language === 'ur' ? 'rtl' : 'ltr',
                       fontVariationSettings: "'SOFT' 50, 'WONK' 0"

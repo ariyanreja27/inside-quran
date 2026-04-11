@@ -232,7 +232,7 @@ export default function SettingsPage() {
     </h2>
   );
 
-  const Stepper = ({ label, value, unit, min, max, step, onChange, description }: {
+  const MinimalCardControl = ({ label, value, unit, min, max, step, onChange, description }: {
     label: string;
     value: number;
     unit: string;
@@ -242,39 +242,77 @@ export default function SettingsPage() {
     onChange: (val: number) => void;
     description?: string;
   }) => {
+    const cardRef = useRef<HTMLDivElement>(null);
+    const [isDragging, setIsDragging] = useState(false);
+
+    const handleUpdate = useCallback((clientX: number) => {
+      if (!cardRef.current) return;
+      const rect = cardRef.current.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const percentage = Math.min(Math.max(x / rect.width, 0), 1);
+      const newValue = min + percentage * (max - min);
+      const steppedValue = Math.round(newValue / step) * step;
+      onChange(Number(steppedValue.toFixed(1)));
+    }, [min, max, step, onChange]);
+
+    useEffect(() => {
+      const handleMove = (e: MouseEvent | TouchEvent) => {
+        if (!isDragging) return;
+        const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+        handleUpdate(clientX);
+      };
+      const handleEnd = () => setIsDragging(false);
+
+      if (isDragging) {
+        window.addEventListener('mousemove', handleMove);
+        window.addEventListener('mouseup', handleEnd);
+        window.addEventListener('touchmove', handleMove);
+        window.addEventListener('touchend', handleEnd);
+      }
+      return () => {
+        window.removeEventListener('mousemove', handleMove);
+        window.removeEventListener('mouseup', handleEnd);
+        window.removeEventListener('touchmove', handleMove);
+        window.removeEventListener('touchend', handleEnd);
+      };
+    }, [isDragging, handleUpdate]);
+
+    const percentage = (value - min) / (max - min);
+
     return (
-      <div className="flex items-center justify-between group">
-        <div className="flex-1 pr-4 text-left">
-          <p className="text-sm font-semibold text-foreground/90 tracking-tight transition-colors">{label}</p>
-          <p className="text-[11px] text-muted-foreground leading-tight mt-1 opacity-80">{description || `${value}${unit}`}</p>
-        </div>
-        <div className="flex items-center bg-secondary/20 rounded-full p-1 border border-border/40 shadow-inner">
-          <motion.button
-            whileTap={{ scale: 0.85 }}
-            transition={{ type: "spring", stiffness: 400, damping: 25 }}
-            disabled={value <= min}
-            onClick={() => onChange(Math.max(min, Number((value - step).toFixed(1))))}
-            className="w-8 h-8 flex items-center justify-center rounded-full bg-background/90 text-foreground shadow-[0_2px_10px_rgba(0,0,0,0.05)] disabled:opacity-20 disabled:cursor-not-allowed border border-border/50"
-            aria-label="Decrease"
-          >
-            <Minus size={14} strokeWidth={2.5} />
-          </motion.button>
-          <div className="px-5 min-w-[75px] flex items-center justify-center">
-            <span className="text-sm font-bold text-foreground font-Amiri tabular-nums">
+      <div 
+        ref={cardRef}
+        onMouseDown={() => setIsDragging(true)}
+        onTouchStart={() => setIsDragging(true)}
+        className="relative h-20 bg-card border border-border/40 rounded-2xl overflow-hidden cursor-ew-resize select-none touch-none group transition-all hover:border-border"
+      >
+        {/* The "Liquid" Fill */}
+        <motion.div 
+          initial={false}
+          animate={{ width: `${percentage * 100}%` }}
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          className="absolute inset-y-0 left-0 bg-primary/[0.08]"
+        />
+        
+        {/* Interaction Indicator Line */}
+        <motion.div 
+          initial={false}
+          animate={{ left: `${percentage * 100}%`, opacity: isDragging ? 1 : 0 }}
+          className="absolute inset-y-0 w-0.5 bg-primary/20 pointer-events-none"
+        />
+
+        {/* Content */}
+        <div className="absolute inset-0 px-5 flex items-center justify-between pointer-events-none">
+          <div>
+            <p className="text-[14px] font-bold text-foreground tracking-tight">{label}</p>
+            <p className="text-[10px] text-muted-foreground opacity-60 mt-0.5 uppercase tracking-wider">{description}</p>
+          </div>
+          <div className="text-right">
+            <span className="text-[18px] font-bold text-primary tabular-nums tracking-tighter">
               {value}
               <span className="text-[10px] ml-1 opacity-50 font-medium">{unit}</span>
             </span>
           </div>
-          <motion.button
-            whileTap={{ scale: 0.85 }}
-            transition={{ type: "spring", stiffness: 400, damping: 25 }}
-            disabled={value >= max}
-            onClick={() => onChange(Math.min(max, Number((value + step).toFixed(1))))}
-            className="w-8 h-8 flex items-center justify-center rounded-full bg-background/90 text-foreground shadow-[0_2px_10px_rgba(0,0,0,0.05)] disabled:opacity-20 disabled:cursor-not-allowed border border-border/50"
-            aria-label="Increase"
-          >
-            <Plus size={14} strokeWidth={2.5} />
-          </motion.button>
         </div>
       </div>
     );
@@ -369,127 +407,139 @@ export default function SettingsPage() {
             </motion.button>
           </div>
           <div className="bg-card border border-border rounded-2xl p-4 space-y-6 shadow-sm">
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between mb-1">
-                <div>
-                  <p className="text-sm font-semibold text-foreground/90 tracking-tight transition-colors">Arabic Font Profile</p>
-                  <p className="text-[11px] text-muted-foreground leading-tight mt-0.5 opacity-80">Select standard or IndoPak style</p>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                {[
-                  { id: 'Amiri', label: 'Amiri (Standard)' },
-                  { id: 'Noorehuda', label: 'Noorehuda (IndoPak)' }
-                ].map((font) => (
-                  <button
-                    key={font.id}
-                    onClick={() => {
-                      if (settings.arabicFont === font.id) return;
-                      const newSize = font.id === 'Amiri' ? 24 : 34; // Automatically bump up Noorehuda size 
-                      updateSettings({ arabicFont: font.id as 'Amiri' | 'Noorehuda', arabicFontSize: newSize });
+            <p className="text-sm font-bold mb-4">Arabic Script Type</p>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { id: 'Amiri', label: 'Amiri' },
+                { id: 'Noorehuda', label: 'Noorehuda' }
+              ].map((font) => (
+                <button
+                  key={font.id}
+                  onClick={() => {
+                    if (settings.arabicFont === font.id) return;
+                    const newSize = font.id === 'Amiri' ? 24 : 34;
+                    updateSettings({ arabicFont: font.id as 'Amiri' | 'Noorehuda', arabicFontSize: newSize });
+                  }}
+                  className={`flex flex-col items-center justify-center p-4 rounded-2xl transition-all h-[90px] border-2 ${
+                    settings.arabicFont === font.id
+                      ? 'bg-secondary/40 border-primary'
+                      : 'bg-white border-border/40 opacity-80'
+                  }`}
+                >
+                  <span 
+                    className="text-[32px] mb-2 leading-none"
+                    style={{ 
+                      fontFamily: font.id,
+                      color: settings.arabicFont === font.id ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground))'
                     }}
-                    className={`h-10 rounded-xl text-[13px] font-bold transition-all shadow-sm ${
-                      settings.arabicFont === font.id
-                        ? 'bg-primary text-primary-foreground border border-primary/20'
-                        : 'bg-secondary/40 text-foreground border border-border hover:bg-secondary/80'
+                  >
+                    بِسْمِ اللَّهِ
+                  </span>
+                  <span 
+                    className={`text-[13px] font-bold ${
+                      settings.arabicFont === font.id ? 'text-primary' : 'text-muted-foreground'
                     }`}
                   >
                     {font.label}
-                  </button>
-                ))}
-              </div>
+                  </span>
+                </button>
+              ))}
             </div>
 
             <div className="h-px bg-border/50 -mx-4" />
 
-            <Stepper
-              label="Arabic Size"
-              description="Font size for Quranic text"
-              value={settings.arabicFontSize}
-              unit="px"
-              min={16} max={56} step={2}
-              onChange={(val: number) => updateSettings({ arabicFontSize: val })}
-            />
+            <div className="space-y-4 py-4">
+              <MinimalCardControl
+                label="Arabic Size"
+                description="Font size for Quranic text"
+                value={settings.arabicFontSize}
+                unit="px"
+                min={16} max={56} step={2}
+                onChange={(val: number) => updateSettings({ arabicFontSize: val })}
+              />
 
-            <Stepper
-              label="Translation Size"
-              description="Font size for English/Urdu"
-              value={settings.translationFontSize}
-              unit="px"
-              min={10} max={24} step={1}
-              onChange={(val: number) => updateSettings({ translationFontSize: val })}
-            />
+              <MinimalCardControl
+                label="Translation Size"
+                description={`Font size for ${settings.language === 'en' ? 'English' : settings.language === 'bn' ? 'Bengali' : settings.language === 'hi' ? 'Hindi' : 'Urdu'}`}
+                value={settings.language === 'en' ? settings.translationFontSize + 2 : settings.translationFontSize}
+                unit="px"
+                min={10} max={26} step={1}
+                onChange={(val: number) => updateSettings({ 
+                  translationFontSize: settings.language === 'en' ? val - 2 : val 
+                })}
+              />
 
-            <Stepper
-              label="Line Spacing"
-              description="Vertical space between lines"
-              value={settings.lineSpacing}
-              unit="x"
-              min={1.5} max={4.0} step={0.1}
-              onChange={(val: number) => updateSettings({ lineSpacing: val })}
-            />
+              <MinimalCardControl
+                label="Line Spacing"
+                description="Vertical space between lines"
+                value={settings.lineSpacing}
+                unit="x"
+                min={1.5} max={4.0} step={0.1}
+                onChange={(val: number) => updateSettings({ lineSpacing: val })}
+              />
+            </div>
           </div>
         </section>
 
-        {/* SECTION 7: APPEARANCE (Moved up for logical flow) */}
+        {/* SECTION 7: APPEARANCE */}
         <section>
           <SectionTitle icon={Eye} title="Display & Filters" />
-          <div className="bg-card border border-border rounded-2xl space-y-2 p-4 shadow-sm">
-            <div className="flex items-center justify-between pb-3 border-b border-border/40">
-              <div>
-                <p className="text-sm font-medium">Tajweed Highlighting</p>
-                <p className="text-xs text-muted-foreground">Color-coded tajweed rules</p>
-              </div>
-              <button
-                onClick={() => updateSettings({ showTajweed: !settings.showTajweed })}
-                className={`w-12 h-6 rounded-full transition-colors relative ${settings.showTajweed ? 'bg-primary' : 'bg-secondary'}`}
+          <div className="space-y-2">
+            {[
+              { 
+                id: 'tajweed', 
+                label: 'Tajweed Highlighting', 
+                desc: 'Color-coded rules for recitation', 
+                icon: Book, 
+                value: settings.showTajweed,
+                onChange: () => updateSettings({ showTajweed: !settings.showTajweed })
+              },
+              { 
+                id: 'translit', 
+                label: 'Show Transliteration', 
+                desc: 'Show full verse transliteration', 
+                icon: Globe, 
+                value: settings.showTransliteration,
+                onChange: () => updateSettings({ showTransliteration: !settings.showTransliteration })
+              },
+              { 
+                id: 'wbw', 
+                label: 'Word-by-Word Mode', 
+                desc: 'Show translation under each word', 
+                icon: Type, 
+                value: settings.showWordByWord,
+                onChange: () => updateSettings({ showWordByWord: !settings.showWordByWord })
+              },
+              ...(settings.showWordByWord ? [{ 
+                id: 'wbw-translit', 
+                label: 'Word Transliteration', 
+                desc: 'Pronunciation for each word', 
+                icon: RotateCcw, 
+                value: settings.showWordTransliteration,
+                onChange: () => updateSettings({ showWordTransliteration: !settings.showWordTransliteration })
+              }] : [])
+            ].map((item) => (
+              <div 
+                key={item.id}
+                className="bg-card border border-border/60 rounded-[20px] p-2.5 flex items-center justify-between shadow-sm transition-all hover:border-border"
               >
-                <span className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${settings.showTajweed ? 'translate-x-6' : 'translate-x-0'}`} />
-              </button>
-            </div>
-            <div className="h-px bg-border/50 -mx-4" />
-            <div className="flex items-center justify-between pb-3 border-b border-border/40">
-              <div>
-                <p className="text-sm font-medium">Word by Word</p>
-                <p className="text-xs text-muted-foreground">Show translation for each word</p>
-              </div>
-              <button
-                onClick={() => updateSettings({ showWordByWord: !settings.showWordByWord })}
-                className={`w-12 h-6 rounded-full transition-colors relative ${settings.showWordByWord ? 'bg-primary' : 'bg-secondary'}`}
-              >
-                <span className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${settings.showWordByWord ? 'translate-x-6' : 'translate-x-0'}`} />
-              </button>
-            </div>
-            {settings.showWordByWord && (
-              <>
-                <div className="h-px bg-border/50 -mx-4" />
-                <div className="flex items-center justify-between pb-3 border-b border-border/40">
-                  <div>
-                    <p className="text-sm font-medium">Show Transliteration</p>
-                    <p className="text-xs text-muted-foreground">Show word pronunciation</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <item.icon size={18} className="text-primary" />
                   </div>
-                  <button
-                    onClick={() => updateSettings({ showTransliteration: !settings.showTransliteration })}
-                    className={`w-12 h-6 rounded-full transition-colors relative ${settings.showTransliteration ? 'bg-primary' : 'bg-secondary'}`}
-                  >
-                    <span className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${settings.showTransliteration ? 'translate-x-6' : 'translate-x-0'}`} />
-                  </button>
+                  <div>
+                    <p className="text-[14px] font-semibold text-foreground leading-tight">{item.label}</p>
+                    <p className="text-[11px] text-muted-foreground mt-0.5">{item.desc}</p>
+                  </div>
                 </div>
-              </>
-            )}
-            <div className="h-px bg-border/50 -mx-4" />
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium">Explained Verses Only</p>
-                <p className="text-xs text-muted-foreground">Hide verses without tafsir</p>
+                <button
+                  onClick={item.onChange}
+                  className={`w-10 h-6 rounded-full transition-colors relative flex-shrink-0 ${item.value ? 'bg-primary' : 'bg-secondary'}`}
+                >
+                  <span className={`absolute top-0.5 left-0.5 bg-white w-5 h-5 rounded-full transition-transform shadow-sm ${item.value ? 'translate-x-4' : 'translate-x-0'}`} />
+                </button>
               </div>
-              <button
-                onClick={() => updateSettings({ showOnlyExplained: !settings.showOnlyExplained })}
-                className={`w-12 h-6 rounded-full transition-colors relative ${settings.showOnlyExplained ? 'bg-primary' : 'bg-secondary'}`}
-              >
-                <span className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${settings.showOnlyExplained ? 'translate-x-6' : 'translate-x-0'}`} />
-              </button>
-            </div>
+            ))}
           </div>
         </section>
 

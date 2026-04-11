@@ -6,6 +6,8 @@ import { useSurahs, useSurahVerses } from '@/hooks/useQuranData';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { TajweedText } from '@/components/TajweedText';
+import { VerseEmbed } from '@/components/VerseEmbed';
+import React from 'react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -160,7 +162,62 @@ export default function NoteViewPage() {
                   break-words overflow-x-hidden"
                 dir={settings.language === 'ur' ? 'rtl' : 'ltr'}
               >
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{note.content}</ReactMarkdown>
+                <ReactMarkdown 
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    blockquote: ({ children }) => {
+                      const firstChild = React.Children.toArray(children)[0] as any;
+                      const textContent = firstChild?.props?.children;
+                      
+                      if (typeof textContent === 'string' && textContent.startsWith('[!')) {
+                        const match = textContent.match(/^\[!(\w+)\]/);
+                        if (match) {
+                          const type = match[1].toLowerCase();
+                          const cleanText = textContent.replace(/^\[!(\w+)\]\s*/, '');
+                          
+                          // Clone the first child to remove the [!TYPE] prefix
+                          const updatedFirstChild = React.cloneElement(firstChild, {
+                            children: cleanText
+                          });
+                          
+                          // Reassemble children without the prefix
+                          const otherChildren = React.Children.toArray(children).slice(1);
+                          
+                          return (
+                            <div className={`callout-block callout-${type}`}>
+                              <div className="flex items-center gap-2 mb-2 opacity-80">
+                                <span className="text-[11px] font-bold uppercase tracking-widest">{match[1]}</span>
+                              </div>
+                              <div className="text-[15px] leading-relaxed">
+                                {updatedFirstChild}
+                                {otherChildren}
+                              </div>
+                            </div>
+                          );
+                        }
+                      }
+                      return <blockquote className="border-l-4 border-primary/20 pl-4 my-6 italic bg-muted/20 py-1 rounded-r-xl">{children}</blockquote>;
+                    },
+                    p: ({ children }) => {
+                      const newChildren = React.Children.map(children, child => {
+                        if (typeof child === 'string') {
+                          const parts = child.split(/(\[\[\d+:\d+\]\])/g);
+                          return parts.map((part, i) => {
+                            const match = part.match(/\[\[(\d+):(\d+)\]\]/);
+                            if (match) {
+                              return <VerseEmbed key={i} surah={Number(match[1])} ayah={Number(match[2])} />;
+                            }
+                            return part;
+                          });
+                        }
+                        return child;
+                      });
+                      return <p className="mb-4 last:mb-0">{newChildren}</p>;
+                    }
+                  }}
+                >
+                  {note.content}
+                </ReactMarkdown>
               </div>
             </div>
           </div>

@@ -16,7 +16,7 @@ export function WordByWordVerse({ verse, showTransliteration, onWordClick }: Wor
         <button 
           key={word.id} 
           onClick={() => onWordClick?.(word)}
-          className="flex flex-col items-center min-w-[60px] hover:bg-secondary/20 rounded-2xl p-2 transition-colors active:scale-95"
+          className="flex flex-col items-center min-w-[60px] hover:bg-secondary/20 rounded-2xl p-2 transition-all active:scale-95"
           aria-label={`Word detail: ${word.transliteration}`}
         >
           <span 
@@ -30,11 +30,11 @@ export function WordByWordVerse({ verse, showTransliteration, onWordClick }: Wor
           </span>
           <div className="flex flex-col items-center gap-1.5 mt-1">
             {showTransliteration && (
-              <span className="text-[11px] text-primary/80 font-display italic text-center leading-snug tracking-tight">
+              <span className="text-[12px] text-primary/80 font-serif italic text-center leading-snug tracking-tight">
                 {word.transliteration}
               </span>
             )}
-            <span className="text-[13px] text-muted-foreground font-medium text-center leading-snug max-w-[100px]">
+            <span className="text-[13px] text-muted-foreground font-normal text-center leading-snug max-w-[100px]">
               {word.translation}
             </span>
           </div>

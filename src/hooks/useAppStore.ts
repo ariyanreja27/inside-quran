@@ -23,10 +23,11 @@ export interface UserSettings {
   arabicFontSize: number;
   translationFontSize: number;
   lineSpacing: number;
-  showOnlyExplained: boolean;
+
   showTajweed: boolean;
   showWordByWord: boolean;
   showTransliteration: boolean;
+  showWordTransliteration: boolean;
 }
 
 export const defaultSettings: UserSettings = {
@@ -35,10 +36,11 @@ export const defaultSettings: UserSettings = {
   arabicFontSize: 24,
   translationFontSize: 14,
   lineSpacing: 2.0,
-  showOnlyExplained: false,
+
   showTajweed: true,
   showWordByWord: false,
   showTransliteration: true,
+  showWordTransliteration: true,
 };
 
 export function useSettings() {

@@ -1,0 +1,75 @@
+{
+  "groups": [
+    {
+      "id": "nominals",
+      "name": "Nouns & Adjectives",
+      "tags": ["N", "PN", "ADJ", "PRON", "DEM", "REL", "DET", "T", "LOC"]
+    },
+    {
+      "id": "verbs",
+      "name": "Verbs",
+      "tags": ["V", "PERF", "IMPF", "IMPV", "ACT_PCPL", "PASS_PCPL"]
+    },
+    {
+      "id": "particles",
+      "name": "Grammatical Particles",
+      "tags": ["P", "CONJ", "SUB", "ACC", "AMD", "ANS", "AVR", "CAUS", "CERT", "CIRC", "COM", "COND", "EQ", "EXH", "EXL", "EXP", "FUT", "INC", "INT", "INTG", "NEG", "PREV", "PRO", "REM", "RES", "RET", "RSLT", "SUP", "SUR", "VOC"]
+    },
+    {
+      "id": "specials",
+      "name": "Other Types",
+      "tags": ["INL", "ATT", "EMP", "DIST"]
+    }
+  ],
+  "terms": {
+    "N": { "label": "Noun", "desc": "A word that names a person, place, thing, or idea." },
+    "PN": { "label": "Proper noun", "desc": "A specific name for a person, place, or entity (e.g., Allah, Makkah)." },
+    "ADJ": { "label": "Adjective", "desc": "A word that describes or modifies a noun's qualities." },
+    "V": { "label": "Verb", "desc": "Expresses an action, occurrence, or state of being." },
+    "PRON": { "label": "Personal pronoun", "desc": "Stands in for a person or thing (I, You, He, They)." },
+    "DEM": { "label": "Demonstrative pronoun", "desc": "Points to specific things (This, That, These)." },
+    "REL": { "label": "Relative pronoun", "desc": "Connects a clause to a noun (Who, Which, That)." },
+    "DET": { "label": "Determiner", "desc": "Specifies a noun (typically the prefix 'Al-')." },
+    "P": { "label": "Preposition", "desc": "Shows relation in space or time (in, with, from)." },
+    "CONJ": { "label": "Coordinating conjunction", "desc": "Joins words or clauses of equal importance (And, Or)." },
+    "SUB": { "label": "Subordinating conjunction", "desc": "Links a dependent clause to an independent one (While, If)." },
+    "ACC": { "label": "Accusative particle", "desc": "Introduces a noun in the accusative case (e.g. Inna)." },
+    "AMD": { "label": "Amendment particle", "desc": "Used to correct or amend a previous statement." },
+    "ANS": { "label": "Answer particle", "desc": "Used for answering questions or affirmations (Yes, No, Nay)." },
+    "AVR": { "label": "Aversion particle", "desc": "Expresses strong rejection, aversion, or distancing." },
+    "CAUS": { "label": "Particle of cause", "desc": "Explains the reason or cause for an action (Because)." },
+    "CERT": { "label": "Particle of certainty", "desc": "Emphasizes the absolute certainty of an event (Indeed)." },
+    "CIRC": { "label": "Circumstantial particle", "desc": "Describes the circumstances under which an action occurs." },
+    "COM": { "label": "Comitative particle", "desc": "Expresses accompaniment or being 'with' someone/something." },
+    "COND": { "label": "Conditional particle", "desc": "Introduces a condition or hypothetical situation (If, When)." },
+    "EQ": { "label": "Equalization particle", "desc": "Expresses neutrality between options (Whether... or)." },
+    "EXH": { "label": "Exhortation particle", "desc": "Used to urge, encourage, or prompt someone to act." },
+    "EXL": { "label": "Explanation particle", "desc": "Introduces an explanation or detail about a topic." },
+    "EXP": { "label": "Exceptive particle", "desc": "Indicates an exception to a general rule (Except)." },
+    "FUT": { "label": "Future particle", "desc": "Points to an action that will occur in the future." },
+    "INC": { "label": "Inceptive particle", "desc": "Indicates the beginning or onset of a situation." },
+    "INT": { "label": "Particle of interpretation", "desc": "Used to interpret or clarify a difficult phrase." },
+    "INTG": { "label": "Interrogative particle", "desc": "Used to introduce a question (What?, Is it?)." },
+    "NEG": { "label": "Negative particle", "desc": "Used to negate a following word or statement (No, Not)." },
+    "PREV": { "label": "Preventive particle", "desc": "Used to prevent or hinder a potential action from occurring." },
+    "PRO": { "label": "Prohibition particle", "desc": "Used for forbidding an action (Do not!)." },
+    "REM": { "label": "Resumption particle", "desc": "Used to start a new sentence or thought process." },
+    "RES": { "label": "Restriction particle", "desc": "Used to restrict, limit, or emphasize (Only, But)." },
+    "RET": { "label": "Retraction particle", "desc": "Used to retract or go back on a previous point." },
+    "RSLT": { "label": "Result particle", "desc": "Introduces the result or consequence of an action." },
+    "SUP": { "label": "Supplemental particle", "desc": "Adds extra emphasis or rhythmic filler without changing core meaning." },
+    "SUR": { "label": "Surprise particle", "desc": "Expresses sudden surprise or an unexpected event." },
+    "VOC": { "label": "Vocative particle / Address", "desc": "Used to call out or address someone directly (O!)." },
+    "INL": { "label": "Quranic initials", "desc": "Mysterious letters found at the start of some Surahs (e.g., Alif-Lam-Mim)." },
+    "T": { "label": "Time adverb", "desc": "Indicates when or for how long an action occurs." },
+    "LOC": { "label": "Location adverb", "desc": "Indicates where or in what position an action occurs." },
+    "ACT_PCPL": { "label": "Active Participle", "desc": "Refers to the doer of an action (e.g., 'The Creator')." },
+    "PASS_PCPL": { "label": "Passive Participle", "desc": "Refers to the one who receives an action (The 'Created')." },
+    "ATT": { "label": "Attention particle", "desc": "Used to draw the listener's attention (Lo!, Behold!)." },
+    "EMP": { "label": "Emphatic laam prefix", "desc": "A prefix used for strong emphasis on a following word." },
+    "DIST": { "label": "Distance", "desc": "Indicates physical or metaphorical distance (Far, Near)." },
+    "PERF": { "label": "Perfect Verb", "desc": "Indicates a completed action (past tense)." },
+    "IMPF": { "label": "Imperfect Verb", "desc": "Indicates an ongoing, recurring, or future action." },
+    "IMPV": { "label": "Imperative Verb", "desc": "A command or request addressing someone directly." }
+  }
+}
