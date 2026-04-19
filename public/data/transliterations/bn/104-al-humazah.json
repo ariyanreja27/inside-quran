@@ -1,0 +1,42 @@
+{
+  "surahNumber": 104,
+  "edition": "verse.transliteration",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Wai lul-li kulli hu mazatil-lumaza"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Al-lazi jama'a maalaw wa'addadah"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Yahsabu anna maalahu akhladah"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Kalla layum ba zanna fil hutamah"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Wa maa adraaka mal-hutamah"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Narul laahil-mooqada"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Al latee tat tali'u 'alalafidah"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "Innaha 'alaihim moosada"
+    },
+    {
+      "numberInSurah": 9,
+      "text": "Fee 'amadim-mu mad dadah"
+    }
+  ]
+}

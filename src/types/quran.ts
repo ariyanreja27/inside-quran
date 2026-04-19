@@ -30,6 +30,7 @@ export interface Verse {
   hizbQuarter: number;
   ruku: number;
   surahNumber: number;
+  transliteration?: string;
   words?: Word[];
 }
 

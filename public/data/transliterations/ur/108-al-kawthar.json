@@ -1,0 +1,18 @@
+{
+  "surahNumber": 108,
+  "edition": "verse.transliteration",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Innaa a'taina kal kauthar"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Fa salli li rabbika wanhar"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Inna shani-aka huwal abtar"
+    }
+  ]
+}

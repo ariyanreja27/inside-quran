@@ -16,15 +16,19 @@ const tajweedColorMap: Record<string, string> = {
 interface TajweedTextProps {
   text: string;
   showColors: boolean;
-  waqf?: string;
+  waqf?: string; // kept in type for compatibility but no longer rendered
 }
 
-export function TajweedText({ text, showColors, waqf }: TajweedTextProps) {
+export function TajweedText({ text, showColors }: TajweedTextProps) {
   const parseTajweed = (textStr: string) => {
     if (!textStr) return null;
     
+    // Normalize Alif Wasla (ٱ U+0671) & Alef with wavy hamza (ٲ U+0672) → plain Alif (ا U+0627)
+    // These glyphs often render incorrectly in various fonts
+    const normalized = textStr.replace(/[\u0671\u0672]/g, '\u0627');
+
     // Quick check: if not using quran-tajweed edition, just return text
-    if (!textStr.includes('[')) return textStr;
+    if (!normalized.includes('[')) return normalized;
 
     // Matches: [ruleCode[:id][textToColorize]]
     // E.g., [h:1[ٱ] => code = h, content = ٱ
@@ -33,11 +37,11 @@ export function TajweedText({ text, showColors, waqf }: TajweedTextProps) {
     let lastIndex = 0;
     let match;
 
-    while ((match = regex.exec(textStr)) !== null) {
+    while ((match = regex.exec(normalized)) !== null) {
       if (match.index > lastIndex) {
         elements.push(
           <span key={`text-${lastIndex}`} className="font-arabic">
-            {textStr.substring(lastIndex, match.index)}
+            {normalized.substring(lastIndex, match.index)}
           </span>
         );
       }
@@ -64,10 +68,10 @@ export function TajweedText({ text, showColors, waqf }: TajweedTextProps) {
       lastIndex = regex.lastIndex;
     }
 
-    if (lastIndex < textStr.length) {
+    if (lastIndex < normalized.length) {
       elements.push(
         <span key={`text-${lastIndex}`} className="font-arabic">
-          {textStr.substring(lastIndex)}
+          {normalized.substring(lastIndex)}
         </span>
       );
     }
@@ -78,14 +82,6 @@ export function TajweedText({ text, showColors, waqf }: TajweedTextProps) {
   return (
     <>
       {parseTajweed(text)}
-      <span className="relative inline-flex flex-row-reverse items-center justify-center mr-1.5 align-middle select-none">
-        <span className="text-[0.9em] font-sans opacity-70">○</span>
-        {waqf && (
-          <span className="absolute -top-[0.45em] left-1/2 -translate-x-1/2 text-[0.45em] font-arabic leading-none pointer-events-none opacity-90">
-            {waqf}
-          </span>
-        )}
-      </span>
     </>
   );
 }

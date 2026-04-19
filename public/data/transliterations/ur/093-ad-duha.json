@@ -1,0 +1,50 @@
+{
+  "surahNumber": 93,
+  "edition": "verse.transliteration",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Wad duhaa"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Wal laili iza sajaa"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Ma wad da'aka rabbuka wa ma qalaa"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Walal-aakhiratu khairul laka minal-oola"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Wa la sawfa y'uteeka rabbuka fatarda"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Alam ya jidka yateeman fa aawaa"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Wa wa jadaka daal lan fahada"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "Wa wa jadaka 'aa-ilan fa aghnaa"
+    },
+    {
+      "numberInSurah": 9,
+      "text": "Fa am mal yateema fala taqhar"
+    },
+    {
+      "numberInSurah": 10,
+      "text": "Wa am mas saa-ila fala tanhar"
+    },
+    {
+      "numberInSurah": 11,
+      "text": "Wa amma bi ni'mati rabbika fahad dith"
+    }
+  ]
+}

@@ -248,13 +248,13 @@ export function WordDetailDrawer({ word, onClose }: { word: Word | null; onClose
             </div>
 
             {/* ── Tabs ── */}
-            <div className="flex items-center gap-2 mb-8 overflow-x-auto no-scrollbar">
+            <div className="flex items-center gap-2 mb-8">
               <button
                 onClick={() => setActiveTab('overview')}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[13.5px] font-semibold transition-colors whitespace-nowrap ${
-                  activeTab === 'overview' 
-                    ? 'bg-primary/10 text-primary' 
-                    : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[13.5px] font-semibold transition-all whitespace-nowrap ${
+                  activeTab === 'overview'
+                    ? 'bg-primary/10 text-primary'
+                    : 'bg-foreground/[0.02] text-muted-foreground hover:bg-foreground/[0.04] hover:text-foreground'
                 }`}
               >
                 <Layers size={16} strokeWidth={2.5} />
@@ -262,10 +262,10 @@ export function WordDetailDrawer({ word, onClose }: { word: Word | null; onClose
               </button>
               <button
                 onClick={() => setActiveTab('reflection')}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[13.5px] font-semibold transition-colors whitespace-nowrap ${
-                  activeTab === 'reflection' 
-                    ? 'bg-primary/10 text-primary' 
-                    : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[13.5px] font-semibold transition-all whitespace-nowrap ${
+                  activeTab === 'reflection'
+                    ? 'bg-primary/10 text-primary'
+                    : 'bg-foreground/[0.02] text-muted-foreground hover:bg-foreground/[0.04] hover:text-foreground'
                 }`}
               >
                 <BookOpen size={16} strokeWidth={2.5} />

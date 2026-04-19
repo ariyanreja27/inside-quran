@@ -1,0 +1,734 @@
+{
+  "surahNumber": 37,
+  "edition": "verse.transliteration",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Wassaaaffaati saffaa"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Fazzaajiraati zajraa"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Fattaaliyaati Zikra"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Inna Illaahakum la Waahid"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Rabbus samaawaati wal ardi wa maa bainahumaa wa Rabbul mashaariq"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Innaa zaiyannas samaaa 'ad dunyaa bizeenatinil kawaakib"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Wa hifzam min kulli Shaitaanim maarid"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "Laa yassamma 'oona ilal mala il a'alaa wa yuqzafoona min kulli jaanib"
+    },
+    {
+      "numberInSurah": 9,
+      "text": "Duhooranw wa lahum 'azaabunw waasib"
+    },
+    {
+      "numberInSurah": 10,
+      "text": "Illaa man khatifal khatfata fa atba'ahoo shihaabun saaqib"
+    },
+    {
+      "numberInSurah": 11,
+      "text": "Fastaftihim ahum ashaddu khalqan am man khalaqnaa; innaa khalaqnaahum min teenil laazib"
+    },
+    {
+      "numberInSurah": 12,
+      "text": "Bal'ajibta wa yaskharoon"
+    },
+    {
+      "numberInSurah": 13,
+      "text": "Wa izaa zukkiroo laa yazkuroon"
+    },
+    {
+      "numberInSurah": 14,
+      "text": "Wa izaa ra aw Aayatinw yastaskhiroon"
+    },
+    {
+      "numberInSurah": 15,
+      "text": "Wa qaalooo in haazaa illaa sihrum mubeen"
+    },
+    {
+      "numberInSurah": 16,
+      "text": "'A-izaa mitnaa wa kunnaa turaabanw wa 'izaaman 'ainnaa lamab'oosoon"
+    },
+    {
+      "numberInSurah": 17,
+      "text": "Awa aabaa'unal awwaloon"
+    },
+    {
+      "numberInSurah": 18,
+      "text": "Qul na'am wa antum daakhiroon"
+    },
+    {
+      "numberInSurah": 19,
+      "text": "Fa innamaa hiya zajra tunw waahidatun fa izaa hum yanzuroon"
+    },
+    {
+      "numberInSurah": 20,
+      "text": "Qa qaaloo yaa wailanaa haazaa Yawmud-Deen"
+    },
+    {
+      "numberInSurah": 21,
+      "text": "Haazaa Yawmul Faslil lazee kuntum bihee tukaziboon"
+    },
+    {
+      "numberInSurah": 22,
+      "text": "Uhshurul lazeena zalamoo wa azwaajahum wa maa kaanoo ya'budoon"
+    },
+    {
+      "numberInSurah": 23,
+      "text": "Min doonil laahi fahdoohum ilaa siraatil Jaheem"
+    },
+    {
+      "numberInSurah": 24,
+      "text": "Wa qifoohum innahum mas'ooloon"
+    },
+    {
+      "numberInSurah": 25,
+      "text": "Maa lakum laa tanaasaroon"
+    },
+    {
+      "numberInSurah": 26,
+      "text": "Bal humul Yawma mustaslimoon"
+    },
+    {
+      "numberInSurah": 27,
+      "text": "Wa aqbala ba'duhum 'alaa ba'diny yatasaaa'aloon"
+    },
+    {
+      "numberInSurah": 28,
+      "text": "Qaalooo innakum kuntum taatoonanaa 'anil yameen"
+    },
+    {
+      "numberInSurah": 29,
+      "text": "Qaaloo bal lam takoonoo mu'mineen"
+    },
+    {
+      "numberInSurah": 30,
+      "text": "Wa maa kaana lanaa 'alaikum min sultaanim bal kuntum qawman taagheen"
+    },
+    {
+      "numberInSurah": 31,
+      "text": "Fahaqqa 'alainaa qawlu Rabbinaaa innaa lazaaa'iqoon"
+    },
+    {
+      "numberInSurah": 32,
+      "text": "Fa aghwainaakum innaa kunnaa ghaaween"
+    },
+    {
+      "numberInSurah": 33,
+      "text": "Fa innahum Yawma'izin fil'azaabi mushtarikoon"
+    },
+    {
+      "numberInSurah": 34,
+      "text": "Innaa kazaalika naf'alu bil mujrimeen"
+    },
+    {
+      "numberInSurah": 35,
+      "text": "Innahum kaanooo izaa qeela lahum laaa ilaaha illal laahu yastakbiroon"
+    },
+    {
+      "numberInSurah": 36,
+      "text": "Wa yaqooloona a'innaa lataarikooo aalihatinaa lishaa'irim majnoon"
+    },
+    {
+      "numberInSurah": 37,
+      "text": "bal jaaa'a bilhaqqi wa saddaqal mursaleen"
+    },
+    {
+      "numberInSurah": 38,
+      "text": "Innakum lazaaa'iqul 'azaabil aleem"
+    },
+    {
+      "numberInSurah": 39,
+      "text": "Wa maa tujzawna illaa maa kuntum ta'maloon"
+    },
+    {
+      "numberInSurah": 40,
+      "text": "Illaa 'ibaadal laahil mukhlaseen"
+    },
+    {
+      "numberInSurah": 41,
+      "text": "Ulaaa'ika lahum rizqum ma'loom"
+    },
+    {
+      "numberInSurah": 42,
+      "text": "Fa waakihu wa hum mukramoon"
+    },
+    {
+      "numberInSurah": 43,
+      "text": "Fee jannaatin Na'eem"
+    },
+    {
+      "numberInSurah": 44,
+      "text": "'Alaa sururim mutaqaa bileen"
+    },
+    {
+      "numberInSurah": 45,
+      "text": "Yutaafu 'alaihim bikaasim mim ma'een"
+    },
+    {
+      "numberInSurah": 46,
+      "text": "Baidaaa'a laz zatil lish shaaribeen"
+    },
+    {
+      "numberInSurah": 47,
+      "text": "Laa feehaa ghawlunw wa laa hum 'anhaa yunzafoon"
+    },
+    {
+      "numberInSurah": 48,
+      "text": "Wa 'indahum qaasiraatut tarfi 'een"
+    },
+    {
+      "numberInSurah": 49,
+      "text": "Ka annahunna baidum maknoon"
+    },
+    {
+      "numberInSurah": 50,
+      "text": "Fa aqbala ba'duhum 'alaa badiny yatasaaa 'aloon"
+    },
+    {
+      "numberInSurah": 51,
+      "text": "Qaala qaaa'ilum minhum innee kaana lee qareen"
+    },
+    {
+      "numberInSurah": 52,
+      "text": "Yaqoolu a'innnaka laminal musaddiqeen"
+    },
+    {
+      "numberInSurah": 53,
+      "text": "'A-izaa mitnaa wa kunnaa turaabanw wa 'izaaman 'ainnaa lamadeenoon"
+    },
+    {
+      "numberInSurah": 54,
+      "text": "Qaala hal antum muttali'oon"
+    },
+    {
+      "numberInSurah": 55,
+      "text": "Fattala'a fara aahu fee sawaaa'il Jaheem"
+    },
+    {
+      "numberInSurah": 56,
+      "text": "Qaala tallaahi in kitta laturdeen"
+    },
+    {
+      "numberInSurah": 57,
+      "text": "Wa law laa ni'matu Rabbee lakuntu minal muhdareen"
+    },
+    {
+      "numberInSurah": 58,
+      "text": "Afamaa nahnu bimaiyiteen"
+    },
+    {
+      "numberInSurah": 59,
+      "text": "Illa mawtatanal oola wa maa nahnu bimu'azzabeen"
+    },
+    {
+      "numberInSurah": 60,
+      "text": "Inna haazaa falya'ma lil'aamiloon"
+    },
+    {
+      "numberInSurah": 61,
+      "text": "Limisli haaza falya'ma lil 'aamiloon"
+    },
+    {
+      "numberInSurah": 62,
+      "text": "Azaalika khairun nuzulan am shajaratuz Zaqqom"
+    },
+    {
+      "numberInSurah": 63,
+      "text": "Innaa ja'alnaahaa fitnatal lizzaalimeen"
+    },
+    {
+      "numberInSurah": 64,
+      "text": "Innahaa shajaratun takhruju feee aslil Jaheem"
+    },
+    {
+      "numberInSurah": 65,
+      "text": "Tal'uhaa ka annahoo ru'oosush Shayaateen"
+    },
+    {
+      "numberInSurah": 66,
+      "text": "Fa innahum la aakiloona minhaa famaali'oona minhal butoon"
+    },
+    {
+      "numberInSurah": 67,
+      "text": "Summa inna lahum 'alaihaa lashawbam min hameem"
+    },
+    {
+      "numberInSurah": 68,
+      "text": "Summa inna marji'ahum la ilal Jaheem"
+    },
+    {
+      "numberInSurah": 69,
+      "text": "Innahum alfaw aabaaa'ahum daaalleen"
+    },
+    {
+      "numberInSurah": 70,
+      "text": "Fahum 'alaa aasaarihim yuhra'oon"
+    },
+    {
+      "numberInSurah": 71,
+      "text": "Wa laqad dalla qablahum aksarul awwaleen"
+    },
+    {
+      "numberInSurah": 72,
+      "text": "Wa laqad arsalnaa feehim munzireen"
+    },
+    {
+      "numberInSurah": 73,
+      "text": "Fanzur kaifa kaana 'aaqibatul munzareen"
+    },
+    {
+      "numberInSurah": 74,
+      "text": "Illaa 'ibaadal laahil mukhlaseen"
+    },
+    {
+      "numberInSurah": 75,
+      "text": "Wa laqad naadaanaa Noohun falani'mal mujeeboon"
+    },
+    {
+      "numberInSurah": 76,
+      "text": "Wa jajainaahu wa ahlahoo minal karbil 'azeem"
+    },
+    {
+      "numberInSurah": 77,
+      "text": "Wa ja'alnaa zurriyyatahoo hummul baaqeen"
+    },
+    {
+      "numberInSurah": 78,
+      "text": "Wa taraknaa 'alaihi fil aakhireen"
+    },
+    {
+      "numberInSurah": 79,
+      "text": "Salaamun 'alaa Noohin fil 'aalameen"
+    },
+    {
+      "numberInSurah": 80,
+      "text": "Innaa kazaalika najzil muhsineen"
+    },
+    {
+      "numberInSurah": 81,
+      "text": "Innahoo min 'ibaadinal mu'mineen"
+    },
+    {
+      "numberInSurah": 82,
+      "text": "Summa aghraqnal aakhareen"
+    },
+    {
+      "numberInSurah": 83,
+      "text": "Wa ina min shee'atihee la Ibraaheem"
+    },
+    {
+      "numberInSurah": 84,
+      "text": "Iz jaaa'a Rabbahoo bi qalbin saleem"
+    },
+    {
+      "numberInSurah": 85,
+      "text": "Iz qaala li abeehi wa qawmihee maazaa ta'budoon"
+    },
+    {
+      "numberInSurah": 86,
+      "text": "A'ifkan aalihatan doonal laahi tureedoon"
+    },
+    {
+      "numberInSurah": 87,
+      "text": "Famaa zannukum bi Rabbil'aalameen"
+    },
+    {
+      "numberInSurah": 88,
+      "text": "Fanazara nazratan finnujoom"
+    },
+    {
+      "numberInSurah": 89,
+      "text": "Faqaala inee saqeem"
+    },
+    {
+      "numberInSurah": 90,
+      "text": "Fatawallaw 'anhu mudbireen"
+    },
+    {
+      "numberInSurah": 91,
+      "text": "Faraagha ilaaa aalihatihim faqaala alaa taakuloon"
+    },
+    {
+      "numberInSurah": 92,
+      "text": "Maa lakum laa tantiqoon"
+    },
+    {
+      "numberInSurah": 93,
+      "text": "Faraagha 'alaihim darbam bilyameen"
+    },
+    {
+      "numberInSurah": 94,
+      "text": "Fa aqbalooo ilaihi yaziffoon"
+    },
+    {
+      "numberInSurah": 95,
+      "text": "Qaala ata'budoona maa tanhitoon"
+    },
+    {
+      "numberInSurah": 96,
+      "text": "Wallaahu khalaqakum wa maa ta'maloon"
+    },
+    {
+      "numberInSurah": 97,
+      "text": "Qaalub noo lahoo bun yaanan fa alqoohu fil jaheem"
+    },
+    {
+      "numberInSurah": 98,
+      "text": "Fa araadoo bihee kaidan faja 'alnaahumul asfaleen"
+    },
+    {
+      "numberInSurah": 99,
+      "text": "Wa qaala innee zaahibun ilaa Rabbee sa yahdeen"
+    },
+    {
+      "numberInSurah": 100,
+      "text": "Rabbi hab lee minas saaliheen"
+    },
+    {
+      "numberInSurah": 101,
+      "text": "Fabashsharnaahu bighulaamin haleem"
+    },
+    {
+      "numberInSurah": 102,
+      "text": "Falamma balagha ma'a hus sa'ya qaala yaa buniya inneee araa fil manaami anneee azbahuka fanzur maazaa taraa; qaala yaaa abatif 'al maa tu'maru satajidunee in shaaa'allaahu minas saabireen"
+    },
+    {
+      "numberInSurah": 103,
+      "text": "Falammaaa aslamaa wa tallahoo liljabeen"
+    },
+    {
+      "numberInSurah": 104,
+      "text": "Wa naadainaahu ai yaaaa Ibraheem"
+    },
+    {
+      "numberInSurah": 105,
+      "text": "Qad saddaqtar ru'yaa; innaa kazaalika najzil muhsineen"
+    },
+    {
+      "numberInSurah": 106,
+      "text": "Inna haazaa lahuwal balaaa'ul mubeen"
+    },
+    {
+      "numberInSurah": 107,
+      "text": "Wa fadainaahu bizibhin 'azeem"
+    },
+    {
+      "numberInSurah": 108,
+      "text": "Wa taraknaa 'alaihi fil aakhireen"
+    },
+    {
+      "numberInSurah": 109,
+      "text": "Salaamun 'alaaa Ibraaheem"
+    },
+    {
+      "numberInSurah": 110,
+      "text": "Kazaalika najzil muhsineen"
+    },
+    {
+      "numberInSurah": 111,
+      "text": "Innahoo min 'ibaadinal mu'mineen"
+    },
+    {
+      "numberInSurah": 112,
+      "text": "Wa bashsharnaahu bi Ishaaqa Nabiyayam minas saaliheen"
+    },
+    {
+      "numberInSurah": 113,
+      "text": "Wa baaraknaa 'alaihi wa 'alaaa Ishaaq; wa min zurriyya tihimaa muhsinunw wa zaalimul linafshihee mubeen"
+    },
+    {
+      "numberInSurah": 114,
+      "text": "Wa laqad mananna alaa Moosaa wa Haaroon"
+    },
+    {
+      "numberInSurah": 115,
+      "text": "Wa najjainaahumaa wa qawmahumaa minal karbil 'azeem"
+    },
+    {
+      "numberInSurah": 116,
+      "text": "Wa nasarnaahum fakaanoo humul ghaalibeen"
+    },
+    {
+      "numberInSurah": 117,
+      "text": "Wa aatainaahumal Kitaabal mustabeen"
+    },
+    {
+      "numberInSurah": 118,
+      "text": "Wa hadainaahumus Siraatal Mustaqeem"
+    },
+    {
+      "numberInSurah": 119,
+      "text": "Wa taraknaa 'alaihimaa fil aakhireen"
+    },
+    {
+      "numberInSurah": 120,
+      "text": "Salaamun 'alaa Moosaa wa Haaroon"
+    },
+    {
+      "numberInSurah": 121,
+      "text": "Innaa kazaalika najzil muhsineen"
+    },
+    {
+      "numberInSurah": 122,
+      "text": "Innahumaa min 'ibaadinal mu'mineen"
+    },
+    {
+      "numberInSurah": 123,
+      "text": "Wa inna Ilyaasa laminal mursaleen"
+    },
+    {
+      "numberInSurah": 124,
+      "text": "Iz qaala liqawmiheee alaa tattaqoon"
+    },
+    {
+      "numberInSurah": 125,
+      "text": "Atad'oona Ba'lanw wa tazaroona ahsanal khaaliqeen"
+    },
+    {
+      "numberInSurah": 126,
+      "text": "Allaaha Rabbakum wa Rabba aabaaa'ikumul awwaleen"
+    },
+    {
+      "numberInSurah": 127,
+      "text": "Fakazzaboohu fa inna hum lamuhdaroon"
+    },
+    {
+      "numberInSurah": 128,
+      "text": "Illaa 'ibaadal laahil mukhlaseen"
+    },
+    {
+      "numberInSurah": 129,
+      "text": "Wa taraknaa 'alaihi fil aakhireen"
+    },
+    {
+      "numberInSurah": 130,
+      "text": "Salaamun 'alaaa Ilyaaseen"
+    },
+    {
+      "numberInSurah": 131,
+      "text": "Innaa kazaalika najzil muhsineen"
+    },
+    {
+      "numberInSurah": 132,
+      "text": "Innahoo min 'ibaadinal mu'mineen"
+    },
+    {
+      "numberInSurah": 133,
+      "text": "Wa inna Lootal laminal mursaleen"
+    },
+    {
+      "numberInSurah": 134,
+      "text": "Iz najjainaahu wa ahlahooo ajma'een"
+    },
+    {
+      "numberInSurah": 135,
+      "text": "Illaa 'ajoozan fil ghaabireen"
+    },
+    {
+      "numberInSurah": 136,
+      "text": "Summa dammarnal aakhareen"
+    },
+    {
+      "numberInSurah": 137,
+      "text": "Wa innakum latamurroona 'alaihim musbiheen"
+    },
+    {
+      "numberInSurah": 138,
+      "text": "Wa billail; afalaa ta'qiloon"
+    },
+    {
+      "numberInSurah": 139,
+      "text": "Wa inna Yoonusa laminal mursaleen"
+    },
+    {
+      "numberInSurah": 140,
+      "text": "Iz abaqa ilal fulkil mash hoon"
+    },
+    {
+      "numberInSurah": 141,
+      "text": "Fasaahama fakaana minal mudhadeen"
+    },
+    {
+      "numberInSurah": 142,
+      "text": "Faltaqamahul hootu wa huwa muleem"
+    },
+    {
+      "numberInSurah": 143,
+      "text": "Falaw laaa annahoo kaana minal musabbiheen"
+    },
+    {
+      "numberInSurah": 144,
+      "text": "Lalabisa fee batniheee ilaa Yawmi yub'asoon"
+    },
+    {
+      "numberInSurah": 145,
+      "text": "Fanabaznaahu bil'araaa'i wa huwa saqeem"
+    },
+    {
+      "numberInSurah": 146,
+      "text": "Wa ambatnaa 'alaihi shajaratam mai yaqteen"
+    },
+    {
+      "numberInSurah": 147,
+      "text": "Wa arsalnaahu ilaa mi'ati alfin aw yazeedoon"
+    },
+    {
+      "numberInSurah": 148,
+      "text": "Fa aamanoo famatta' naahum ilaa heen"
+    },
+    {
+      "numberInSurah": 149,
+      "text": "Fastaftihim ali Rabbikal banaatu wa lahumul banoon"
+    },
+    {
+      "numberInSurah": 150,
+      "text": "Am khalaqnal malaaa'i kata inaasanw wa hm shaahidoon"
+    },
+    {
+      "numberInSurah": 151,
+      "text": "Alaaa innahum min ifkihim la yaqooloon"
+    },
+    {
+      "numberInSurah": 152,
+      "text": "Waladal laahu wa innhum lakaaziboon"
+    },
+    {
+      "numberInSurah": 153,
+      "text": "Astafal banaati 'alal baneen"
+    },
+    {
+      "numberInSurah": 154,
+      "text": "Maa lakum kaifa tahkumoon"
+    },
+    {
+      "numberInSurah": 155,
+      "text": "Afalaa tazakkaroon"
+    },
+    {
+      "numberInSurah": 156,
+      "text": "Am lakum sultaanum mubeen"
+    },
+    {
+      "numberInSurah": 157,
+      "text": "Faatoo bi Kitaabikum in kuntum saadiqeen"
+    },
+    {
+      "numberInSurah": 158,
+      "text": "Wa ja'aloo bainahoo wa bainal jinnati nasabaa; wa laqad 'alimatil jinnatu innahum lamuhdaroon"
+    },
+    {
+      "numberInSurah": 159,
+      "text": "Subhaanal laahi 'ammaa yasifoon"
+    },
+    {
+      "numberInSurah": 160,
+      "text": "Illaa 'ibaadal laahil mukhlaseen"
+    },
+    {
+      "numberInSurah": 161,
+      "text": "Fa innakum wa maa ta'ubdoon"
+    },
+    {
+      "numberInSurah": 162,
+      "text": "Maaa antum 'alaihi befaaatineen"
+    },
+    {
+      "numberInSurah": 163,
+      "text": "Illaa man huwa saalil jaheem"
+    },
+    {
+      "numberInSurah": 164,
+      "text": "Wa maa minnasa illaa lahoo maqaamum ma'loom"
+    },
+    {
+      "numberInSurah": 165,
+      "text": "Wa innaa llanah nus saaffoon"
+    },
+    {
+      "numberInSurah": 166,
+      "text": "Wa innaa lanah nul musabbihoon"
+    },
+    {
+      "numberInSurah": 167,
+      "text": "Wa in kaanoo la yaqooloon"
+    },
+    {
+      "numberInSurah": 168,
+      "text": "Law anna 'indana zikram minal awwaleen"
+    },
+    {
+      "numberInSurah": 169,
+      "text": "Lakunna 'ibaadal laahil mukhlaseen"
+    },
+    {
+      "numberInSurah": 170,
+      "text": "Fakafaroo bihee fasawfa ya'lamoon"
+    },
+    {
+      "numberInSurah": 171,
+      "text": "Wa laqad sabaqat Kalimatunaa li'ibaadinal mursa leen"
+    },
+    {
+      "numberInSurah": 172,
+      "text": "Innaa hum lahumul mansooroon"
+    },
+    {
+      "numberInSurah": 173,
+      "text": "Wa inna jundana lahumul ghaaliboon"
+    },
+    {
+      "numberInSurah": 174,
+      "text": "Fatawalla 'anhum hatta heen"
+    },
+    {
+      "numberInSurah": 175,
+      "text": "Wa absirhum fasawfa yubsiroon"
+    },
+    {
+      "numberInSurah": 176,
+      "text": "Afabi'azaabinaa yasta'jiloon"
+    },
+    {
+      "numberInSurah": 177,
+      "text": "Fa izaa nazala bisaahatihim fasaaa'a sabaahul munzareen"
+    },
+    {
+      "numberInSurah": 178,
+      "text": "Wa tawalla 'anhum hattaa heen"
+    },
+    {
+      "numberInSurah": 179,
+      "text": "Wa absir fasawfa yubsiroon"
+    },
+    {
+      "numberInSurah": 180,
+      "text": "Subhaana Rabbika Rabbil 'izzati 'amma yasifoon"
+    },
+    {
+      "numberInSurah": 181,
+      "text": "Wa salaamun 'alalmursaleen"
+    },
+    {
+      "numberInSurah": 182,
+      "text": "Walhamdu lillaahi Rabbil 'aalameen"
+    }
+  ]
+}

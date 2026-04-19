@@ -1,0 +1,34 @@
+{
+  "surahNumber": 1,
+  "edition": "verse.transliteration",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Bismillaahir Rahmaanir Raheem"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Alhamdu lillaahi Rabbil 'aalameen"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Ar-Rahmaanir-Raheem"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Maaliki Yawmid-Deen"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Iyyaaka na'budu wa lyyaaka nasta'een"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Ihdinas-Siraatal-Mustaqeem"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Siraatal-lazeena an'amta 'alaihim ghayril-maghdoobi 'alaihim wa lad-daaalleen"
+    }
+  ]
+}

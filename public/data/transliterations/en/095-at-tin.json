@@ -1,0 +1,38 @@
+{
+  "surahNumber": 95,
+  "edition": "verse.transliteration",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Wat teeni waz zaitoon"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Wa toori sineen"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Wa haazal balad-il ameen"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Laqad khalaqnal insaana fee ahsani taqweem"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Thumma ra dad naahu asfala saafileen"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Ill-lal lazeena aamanoo wa 'amilus saalihaati; falahum ajrun ghairu mamnoon"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Fama yu kaz zibuka b'adu bid deen"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "Alai sal laahu bi-ahkamil haakimeen"
+    }
+  ]
+}

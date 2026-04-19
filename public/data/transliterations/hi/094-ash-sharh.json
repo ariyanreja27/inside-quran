@@ -1,0 +1,38 @@
+{
+  "surahNumber": 94,
+  "edition": "verse.transliteration",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Alam nashrah laka sadrak"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Wa wa d'ana 'anka wizrak"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Allazee anqada zahrak"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Wa raf 'ana laka zikrak"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Fa inna ma'al usri yusra"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Inna ma'al 'usri yusra"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Fa iza faragh ta fansab"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "Wa ilaa rabbika far ghab"
+    }
+  ]
+}

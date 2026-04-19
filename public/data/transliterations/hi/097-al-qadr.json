@@ -1,0 +1,26 @@
+{
+  "surahNumber": 97,
+  "edition": "verse.transliteration",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Innaa anzalnaahu fee lailatil qadr"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Wa maa adraaka ma lailatul qadr"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Lailatul qadri khairum min alfee shahr"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Tanaz zalul malaa-ikatu war roohu feeha bi izni-rab bihim min kulli amr"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Salaamun hiya hattaa mat la'il fajr"
+    }
+  ]
+}

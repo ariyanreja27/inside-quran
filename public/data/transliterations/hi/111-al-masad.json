@@ -1,0 +1,26 @@
+{
+  "surahNumber": 111,
+  "edition": "verse.transliteration",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Tab bat yadaa abee Lahabinw-wa tabb"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Maa aghna 'anhu maaluhu wa ma kasab"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Sa yas laa naran zaata lahab"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Wam ra-atuh hamma latal-hatab"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Fee jeediha hab lum mim-masad"
+    }
+  ]
+}

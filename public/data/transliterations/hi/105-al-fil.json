@@ -1,0 +1,26 @@
+{
+  "surahNumber": 105,
+  "edition": "verse.transliteration",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Alam tara kaifa fa'ala rabbuka bi ashaabil feel"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Alam yaj'al kai dahum fee tad leel"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Wa arsala 'alaihim tairan abaabeel"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Tar meehim bi hi jaaratim min sij jeel"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Faja 'alahum ka'asfim m'akool"
+    }
+  ]
+}

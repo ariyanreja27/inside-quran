@@ -1,0 +1,50 @@
+{
+  "surahNumber": 101,
+  "edition": "verse.transliteration",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Al qaari'ah"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Mal qaariah"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Wa maa adraaka mal qaari'ah"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Yauma ya koonun naasu kal farashil mabthooth"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Wa ta koonul jibalu kal 'ihnil manfoosh"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Fa-amma man thaqulat mawa zeenuh"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Fahuwa fee 'ishatir raadiyah"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "Wa amma man khaffat mawa zeenuh"
+    },
+    {
+      "numberInSurah": 9,
+      "text": "Fa-ummuhu haawiyah"
+    },
+    {
+      "numberInSurah": 10,
+      "text": "Wa maa adraaka maa hiyah"
+    },
+    {
+      "numberInSurah": 11,
+      "text": "Naarun hamiyah"
+    }
+  ]
+}

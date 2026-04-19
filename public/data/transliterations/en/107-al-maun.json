@@ -1,0 +1,34 @@
+{
+  "surahNumber": 107,
+  "edition": "verse.transliteration",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Ara-aital lazee yu kazzibu bid deen"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Fa zaalikal lazi yadu'ul-yateem"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Wa la ya huddu 'alaa ta'amil miskeen"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Fa wai lul-lil mu salleen"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Al lazeena hum 'an salaatihim sahoon"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Al lazeena hum yuraa-oon"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Wa yamna'oonal ma'oon"
+    }
+  ]
+}

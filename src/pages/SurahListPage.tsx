@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { 
   Menu, 
   Search, 
@@ -25,7 +26,8 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { useSurahs } from '@/hooks/useQuranData';
-import { useFavorites, useLastRead } from '@/hooks/useAppStore';
+import { useFavorites, useLastRead, useSettings } from '@/hooks/useAppStore';
+import { surahList } from '@/data/quranMeta';
 import SurahCard from '@/components/SurahCard';
 import SearchOverlay from '@/components/SearchOverlay';
 
@@ -41,6 +43,47 @@ export default function SurahListPage() {
 
   const recentRead = lastRead.length > 0 ? lastRead[0] : null;
   const [showPopup, setShowPopup] = useState(!!recentRead);
+  const queryClient = useQueryClient();
+  const { settings } = useSettings();
+
+  // Prefetch last-read surah data in the background while user is on home page
+  useEffect(() => {
+    if (!recentRead) return;
+    const surahNumber = recentRead.surahNumber;
+    const translationLang =
+      settings.language === 'bn' ? 'bn' :
+      settings.language === 'hi' ? 'hi' :
+      settings.language === 'ur' ? 'ur' : 'en';
+    const queryKey = ['surah-verses', surahNumber, settings.language, settings.showTajweed, settings.arabicFont];
+    // Only prefetch if not already cached
+    const cached = queryClient.getQueryData(queryKey);
+    if (!cached) {
+      queryClient.prefetchQuery({ queryKey, queryFn: async () => {
+        const meta = surahList.find(s => s.number === surahNumber);
+        if (!meta) return [];
+        const slug = `${String(surahNumber).padStart(3, '0')}-${meta.name.toLowerCase().replace(/['']/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')}`;
+        const base = '/data';
+        const [arabic, trans, translit] = await Promise.all([
+          fetch(`${base}/arabic/${slug}.json`).then(r => r.ok ? r.json() : null),
+          fetch(`${base}/translations/${translationLang}/${slug}.json`).then(r => r.ok ? r.json() : null),
+          fetch(`${base}/transliterations/${translationLang}/${slug}.json`).then(r => r.ok ? r.json() : null),
+        ]);
+        if (!arabic?.verses) return [];
+        const tMap: Record<number,string> = {};
+        trans?.verses?.forEach((v: {numberInSurah:number;text:string}) => { tMap[v.numberInSurah] = v.text; });
+        const trMap: Record<number,string> = {};
+        translit?.verses?.forEach((v: {numberInSurah:number;text:string}) => { trMap[v.numberInSurah] = v.text; });
+        return arabic.verses.map((a: {numberInSurah:number;text:string;juz:number;page:number;hizbQuarter:number;ruku:number}) => ({
+          number: a.numberInSurah, numberInSurah: a.numberInSurah,
+          text: a.text, translation: tMap[a.numberInSurah] || '',
+          transliteration: trMap[a.numberInSurah] || '',
+          juz: a.juz, page: a.page, hizbQuarter: a.hizbQuarter, ruku: a.ruku,
+          surahNumber, words: [],
+        }));
+      }, staleTime: Infinity });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Hide popup on scroll or timeout
   useEffect(() => {

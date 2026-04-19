@@ -1,0 +1,318 @@
+{
+  "surahNumber": 55,
+  "edition": "verse.transliteration",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Ar Rahmaan"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "'Allamal Quran"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Khalaqal insaan"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "'Allamalhul bayaan"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Ashshamsu walqamaru bihusbaan"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Wannajmu washshajaru yasjudan"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Wassamaaa'a rafa'ahaa wa wada'al Meezan"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "Allaa tatghaw fil meezaan"
+    },
+    {
+      "numberInSurah": 9,
+      "text": "Wa aqeemul wazna bilqisti wa laa tukhsirul meezaan"
+    },
+    {
+      "numberInSurah": 10,
+      "text": "Wal arda wada'ahaa lilanaame"
+    },
+    {
+      "numberInSurah": 11,
+      "text": "Feehaa faakihatunw wan nakhlu zaatul akmaam"
+    },
+    {
+      "numberInSurah": 12,
+      "text": "Walhabbu zul 'asfi war Raihaanu"
+    },
+    {
+      "numberInSurah": 13,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan"
+    },
+    {
+      "numberInSurah": 14,
+      "text": "Khalaqal insaana min salsaalin kalfakhkhaari"
+    },
+    {
+      "numberInSurah": 15,
+      "text": "Wa khalaqal jaaan mim maarijim min naar"
+    },
+    {
+      "numberInSurah": 16,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan"
+    },
+    {
+      "numberInSurah": 17,
+      "text": "Rabbul mashriqayni wa Rabbul maghribayni"
+    },
+    {
+      "numberInSurah": 18,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan"
+    },
+    {
+      "numberInSurah": 19,
+      "text": "Marajal bahrayni yalta qiyaani"
+    },
+    {
+      "numberInSurah": 20,
+      "text": "Bainahumaa barzakhul laa yabghiyaan"
+    },
+    {
+      "numberInSurah": 21,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan"
+    },
+    {
+      "numberInSurah": 22,
+      "text": "Yakhruju minhumal lu 'lu u wal marjaanu"
+    },
+    {
+      "numberInSurah": 23,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan"
+    },
+    {
+      "numberInSurah": 24,
+      "text": "Wa lahul jawaaril mun sha'aatu fil bahri kal a'laam"
+    },
+    {
+      "numberInSurah": 25,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 26,
+      "text": "Kullu man 'alaihaa faan"
+    },
+    {
+      "numberInSurah": 27,
+      "text": "Wa yabqaa wajhu rabbika zul jalaali wal ikraam"
+    },
+    {
+      "numberInSurah": 28,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 29,
+      "text": "Yas'aluhoo man fissamaawaati walard; kulla ywmin huwa fee shaan"
+    },
+    {
+      "numberInSurah": 30,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 31,
+      "text": "Sanafrughu lakum ayyuhas saqalaan"
+    },
+    {
+      "numberInSurah": 32,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 33,
+      "text": "Yaa ma'sharal jinni wal insi inis tata'tum an tanfuzoo min aqtaaris samaawaati wal ardi fanfuzoo; laa tanfuzoona illaa bisultaan"
+    },
+    {
+      "numberInSurah": 34,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 35,
+      "text": "Yursalu 'alaikumaa shuwaazum min naarifiw-wa nuhaasun falaa tantasiraan"
+    },
+    {
+      "numberInSurah": 36,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 37,
+      "text": "Fa-izan shaqqatis samaaa'u fakaanat wardatan kaddihaan"
+    },
+    {
+      "numberInSurah": 38,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 39,
+      "text": "Fa-yawma'izil laa yus'alu 'an zambiheee insunw wa laa jaann"
+    },
+    {
+      "numberInSurah": 40,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 41,
+      "text": "Yu'raful mujrimoona biseemaahum fa'yu'khazu binna waasi wal aqdaam"
+    },
+    {
+      "numberInSurah": 42,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 43,
+      "text": "Haazihee jahannamul latee yukazzibu bihal mujrimoon"
+    },
+    {
+      "numberInSurah": 44,
+      "text": "Yatoofoona bainahaa wa baina hameemim aan"
+    },
+    {
+      "numberInSurah": 45,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 46,
+      "text": "Wa liman khaafa maqaama rabbihee jannataan"
+    },
+    {
+      "numberInSurah": 47,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 48,
+      "text": "Zawaataaa afnaan"
+    },
+    {
+      "numberInSurah": 49,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 50,
+      "text": "Feehimaa 'aynaani tajriyaan"
+    },
+    {
+      "numberInSurah": 51,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 52,
+      "text": "Feehimaa min kulli faakihatin zawjaan"
+    },
+    {
+      "numberInSurah": 53,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 54,
+      "text": "Muttaki'eena 'alaa furushim bataaa'inuhaa min istabraq; wajanal jannataini daan"
+    },
+    {
+      "numberInSurah": 55,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 56,
+      "text": "Feehinna qaasiratut tarfi lam yatmishunna insun qablahum wa laa jaaann"
+    },
+    {
+      "numberInSurah": 57,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 58,
+      "text": "ka annahunnal yaaqootu wal marjaan"
+    },
+    {
+      "numberInSurah": 59,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 60,
+      "text": "Hal jazaaa'ul ihsaani illal ihsaan"
+    },
+    {
+      "numberInSurah": 61,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 62,
+      "text": "Wa min doonihimaa jannataan"
+    },
+    {
+      "numberInSurah": 63,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 64,
+      "text": "Mudhaaammataan"
+    },
+    {
+      "numberInSurah": 65,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 66,
+      "text": "Feehimaa 'aynaani nad daakhataan"
+    },
+    {
+      "numberInSurah": 67,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 68,
+      "text": "Feehimaa faakihatunw wa nakhlunw wa rummaan"
+    },
+    {
+      "numberInSurah": 69,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 70,
+      "text": "Feehinna khairaatun hisaan"
+    },
+    {
+      "numberInSurah": 71,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 72,
+      "text": "Hoorum maqsooraatun fil khiyaam"
+    },
+    {
+      "numberInSurah": 73,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 74,
+      "text": "Lam yatmis hunna insun qablahum wa laa jaaann"
+    },
+    {
+      "numberInSurah": 75,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 76,
+      "text": "Muttaki'eena 'alaa rafratin khudrinw wa 'abqariyyin hisaan"
+    },
+    {
+      "numberInSurah": 77,
+      "text": "Fabi ayyi aalaaa'i Rabbikumaa tukazzibaan."
+    },
+    {
+      "numberInSurah": 78,
+      "text": "Tabaarakasmu Rabbika Zil-Jalaali wal-Ikraam"
+    }
+  ]
+}

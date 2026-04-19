@@ -1,15 +1,16 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, Fragment } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, MoreVertical, BookmarkCheck, Bookmark as BookmarkIcon, FileText, Pencil, BookOpen, PenLine } from 'lucide-react';
+import { ArrowLeft, MoreVertical, BookmarkCheck, Bookmark as BookmarkIcon, FileText, Pencil, BookOpen, PenLine, Settings as SettingsIcon, Type as TypeIcon, Globe, Book, Eye } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSurahVerses, useSurahs } from '@/hooks/useQuranData';
-import { useBookmarks, useExplanations, useLastPosition, useLastRead, useSettings, useCustomTranslations, useCustomTafsirs, useNotes } from '@/hooks/useAppStore';
+import { useBookmarks, useExplanations, useLastPosition, useLastRead, useSettings, useCustomTranslations, useCustomTafsirs, useNotes, useDarkMode } from '@/hooks/useAppStore';
 import {
   Drawer,
   DrawerContent,
   DrawerTitle,
   DrawerDescription,
 } from "@/components/ui/drawer";
+import { Slider } from "@/components/ui/slider";
 import { TajweedText } from '@/components/TajweedText';
 import { WordByWordVerse } from '@/components/WordByWordVerse';
 import { WordDetailDrawer } from '@/components/WordDetailDrawer';
@@ -19,7 +20,7 @@ export default function SurahReadingPage() {
   const { number } = useParams<{ number: string }>();
   const navigate = useNavigate();
   const surahNumber = parseInt(number || '1');
-  
+
   useEffect(() => {
     if (isNaN(surahNumber) || surahNumber < 1 || surahNumber > 114) {
       navigate('/');
@@ -28,6 +29,7 @@ export default function SurahReadingPage() {
 
   const { data: surahs } = useSurahs();
   const { data: verses, isLoading } = useSurahVerses(surahNumber);
+  const surah = surahs?.find(s => s.number === surahNumber);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const targetVerse = queryParams.get('verse');
@@ -35,15 +37,28 @@ export default function SurahReadingPage() {
   const { hasExplanation, getExplanation } = useExplanations();
   const { hasTafsir } = useCustomTafsirs();
   const { setPosition } = useLastPosition();
-  const { settings } = useSettings();
+  const { settings, updateSettings } = useSettings();
+  const { isDark, toggle: toggleDark } = useDarkMode();
   const { getCustomTranslation, saveCustomTranslation, resetCustomTranslation } = useCustomTranslations();
   const { saveLastRead } = useLastRead();
   const { notes } = useNotes();
-  
+
   const [isRendered, setIsRendered] = useState(false);
   const [menuVerse, setMenuVerse] = useState<number | null>(null);
   const [currentJuz, setCurrentJuz] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState<number | null>(null);
+  const [currentRuku, setCurrentRuku] = useState<number | null>(null);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [renderLimit, setRenderLimit] = useState(30);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+
+  // Tracking variables for Juz/Page/Ruku dividers
+  let lastJuz = 0;
+  let lastPage = 0;
+  let lastRuku = 0;
+  // Reset render limit when surah changes
+  useEffect(() => { setRenderLimit(30); }, [surahNumber]);
+
   const [editingVerse, setEditingVerse] = useState<number | null>(null);
   const [editText, setEditText] = useState('');
 
@@ -59,7 +74,7 @@ export default function SurahReadingPage() {
   const verseNumTimeoutRef = useRef<NodeJS.Timeout>();
   const dragStartY = useRef(0);
   const dragStartScroll = useRef(0);
-  
+
   const editingVerseObj = verses?.find(a => a.numberInSurah === editingVerse);
   const activeCustomTrans = editingVerse ? getCustomTranslation(surahNumber, editingVerse, settings.language) : null;
   const isSaveDisabled = !editingVerseObj || editText.trim() === '' || editText.trim() === (activeCustomTrans || editingVerseObj.translation).trim();
@@ -154,8 +169,6 @@ export default function SurahReadingPage() {
   useEffect(() => () => { if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current); }, []);
 
 
-  const surah = surahs?.find(s => s.number === surahNumber);
-
   useEffect(() => {
     if (surahNumber && !targetVerse) {
       setPosition({ surahNumber, verseNumber: 1 });
@@ -189,7 +202,7 @@ export default function SurahReadingPage() {
         const el = verseElements[i];
         const arabicEl = el.querySelector('.arabic-text');
         const transEl = el.querySelector('p.font-display.text-muted-foreground');
-        
+
         let isVisible = false;
 
         if (arabicEl) {
@@ -225,6 +238,7 @@ export default function SurahReadingPage() {
         if (verse) {
           setCurrentJuz(verse.juz);
           setCurrentPage(verse.page);
+          setCurrentRuku(verse.ruku);
           setCurrentVerseNum(topMostVerseNum);
           if (surahNumber) {
             if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
@@ -264,7 +278,7 @@ export default function SurahReadingPage() {
             top: elementPosition - headerOffset,
             behavior: 'smooth'
           });
-          
+
           // Highlight effect
           element.classList.add('ring-2', 'ring-primary/50', 'bg-primary/5');
           setTimeout(() => {
@@ -286,9 +300,23 @@ export default function SurahReadingPage() {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  let lastJuz = 0;
-  let lastPage = 0;
-  let lastRuku = 0;
+  // After first 30 verses paint, load all remaining verses immediately during idle time
+  useEffect(() => {
+    if (!verses || !isRendered || renderLimit >= verses.length) return;
+    const id = (window as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback
+      ? (window as Window & { requestIdleCallback: (cb: () => void, opts: { timeout: number }) => number }).requestIdleCallback(
+        () => setRenderLimit(verses.length),
+        { timeout: 300 }
+      )
+      : setTimeout(() => setRenderLimit(verses.length), 100) as unknown as number;
+    return () => {
+      if ((window as Window & { cancelIdleCallback?: (id: number) => void }).cancelIdleCallback) {
+        (window as Window & { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(id as number);
+      } else {
+        clearTimeout(id as unknown as ReturnType<typeof setTimeout>);
+      }
+    };
+  }, [verses, isRendered, renderLimit]);
 
   // Read header bottom live — always accurate, no stale state
   // h-14 header = 56px (Tailwind constant), no DOM measurement needed
@@ -297,39 +325,177 @@ export default function SurahReadingPage() {
   const HIT_HALF = 40; // half of 80px hit area height
   const trackH = window.innerHeight - HEADER_H + GAP - HIT_HALF * 2;
   const handleTop = (HEADER_H - GAP + HIT_HALF) + scrollPercent * Math.max(0, trackH);
+  // ── Tajweed word-click helpers ────────────────────────────────────────────
+  // Split tajweed-encoded text by whitespace at bracket-depth 0
+  const splitTajweedWords = (text: string): string[] => {
+    const words: string[] = [];
+    let current = '';
+    let depth = 0;
+    for (const ch of text) {
+      if (ch === '[') depth++;
+      else if (ch === ']') depth--;
+      // Split on any whitespace while outside brackets
+      if (/\s/.test(ch) && depth === 0) {
+        if (current.trim()) words.push(current.trim());
+        current = '';
+      } else {
+        current += ch;
+      }
+    }
+    if (current.trim()) words.push(current.trim());
+    return words;
+  };
+
+  // Strip [code[text]] or [code[text] markup → plain text, then nuke leftover brackets
+  const stripTajweedMarkup = (str: string): string =>
+    str
+      .replace(/\[[a-z]+(?::\d+)?\[([^\]]+)\]\]/g, '$1') // [code:id[text]]  (two closings)
+      .replace(/\[[a-z]+(?::\d+)?\[([^\]]+)\]/g, '$1')   // [code:id[text]   (one closing)
+      .replace(/[\[\]]/g, '');                              // purge any leftover brackets
+
+  // Normalize for comparison: strip brackets then diacritics + alif variants
+  const normAr = (str: string): string =>
+    str
+      .replace(/[\[\]]/g, '')                                          // kill stray brackets
+      .replace(/[\u064B-\u065F\u0610-\u061A\u0670\u06D6-\u06ED]/g, '') // diacritics
+      .replace(/[\u0671\u0672\u0622\u0623\u0625]/g, '\u0627')                 // alif variants → ا
+      .replace(/\uFE8E|\uFE8D/g, '\u0627')
+      .trim();
+
+  /**
+   * Map each tajweed text segment to its corresponding verse.Word.
+   * Uses greedy accumulation: collect segments until their stripped text
+   * covers the next word's plain text, then advance to the next word.
+   */
+  const buildWordMap = (segments: string[], words: Word[] | undefined): (Word | null)[] => {
+    const clickable = (words ?? []).filter(w => w.charTypeName !== 'end');
+    if (!clickable.length || !segments.length) return segments.map(() => null);
+
+    const result: (Word | null)[] = [];
+    let wIdx = 0;
+    let carry = '';
+
+    for (let si = 0; si < segments.length; si++) {
+      if (wIdx >= clickable.length) { result.push(null); continue; }
+
+      const curr = clickable[wIdx];
+      result.push(curr);
+
+      carry += normAr(stripTajweedMarkup(segments[si]));
+      const wordNorm = normAr(curr.text);
+      const segsLeft = segments.length - si - 1;   // future segments
+      const wordsLeft = clickable.length - wIdx - 1; // future words
+
+      // Advance to next word when:
+      //  (a) remaining segs ≤ remaining words → must be 1:1 from here on, OR
+      //  (b) accumulated chars cover the current word AND we're not forced to keep combining
+      const mustCombine = segsLeft > wordsLeft;
+      const contentComplete = carry.length > 0 && carry.length >= wordNorm.length;
+
+      if (segsLeft <= wordsLeft || (contentComplete && !mustCombine)) {
+        wIdx++;
+        carry = '';
+      }
+    }
+    return result;
+  };
 
   return (
     <div className="min-h-screen pb-24">
-      {/* Header */}
-      <div className="sticky top-0 z-40 bg-card/95 backdrop-blur-md border-b border-border">
-        <div className="flex items-center gap-3 px-4 h-14">
-          <button onClick={() => {
-            if (window.history.state && window.history.state.idx > 0) {
-              navigate(-1);
-            } else {
-              navigate('/');
-            }
-          }} className="p-2 -ml-2 rounded-xl transition">
-            <ArrowLeft size={20} />
-          </button>
-          {isLoading ? (
-            null
-          ) : (
-            <>
-              <div className="flex-1 min-w-0">
-                <h2 className="font-display font-semibold text-sm truncate">{surah?.name}</h2>
-                <p className="text-[10px] text-muted-foreground">{surah?.meaning}</p>
+      {/* Header v6: Refined Navigation */}
+      <div className="sticky top-0 z-40 bg-card/80 backdrop-blur-2xl border-b border-border/40 transition-all duration-300">
+        <div className="h-16 px-4 flex items-center justify-between gap-3">
+          {/* Left: Back */}
+          <div className="w-14">
+            <button
+              onClick={() => {
+                if (window.history.state?.idx > 0) navigate(-1);
+                else navigate('/');
+              }}
+              className="w-10 h-10 flex items-center justify-center rounded-2xl bg-secondary/30 hover:bg-secondary transition-all active:scale-90"
+            >
+              <ArrowLeft size={20} />
+            </button>
+          </div>
+
+          {/* Center: Title */}
+          <div className="flex-1 text-center min-w-0">
+            <motion.h1
+              initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }}
+              className="font-display font-semibold text-lg sm:text-xl text-foreground truncate tracking-tight leading-tight"
+            >
+              {isLoading ? "..." : surah?.name}
+            </motion.h1>
+            {!isLoading && (
+              <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-[0.2em] opacity-50 -mt-0.5">
+                {surah?.meaning}
+              </p>
+            )}
+          </div>
+
+          {/* Right: Stylized Surah Number (No text prefix) */}
+          <div className="w-14 flex justify-end">
+            {!isLoading && (
+              <div className="w-9 h-9 flex items-center justify-center rounded-full bg-primary/5 border border-primary/10 text-primary font-black text-xs shadow-sm">
+                {surahNumber.toString().padStart(2, '0')}
               </div>
-              {currentJuz && (
-                <div className="flex flex-col items-end text-[10px] text-muted-foreground font-medium pr-1">
-                  <span>Juz {currentJuz}</span>
-                  <span>Page {currentPage}</span>
-                </div>
-              )}
-            </>
-          )}
+            )}
+          </div>
         </div>
       </div>
+
+
+
+      {/* Floating Command Pill (v5) */}
+      <AnimatePresence>
+        {!isLoading && (
+          <motion.div
+            initial={{ y: 100, x: '-50%', opacity: 0 }}
+            animate={{ y: 0, x: '-50%', opacity: 1 }}
+            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 transform-gpu"
+          >
+            <div className="bg-card/80 backdrop-blur-xl border border-border/60 shadow-[0_8px_32px_rgba(0,0,0,0.12)] rounded-full p-1.5 flex items-center gap-1.5 min-w-[240px]">
+              {/* Segmented Mode Switcher */}
+              <div className="flex-1 flex items-center bg-secondary/40 rounded-full p-1 relative border border-border/20">
+                <div
+                  className="absolute rounded-full bg-card shadow-md inset-y-1 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+                  style={{
+                    left: settings.showWordByWord ? '4px' : '50%',
+                    right: settings.showWordByWord ? '50%' : '4px',
+                  }}
+                />
+                <button
+                  onClick={() => updateSettings({ showWordByWord: true })}
+                  className={`flex-1 relative z-10 py-2.5 text-[11px] font-black tracking-widest rounded-full transition-all ${settings.showWordByWord
+                      ? 'text-primary'
+                      : 'text-muted-foreground/50 ring-1 ring-inset ring-border/60 hover:text-muted-foreground'
+                    }`}
+                >
+                  WORD
+                </button>
+                <button
+                  onClick={() => updateSettings({ showWordByWord: false })}
+                  className={`flex-1 relative z-10 py-2.5 text-[11px] font-black tracking-widest rounded-full transition-all ${!settings.showWordByWord
+                      ? 'text-primary'
+                      : 'text-muted-foreground/50 ring-1 ring-inset ring-border/60 hover:text-muted-foreground'
+                    }`}
+                >
+                  VERSE
+                </button>
+              </div>
+
+              {/* Settings Action */}
+              <button
+                onClick={() => setIsSettingsOpen(true)}
+                className="w-11 h-11 flex items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/20 active:scale-90 transition-all"
+                title="Quick Settings"
+              >
+                <SettingsIcon size={20} strokeWidth={2.5} />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Draggable Scroll Handle */}
       {isRendered && (
@@ -417,181 +583,216 @@ export default function SurahReadingPage() {
             </div>
 
             {/* Verses */}
-            <div 
-              className="px-4 space-y-3 mt-2"
+            <div
+              className="px-4 space-y-2 mt-2"
               ref={(el) => { if (el && !isRendered) setIsRendered(true); }}
             >
-              {verses?.map((verse) => {
-            const dividers: string[] = [];
-            if (verse.juz !== lastJuz) { dividers.push(`Juz ${verse.juz}`); lastJuz = verse.juz; }
-            if (verse.page !== lastPage) { dividers.push(`Page ${verse.page}`); lastPage = verse.page; }
-            if (verse.ruku !== lastRuku) { dividers.push(`Ruku ${verse.ruku}`); lastRuku = verse.ruku; }
+              {verses?.slice(0, renderLimit).map((verse) => {
+                const anyChanged = verse.juz !== lastJuz || verse.page !== lastPage || verse.ruku !== lastRuku;
+                if (anyChanged) {
+                  lastJuz = verse.juz;
+                  lastPage = verse.page;
+                  lastRuku = verse.ruku;
+                }
+                const dividerLabel = anyChanged
+                  ? `Juz ${verse.juz}  ·  Page ${verse.page}  ·  Ruku ${verse.ruku}`
+                  : null;
 
-            const explained = hasExplanation(surahNumber, verse.numberInSurah);
-            const tafsirExists = hasTafsir(surahNumber, verse.numberInSurah);
-            const bookmarked = isBookmarked(surahNumber, verse.numberInSurah);
-            const note = notes.find(n => n.surahNumber === surahNumber && n.verseNumber === verse.numberInSurah);
-            const customTrans = getCustomTranslation(surahNumber, verse.numberInSurah, settings.language);
-            const displayTranslation = customTrans || verse.translation;
+                const explained = hasExplanation(surahNumber, verse.numberInSurah);
+                const tafsirExists = hasTafsir(surahNumber, verse.numberInSurah);
+                const bookmarked = isBookmarked(surahNumber, verse.numberInSurah);
+                const note = notes.find(n => n.surahNumber === surahNumber && n.verseNumber === verse.numberInSurah);
+                const customTrans = getCustomTranslation(surahNumber, verse.numberInSurah, settings.language);
+                const displayTranslation = customTrans || verse.translation;
 
-
-
-            return (
-              <div key={verse.numberInSurah}>
-                {dividers.length > 0 && (
-                  <div className="flex items-center justify-center gap-2 py-1">
-                    <div className="h-px flex-1 bg-border" />
-                    <span className="divider-label">{dividers.join(' • ')}</span>
-                    <div className="h-px flex-1 bg-border" />
-                  </div>
-                )}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.15, delay: Math.min(verse.numberInSurah * 0.02, 1) }}
-                  id={`verse-${verse.numberInSurah}`}
-                  className="relative verse-card transition-all duration-500 rounded-2xl"
-                >
-                  {/* Top row */}
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-secondary text-xs font-semibold text-primary">
-                        {verse.numberInSurah}
-                      </span>
-                      {bookmarked && (
-                        <BookmarkCheck size={14} className="text-gold" />
-                      )}
-                    </div>
-                    <div className="relative" ref={menuVerse === verse.numberInSurah ? menuRef : undefined}>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setMenuVerse(menuVerse === verse.numberInSurah ? null : verse.numberInSurah);
-                        }}
-                        className="p-1.5 rounded-lg transition"
-                      >
-                        <MoreVertical size={16} className="text-muted-foreground" />
-                      </button>
-                      {menuVerse === verse.numberInSurah && (
-                        <div className="absolute right-0 top-8 w-48 bg-card border border-border rounded-xl shadow-lg py-1 z-50">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              toggleBookmark(surahNumber, verse.numberInSurah);
-                              setMenuVerse(null);
-                            }}
-                            className="flex items-center gap-2 w-full px-3 py-2 text-[15px] font-medium transition text-foreground/90"
-                          >
-                            <BookmarkIcon size={16} className="text-muted-foreground mr-1" />
-                            {bookmarked ? 'Remove Bookmark' : 'Bookmark'}
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setMenuVerse(null);
-                              if (tafsirExists) {
-                                navigate(`/tafsir-view?surah=${surahNumber}&verse=${verse.numberInSurah}`);
-                              } else {
-                                navigate(`/tafsir-builder?surah=${surahNumber}&verse=${verse.numberInSurah}`);
-                              }
-                            }}
-                            className="flex items-center gap-2 w-full px-3 py-2 text-[15px] font-medium transition text-foreground/90"
-                          >
-                            <FileText size={16} className="text-muted-foreground mr-1" />
-                            {tafsirExists ? 'View Tafsirs' : 'Add Tafsirs'}
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setMenuVerse(null);
-                              if (explained) {
-                                navigate(`/explanation-view?surah=${surahNumber}&verse=${verse.numberInSurah}`);
-                              } else {
-                                navigate(`/explanation-builder?surah=${surahNumber}&verse=${verse.numberInSurah}`);
-                              }
-                            }}
-                            className="flex items-center gap-2 w-full px-3 py-2 text-[15px] font-medium transition text-foreground/90"
-                          >
-                            <BookOpen size={16} className="text-muted-foreground mr-1" />
-                            {explained ? 'View Explanation' : 'Add Explanation'}
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setMenuVerse(null);
-                              if (note) {
-                                navigate(`/note-view?id=${note.id}`);
-                              } else {
-                                navigate(`/note-builder?surah=${surahNumber}&verse=${verse.numberInSurah}`);
-                              }
-                            }}
-                            className="flex items-center gap-2 w-full px-3 py-2 text-[15px] font-medium transition text-foreground/90"
-                          >
-                            <PenLine size={16} className="text-muted-foreground mr-1" />
-                            {note ? 'View Note' : 'Add Note'}
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setEditText(customTrans || verse.translation);
-                              setEditingVerse(verse.numberInSurah);
-                              setMenuVerse(null);
-                            }}
-                            className="flex items-center gap-2 w-full px-3 py-2 text-[15px] font-medium transition text-foreground/90"
-                          >
-                            <Pencil size={16} className="text-muted-foreground mr-1" />
-                            Edit Translation
-                          </button>
+                return (
+                  <Fragment key={verse.numberInSurah}>
+                    {dividerLabel && (
+                      <div className="sticky top-16 z-20 bg-background/90 backdrop-blur-md flex items-center justify-center gap-2 py-2 px-2 border-b border-border/10">
+                        <div className="h-px flex-1 bg-border/20" />
+                        <span className="text-[10px] font-bold tracking-[0.1em] text-muted-foreground/60 uppercase whitespace-nowrap">
+                          {dividerLabel}
+                        </span>
+                        <div className="h-px flex-1 bg-border/20" />
+                      </div>
+                    )}
+                    <div
+                      id={`verse-${verse.numberInSurah}`}
+                      className="relative verse-card transition-all duration-300 rounded-2xl"
+                    >
+                      {/* Top row */}
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                          <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-secondary text-xs font-semibold text-primary">
+                            {verse.numberInSurah}
+                          </span>
+                          {bookmarked && (
+                            <BookmarkCheck size={14} className="text-gold" />
+                          )}
                         </div>
+                        <div className="relative" ref={menuVerse === verse.numberInSurah ? menuRef : undefined}>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setMenuVerse(menuVerse === verse.numberInSurah ? null : verse.numberInSurah);
+                            }}
+                            className="p-1.5 rounded-lg transition"
+                          >
+                            <MoreVertical size={16} className="text-muted-foreground" />
+                          </button>
+                          {menuVerse === verse.numberInSurah && (
+                            <div className="absolute right-0 top-8 w-48 bg-card border border-border rounded-xl shadow-lg py-1 z-50">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  toggleBookmark(surahNumber, verse.numberInSurah);
+                                  setMenuVerse(null);
+                                }}
+                                className="flex items-center gap-2 w-full px-3 py-2 text-[15px] font-medium transition text-foreground/90"
+                              >
+                                <BookmarkIcon size={16} className="text-muted-foreground mr-1" />
+                                {bookmarked ? 'Remove Bookmark' : 'Bookmark'}
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setMenuVerse(null);
+                                  if (tafsirExists) {
+                                    navigate(`/tafsir-view?surah=${surahNumber}&verse=${verse.numberInSurah}`);
+                                  } else {
+                                    navigate(`/tafsir-builder?surah=${surahNumber}&verse=${verse.numberInSurah}`);
+                                  }
+                                }}
+                                className="flex items-center gap-2 w-full px-3 py-2 text-[15px] font-medium transition text-foreground/90"
+                              >
+                                <FileText size={16} className="text-muted-foreground mr-1" />
+                                {tafsirExists ? 'View Tafsirs' : 'Add Tafsirs'}
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setMenuVerse(null);
+                                  if (explained) {
+                                    navigate(`/explanation-view?surah=${surahNumber}&verse=${verse.numberInSurah}`);
+                                  } else {
+                                    navigate(`/explanation-builder?surah=${surahNumber}&verse=${verse.numberInSurah}`);
+                                  }
+                                }}
+                                className="flex items-center gap-2 w-full px-3 py-2 text-[15px] font-medium transition text-foreground/90"
+                              >
+                                <BookOpen size={16} className="text-muted-foreground mr-1" />
+                                {explained ? 'View Explanation' : 'Add Explanation'}
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setMenuVerse(null);
+                                  if (note) {
+                                    navigate(`/note-view?id=${note.id}`);
+                                  } else {
+                                    navigate(`/note-builder?surah=${surahNumber}&verse=${verse.numberInSurah}`);
+                                  }
+                                }}
+                                className="flex items-center gap-2 w-full px-3 py-2 text-[15px] font-medium transition text-foreground/90"
+                              >
+                                <PenLine size={16} className="text-muted-foreground mr-1" />
+                                {note ? 'View Note' : 'Add Note'}
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setEditText(customTrans || verse.translation);
+                                  setEditingVerse(verse.numberInSurah);
+                                  setMenuVerse(null);
+                                }}
+                                className="flex items-center gap-2 w-full px-3 py-2 text-[15px] font-medium transition text-foreground/90"
+                              >
+                                <Pencil size={16} className="text-muted-foreground mr-1" />
+                                Edit Translation
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Arabic */}
+                      {settings.showWordByWord ? (
+                        <WordByWordVerse
+                          verse={verse}
+                          showTransliteration={settings.showWordTransliteration}
+                          onWordClick={(w) => setSelectedWord(w)}
+                        />
+                      ) : verse.words && verse.words.length > 0 ? (
+                        /* Verse mode — clickable words WITH Tajweed colors */
+                        <p
+                          className="arabic-text text-center text-foreground mb-4"
+                          style={{
+                            fontSize: `${settings.arabicFontSize}px`,
+                            lineHeight: settings.lineSpacing
+                          }}
+                        >
+                          {(() => {
+                            const segments = splitTajweedWords(verse.text);
+                            const wordMap = buildWordMap(segments, verse.words);
+                            return segments.map((seg, i) => {
+                              const word = wordMap[i];
+                              return (
+                                <span
+                                  key={i}
+                                  onClick={() => { if (word) setSelectedWord(word); }}
+                                  className={word ? 'cursor-pointer hover:opacity-60 active:opacity-40 transition-opacity' : ''}
+                                >
+                                  <TajweedText text={seg} showColors={settings.showTajweed} />{' '}
+                                </span>
+                              );
+                            });
+                          })()}
+                        </p>
+                      ) : (
+                        /* Fallback: word data not yet loaded */
+                        <p
+                          className="arabic-text text-center text-foreground mb-4"
+                          style={{
+                            fontSize: `${settings.arabicFontSize}px`,
+                            lineHeight: settings.lineSpacing
+                          }}
+                        >
+                          <TajweedText text={verse.text} showColors={settings.showTajweed} waqf={verse.waqf} />
+                        </p>
                       )}
+
+                      {/* Full Verse Transliteration */}
+                      {settings.showTransliteration && (
+                        <p
+                          className="font-serif italic text-primary/60 text-center mb-3 leading-snug px-4"
+                          style={{ fontSize: `${settings.translationFontSize - 1}px` }}
+                        >
+                          {verse.transliteration}
+                        </p>
+                      )}
+
+                      {/* Translation */}
+                      <p
+                        className="font-display text-muted-foreground text-center"
+                        style={{
+                          fontSize: `${settings.language === 'en' ? settings.translationFontSize + 2 : settings.translationFontSize}px`,
+                          lineHeight: 1.6,
+                          direction: settings.language === 'ur' ? 'rtl' : 'ltr',
+                          fontVariationSettings: "'SOFT' 50, 'WONK' 0"
+                        }}
+                      >
+                        {displayTranslation}
+                      </p>
                     </div>
-                  </div>
-
-                  {/* Arabic */}
-                  {settings.showWordByWord ? (
-                    <WordByWordVerse 
-                      verse={verse} 
-                      showTransliteration={settings.showWordTransliteration} 
-                      onWordClick={(w) => setSelectedWord(w)}
-                    />
-                  ) : (
-                    <p
-                      className="arabic-text text-center text-foreground mb-4"
-                      style={{
-                        fontSize: `${settings.arabicFontSize}px`,
-                        lineHeight: settings.lineSpacing
-                      }}
-                    >
-                      <TajweedText text={verse.text} showColors={settings.showTajweed} waqf={verse.waqf} />
-                    </p>
-                  )}
-
-                  {/* Full Verse Transliteration */}
-                  {settings.showTransliteration && (
-                    <p 
-                      className="font-serif italic text-primary/60 text-center mb-3 leading-snug px-4"
-                      style={{ fontSize: `${settings.translationFontSize - 1}px` }}
-                    >
-                      {verse.words?.filter(w => w.charTypeName !== 'end').map(w => w.transliteration).join(' ')}
-                    </p>
-                  )}
-
-                  {/* Translation */}
-                  <p
-                    className="font-display text-muted-foreground text-center"
-                    style={{
-                      fontSize: `${settings.language === 'en' ? settings.translationFontSize + 2 : settings.translationFontSize}px`,
-                      lineHeight: 1.6,
-                      direction: settings.language === 'ur' ? 'rtl' : 'ltr',
-                      fontVariationSettings: "'SOFT' 50, 'WONK' 0"
-                    }}
-                  >
-                    {displayTranslation}
-                  </p>
-                </motion.div>
-              </div>
-            );
+                  </Fragment>
+                );
               })}
+              {/* Load-more sentinel */}
+              {verses && renderLimit < verses.length && (
+                <div ref={loadMoreRef} className="h-16 flex items-center justify-center">
+                  <div className="w-6 h-6 rounded-full border-2 border-primary/30 border-t-primary animate-spin" />
+                </div>
+              )}
             </div>
           </motion.div>
         )}
@@ -599,58 +800,183 @@ export default function SurahReadingPage() {
 
       {/* Edit Translation Drawer */}
       <Drawer open={!!editingVerse} onOpenChange={(open) => !open && setEditingVerse(null)}>
-         <DrawerContent className="rounded-t-[2rem] bg-white border-none focus:outline-none flex flex-col max-h-[90vh]">
-            {editingVerse && (
-               <>
-                  <div className="flex-1 overflow-y-auto px-7 pt-5 scrollbar-hide">
-                     <DrawerTitle className="font-display text-xl mb-1 text-foreground">Edit Translation</DrawerTitle>
-                     <DrawerDescription className="text-muted-foreground mb-6">Create a custom translation for Verse {editingVerse}</DrawerDescription>
-                     
-                     <div className="mb-6">
-                        <label className="block text-[11px] font-semibold text-muted-foreground uppercase tracking-widest mb-3">
-                           CUSTOM TRANSLATION ({settings.language.toUpperCase()})
-                        </label>
-                        <textarea 
-                           className="w-full bg-muted/30 border border-border rounded-2xl p-4 text-[15px] focus:outline-none focus:border-primary transition-colors min-h-[200px] resize-y"
-                           value={editText}
-                           onChange={(e) => setEditText(e.target.value)}
-                           dir={settings.language === 'ur' ? 'rtl' : 'ltr'}
-                           placeholder="Write your custom translation..."
-                        />
-                     </div>
-                  </div>
-                  
-                  <div className="px-7 pb-[max(1.25rem,env(safe-area-inset-bottom,1.25rem))] pt-4 bg-background border-t border-border shrink-0 flex gap-3">
-                     <button 
-                        disabled={isResetDisabled}
-                        onClick={() => {
-                           resetCustomTranslation(surahNumber, editingVerse, settings.language);
-                           setEditingVerse(null);
-                        }} 
-                        className={`flex-1 font-medium py-[14px] rounded-full transition-colors text-[15px] ${isResetDisabled ? 'bg-secondary text-muted-foreground/80 cursor-not-allowed' : 'bg-destructive/10 text-destructive'}`}
-                     >
-                        Reset
-                     </button>
-                     <button 
-                        disabled={isSaveDisabled}
-                        onClick={() => {
-                           if (editText.trim()) {
-                              saveCustomTranslation(surahNumber, editingVerse, settings.language, editText.trim());
-                           }
-                           setEditingVerse(null);
-                        }} 
-                        className={`flex-[2] font-medium py-[14px] rounded-full transition-colors text-[15px] ${isSaveDisabled ? 'bg-secondary text-muted-foreground/80 cursor-not-allowed' : 'bg-primary text-primary-foreground'}`}
-                     >
-                        Save Translation
-                     </button>
-                  </div>
-               </>
-            )}
-         </DrawerContent>
+        <DrawerContent className="rounded-t-[2rem] bg-white border-none focus:outline-none flex flex-col max-h-[90vh]">
+          {editingVerse && (
+            <>
+              <div className="flex-1 overflow-y-auto px-7 pt-5 scrollbar-hide">
+                <DrawerTitle className="font-display text-xl mb-1 text-foreground">Edit Translation</DrawerTitle>
+                <DrawerDescription className="text-muted-foreground mb-6">Create a custom translation for Verse {editingVerse}</DrawerDescription>
+
+                <div className="mb-6">
+                  <label className="block text-[11px] font-semibold text-muted-foreground uppercase tracking-widest mb-3">
+                    CUSTOM TRANSLATION ({settings.language.toUpperCase()})
+                  </label>
+                  <textarea
+                    className="w-full bg-muted/30 border border-border rounded-2xl p-4 text-[15px] focus:outline-none focus:border-primary transition-colors min-h-[200px] resize-y"
+                    value={editText}
+                    onChange={(e) => setEditText(e.target.value)}
+                    dir={settings.language === 'ur' ? 'rtl' : 'ltr'}
+                    placeholder="Write your custom translation..."
+                  />
+                </div>
+              </div>
+
+              <div className="px-7 pb-[max(1.25rem,env(safe-area-inset-bottom,1.25rem))] pt-4 bg-background border-t border-border shrink-0 flex gap-3">
+                <button
+                  disabled={isResetDisabled}
+                  onClick={() => {
+                    resetCustomTranslation(surahNumber, editingVerse, settings.language);
+                    setEditingVerse(null);
+                  }}
+                  className={`flex-1 font-medium py-[14px] rounded-full transition-colors text-[15px] ${isResetDisabled ? 'bg-secondary text-muted-foreground/80 cursor-not-allowed' : 'bg-destructive/10 text-destructive'}`}
+                >
+                  Reset
+                </button>
+                <button
+                  disabled={isSaveDisabled}
+                  onClick={() => {
+                    if (editText.trim()) {
+                      saveCustomTranslation(surahNumber, editingVerse, settings.language, editText.trim());
+                    }
+                    setEditingVerse(null);
+                  }}
+                  className={`flex-[2] font-medium py-[14px] rounded-full transition-colors text-[15px] ${isSaveDisabled ? 'bg-secondary text-muted-foreground/80 cursor-not-allowed' : 'bg-primary text-primary-foreground'}`}
+                >
+                  Save Translation
+                </button>
+              </div>
+            </>
+          )}
+        </DrawerContent>
       </Drawer>
-      
-      <WordDetailDrawer 
-        word={selectedWord} 
+
+      {/* Quick Settings Drawer */}
+      <Drawer open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
+        <DrawerContent className="rounded-t-[2rem] bg-card border-none focus:outline-none flex flex-col max-h-[85vh] overflow-hidden">
+          <div className="mx-auto w-12 h-1.5 bg-secondary/50 rounded-full mt-3 mb-2 shrink-0" />
+
+          <div className="flex-1 overflow-y-auto px-6 pt-2 pb-8 scrollbar-hide">
+            <DrawerTitle className="font-display text-xl font-bold mb-1 text-foreground">Quick Settings</DrawerTitle>
+            <DrawerDescription className="text-[13px] text-muted-foreground mb-6">Customize your reading experience</DrawerDescription>
+
+            <div className="space-y-6">
+              {/* SECTION: TEXT SIZES */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <TypeIcon size={16} className="text-primary" />
+                  </div>
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground/80">Typography</h3>
+                </div>
+
+                <div className="grid gap-3">
+                  {/* Arabic Size */}
+                  <div className="p-4 rounded-2xl bg-secondary/30 border border-border/40">
+                    <div className="flex justify-between items-center mb-3">
+                      <span className="text-[13px] font-semibold">Arabic Size</span>
+                      <span className="text-[13px] font-bold text-primary">{settings.arabicFontSize}px</span>
+                    </div>
+                    <Slider
+                      value={[settings.arabicFontSize]}
+                      min={20} max={60} step={2}
+                      onValueChange={([val]) => updateSettings({ arabicFontSize: val })}
+                    />
+                  </div>
+
+                  {/* Translation Size */}
+                  <div className="p-4 rounded-2xl bg-secondary/30 border border-border/40">
+                    <div className="flex justify-between items-center mb-3">
+                      <span className="text-[13px] font-semibold">Translation Size</span>
+                      <span className="text-[13px] font-bold text-primary">{settings.translationFontSize}px</span>
+                    </div>
+                    <Slider
+                      value={[settings.translationFontSize]}
+                      min={12} max={24} step={1}
+                      onValueChange={([val]) => updateSettings({ translationFontSize: val })}
+                    />
+                  </div>
+
+                  {/* Line Spacing */}
+                  <div className="p-4 rounded-2xl bg-secondary/30 border border-border/40">
+                    <div className="flex justify-between items-center mb-3">
+                      <span className="text-[13px] font-semibold">Line Spacing</span>
+                      <span className="text-[13px] font-bold text-primary">{settings.lineSpacing.toFixed(1)}x</span>
+                    </div>
+                    <Slider
+                      value={[settings.lineSpacing]}
+                      min={1.5} max={4.0} step={0.1}
+                      onValueChange={([val]) => updateSettings({ lineSpacing: val })}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* SECTION: DISPLAY */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Eye size={16} className="text-primary" />
+                  </div>
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground/80">Display</h3>
+                </div>
+
+                <div className="grid gap-2">
+                  {[
+                    {
+                      id: 'tajweed',
+                      label: 'Tajweed Colors',
+                      icon: Book,
+                      value: settings.showTajweed,
+                      onChange: () => updateSettings({ showTajweed: !settings.showTajweed })
+                    },
+                    {
+                      id: 'translit',
+                      label: 'Transliteration',
+                      icon: Globe,
+                      value: settings.showTransliteration,
+                      onChange: () => updateSettings({ showTransliteration: !settings.showTransliteration })
+                    },
+                    ...(settings.showWordByWord ? [{
+                      id: 'word-translit',
+                      label: 'Word Transliteration',
+                      icon: TypeIcon,
+                      value: settings.showWordTransliteration,
+                      onChange: () => updateSettings({ showWordTransliteration: !settings.showWordTransliteration })
+                    }] : [])
+                  ].map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={item.onChange}
+                      className={`flex items-center justify-between p-3.5 rounded-2xl transition-all border ${item.value ? 'bg-primary/5 border-primary/20' : 'bg-secondary/20 border-border/50'}`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <item.icon size={18} className={item.value ? 'text-primary' : 'text-muted-foreground'} />
+                        <span className={`text-[14px] font-semibold ${item.value ? 'text-foreground' : 'text-muted-foreground'}`}>{item.label}</span>
+                      </div>
+                      <div className={`w-10 h-6 rounded-full transition-colors relative ${item.value ? 'bg-primary' : 'bg-muted-foreground/30'}`}>
+                        <div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${item.value ? 'translate-x-4' : 'translate-x-0'}`} />
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                onClick={() => {
+                  setIsSettingsOpen(false);
+                  navigate('/settings');
+                }}
+                className="w-full py-4 rounded-2xl bg-secondary/50 text-foreground font-bold text-sm hover:bg-secondary transition-colors"
+              >
+                View All Settings
+              </button>
+            </div>
+          </div>
+        </DrawerContent>
+      </Drawer>
+
+      <WordDetailDrawer
+        word={selectedWord}
         onClose={() => setSelectedWord(null)}
       />
     </div>

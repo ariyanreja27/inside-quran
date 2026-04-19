@@ -1,0 +1,74 @@
+{
+  "surahNumber": 86,
+  "edition": "verse.transliteration",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Wassamaaa'i wattaariq"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Wa maaa adraaka mattaariq"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Annajmus saaqib"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "In kullu nafsil lammaa 'alaihaa haafiz"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Fal yanzuril insaanu mimma khuliq"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Khuliqa mim maaa'in daafiq"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Yakhruju mim bainissulbi wat taraaa'ib"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "Innahoo 'alaa raj'ihee laqaadir"
+    },
+    {
+      "numberInSurah": 9,
+      "text": "Yawma tublas saraaa'ir"
+    },
+    {
+      "numberInSurah": 10,
+      "text": "Famaa lahoo min quwwatinw wa laa naasir"
+    },
+    {
+      "numberInSurah": 11,
+      "text": "Wassamaaa'i zaatir raj'"
+    },
+    {
+      "numberInSurah": 12,
+      "text": "Wal ardi zaatis sad'"
+    },
+    {
+      "numberInSurah": 13,
+      "text": "Innahoo laqawlun fasl"
+    },
+    {
+      "numberInSurah": 14,
+      "text": "Wa maa huwa bil hazl"
+    },
+    {
+      "numberInSurah": 15,
+      "text": "Innahum yakeedoona kaidaa"
+    },
+    {
+      "numberInSurah": 16,
+      "text": "Wa akeedu kaidaa"
+    },
+    {
+      "numberInSurah": 17,
+      "text": "Famahhilil kaafireena amhilhum ruwaidaa"
+    }
+  ]
+}

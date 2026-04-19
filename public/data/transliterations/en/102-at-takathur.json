@@ -1,0 +1,38 @@
+{
+  "surahNumber": 102,
+  "edition": "verse.transliteration",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Al haaku mut takathur"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Hatta zurtumul-maqaabir"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Kalla sawfa ta'lamoon"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Thumma kalla sawfa ta'lamoon"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Kalla law ta'lamoona 'ilmal yaqeen"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Latara-wun nal jaheem"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Thumma latara wunnaha 'ainal yaqeen"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "Thumma latus alunna yauma-izin 'anin na'eem"
+    }
+  ]
+}

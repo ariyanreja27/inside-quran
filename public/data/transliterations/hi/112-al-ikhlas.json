@@ -1,0 +1,22 @@
+{
+  "surahNumber": 112,
+  "edition": "verse.transliteration",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Qul huwal laahu ahad"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Allah hus-samad"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Lam yalid wa lam yoolad"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Wa lam yakul-lahu kufuwan ahad"
+    }
+  ]
+}

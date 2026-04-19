@@ -1,0 +1,26 @@
+{
+  "surahNumber": 113,
+  "edition": "verse.transliteration",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Qul a'uzoo bi rabbil-falaq"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Min sharri ma khalaq"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Wa min sharri ghasiqin iza waqab"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Wa min sharrin-naffaa-thaati fil 'uqad"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Wa min shar ri haasidin iza hasad"
+    }
+  ]
+}

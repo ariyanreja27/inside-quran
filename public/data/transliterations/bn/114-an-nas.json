@@ -1,0 +1,30 @@
+{
+  "surahNumber": 114,
+  "edition": "verse.transliteration",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Qul a'uzu birabbin naas"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Malikin naas"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Ilaahin naas"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Min sharril was waasil khannaas"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Al lazee yuwas wisu fee sudoorin naas"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Minal jinnati wan naas"
+    }
+  ]
+}

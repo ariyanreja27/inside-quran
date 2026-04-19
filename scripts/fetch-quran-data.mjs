@@ -12,9 +12,13 @@
  *   public/data/translations/hi/{NNN}-{slug}.json  (114 files)
  *   public/data/translations/ur/{NNN}-{slug}.json  (114 files)
  *   public/data/waqf/{NNN}-{slug}.json          (114 files)
+ *   public/data/transliterations/en/{NNN}-{slug}.json (114 files)
+ *   public/data/transliterations/bn/{NNN}-{slug}.json (114 files)
+ *   public/data/transliterations/hi/{NNN}-{slug}.json (114 files)
+ *   public/data/transliterations/ur/{NNN}-{slug}.json (114 files)
  *   public/data/word-by-word/{NNN}-{slug}.json   (114 files)
  *
- * Also fills: Inside-Quran.json (arabic + waqf_end + bn translation)
+ * Also fills: Inside-Quran.json (arabic + waqf_end + bn translation + transliterations)
  */
 
 import fs from 'fs';
@@ -253,7 +257,11 @@ async function fetchSurah(surah) {
     const wbwData = await fetchWithRetry(
       `${QURANCOM_BASE}/verses/by_chapter/${n}?words=true&word_fields=text_uthmani,location,translation,transliteration,root&per_page=500`
     );
-    log(' wbw✓');
+     // 8. Full-Verse Transliteration (High quality: en.transliteration)
+    const transData = await fetchWithRetry(
+      `${ALQURAN_BASE}/surah/${n}/en.transliteration`
+    );
+    log(' trans✓');
 
     // ── Process Arabic ayahs ──────────────────────────────────────────────────
     const arabicAyahs = arabicData.data.ayahs;
@@ -343,6 +351,19 @@ async function fetchSurah(surah) {
       { surahNumber: n, verses: waqfVerses }
     );
 
+    // ── Write: Dedicated Transliterations ────────────────────────────────────
+    const transVerses = (transData.data?.ayahs || []).map(a => ({
+      numberInSurah: a.numberInSurah,
+      text: a.text || ''
+    }));
+
+    ['en', 'bn', 'hi', 'ur'].forEach(lang => {
+      writeJson(
+        path.join(PUBLIC_DATA, 'transliterations', lang, surahFileName(surah)),
+        { surahNumber: n, edition: 'verse.transliteration', verses: transVerses }
+      );
+    });
+
     // ── Write: Word-by-word ───────────────────────────────────────────────────
     const wbwVerses = arabicAyahs.map(a => ({
       numberInSurah: a.numberInSurah,
@@ -364,6 +385,7 @@ async function fetchSurah(surah) {
       urVerses,
       waqfMap,
       wbwMap,
+      transVerses,
     };
 
   } catch (err) {
@@ -389,7 +411,7 @@ function updateInsideQuranJson(allSurahData) {
   for (const surahData of allSurahData) {
     if (!surahData) continue;
 
-    const { surahNumber, arabicVerses, bnVerses, hiVerses, urVerses, waqfMap, wbwMap } = surahData;
+    const { surahNumber, arabicVerses, bnVerses, hiVerses, urVerses, waqfMap, wbwMap, transVerses } = surahData;
 
     // Build lookup maps
     const arabicMap = {};
@@ -403,6 +425,9 @@ function updateInsideQuranJson(allSurahData) {
 
     const urMap = {};
     urVerses.forEach(v => { urMap[v.numberInSurah] = v.text; });
+
+    const transMap = {};
+    transVerses.forEach(v => { transMap[v.numberInSurah] = v.text; });
 
     // Find matching surah in Inside-Quran.json
     const surahEntry = insideQuran.surahs.find(s => s.surah_number === surahNumber);
@@ -431,12 +456,12 @@ function updateInsideQuranJson(allSurahData) {
       if (urMap[vNum] !== undefined) verseEntry.translations.ur = urMap[vNum];
 
       // Fill transliterations
-      const enTrans = verseEntry.translations.transliteration?.en || '';
+      const dedicatedTrans = transMap[vNum] || '';
       verseEntry.translations.transliteration = {
-        en: enTrans,
-        bn: enTrans,
-        hi: enTrans,
-        ur: enTrans
+        en: dedicatedTrans,
+        bn: dedicatedTrans,
+        hi: dedicatedTrans,
+        ur: dedicatedTrans
       };
       
       // Word Preview (word_by_word)
@@ -467,7 +492,9 @@ async function main() {
   console.log(`Inside-Quran.json: ${INSIDE_QURAN_JSON}\n`);
 
   // Ensure directories exist
-  ['meta', 'arabic', 'translations/en', 'translations/bn', 'translations/hi', 'translations/ur', 'waqf', 'word-by-word']
+  ['meta', 'arabic', 'translations/en', 'translations/bn', 'translations/hi', 'translations/ur', 
+   'transliterations/en', 'transliterations/bn', 'transliterations/hi', 'transliterations/ur',
+   'waqf', 'word-by-word']
     .forEach(d => ensureDir(path.join(PUBLIC_DATA, d)));
 
   // Write meta

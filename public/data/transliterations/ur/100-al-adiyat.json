@@ -1,0 +1,50 @@
+{
+  "surahNumber": 100,
+  "edition": "verse.transliteration",
+  "verses": [
+    {
+      "numberInSurah": 1,
+      "text": "Wal'aadi yaati dabha"
+    },
+    {
+      "numberInSurah": 2,
+      "text": "Fal moori yaati qadha"
+    },
+    {
+      "numberInSurah": 3,
+      "text": "Fal mugheeraati subha"
+    },
+    {
+      "numberInSurah": 4,
+      "text": "Fa atharna bihee naq'a"
+    },
+    {
+      "numberInSurah": 5,
+      "text": "Fawa satna bihee jam'a"
+    },
+    {
+      "numberInSurah": 6,
+      "text": "Innal-insana lirabbihee lakanood"
+    },
+    {
+      "numberInSurah": 7,
+      "text": "Wa innahu 'alaa zaalika la shaheed"
+    },
+    {
+      "numberInSurah": 8,
+      "text": "Wa innahu lihubbil khairi la shadeed"
+    },
+    {
+      "numberInSurah": 9,
+      "text": "Afala ya'lamu iza b'uthira ma filquboor"
+    },
+    {
+      "numberInSurah": 10,
+      "text": "Wa hussila maa fis sudoor"
+    },
+    {
+      "numberInSurah": 11,
+      "text": "Inna rabbahum bihim yauma 'izil la khabeer"
+    }
+  ]
+}

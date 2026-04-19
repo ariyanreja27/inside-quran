@@ -166,7 +166,7 @@ export default function NoteViewPage() {
                   remarkPlugins={[remarkGfm]}
                   components={{
                     blockquote: ({ children }) => {
-                      const firstChild = React.Children.toArray(children)[0] as any;
+                      const firstChild = React.Children.toArray(children)[0] as React.ReactElement<{ children: string }>;
                       const textContent = firstChild?.props?.children;
                       
                       if (typeof textContent === 'string' && textContent.startsWith('[!')) {
