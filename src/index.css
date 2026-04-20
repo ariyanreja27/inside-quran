@@ -156,6 +156,7 @@
     overflow: hidden;
     font-variant-ligatures: discretionary-ligatures;
     -webkit-font-feature-settings: "liga" 1, "dlig" 1;
+    font-feature-settings: "liga" 1, "dlig" 1;
     line-height: 1;
   }
 
