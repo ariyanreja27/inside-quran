@@ -223,7 +223,7 @@ export function WordDetailDrawer({ word, onClose }: { word: Word | null; onClose
 
             {/* ── Hero Section ── */}
             <div className="flex items-start gap-4 mb-10 pt-8">
-              <div className="flex flex-row-reverse items-center">
+              <div dir="rtl" className="whitespace-nowrap">
                 {stats?.morphemes.map((m, i) => (
                   <span 
                     key={i} 
@@ -234,7 +234,7 @@ export function WordDetailDrawer({ word, onClose }: { word: Word | null; onClose
                   </span>
                 ))}
                 {(!stats || stats.morphemes.length === 0) && (
-                  <p className="arabic-text text-[48px] text-foreground leading-none">{word.text}</p>
+                  <span className="arabic-text text-[48px] text-foreground leading-none">{word.text}</span>
                 )}
               </div>
               <div className="pt-2 flex-1">

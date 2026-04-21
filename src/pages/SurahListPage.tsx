@@ -220,13 +220,7 @@ export default function SurahListPage() {
             </h1>
           </div>
 
-          <button 
-            onClick={() => navigate('/last-read')}
-            className="w-10 h-10 flex items-center justify-center rounded-full text-foreground hover:bg-muted/50 transition-all outline-none"
-            aria-label="History"
-          >
-            <History size={22} />
-          </button>
+          
         </div>
       </div>
 
