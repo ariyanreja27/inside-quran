@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import type { Verse } from '@/types/quran';
 import { surahList, type SurahMeta } from '@/data/quranMeta';
 import { useSettings } from './useAppStore';
+import { getApiUrl } from '@/utils/api';
 
 // ─── Local data paths (served from public/data/) ─────────────────────────────
 const LOCAL_DATA = '/data';
@@ -31,9 +32,11 @@ function normalizeTransliteration(str: string): string {
   return trimmed;
 }
 
-/** Normalize Alif Wasla (ٱ U+0671) → plain Alif (ا U+0627) so no broken glyph appears above the letter */
+/** Normalize Alif Wasla (ٱ U+0671) → plain Alif (ا U+0627) so no broken glyph appears above the letter.
+ * Also remove U+06DF and U+06E0 which cause massive black fallback dots in certain fonts. */
 function normalizeArabic(str: string): string {
-  return str ? str.replace(/[\u0671\u0672]/g, '\u0627') : str;
+  if (!str) return str;
+  return str.replace(/[\u0671\u0672]/g, '\u0627').replace(/[\u06DF\u06E0]/g, '');
 }
 
 /** Try to fetch a local JSON file; returns null if not available (offline / file missing) */
@@ -58,6 +61,26 @@ interface LocalWord         { id: number; position: number; text: string; transl
 interface LocalWbwVerse     { numberInSurah: number; words: LocalWord[]; }
 interface LocalWbwFile      { surahNumber: number; verses: LocalWbwVerse[]; }
 
+// ─── Mushaf Page Interfaces ────────────────────────────────────────────────
+export interface MushafWord {
+  id: number;
+  position: number;
+  text_uthmani: string;
+  text_tajweed?: string;
+  char_type_name: string;
+  verse_key: string;
+}
+
+export interface MushafPage {
+  page_number: number;
+  lines: Record<number, MushafWord[]>;
+}
+
+export interface MushafMeta {
+  surah_start_pages: Record<number, number>;
+}
+
+
 export function useSurahs() {
   return useQuery<SurahMeta[]>({
     queryKey: ['surahs'],
@@ -74,94 +97,56 @@ export function useSurahVerses(surahNumber: number) {
   return useQuery<Verse[]>({
     queryKey: ['surah-verses', surahNumber, settings.language, settings.showTajweed, settings.arabicFont],
     queryFn: async () => {
-      const translationLang =
-        settings.language === 'bn' ? 'bn' :
-        settings.language === 'hi' ? 'hi' :
-        settings.language === 'ur' ? 'ur' :
-        'en';
+      try {
+        const response = await fetch(`${getApiUrl()}/api/surahs/${surahNumber}/verses`);
+        if (!response.ok) throw new Error('Failed to fetch verses from API');
+        
+        const data = await response.json();
+        const translationLang = settings.language || 'en';
 
-      const slug = surahSlug(surahNumber);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return data.verses.map((v: any) => {
+          // Use the requested font field
+          const targetFontField = settings.arabicFont;
 
-      // ── Fetch all files in PARALLEL for maximum speed ─────────────────────
-      const [
-        local,
-        localTajweed,
-        localTrans,
-        localTranslit,
-        localWaqf,
-        localWbw,
-      ] = await Promise.all([
-        fetchLocal<LocalArabicFile>(`${LOCAL_DATA}/arabic/${slug}.json`),
-        settings.showTajweed ? fetchLocal<LocalTransFile>(`${LOCAL_DATA}/tajweed/${slug}.json`) : Promise.resolve(null),
-        fetchLocal<LocalTransFile>(`${LOCAL_DATA}/translations/${translationLang}/${slug}.json`),
-        fetchLocal<LocalTransFile>(`${LOCAL_DATA}/transliterations/${translationLang}/${slug}.json`),
-        fetchLocal<LocalWaqfFile>(`${LOCAL_DATA}/waqf/${slug}.json`),
-        fetchLocal<LocalWbwFile>(`${LOCAL_DATA}/word-by-word/${slug}.json`),
-      ]);
+          let text = v[targetFontField] || v.text_uthmani || v.text;
 
-      const arabicVerses = local?.verses || [];
+          if (settings.showTajweed && v.tajweedText) {
+            text = v.tajweedText;
+          }
 
-      // Build tajweed map
-      let tajweedVerses: Record<number, string> | null = null;
-      if (settings.showTajweed && localTajweed?.verses?.length) {
-        tajweedVerses = {};
-        localTajweed.verses.forEach(v => { tajweedVerses![v.numberInSurah] = v.text; });
+          text = normalizeArabic(text);
+
+          const verseNum = v.verse_number || v.id || v.numberInSurah;
+          
+          return {
+            number: verseNum,
+            numberInSurah: verseNum,
+            text,
+            translation: v.translations?.[translationLang] || '',
+            transliteration: v.transliteration || '',
+            waqf: v.waqf || null,
+            juz: v.juz_number || 0,
+            page: v.page_number || 0,
+            hizbQuarter: v.hizb_number || 0,
+            ruku: v.rub_el_hizb_number || 0, // Fallback approximations
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            words: (v.wbw || v.words || []).map((w: any) => ({
+              ...w,
+              text: normalizeArabic(
+                settings.arabicFont === 'text_qpc_hafs'
+                  ? (w.text_qpc_hafs || w.text_uthmani || w.text) 
+                  : (w.text_uthmani || w.text)
+              ),
+              transliteration: normalizeTransliteration(w.transliteration || w.transliteration?.text || ''),
+              translation: w.translation?.text || w.translation || ''
+            })),
+          };
+        });
+      } catch (err) {
+        console.error(err);
+        return [];
       }
-
-      // Build translation map
-      const translationMap: Record<number, string> = {};
-      if (localTrans?.verses?.length) {
-        localTrans.verses.forEach(v => { translationMap[v.numberInSurah] = v.text; });
-      }
-
-      // Build transliteration map
-      const transliterationMap: Record<number, string> = {};
-      if (localTranslit?.verses?.length) {
-        localTranslit.verses.forEach(v => { transliterationMap[v.numberInSurah] = v.text; });
-      }
-
-      // Build waqf map
-      const waqfMap: Record<number, string> = {};
-      if (localWaqf?.verses?.length) {
-        localWaqf.verses.forEach(v => { if (v.waqfMark) waqfMap[v.numberInSurah] = v.waqfMark; });
-      }
-
-      // Build word-by-word map
-      const wbwMap: Record<number, LocalWord[]> = {};
-      if (localWbw?.verses?.length) {
-        localWbw.verses.forEach(v => { wbwMap[v.numberInSurah] = v.words; });
-      }
-
-      // ── 6. Build the unified Verse array ───────────────────────────────────
-      return arabicVerses.map(a => {
-        // If tajweed flag is active and we captured it, lay it atop the standard text
-        let text = a.text;
-        if (settings.showTajweed && tajweedVerses && tajweedVerses[a.numberInSurah]) {
-          text = tajweedVerses[a.numberInSurah];
-        }
-
-        // Apply Alif Wasla normalization to the verse text (removes broken glyph above ا)
-        text = normalizeArabic(text);
-
-        return {
-          number: a.numberInSurah, // global ayah number approx
-          numberInSurah: a.numberInSurah,
-          text,
-          translation: translationMap[a.numberInSurah] || '',
-          transliteration: transliterationMap[a.numberInSurah] || '',
-          waqf: waqfMap[a.numberInSurah],
-          juz: a.juz,
-          page: a.page,
-          hizbQuarter: a.hizbQuarter,
-          ruku: a.ruku,
-          surahNumber,
-          words: (wbwMap[a.numberInSurah] || []).map(w => ({
-            ...w,
-            text: normalizeArabic(w.text),
-            transliteration: normalizeTransliteration(w.transliteration)
-          })),
-        };
-      });
     },
     staleTime: Infinity,
     enabled: surahNumber > 0,

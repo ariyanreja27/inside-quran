@@ -53,7 +53,7 @@ export function TajweedText({ text, showColors }: TajweedTextProps) {
         // Apply inline color if found, else apply default inherit
         const color = tajweedColorMap[code] || 'inherit';
         elements.push(
-          <span key={`tj-${match.index}`} style={{ color }} className="font-arabic transition-colors duration-300">
+          <span key={`tj-${match.index}`} style={{ color }} className="font-arabic">
             {content}
           </span>
         );

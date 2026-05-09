@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSettings } from '@/hooks/useAppStore';
+import { getApiUrl } from '@/utils/api';
 
 interface ShaneNuzul {
   id: string;
@@ -26,7 +27,7 @@ export default function ShaneNuzulPage() {
   const [selectedSurah, setSelectedSurah] = useState<number | null>(null);
 
   useEffect(() => {
-    fetch('/data/discover/shane-nuzul.json')
+    fetch(`${getApiUrl()}/api/discover/shane-nuzul`)
       .then(res => res.json())
       .then(json => {
         setData(json);

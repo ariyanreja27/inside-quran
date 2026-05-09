@@ -8,14 +8,15 @@ import { Word } from '@/types/quran';
 import { useSettings } from '@/hooks/useAppStore';
 import { GrammarGlossary } from './GrammarGlossary';
 import { MOOD_LABELS, CASE_LABELS, getPoSColor } from '@/utils/grammar-utils';
+import { getApiUrl } from '@/utils/api';
 
 // ─── Morphology Parsing ──────────────────────────────────────────────────────
 let morphologyCache: string[] | null = null;
-const MORPHOLOGY_URL = '/data/quran-morphology.txt';
+const getMorphologyUrl = () => `${getApiUrl()}/api/morphology`;
 
 async function loadMorphologyLines(): Promise<string[]> {
   if (morphologyCache) return morphologyCache;
-  const res = await fetch(MORPHOLOGY_URL);
+  const res = await fetch(getMorphologyUrl());
   if (!res.ok) throw new Error('Failed to load morphology data');
   const text = await res.text();
   morphologyCache = text.split('\n').filter(Boolean);
@@ -34,11 +35,11 @@ interface GlossaryData {
 }
 
 let glossaryCache: GlossaryData | null = null;
-const GLOSSARY_URL = '/data/morphology-glossary.json';
+const getGlossaryUrl = () => `${getApiUrl()}/api/morphology/glossary`;
 
 async function loadGlossary(): Promise<GlossaryData> {
   if (glossaryCache) return glossaryCache;
-  const res = await fetch(GLOSSARY_URL);
+  const res = await fetch(getGlossaryUrl());
   if (!res.ok) throw new Error('Failed to load glossary');
   glossaryCache = await res.json();
   return glossaryCache!;

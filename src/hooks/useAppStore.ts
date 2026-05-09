@@ -17,9 +17,11 @@ export interface TafsirRecord {
   updatedAt: string;
 }
 
+export type ArabicFontType = 'text_noorehuda' | 'text_qpc_hafs' | 'text_uthmani_simple' | 'Amiri';
+
 export interface UserSettings {
   language: 'en' | 'bn' | 'hi' | 'ur';
-  arabicFont: 'Amiri' | 'Noorehuda';
+  arabicFont: ArabicFontType;
   arabicFontSize: number;
   translationFontSize: number;
   lineSpacing: number;
@@ -32,8 +34,8 @@ export interface UserSettings {
 
 export const defaultSettings: UserSettings = {
   language: 'en',
-  arabicFont: 'Amiri',
-  arabicFontSize: 24,
+  arabicFont: 'text_qpc_hafs',
+  arabicFontSize: 34,
   translationFontSize: 14,
   lineSpacing: 2.0,
 
@@ -52,9 +54,17 @@ export function useSettings() {
 
   useEffect(() => {
     // Dynamically apply chosen Arabic font to the CSS variables
-    const fontStr = settings.arabicFont === 'Noorehuda' 
-      ? "'Noorehuda', 'Amiri', 'Traditional Arabic', serif"
-      : "'Amiri', 'Traditional Arabic', serif";
+    let fontStr = "'Amiri', 'Traditional Arabic', serif";
+    
+    switch(settings.arabicFont) {
+      case 'text_noorehuda':
+        fontStr = "'Noorehuda', 'Amiri', 'Traditional Arabic', serif";
+        break;
+      case 'text_qpc_hafs':
+        fontStr = "'KFGQPC Uthmanic Script HAFS', 'UthmaniQuran', 'Scheherazade New', 'Amiri', serif";
+        break;
+    }
+    
     document.documentElement.style.setProperty('--font-arabic', fontStr);
   }, [settings.arabicFont]);
 

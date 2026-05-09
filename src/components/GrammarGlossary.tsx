@@ -9,6 +9,7 @@ import {
 import { Info } from 'lucide-react';
 
 import { getPoSColor } from '@/utils/grammar-utils';
+import { getApiUrl } from '@/utils/api';
 
 interface GlossaryTerm {
   label: string;
@@ -24,7 +25,7 @@ export function GrammarGlossary() {
   const [data, setData] = React.useState<GlossaryData | null>(null);
 
   React.useEffect(() => {
-    fetch('/data/morphology-glossary.json')
+    fetch(`${getApiUrl()}/api/morphology/glossary`)
       .then(res => res.json())
       .then(setData)
       .catch(console.error);

@@ -47,7 +47,7 @@ export default function SettingsPage() {
   const { lastRead } = useLastRead();
   const { customTranslations } = useCustomTranslations();
 
-  const targetArabicFontSize = settings.arabicFont === 'Noorehuda' ? 34 : 24;
+  const targetArabicFontSize = settings.arabicFont === 'text_noorehuda' ? 34 : 24;
 
   const isModified =
     settings.arabicFontSize !== targetArabicFontSize ||
@@ -242,77 +242,32 @@ export default function SettingsPage() {
     onChange: (val: number) => void;
     description?: string;
   }) => {
-    const cardRef = useRef<HTMLDivElement>(null);
-    const [isDragging, setIsDragging] = useState(false);
-
-    const handleUpdate = useCallback((clientX: number) => {
-      if (!cardRef.current) return;
-      const rect = cardRef.current.getBoundingClientRect();
-      const x = clientX - rect.left;
-      const percentage = Math.min(Math.max(x / rect.width, 0), 1);
-      const newValue = min + percentage * (max - min);
-      const steppedValue = Math.round(newValue / step) * step;
-      onChange(Number(steppedValue.toFixed(1)));
-    }, [min, max, step, onChange]);
-
-    useEffect(() => {
-      const handleMove = (e: MouseEvent | TouchEvent) => {
-        if (!isDragging) return;
-        const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-        handleUpdate(clientX);
-      };
-      const handleEnd = () => setIsDragging(false);
-
-      if (isDragging) {
-        window.addEventListener('mousemove', handleMove);
-        window.addEventListener('mouseup', handleEnd);
-        window.addEventListener('touchmove', handleMove);
-        window.addEventListener('touchend', handleEnd);
-      }
-      return () => {
-        window.removeEventListener('mousemove', handleMove);
-        window.removeEventListener('mouseup', handleEnd);
-        window.removeEventListener('touchmove', handleMove);
-        window.removeEventListener('touchend', handleEnd);
-      };
-    }, [isDragging, handleUpdate]);
-
-    const percentage = (value - min) / (max - min);
-
     return (
-      <div 
-        ref={cardRef}
-        onMouseDown={() => setIsDragging(true)}
-        onTouchStart={() => setIsDragging(true)}
-        className="relative h-20 bg-card border border-border/40 rounded-2xl overflow-hidden cursor-ew-resize select-none touch-none group transition-all hover:border-border"
-      >
-        {/* The "Liquid" Fill */}
-        <motion.div 
-          initial={false}
-          animate={{ width: `${percentage * 100}%` }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="absolute inset-y-0 left-0 bg-primary/[0.08]"
-        />
-        
-        {/* Interaction Indicator Line */}
-        <motion.div 
-          initial={false}
-          animate={{ left: `${percentage * 100}%`, opacity: isDragging ? 1 : 0 }}
-          className="absolute inset-y-0 w-0.5 bg-primary/20 pointer-events-none"
-        />
-
-        {/* Content */}
-        <div className="absolute inset-0 px-5 flex items-center justify-between pointer-events-none">
-          <div>
-            <p className="text-[14px] font-bold text-foreground tracking-tight">{label}</p>
-            <p className="text-[10px] text-muted-foreground opacity-60 mt-0.5 uppercase tracking-wider">{description}</p>
-          </div>
-          <div className="text-right">
-            <span className="text-[18px] font-bold text-primary tabular-nums tracking-tighter">
-              {value}
-              <span className="text-[10px] ml-1 opacity-50 font-medium">{unit}</span>
-            </span>
-          </div>
+      <div className="flex flex-col gap-2">
+        <div>
+          <p className="text-[16px] font-semibold text-foreground tracking-tight">{label}</p>
+          {description && <p className="text-[12px] text-muted-foreground mt-0.5">{description}</p>}
+        </div>
+        <div className="flex items-center justify-between mt-2">
+          <button 
+            onClick={() => onChange(Math.max(min, value - step))}
+            disabled={value <= min}
+            className="w-[52px] h-[46px] rounded-[14px] bg-[#F3EFE9] dark:bg-secondary/40 flex items-center justify-center hover:bg-[#E8E4DD] dark:hover:bg-secondary transition-colors disabled:opacity-50"
+          >
+            <Minus size={18} strokeWidth={2.5} className="text-foreground" />
+          </button>
+          
+          <span className="text-[17px] font-medium text-foreground text-center flex-1">
+            {value}{unit}
+          </span>
+          
+          <button 
+            onClick={() => onChange(Math.min(max, value + step))}
+            disabled={value >= max}
+            className="w-[52px] h-[46px] rounded-[14px] bg-[#F3EFE9] dark:bg-secondary/40 flex items-center justify-center hover:bg-[#E8E4DD] dark:hover:bg-secondary transition-colors disabled:opacity-50"
+          >
+            <Plus size={18} strokeWidth={2.5} className="text-foreground" />
+          </button>
         </div>
       </div>
     );
@@ -408,42 +363,49 @@ export default function SettingsPage() {
           </div>
           <div className="bg-card border border-border rounded-2xl p-4 space-y-6 shadow-sm">
             <p className="text-sm font-bold mb-4">Arabic Script Type</p>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-3 pb-2 -mx-4 px-4">
               {[
-                { id: 'Amiri', label: 'Amiri' },
-                { id: 'Noorehuda', label: 'Noorehuda' }
-              ].map((font) => (
-                <button
-                  key={font.id}
-                  onClick={() => {
-                    if (settings.arabicFont === font.id) return;
-                    const newSize = font.id === 'Amiri' ? 24 : 34;
-                    updateSettings({ arabicFont: font.id as 'Amiri' | 'Noorehuda', arabicFontSize: newSize });
-                  }}
-                  className={`flex flex-col items-center justify-center p-4 rounded-2xl transition-all h-[90px] border-2 ${
-                    settings.arabicFont === font.id
-                      ? 'bg-secondary/40 border-primary'
-                      : 'bg-white border-border/40 opacity-80'
-                  }`}
-                >
-                  <span 
-                    className="text-[32px] mb-2 leading-none"
-                    style={{ 
-                      fontFamily: font.id,
-                      color: settings.arabicFont === font.id ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground))'
+                { id: 'text_noorehuda', label: 'Noorehuda' },
+                { id: 'text_qpc_hafs', label: 'KFGQPC Hafs' },
+                { id: 'text_uthmani_simple', label: 'Uthmani Simple' }
+              ].map((font) => {
+                let previewFontFamily = "'Amiri', serif";
+                if (font.id === 'text_noorehuda') previewFontFamily = "'Noorehuda', 'Amiri', serif";
+                else if (font.id === 'text_qpc_hafs') previewFontFamily = "'KFGQPC Uthmanic Script HAFS', 'UthmaniQuran', serif";
+
+                return (
+                  <button
+                    key={font.id}
+                    onClick={() => {
+                      if (settings.arabicFont === font.id) return;
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      updateSettings({ arabicFont: font.id as any });
                     }}
-                  >
-                    بِسْمِ اللَّهِ
-                  </span>
-                  <span 
-                    className={`text-[13px] font-bold ${
-                      settings.arabicFont === font.id ? 'text-primary' : 'text-muted-foreground'
+                    className={`flex-none min-w-[160px] snap-center flex flex-col items-center justify-center p-4 rounded-2xl transition-all h-[90px] border-2 ${
+                      settings.arabicFont === font.id
+                        ? 'bg-[#F1EFE9] dark:bg-secondary/40 border-primary'
+                        : 'bg-white dark:bg-card border-border/40 opacity-90'
                     }`}
                   >
-                    {font.label}
-                  </span>
-                </button>
-              ))}
+                    <span 
+                      className="text-[28px] mb-2 leading-none"
+                      style={{ 
+                        color: settings.arabicFont === font.id ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground))',
+                        fontFamily: previewFontFamily
+                      }}
+                    >
+                      بِسْمِ اللَّهِ
+                    </span>
+                    <span 
+                      className={`text-[13px] font-bold text-center leading-tight ${
+                        settings.arabicFont === font.id ? 'text-primary' : 'text-muted-foreground'
+                      }`}
+                    >
+                      {font.label}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
 
             <div className="h-px bg-border/50 -mx-4" />
@@ -457,7 +419,6 @@ export default function SettingsPage() {
                 min={16} max={56} step={2}
                 onChange={(val: number) => updateSettings({ arabicFontSize: val })}
               />
-
               <MinimalCardControl
                 label="Translation Size"
                 description={`Font size for ${settings.language === 'en' ? 'English' : settings.language === 'bn' ? 'Bengali' : settings.language === 'hi' ? 'Hindi' : 'Urdu'}`}

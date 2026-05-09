@@ -14,7 +14,15 @@ import { Slider } from "@/components/ui/slider";
 import { TajweedText } from '@/components/TajweedText';
 import { WordByWordVerse } from '@/components/WordByWordVerse';
 import { WordDetailDrawer } from '@/components/WordDetailDrawer';
+import { SurahBanner } from '@/components/SurahBanner';
+import { AyahMarker } from '@/components/AyahMarker';
+import { PagePill } from '@/components/PagePill';
 import type { Verse, Word } from '@/types/quran';
+
+const arabicVerseNumber = (num: number) => {
+  const arabicNumbers = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+  return num.toString().split('').map(n => arabicNumbers[parseInt(n)]).join('');
+};
 
 export default function SurahReadingPage() {
   const { number } = useParams<{ number: string }>();
@@ -50,6 +58,8 @@ export default function SurahReadingPage() {
   const [currentRuku, setCurrentRuku] = useState<number | null>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [renderLimit, setRenderLimit] = useState(30);
+
+
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
   // Tracking variables for Juz/Page/Ruku dividers
@@ -330,12 +340,12 @@ export default function SurahReadingPage() {
   const splitTajweedWords = (text: string): string[] => {
     const words: string[] = [];
     let current = '';
-    let depth = 0;
+    let inBracket = false;
     for (const ch of text) {
-      if (ch === '[') depth++;
-      else if (ch === ']') depth--;
+      if (ch === '[') inBracket = true;
+      else if (ch === ']') inBracket = false;
       // Split on any whitespace while outside brackets
-      if (/\s/.test(ch) && depth === 0) {
+      if (/\s/.test(ch) && !inBracket) {
         if (current.trim()) words.push(current.trim());
         current = '';
       } else {
@@ -351,12 +361,12 @@ export default function SurahReadingPage() {
     str
       .replace(/\[[a-z]+(?::\d+)?\[([^\]]+)\]\]/g, '$1') // [code:id[text]]  (two closings)
       .replace(/\[[a-z]+(?::\d+)?\[([^\]]+)\]/g, '$1')   // [code:id[text]   (one closing)
-      .replace(/[\[\]]/g, '');                              // purge any leftover brackets
+      .replace(/[[\]]/g, '');                              // purge any leftover brackets
 
   // Normalize for comparison: strip brackets then diacritics + alif variants
   const normAr = (str: string): string =>
     str
-      .replace(/[\[\]]/g, '')                                          // kill stray brackets
+      .replace(/[[\]]/g, '')                                          // kill stray brackets
       .replace(/[\u064B-\u065F\u0610-\u061A\u0670\u06D6-\u06ED]/g, '') // diacritics
       .replace(/[\u0671\u0672\u0622\u0623\u0625]/g, '\u0627')                 // alif variants → ا
       .replace(/\uFE8E|\uFE8D/g, '\u0627')
@@ -460,24 +470,26 @@ export default function SurahReadingPage() {
                 <div
                   className="absolute rounded-full bg-card shadow-md inset-y-1 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
                   style={{
-                    left: settings.showWordByWord ? '4px' : '50%',
-                    right: settings.showWordByWord ? '50%' : '4px',
+                    width: 'calc(50% - 2px)',
+                    left: settings.showWordByWord 
+                        ? '4px' 
+                        : 'calc(50% + 2px)',
                   }}
                 />
                 <button
                   onClick={() => updateSettings({ showWordByWord: true })}
-                  className={`flex-1 relative z-10 py-2.5 text-[11px] font-black tracking-widest rounded-full transition-all ${settings.showWordByWord
+                  className={`flex-1 relative z-10 py-2.5 text-[10px] font-black tracking-widest rounded-full transition-all ${settings.showWordByWord
                       ? 'text-primary'
-                      : 'text-muted-foreground/50 ring-1 ring-inset ring-border/60 hover:text-muted-foreground'
+                      : 'text-muted-foreground/50 hover:text-muted-foreground'
                     }`}
                 >
                   WORD
                 </button>
                 <button
                   onClick={() => updateSettings({ showWordByWord: false })}
-                  className={`flex-1 relative z-10 py-2.5 text-[11px] font-black tracking-widest rounded-full transition-all ${!settings.showWordByWord
+                  className={`flex-1 relative z-10 py-2.5 text-[10px] font-black tracking-widest rounded-full transition-all ${!settings.showWordByWord
                       ? 'text-primary'
-                      : 'text-muted-foreground/50 ring-1 ring-inset ring-border/60 hover:text-muted-foreground'
+                      : 'text-muted-foreground/50 hover:text-muted-foreground'
                     }`}
                 >
                   VERSE
@@ -569,22 +581,24 @@ export default function SurahReadingPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full pb-12 pt-6"
           >
             {/* Bismillah & Surah Calligraphy */}
-            <div className="text-center py-5 px-4 flex flex-col items-center gap-1">
-              <p className="surah-calligraphy ">
-                surah{surahNumber.toString().padStart(3, '0')} surah-icon
-              </p>
-              {surahNumber !== 1 && surahNumber !== 9 && (
-                <p className="bismillah-text text-4xl leading-normal mt-3 -mb-4 border-b-0">
-                  ﷽
+            <div className="text-center py-2 px-4 flex flex-col items-center gap-1">
+                <p className="surah-calligraphy ">
+                  surah{surahNumber.toString().padStart(3, '0')} surah-icon
                 </p>
-              )}
-            </div>
+
+                {surahNumber !== 1 && surahNumber !== 9 && (
+                  <p className="bismillah-text text-4xl leading-normal mt-3 -mb-4 border-b-0">
+                    ﷽
+                  </p>
+                )}
+              </div>
 
             {/* Verses */}
             <div
-              className="px-4 space-y-2 mt-2"
+              className="mt-2 px-4 space-y-3"
               ref={(el) => { if (el && !isRendered) setIsRendered(true); }}
             >
               {verses?.slice(0, renderLimit).map((verse) => {
@@ -618,12 +632,15 @@ export default function SurahReadingPage() {
                     )}
                     <div
                       id={`verse-${verse.numberInSurah}`}
-                      className="relative verse-card transition-all duration-300 rounded-2xl"
+                      className="relative verse-card transition-all duration-300 rounded-2xl bg-card border border-border p-5"
                     >
                       {/* Top row */}
-                      <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-2">
-                          <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-secondary text-xs font-semibold text-primary">
+                          <span 
+                            className="flex items-center justify-center w-8 h-8 rounded-full text-xs font-bold"
+                            style={{ backgroundColor: '#F1EFE9', color: '#7C3636' }}
+                          >
                             {verse.numberInSurah}
                           </span>
                           {bookmarked && (
@@ -716,50 +733,131 @@ export default function SurahReadingPage() {
                       </div>
 
                       {/* Arabic */}
-                      {settings.showWordByWord ? (
-                        <WordByWordVerse
-                          verse={verse}
-                          showTransliteration={settings.showWordTransliteration}
-                          onWordClick={(w) => setSelectedWord(w)}
-                        />
-                      ) : verse.words && verse.words.length > 0 ? (
-                        /* Verse mode — clickable words WITH Tajweed colors */
-                        <p
-                          className="arabic-text text-center text-foreground mb-4"
-                          style={{
-                            fontSize: `${settings.arabicFontSize}px`,
-                            lineHeight: settings.lineSpacing
-                          }}
-                        >
-                          {(() => {
-                            const segments = splitTajweedWords(verse.text);
-                            const wordMap = buildWordMap(segments, verse.words);
-                            return segments.map((seg, i) => {
-                              const word = wordMap[i];
+                      {(() => {
+                        let arabicText = verse.text || '';
+                        // Strip Private Use Area characters
+                        arabicText = arabicText.replace(/[\uE000-\uF8FF]/g, '');
+                        // Fix dataset anomalies where single-letter prefixes (Waw, Fa, Ba, Ka, Li) are separated by spaces
+                        arabicText = arabicText.replace(/(^|\s)([وفبكلساأ][\u064B-\u065F]*)\s+(?=\S)/g, (match, p1, p2) => p1 + p2);
+
+                        const rawLocalWords = arabicText.split(/ +/);
+                        const localWords: string[] = [];
+                        for (const w of rawLocalWords) {
+                          // If the word consists entirely of marks/numbers/waqf signs, append it to the previous word
+                          // eslint-disable-next-line no-misleading-character-class
+                          if (/^[\u0600-\u061C\u064B-\u065F\u0660-\u066D\u0670\u06D6-\u06ED\u06F0-\u06F9٪]+$/.test(w) && localWords.length > 0) {
+                            localWords[localWords.length - 1] += ' ' + w;
+                          } else {
+                            localWords.push(w);
+                          }
+                        }
+
+                        if (settings.showWordByWord) {
+                          return (
+                            <div 
+                              className="flex flex-wrap justify-center gap-y-6 gap-x-1.5 w-full pt-4 pb-4"
+                              style={{
+                                fontSize: `${settings.arabicFontSize}px`,
+                                lineHeight: settings.lineSpacing,
+                                direction: 'rtl'
+                              }}
+                            >
+                              {localWords.map((wordStr, index) => {
+                                const wordData = verse.words?.[index];
+                                const isEnd = wordData?.charTypeName === 'end' || /^[\u0660-\u06690-9]+$/.test(wordStr) || wordStr.includes('۝') || wordStr.includes('٪');
+                                
+                                return (
+                                  <div 
+                                    key={`${verse.numberInSurah}-${index}`} 
+                                    className={`relative group inline-flex flex-col items-center cursor-pointer`}
+                                    onClick={() => {
+                                      if (!isEnd && wordData) {
+                                        setSelectedWord({ ...wordData, text: wordStr });
+                                      }
+                                    }}
+                                  >
+                                     <span 
+                                        className={`arabic-text transition-colors duration-200 ${
+                                          !isEnd && wordData ? (
+                                            isDark 
+                                              ? 'group-hover:text-primary group-hover:bg-primary/20 rounded px-1' 
+                                              : 'group-hover:text-primary group-hover:bg-primary/10 rounded px-1'
+                                          ) : ''
+                                        }`}
+                                        dangerouslySetInnerHTML={{ __html: wordStr }}
+                                     />
+                                     
+                                     {/* Word By Word Data */}
+                                     {!isEnd && wordData && (
+                                        <div className="flex flex-col items-center mt-2 opacity-100 transition-opacity duration-200">
+                                          {settings.showWordTransliteration && (
+                                           <span className="text-[11px] text-primary/70 font-medium mb-0.5 font-sans whitespace-nowrap">{wordData.transliteration}</span>
+                                          )}
+                                           <span className="text-[12px] text-muted-foreground font-sans text-center max-w-[80px] leading-tight">{wordData.translation}</span>
+                                        </div>
+                                     )}
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          );
+                        }
+
+                        // Standard Mode (No Word by Word Layout, just inline spans for perfect Arabic kerning)
+                        return (
+                          <div 
+                            className="text-center w-full pt-4 pb-4 arabic-text"
+                            style={{
+                              fontSize: `${settings.arabicFontSize}px`,
+                              lineHeight: settings.lineSpacing,
+                              direction: 'rtl'
+                            }}
+                          >
+                            {localWords.map((wordStr, index) => {
+                              const wordData = verse.words?.[index];
+                              const isEnd = wordData?.charTypeName === 'end' || /^[\u0660-\u06690-9]+$/.test(wordStr) || wordStr.includes('۝') || wordStr.includes('٪');
+                              
                               return (
-                                <span
-                                  key={i}
-                                  onClick={() => { if (word) setSelectedWord(word); }}
-                                  className={word ? 'cursor-pointer hover:opacity-60 active:opacity-40 transition-opacity' : ''}
+                                <span 
+                                  key={`${verse.numberInSurah}-${index}`} 
+                                  className={`relative group inline-block cursor-pointer`}
+                                  onClick={() => {
+                                    if (!isEnd && wordData) {
+                                      setSelectedWord({ ...wordData, text: wordStr });
+                                    }
+                                  }}
                                 >
-                                  <TajweedText text={seg} showColors={settings.showTajweed} />{' '}
+                                   <span 
+                                      className={`transition-colors duration-200 ${
+                                        !isEnd && wordData ? (
+                                          isDark 
+                                            ? 'group-hover:text-primary group-hover:bg-primary/20 rounded px-1' 
+                                            : 'group-hover:text-primary group-hover:bg-primary/10 rounded px-1'
+                                        ) : ''
+                                      }`}
+                                      dangerouslySetInnerHTML={{ __html: wordStr }}
+                                   />{' '}
+                                   
+                                   {/* Hover tooltip for translation only in standard mode */}
+                                   {!isEnd && wordData && (
+                                      <div className={`absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none z-10 ${
+                                        isDark 
+                                          ? 'bg-secondary text-foreground shadow-lg border border-border' 
+                                          : 'bg-primary text-primary-foreground shadow-xl'
+                                      }`}>
+                                         {wordData.translation}
+                                         {/* Little triangle pointer */}
+                                         <div className={`absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 ${
+                                           isDark ? 'bg-secondary border-b border-r border-border' : 'bg-primary'
+                                         }`} />
+                                      </div>
+                                   )}
                                 </span>
                               );
-                            });
-                          })()}
-                        </p>
-                      ) : (
-                        /* Fallback: word data not yet loaded */
-                        <p
-                          className="arabic-text text-center text-foreground mb-4"
-                          style={{
-                            fontSize: `${settings.arabicFontSize}px`,
-                            lineHeight: settings.lineSpacing
-                          }}
-                        >
-                          <TajweedText text={verse.text} showColors={settings.showTajweed} waqf={verse.waqf} />
-                        </p>
-                      )}
+                            })}
+                          </div>
+                        );
+                      })()}
 
                       {/* Full Verse Transliteration */}
                       {settings.showTransliteration && (

@@ -3,6 +3,7 @@ import { useSettings } from '@/hooks/useAppStore';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, BookOpen, Quote, Heart, Info, ChevronRight, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { getApiUrl } from '@/utils/api';
 
 interface Dua {
   id: string;
@@ -21,7 +22,7 @@ export default function DuasPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/data/discover/duas.json')
+    fetch(`${getApiUrl()}/api/discover/duas`)
       .then(res => res.json())
       .then(data => {
         setDuas(data);

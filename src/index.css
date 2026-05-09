@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Amiri:ital,wght@0,400;0,700;1,400&family=Scheherazade+New:wght@400;700&family=Katibeh&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Lateef&family=Aref+Ruqaa&display=swap');
 
 @font-face {
   font-family: 'surah-font';
@@ -12,11 +13,31 @@
   font-display: swap;
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@font-face {
+  font-family: 'KFGQPC Uthmanic Script HAFS';
+  src: url('https://cdn.jsdelivr.net/gh/quranwbw/qpc-fonts@master/KFGQPC_Uthmanic_Script_HAFS_Regular.ttf') format('truetype'),
+       url('/fonts/KFGQPCUthmanicScriptHAFS.otf') format('opentype');
+  font-display: swap;
+}
 
-@layer base {
+@font-face {
+  font-family: 'UthmaniQuran';
+  src: url('/fonts/KFGQPCUthmanicScriptHAFS.otf') format('opentype');
+  font-display: swap;
+}
+
+/* Quran.com V4 API Tajweed Rules */
+rule.madda_necessary, rule.madda_permissible, rule.madda_normal, rule.madda_obligatory { color: #D32F2F; }
+rule.ghunnah, rule.idgham_ghunnah { color: #F57C00; }
+rule.ikhfa, rule.ikhfa_shafawi { color: #1976D2; }
+rule.qalqalah { color: #9C27B0; }
+rule.idgham_without_ghunnah { color: #757575; }
+rule.idgham_mutajanisayn, rule.idgham_mutaqaribayn { color: #2E7D32; }
+rule.iqlab { color: #9C27B0; }
+
+
+
+
   :root {
     --background: 40 30% 96%;
     --foreground: 20 10% 15%;
@@ -117,25 +138,30 @@
     --explained: 140 25% 15%;
     --explained-border: 140 25% 30%;
   }
-}
 
   html {
     overflow-x: clip;
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     font-family: var(--font-body);
     -webkit-tap-highlight-color: transparent;
     overflow-x: clip;
     width: 100%;
   }
 
-@layer components {
   .arabic-text {
     font-family: var(--font-arabic);
     direction: rtl;
     line-height: 2.2;
+  }
+
+  .text-align-last-center {
+    text-align-last: center;
   }
 
   .bismillah-text {
@@ -143,13 +169,13 @@
     direction: rtl;
     line-height: 1;
     font-weight: 400;
-    @apply text-foreground;
+    color: hsl(var(--foreground));
   }
 
   .surah-calligraphy {
     font-family: 'surah-font' !important;
     font-size: 65px;
-    @apply text-foreground;
+    color: hsl(var(--foreground));
     display: block;
     height: 65px;
     white-space: nowrap;
@@ -167,27 +193,61 @@
   }
 
   .surah-card {
-    @apply bg-card rounded-2xl border border-border p-4 transition-all duration-200;
+    background-color: hsl(var(--card));
+    border-radius: 1rem;
+    border: 1px solid hsl(var(--border));
+    padding: 1rem;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
   }
 
 
 
   .verse-card {
-    @apply bg-card rounded-2xl border border-border p-5 transition-all duration-200;
+    background-color: hsl(var(--card));
+    border-radius: 1rem;
+    border: 1px solid hsl(var(--border));
+    padding: 1.25rem;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
   }
 
 
   .divider-label {
-    @apply text-xs font-medium tracking-wider uppercase text-muted-foreground;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: hsl(var(--muted-foreground));
   }
 
   .filter-chip {
-    @apply px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 cursor-pointer;
-    @apply bg-secondary text-secondary-foreground;
+    padding: 0.375rem 0.875rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 500;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
+    cursor: pointer;
+    background-color: hsl(var(--secondary));
+    color: hsl(var(--secondary-foreground));
   }
 
   .filter-chip-active {
-    @apply px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 cursor-pointer;
+    padding: 0.375rem 0.875rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 500;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
+    cursor: pointer;
     background-color: hsl(var(--primary));
     color: hsl(var(--primary-foreground));
   }
@@ -233,23 +293,45 @@
 
   /* Study Callouts */
   .callout-block {
-    @apply my-8 p-6 rounded-[1.5rem] border-l-[6px] shadow-sm;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border-radius: 1.5rem;
+    border-left-width: 6px;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   }
   .callout-linguistic {
-    @apply bg-amber-500/5 border-amber-500/30 text-amber-900 dark:text-amber-200/90;
+    background-color: rgb(245 158 11 / 0.05);
+    border-color: rgb(245 158 11 / 0.3);
+    color: rgb(120 53 15);
+  }
+  .dark .callout-linguistic {
+    color: rgb(253 230 138 / 0.9);
   }
   .callout-context {
-    @apply bg-indigo-500/5 border-indigo-500/30 text-indigo-900 dark:text-indigo-200/90;
+    background-color: rgb(99 102 241 / 0.05);
+    border-color: rgb(99 102 241 / 0.3);
+    color: rgb(49 46 129);
+  }
+  .dark .callout-context {
+    color: rgb(199 210 254 / 0.9);
   }
   .callout-tadabbur {
-    @apply bg-emerald-500/5 border-emerald-500/30 text-emerald-900 dark:text-emerald-200/90;
+    background-color: rgb(16 185 129 / 0.05);
+    border-color: rgb(16 185 129 / 0.3);
+    color: rgb(6 78 59);
+  }
+  .dark .callout-tadabbur {
+    color: rgb(167 243 208 / 0.9);
   }
   .callout-action {
-    @apply bg-rose-500/5 border-rose-500/30 text-rose-900 dark:text-rose-200/90;
+    background-color: rgb(244 63 94 / 0.05);
+    border-color: rgb(244 63 94 / 0.3);
+    color: rgb(136 19 55);
   }
-}
-
-
+  .dark .callout-action {
+    color: rgb(254 205 211 / 0.9);
+  }
 
 @media print {
   html, body {

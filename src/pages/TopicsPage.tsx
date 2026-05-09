@@ -5,6 +5,7 @@ import {
   ArrowLeft, BookOpen, ChevronRight, X, Search 
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getApiUrl } from '@/utils/api';
 
 interface Topic {
   id: string;
@@ -34,7 +35,7 @@ export default function TopicsPage() {
   const isAmiri = settings.arabicFont === 'Amiri';
 
   useEffect(() => {
-    fetch('/data/discover/topics.json')
+    fetch(`${getApiUrl()}/api/discover/topics`)
       .then(res => res.json())
       .then(data => {
         setTopics(data);
